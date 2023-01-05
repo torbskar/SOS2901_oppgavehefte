@@ -1,0 +1,110 @@
+# Klassifikasjonstrær
+
+```{r}
+#| warning: false 
+#| message: false
+
+library(tidyverse) 
+library(rpart)      # funksjoner for CART 
+library(rpart.plot) # funksjon for å plotte CART 
+library(caret)      # inneholder funksjon for confusion matrix 
+library(skimr)      # funksjonen skim()
+```
+
+
+Vi skal her bruke datasettet **credit** fra Canvas. Dataene er en banks kundehistorikk for kreditt for 1000 kunder. Variabelen *default*[^cart-1] er «yes» hvis tilbakebetaling som avtalt og «no» hvis ikke. Dette er utfallsvariabelen. Øvrige variable er rimelig selvforklarende etter variabelnavn. Målet er å lage et system for hvilke nye kunder som skal få innvilget kreditt.
+
+
+```{r}
+credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE) 
+
+skim(credit)
+```
+
+Vi splitter først datasettet i to deler: en til training og en til testing. 
+
+```{r}
+grense <- 0.7
+lottery <- runif(n = nrow(credit))
+
+training <- filter(credit, lottery < grense)
+testing  <- filter(credit, lottery >= grense)
+
+```
+
+
+
+
+[^cart-1]: Begrepet "default" på engelsk kan bety å ikke holde en forpliktelse, men i software kan det bety forhåndsvalg. Dette kan være forvirrende akkurat her. Du kan godt endre variabelnavnet hvis du vil.
+
+
+Vi starter med å inkludere noen få variable som gir en oversiktlig illustrasjon. Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere `method = "class"`. Hvis ikke vil `rpart()` gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet. 
+
+
+```{r}
+credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
+                     data=training, method="class")
+rpart.plot(credit_tree)
+
+```
+
+Vi kan også få printet ut disse som tall i en tabell. 
+
+```{r}
+rpart.rules(credit_tree, extra=4)  
+```
+
+Vi kan så skrive ut confusion matrix. 
+
+
+```{r}
+rpart_class <- predict(credit_tree, type="class")
+table(rpart_class, training$default)
+confusionMatrix(rpart_class, training$default)
+
+```
+
+
+```{r}
+rpart_test <- predict(credit_tree, newdata=testing, type="class")
+confusionMatrix(rpart_test, testing$default)
+
+```
+
+
+
+
+
+## Oppgaver
+
+::: {#exr-}
+Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth. 
+:::
+
+
+
+::: {#exr-}
+Bruk datasettet credit til å predikere kredittverdighet for nye kunder.
+
+a)  Spesifiser en formel med et fåtall variable og lag et klassifikasjonstre.
+b)  Plot med rpart.plot()
+c)  Bruk predict() til å klassifisere.
+d)  Lag en confusion matrix med table()
+e)  Gi en vurdering av resultatet.
+    1)  Si noe om forholdet mellom resultat for training og testing datasett.
+    1)  Er cost-ratio ok fra bankens perspektiv?
+    2)  Er cost-ratio ok fra kundens perspektiv?
+    3)  Andre hensyn som bør spille inn her?
+:::
+
+
+::: {#exr-}
+Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.  
+Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.  
+:::
+
+
+
+::: {#exr-}
+Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.  
+:::

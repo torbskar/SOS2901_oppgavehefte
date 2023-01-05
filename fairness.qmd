@@ -1,0 +1,124 @@
+# Fairness 
+
+
+## Introduksjon til fairness
+
+
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(randomForest)
+library(caret)
+library(fairness)
+```
+
+
+
+Compas er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert av flere. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett "biased" mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.^[Det er verd å minne på at politi i USA i stor grad er mer hardhendte enn norsk politi. Konsekvensene er altså litt mer alvorlig enn at unødig mange føler seg unødig mistenkte.] Et datasett er gjort tilgjengelig av [Propublica her](https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis) som vi skal bruke. 
+
+
+
+```{r}
+compas <- readRDS("../data/compas.rds")
+
+glimpse(compas)
+
+```
+
+Vi tilpasser først en random forest modell. 
+
+```{r}
+set.seed(4356)
+glimpse(compas)
+rf <- randomForest(Two_yr_Recidivism ~ .,
+                   #importance = TRUE,
+                    data = compas)
+```
+
+
+Lager en prediksjon i nytt datasett
+
+
+```{r}
+compas_p <- compas %>% 
+  mutate(pred_rf = predict(rf))  
+```
+
+
+
+Confusion matrix
+
+
+```{r}
+confusionMatrix(compas_p$pred_rf,
+                compas_p$Two_yr_Recidivism, positive="1")
+```
+
+
+Splitter datasettet i to etter kjønn. Her for menn. 
+
+```{r}
+compas_1 <- compas_p %>% 
+  filter(Sex == "Male")
+```
+
+
+
+Confusion matrix for menn
+```{r}
+confusionMatrix(compas_1$pred_rf,
+                compas_1$Two_yr_Recidivism, positive="1")
+```
+
+
+Splitter datasettet i to etter kjønn. Her for kvinner. 
+```{r}
+compas_2 <- compas_p %>% 
+  filter(Sex == "Female")
+```
+
+Confusion matrix for kvinner
+
+```{r}
+confusionMatrix(compas_2$pred_rf,
+                compas_2$Two_yr_Recidivism, positive="1")
+```
+
+
+Bruker funksjoner i fairness-pakken til å gjøre det samme: 
+
+```{r}
+acc <- acc_parity(data = compas_p, 
+                  outcome      = 'Two_yr_Recidivism', 
+                  group        = 'Sex',
+                  preds        = 'pred_rf', 
+                  base         = 'Female')
+acc$Metric
+```
+
+Her er en grafisk fremstilling av ACC
+
+```{r}
+acc$Metric_plot
+```
+
+
+
+
+## Flere mål på fairness
+
+
+
+
+
+## Tuning til mer fairness
+
+
+
+
+
+
+
+## Oppgaver

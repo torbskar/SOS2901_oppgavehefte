@@ -1,0 +1,60 @@
+
+
+# Løsningsforslag
+
+
+```{r}
+#| warning: false 
+#| echo: false
+#| message: false
+library(tidyverse)
+library(skimr)
+```
+
+
+
+## Linær regresjon 
+
+
+Løsningsforslag til @exr-sepaa
+
+::: solution
+Les inn data og bruk `glimpse()`.
+
+```{r uke2_innlesning}
+#| warning: false 
+#| message: false
+grade <- read.csv("../data/grade.csv")
+
+glimpse(grade)
+
+```
+:::
+
+Bruk `skim()`.
+
+```{r}
+#| warning: false 
+#| message: false
+skim(grade)
+
+```
+
+Kanskje noen enkle plot?
+
+```{r}
+#| warning: false 
+#| message: false
+ggplot(grade, aes(x = absences, y = final_grade)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+ggplot(grade, aes(x = final_grade, fill = factor(studytime))) +
+  geom_density(alpha = .3)
+
+ggplot(grade, aes(x = absences, y = final_grade, group = factor(studytime), color = factor(studytime))) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+
+```
+

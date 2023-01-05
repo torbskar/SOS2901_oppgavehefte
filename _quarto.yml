@@ -1,0 +1,40 @@
+project: 
+  type: book
+  output-dir: docs
+
+book:
+  title: "SOS2901 Maskinlæring for samfunnsvitere"
+  subtitle: "Oppgaver til hver undervisningsuke"
+  author: "Torbjørn Skardhamar"
+  date: today
+  version: 0.1
+  page-navigation: true
+  chapters:
+    - index.qmd
+    - datasets.qmd
+    - introduksjon.qmd
+    - grunnleggendeML.qmd
+    - linear_regresjon.qmd
+    - logistisk_regresjon.qmd
+    - cart.qmd
+    - bagging.qmd
+    - randomForest.qmd
+    - fairness.qmd
+    - boosting.qmd
+    - unsupervised.qmd
+    - references.qmd
+  # appendices: 
+  #   - losningsforslag.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    code-fold: true
+    code-tools: true
+  pdf:
+    documentclass: scrreprt
+
+
+

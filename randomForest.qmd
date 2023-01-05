@@ -1,0 +1,205 @@
+# Random forest
+Random forest bruker klassifikasjonstrær og bagging som byggestener. I prinsippet er det "bagged trees", men i stedet for å bagge samme type trær, så gjøres det en endring i hvert tre. 
+
+
+
+
+```{r}
+#| warning: false
+#| message: false
+library(tidyverse)
+library(rsample)
+library(fairmodels)
+library(randomForest)
+library(caret)
+```
+
+## Eksempel
+
+Leser inn Compas-dataene. 
+
+```{r}
+compas <- readRDS("../data/compas.rds")
+glimpse(compas)
+
+```
+
+
+Estimerer random forest med alle variable
+
+```{r}
+set.seed(4356)
+rf <- randomForest(Two_yr_Recidivism ~ . , 
+                    data = compas)
+rf
+
+```
+
+Følgende plot gir en oversikt over feilrater for random forest etter hvor mange trær. Det siste tallet til høyre i plottet er de feilratene som vises i output fra randomForest som vist over. Den svarte linjen er altså den totale feilraten, den grønne er falske positive, og den røde er falske negative. 
+I utgangspunktet bruker random forest 500 trær (slik den er implementert i R). Dette plottet viser når resultatene stabiliserer seg. Kort sagt: Hvis linjene er ganske stabile mot til høyre i plottet har man nok trær. Hvis det har stabilisert seg før kunne man forsåvidt klart seg med færre trær. Hvis grafen er ganske humpete mot høyre i plottet, så kan man øke antall trær og se om det bedrer seg. 
+
+```{r}
+plot(rf)
+```
+
+
+Predikerer på samme datasett
+
+```{r}
+compas_p <- compas %>% 
+  mutate(pred_rf = predict(rf))
+```
+
+Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
+
+
+```{r}
+table(compas_p$pred_rf, compas_p$Two_yr_Recidivism) 
+```
+
+Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
+```{r}
+confusionMatrix(compas_p$pred_rf,
+                compas_p$Two_yr_Recidivism, positive="1")
+```
+
+
+Estimerer på nytt og øker antall trær og lager nytt plot. Her er det lagt inn en linje ved 500 trær for å markere tilsvarende resultat som ovenfor. Merk at det endelige resultatet endrer seg noe og mer stabilt mot slutten enn før, men kanskje ikke veldig vesentlig bedre. Merk at vi ikke kan forvente at linjene blir helt flate, og bedring i den ene feilraten går gjerne på bekostning av den andre.  
+
+```{r}
+set.seed(4356)
+rf1 <- randomForest(Two_yr_Recidivism ~ . , 
+                    ntree = 1500, 
+                   data = compas)
+
+plot(rf1)
+abline(v=500, col = "gray")
+```
+
+
+Vi kan justere resultatet med å endre antall variable som tas med i hver split (i hvert tre). I forrige eksempel valgte funksjonen å bruke kun to variable, men det kan settes til f.eks. fire. Merk at det er et poeng at det ikke skal være så mange variable i hver split! Dette endrer normalt ikke resultatene veldig mye. 
+
+```{r}
+set.seed(4356)
+rf2 <- randomForest(Two_yr_Recidivism ~ . , 
+                    mtry=4,
+                    data = compas)
+rf2
+```
+
+
+### Variable importance 
+
+For å få ut variable importance må dette settes i estimeringen med `importance = TRUE`. Det tar nå litt lengre tid å estimere, så med store datasett bør du vente med dette til du ellers er fornøyd med modellen. 
+
+```{r}
+set.seed(4356)
+rf <- randomForest(Two_yr_Recidivism ~ . , 
+                   importance = TRUE, 
+                    data = compas)
+rf
+```
+
+Vi kan da plotte variable importance plot. Set `type = 1` for at det skal vise gjennomsnittlig reduksjon i accuracy fremfor gini-koeffisienten. Endring i accuracy er lettest tolkbart og er oftest mest meningsfult. 
+
+```{r}
+varImpPlot(rf, type = 1)
+```
+Her er det altså antall tidligere dommer som har størst betydning for prediksjon av tilbakefall, etterfulgt av alder og kjønn, og til sist om lovbruddet var en forseelse eller ikke.^[I norsk straffelov var det et skille mellom forseelse og forbrytelse frem til 2015, og dette skillet finnes ikke lengre i norsk straffelov. Men med "forseelse" menes det jo i denne sammenheng de mindre alvorlige lovbruddene.] 
+
+
+### Partial dependence 
+
+Her må du velge hvilken variabel du ønsker å se på. Det er oftest de "viktigste variablene" fra variable importanc som er mest relevante å se på. 
+
+```{r}
+partialPlot(rf, pred.data = compas, 
+            x.var = Number_of_Priors, 
+            which.class = "1")
+```
+
+
+
+
+
+## Tuning av random forest
+Det som faktisk endrer resultatene en god del er sampling prosedyren, altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget. Men ved å bruke argumentet `sampsize = ...` kan vi angi en annen andel. Hvis vi angir to tall er det *antallet* som trekkes fra hver kategori i utfallsvariabelen. Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori. I disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall. 
+
+Hensikten med å gjøre dette er at hvis det er et mindretall som har tilbakefall, så blir hvert tre bygget med mer informasjon om ikke-residivistene enn residivistene. Hvis vi vekter opp residivistene, så får disse større inflytelse på hvert tre. Dermed vil dette også påvirke resultatet. Det er imidlertid vanskelig å vite helt sikkert hvordan det vil slå ut, så man må prøve seg litt frem. Noen ganger vil man veie gruppene likt, andre ganger ulikt. Her er et eksempel der de veies likt:
+
+```{r}
+set.seed(4356)
+rf3 <- randomForest(Two_yr_Recidivism ~ . , 
+                    sampsize = c(1900, 1900),
+                    data = compas)
+rf3
+
+```
+
+Her er et eksempel der de veies ulikt:
+
+```{r}
+set.seed(4356)
+rf3 <- randomForest(Two_yr_Recidivism ~ . , 
+                    sampsize = c(1000, 1900),
+                   data = compas)
+rf3
+
+```
+
+
+Det viktige nå er at feilratene for falske positive og falske negative blir vesentlig forskjellig! Det betyr at ved hvordan vi estimerer modellen kan vi legge sterke føringer på resultatet. Vi bør derfor ta stilling til *på forhånd* hvilke feilrater vi er villig til å akseptere - og hvorvidt de to typer feil er like ille eller ikke. Det er dette Berk (2016) kaller *asymetriske kostnader* og må vurderes i henhold til konsekvenser av hva prediksjonen skal brukes til. 
+
+
+Predikere for nye data: 
+
+```{r}
+compas_p <- compas %>% 
+  mutate(pred_rf = predict(rf, newdata=compas))
+```
+
+
+Confusion matrix: 
+
+```{r}
+confusionMatrix(compas_p$pred_rf, compas_p$Two_yr_Recidivism, positive="1")
+```
+
+
+
+
+
+
+
+## Oppgaver
+::: {#exr-}
+Bruk datasettet credit som i forrige oppgave. 
+
+a) Bruk random forest til å gjøre en tilsvarende klassifisering som du gjorde med 
+klassifikasjonstre. Bruk default instillinger i randomForest().
+a) Bruk predict() til å klassifisere
+a) Lag en confusion matrix med table() og gjenta med confusionMatrix()
+a) Gjør en vurdering av resultatet og sammenlign med resultat fra klassifikasjonstre
+
+:::
+
+
+
+::: {#exr-}
+Gjenta oppgave 1, men se om du kan justere modellen til et mer tilfredsstillende resultat. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette. Bruk parameterne sampsize, mtry og ntree. 
+:::
+
+
+::: {#exr-}
+Tolk random forest
+a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning. 
+a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial 
+dependence plot. 
+:::
+
+
+::: {#exr-}
+Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen. 
+Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave. Hvis du virkelig vil at begge skal få lån kan du kanskje justere modellen? Legge til/fjerne variable fra formelen og justere tuning parametrene. Prøv deg frem.  
+:::
+

@@ -1,0 +1,23 @@
+# Boosting
+
+Det er flere typer boosting-algoritmer. Vi skal først se på adaptive boosting fordi det er den enkleste (og eldste) varianten. Deretter ser vi på gradient boosting fordi andre mer avanserte boosting-algoritmer er varianter av denne. 
+
+Kilde: https://towardsdatascience.com/how-to-select-between-boosting-algorithm-e8d1b15924f7
+
+
+## Adaptive boosting - Adaboost 
+Adaptive boosting har et enkelt prinsipp: Først estimeres en modell, og deretter estimeres en ny modell der feilklassifikasjonene fra forrige modell vektes tyngre. Teorien tilsier at dette vil bedre klassifikasjonen. Så fortsetter den slik og estimerer nye vektede modeller til vi ikke får noen vesetnlig forbedring. 
+
+
+
+## Gradient boosting - gbm
+Gradient boosting er bygget på et tilsvarende prinsipp, men vekter ikke dataene. Derimot bruker den loss-funksjon i stedet. 
+
+
+
+
+
+
+## Extreme gradient boosting - XGboost 
+
+

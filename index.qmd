@@ -1,0 +1,48 @@
+# Introduksjon {.unnumbered}
+
+Dette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. Det lages delvis underveis, så det vil bli oppdateringer jevnlig.
+
+Dessuten skriver jeg disse oppgavene i Quarto som jeg ikke er så god i, så jeg prøver meg litt frem. Det kan derfor hende layout og andre ting endres underveis.
+
+## Installasjon av R og Rstudio
+
+Du må installere både [R](https://www.r-project.org/) og [Rstudio](https://posit.co/products/open-source/rstudio/) på din datamaskin. Hvis du har Windows-maskin trenger du også installere [Rtools](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html). Hvis du har Mac OS X kan det hende du må installere [XQuartz](https://www.xquartz.org/).
+
+Se ellers video fra [SICSS](https://youtu.be/ulIv0NiVTs4) 
+{{< video https://youtu.be/ulIv0NiVTs4 >}}
+
+
+## Pakker {.unnumbered}
+
+R er basert på bruk av "pakker" som må installeres for å få tilgang til funksjoner vi skal bruke. Disse installeres med bruk av kommandoen `install.packages()`. F.eks. kan man installere pakken Tidyverse med følgende: `install.packages("tidyverse")`.
+
+For å installere flere pakker kan man kjøre `install.packages()` flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre `install.packages()` på dette objektet. Noe slikt:
+
+```{r}
+#| eval: false
+pkgs <- c("tidyverse", "skimr", "randomForest")
+#install.packages(pkgs)
+
+```
+
+Men for at du skal kunne bruke pakkene må du aktivere dem i R ved `library()`. Dette må du gjøre hver gang du starter opp R. Det kan se slik ut:
+
+```{r }
+#| echo: true
+#| eval: false
+library(tidyverse)
+library(skimr)
+library(randomForest)
+library(caret)
+library(AUC)
+
+```
+
+## Forutsetninger
+
+Dette kurset forutsetter at man har grunnleggende ferdigheter i kvantitative metoder og har brukt R før. Hvis du vet du trenger det: frisk opp litt fra tidligere kurs.
+
+Når det er sagt, så er det begrenset hvor mye man bør kunne fra før og er du motivert til å jobbe med stoffet skal du nok få til dette.
+
+Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham & Grolemunds bok ["R for data science"](https://r4ds.had.co.nz/) et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk. 
+

@@ -1,0 +1,27 @@
+
+# Introduksjon til maskinlæring
+Temaet for denne forelesningen er maskinlæring generelt og datadrevne beslutninger. Vi kommer inn på flere av temaene som vil behandles grundigere gjennom kurset. 
+
+
+<iframe src="https://uio.cloud.panopto.eu/Panopto/Pages/Embed.aspx?id=84a314ea-41fa-4b0f-97d6-af6900ba0b9f&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+
+Hvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Deretter kommer noen oppgaver, som dere skal løse. Oppgavene er ganske åpne og det er meningen at dere skal velge et annet datasett og gjøre tilsvarende analyser som i eksempelet. Fra eksempelet får dere også nødvendig kode. 
+
+
+
+
+## Oppgaver
+
+::: {#exr-sepaa}
+Kan man tenke seg målrettede tiltak som **ikke** innebærer en form for prediksjon om fremtiden? (Implisitt eller eksplisitt) 
+:::
+
+::: {#exr-feil}
+Hvor alvorlig er det å gjøre feil? Hva avgjør om feil prediksjon spiller noen rolle? 
+:::
+
+
+
+
+

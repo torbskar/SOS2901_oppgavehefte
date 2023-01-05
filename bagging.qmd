@@ -1,0 +1,60 @@
+# Bagging 
+
+
+# Introduksjon til bagging
+
+
+
+```{r}
+#| warning: false
+#| message: false
+
+# Kilde: https://www.statology.org/bagging-in-r/ 
+
+library(e1071)       #for calculating variable importance
+library(caret)       #for general model fitting
+library(rpart)       #for fitting decision trees
+library(ipred)       #for fitting bagged decision trees
+
+credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE) 
+
+```
+
+
+
+
+
+
+
+
+
+
+## Oppgaver
+::: {#exr-}
+Bruk bagging til å forbedre prediksjonene. Bruk samme formel, men bygg 150 trær. 
+:::
+
+
+::: {.solution}
+
+
+```{r}
+fmla <- default ~ age + amount + percent_of_income + purpose + employment_duration + housing 
+
+fmla
+
+set.seed(1)
+bag <- bagging(
+  formula = fmla,
+  data = credit,
+  nbagg = 150,   
+  coob = TRUE,
+  control = rpart.control(minsplit = 2, cp = 0)
+)
+bag
+```
+
+:::
+
+
+

@@ -1,0 +1,136 @@
+# Datasett
+
+I de følgende oppgavene kan man bruke ulike datasett og gjøre omtrent de samme operasjonene. Hvert kapittel innleder med et empirisk eksempel som illustrerer hvordan det gjøres i R. Det du må finne ut av er hva hver del av koden gjør utover de ganske korte forklaringene i teksten. 
+
+En foreslått arbeidsmåte er da at du først gjør de samme analysene i eksempelet og sørger for at du skjønner hvordan ting fungerer. Deretter velger du et annet datasett (av de nedenforstående) og gjør en tilsvarende analyse på det datasettet. Så kan du fortsette med nye datasett ettersom hva du har tid til. Å gjøre flere analyser med ulike datasett er en fin forberedelse til eksamen. 
+
+Husk at for hvert datasett er det ulike relevante problemstillinger som har betydning for hvordan du gjennomfører og tolker resultatet. Du må derfor ikke ta lett på tekstoppgavene! 
+
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+```
+
+
+I disse oppgavene skal vi bruke flere forskjellige datasett.
+
+## Credit
+
+```{r credit}
+credit <- read.csv("../data/credit.csv")
+glimpse(credit)
+
+```
+
+## Attrition
+
+Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset).
+
+```{r attrition}
+attrition <- read.csv("../data/attrition.csv")
+glimpse(attrition)
+
+```
+
+## Anmeldte lovbrudd 2016
+
+```{r kom2016}
+load("../data/krim2016.RData")
+glimpse(kom2016)
+
+```
+
+## Churn
+
+```{r}
+churn <- read.csv("../data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+glimpse(churn)
+```
+
+## Recidivism from Iowa prisons
+
+Datasettet inneholder data på 26020 personer løslatt fra fengsel i staten Iowa, USA mellom 2010 og 2015. For hver person er det informasjon om hvorvidt de har blitt fengslet på nytt innen 3 år (dvs. fulgt til mellom 2013 og 2018).
+
+Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/slonnadube/recidivism-for-offenders-released-from-prison) og er nærmere omtalt der.
+
+```{r recidivism}
+recidivism <- read.csv("../data/3-Year_Recidivism_for_Offenders_Released_from_Prison_in_Iowa_elaborated.csv")
+
+glimpse(recidivism)
+
+```
+
+## Compas
+
+
+
+
+## Diabetes rehospitalization
+
+Data er beskrevet nærmere i [Strack et al (2014)](https://www.hindawi.com/journals/bmri/2014/781670/) (se særlig tabell 1) og er tilgjengelig fra [UCI machine learning repository](https://archive.ics.uci.edu/ml/datasets/diabetes+130-us+hospitals+for+years+1999-2008)
+
+Utfallsvariabelen av interesse er *readmitted*, altså om pasienten blir lagt inn på nytt på et eller annet tidspunkt etter utskrivning.
+
+```{r diabetic}
+diabetic <- read.csv("../data/diabetic_data.csv")
+glimpse(diabetic)
+```
+
+## Absenteeism
+
+Dette er et syntetisk datasett som inneholder 8336 personer i en tenkt bedrift og hvor mange timer hver person har fravær fra jobben.
+
+Data er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/HRAnalyticRepository/absenteeism-dataset)
+
+```{r absenteeism}
+absenteeism <- read.csv("../data/MFGEmployees4.csv")
+glimpse(absenteeism)
+```
+
+## Human resources (HR)
+
+Data er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/rhuebner/human-resources-data-set) og variable er beskrevet nærmere [på denne lenken](https://rpubs.com/rhuebner/hrd_cb_v14).
+
+```{r hr}
+hr <- read.csv("../data/HRDataset_v14.csv")
+glimpse(hr)
+
+```
+
+## Nettverk
+
+```{r nettverk}
+load("../data/networkExample.RData")
+glimpse(dataset)
+```
+
+## oes
+
+```{r oes}
+oes <- readRDS("../data/oes.rds")
+class(oes)
+glimpse(oes)
+```
+
+## Overfit
+
+Simulerte data.
+
+```{r overfit}
+overfit <- read.csv("../data/overfit.csv")
+glimpse(overfit)
+
+```
+
+## Voters
+
+Data er hentet fra [2016 Views of the Electorate Research Survey](https://www.voterstudygroup.org/data) gjennomført av Voter study group.
+
+Aktuell problemstilling er å predikere hvilke velgere som støtter Clinton. En slik klassifisering kan brukes til f.eks. å målrette budskap. En relatert problemstilling er å klustre velgerne for å finne segmenter
+
+```{r voters}
+voters <- read.csv("../data/voters.csv")
+glimpse(voters)
+```
