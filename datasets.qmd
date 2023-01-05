@@ -18,8 +18,11 @@ I disse oppgavene skal vi bruke flere forskjellige datasett.
 
 ## Credit
 
+Last ned dataene her: [Credit.csv](file:///data/credit.csv)
+
+
 ```{r credit}
-credit <- read.csv("../data/credit.csv")
+credit <- read.csv("data/credit.csv")
 glimpse(credit)
 
 ```
