@@ -11,20 +11,35 @@ Husk at for hvert datasett er det ulike relevante problemstillinger som har bety
 #| echo: false
 #| message: false
 library(tidyverse)
+library(downloadthis)
 ```
 
 
-I disse oppgavene skal vi bruke flere forskjellige datasett.
+I disse oppgavene skal vi bruke flere forskjellige datasett. Last de ned og legg dem i din data-mappe. 
 
 ## Credit
+ 
 
-Last ned dataene her: [Credit.csv](file:///github.com/torbskar/SOS2901_oppgavehefte/tree/main/data/credit.csv)
 
-
+Dataene inneholder følgende variable.
 ```{r credit}
 credit <- read.csv("data/credit.csv")
+
 glimpse(credit)
 
+```
+```{r}
+#| echo: false
+credit <- read.csv("data/credit.csv")
+credit %>%
+  download_this(
+    output_name = "credit dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
 ```
 
 ## Attrition
