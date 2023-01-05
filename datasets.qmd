@@ -50,7 +50,24 @@ Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/pavansub
 attrition <- read.csv("../data/attrition.csv")
 glimpse(attrition)
 
+
 ```
+
+```{r}
+#| echo: false
+attrition %>%
+  select(-X) %>% 
+  download_this(
+    output_name = "attrition dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+
 
 ## Anmeldte lovbrudd 2016
 
@@ -59,12 +76,37 @@ load("../data/krim2016.RData")
 glimpse(kom2016)
 
 ```
+```{r}
+#| echo: false
+kom2016 %>%
+  download_this(
+    output_name = "kom2016 dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
 
 ## Churn
 
 ```{r}
-churn <- read.csv("../data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+churn <- read.csv("data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 glimpse(churn)
+```
+
+```{r}
+#| echo: false
+churn %>%
+  download_this(
+    output_name = "churn dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
 ```
 
 ## Recidivism from Iowa prisons
@@ -74,16 +116,47 @@ Datasettet inneholder data på 26020 personer løslatt fra fengsel i staten Iowa
 Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/slonnadube/recidivism-for-offenders-released-from-prison) og er nærmere omtalt der.
 
 ```{r recidivism}
-recidivism <- read.csv("../data/3-Year_Recidivism_for_Offenders_Released_from_Prison_in_Iowa_elaborated.csv")
+recidivism <- read.csv("data/3-Year_Recidivism_for_Offenders_Released_from_Prison_in_Iowa_elaborated.csv")
 
 glimpse(recidivism)
+
+```
+```{r}
+#| echo: false
+recidivism %>%
+  download_this(
+    output_name = "recidivism dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
 
 ```
 
 ## Compas
 
 
+```{r}
+compas <- readRDS("data/compas.rds")
+glimpse(compas)
+```
 
+
+```{r}
+#| echo: false
+compas %>%
+  download_this(
+    output_name = "recidivism dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
 
 ## Diabetes rehospitalization
 
@@ -92,8 +165,22 @@ Data er beskrevet nærmere i [Strack et al (2014)](https://www.hindawi.com/journ
 Utfallsvariabelen av interesse er *readmitted*, altså om pasienten blir lagt inn på nytt på et eller annet tidspunkt etter utskrivning.
 
 ```{r diabetic}
-diabetic <- read.csv("../data/diabetic_data.csv")
+diabetic <- read.csv("data/diabetic_data.csv")
 glimpse(diabetic)
+```
+
+```{r}
+#| echo: false
+diabetic %>%
+  download_this(
+    output_name = "diabetic dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
 ```
 
 ## Absenteeism
@@ -103,8 +190,21 @@ Dette er et syntetisk datasett som inneholder 8336 personer i en tenkt bedrift o
 Data er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/HRAnalyticRepository/absenteeism-dataset)
 
 ```{r absenteeism}
-absenteeism <- read.csv("../data/MFGEmployees4.csv")
+absenteeism <- read.csv("data/MFGEmployees4.csv")
 glimpse(absenteeism)
+```
+```{r}
+#| echo: false
+absenteeism %>%
+  download_this(
+    output_name = "absenteeism dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
 ```
 
 ## Human resources (HR)
@@ -112,35 +212,70 @@ glimpse(absenteeism)
 Data er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/rhuebner/human-resources-data-set) og variable er beskrevet nærmere [på denne lenken](https://rpubs.com/rhuebner/hrd_cb_v14).
 
 ```{r hr}
-hr <- read.csv("../data/HRDataset_v14.csv")
+hr <- read.csv("data/HRDataset_v14.csv")
 glimpse(hr)
+
+```
+
+```{r}
+#| echo: false
+hr %>%
+  download_this(
+    output_name = "hr dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
 
 ```
 
 ## Nettverk
 
 ```{r nettverk}
-load("../data/networkExample.RData")
+load("data/networkExample.RData")
 glimpse(dataset)
 ```
+
+```{r}
+#| echo: false
+dataset %>%
+  download_this(
+    output_name = "nettverk dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+
+
 
 ## oes
 
 ```{r oes}
-oes <- readRDS("../data/oes.rds")
+oes <- readRDS("data/oes.rds")
 class(oes)
 glimpse(oes)
 ```
 
-## Overfit
-
-Simulerte data.
-
-```{r overfit}
-overfit <- read.csv("../data/overfit.csv")
-glimpse(overfit)
+```{r}
+#| echo: false
+oes %>%
+  download_this(
+    output_name = "oes dataset",
+    output_extension = ".rds",
+    button_label = "Download data as rds",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
 
 ```
+
 
 ## Voters
 
@@ -149,6 +284,19 @@ Data er hentet fra [2016 Views of the Electorate Research Survey](https://www.vo
 Aktuell problemstilling er å predikere hvilke velgere som støtter Clinton. En slik klassifisering kan brukes til f.eks. å målrette budskap. En relatert problemstilling er å klustre velgerne for å finne segmenter
 
 ```{r voters}
-voters <- read.csv("../data/voters.csv")
+voters <- read.csv("data/voters.csv")
 glimpse(voters)
+```
+```{r}
+#| echo: false
+voters %>%
+  download_this(
+    output_name = "voters dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
 ```
