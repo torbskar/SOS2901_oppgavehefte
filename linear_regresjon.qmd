@@ -9,8 +9,6 @@
 library(skimr)
 library(tidyverse)
 
-grade <- read.csv("../data/grade.csv")
-
 ```
 
 ## OLS i R
@@ -20,8 +18,8 @@ Vi illustrerer lineær regresjon med et empirisk eksempel. Her skal vi bruke dat
 Først leser vi inn dataene og tar en titt på variabellisten. 
 
 ```{r}
-load("../data/kom_2016.RData")
-glimpse(kom_2016)
+kommune <- readRDS( "data/kommunedata.rds")
+glimpse(kommune)
 
 ```
 
@@ -29,7 +27,7 @@ En annen måte å få oversikt over dataene på er å bruke funksjonen `skim()`,
 
 ```{r}
 
-skim(kom_2016)
+skim(kommune)
 
 ```
 
@@ -39,8 +37,13 @@ En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i
 En god start på de fleste empiriske analyser er å beskrive sammenhengen med et plot. Her legger vi på en lineær regresjonslinje med `geom_smooth()` der vi presiserer lineær modell med `method = "lm"` og lar være å ta med konfidensintervallet `se = FALSE`.  
 
 ```{r}
-ggplot(kom_2016, aes(x = prop_unge_menn, 
-                     y = Vold)) +
+#| warning: false
+#| message: false 
+kommune <- kommune %>% 
+  mutate(prop_unge_menn = (menn_18_25 + menn_26_35)/bef_totalt*100) 
+
+ggplot(kommune, aes(x = prop_unge_menn, 
+                     y = voldskriminalitet)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) 
 ```
@@ -48,14 +51,16 @@ ggplot(kom_2016, aes(x = prop_unge_menn,
 
 
 ```{r}
-est <- lm(Vold ~ prop_unge_menn, data=kom_2016)
+est <- lm(voldskriminalitet ~ prop_unge_menn, data=kommune)
 summary(est)
+
+round(summary(est)$r.squared, digits = 3)
 ```
 
 Med andre ord kan voldsraten beskrives som 
 
-$$ vold = -0.9949 + 54.7475 \times ungeMenn  $$
-Men vi har også sett at $r^2$ er ganske lav, bare 0.0693, altså ca 7%. Denne koeffisienten kalles også "coefficient of determination" og sier noe om i hvor stor grad modellen fanger opp variasjoenen i dataene. En lav $r^2$ betyr at modellen i liten grad gjør det. Vi må altså forvente at modellen vil bomme ganske kraftig i sine prediksjoner. Vi kan velge å ta modellen seriøst likevel, men ikke ha for store forventninger for prediksjonene! 
+$$ voldskriminalitet = 0.78 + 0.39 \times ungeMenn  $$
+Men vi har også sett at $r^2$ er ganske lav, bare `r round(summary(est)$r.squared, digits = 3)`. Denne koeffisienten kalles også "coefficient of determination" og sier noe om i hvor stor grad modellen fanger opp variasjoenen i dataene. En lav $r^2$ betyr at modellen i liten grad gjør det. Vi må altså forvente at modellen vil bomme ganske kraftig i sine prediksjoner. Vi kan velge å ta modellen seriøst likevel, men ikke ha for store forventninger for prediksjonene! 
 
 
 Et annet mål på hvor godt modellen treffer er "Root mean square error", RMSE. Dette kan skrives som: 
@@ -74,7 +79,7 @@ RMSE sier altså omtrentlig hvor mye modellen i gjennomsnitt bommer på de obser
 For å få litt bedre tak på hva RMSE betyr kan vi se på et plot av de predikerte og observerte verdiene. Vi kan predikere vold for hver enkelt kommune basert på denne modellen, som altså er den forventede voldsraten *hvis modellen er sann*. Funksjonen `predict()` gir oss hva vi trenger.
 
 ```{r}
-kom <- kom_2016 %>% 
+kom <- kommune %>% 
   mutate(pred = predict(est))
 ```
 
@@ -82,7 +87,7 @@ Merk at koden her lagde en kopi av datasettet der vi har alle de opprinnelige va
 Vi kan nå sammenlignet prediksjonene med de observerte utfallene. 
 
 ```{r}
-ggplot(kom, aes(x = Vold, y = pred)) +
+ggplot(kom, aes(x = voldskriminalitet, y = pred)) +
   geom_point(alpha = .3) +
   geom_smooth(method = "lm", se = FALSE)
 ```
@@ -113,23 +118,26 @@ Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan k
 I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon. 
 
 ```{r}
-est_m <- lm(Vold ~ prop_unge_menn + gj_innt_17_34 + gj_innt_35_66 + 
-                   prop_shj_mottakere_6mnd , 
-            data=kom_2016)
+
+est_m <- lm(voldskriminalitet ~ prop_unge_menn + inntekt_totalt_median + shj_unge + 
+                   ant_husholdninger , 
+            data=kommune)
 summary(est_m)
+
+
 ```
 
-Merk at $r^2$ nå har gått betraktelig opp, til ca 0.31. Gitt at vi tolker dette som i hvor stor grad vi kan *predikere* utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon. 
+Merk at $r^2$ nå har gått betraktelig opp, til ca `r round(summary(est_m)$r.squared, digits = 2)`. Gitt at vi tolker dette som i hvor stor grad vi kan *predikere* utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon. 
 
 Her er et scatterplot av observert mot forventet voldsrater:
 
 ```{r}
 #| warning: false
 #| error: false
-kom_pred <- kom_2016 %>% 
+kom_pred <- kommune %>% 
   mutate(pred = predict(est_m))
 
-ggplot(kom_pred, aes(x = Vold, y = pred)) +
+ggplot(kom_pred, aes(x = voldskriminalitet, y = pred)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
 
@@ -139,12 +147,14 @@ ggplot(kom_pred, aes(x = Vold, y = pred)) +
 La oss inkludere alle aktuelle variable i datasettet. Et lite triks her er å fjerne alle variable vi ikke er interessert i og lagre det i et nytt datasett. I `lm()` kan vi da presisere formelen som `Vold ~ . ` som betyr å ta med alle variabelene i stedet for å liste hver enkelt variabel. 
 
 ```{r}
-kom_s <- kom_2016 %>% 
-  select(-c(kommune, lovb_ialt, Orden,  
-            Rusmiddellovbrudd, Trafikkovertredelse, 
-            lovb_annet, prop_unge_menn))
+glimpse(kommune)
 
-full_mod <- lm(Vold ~ . , data = kom_s)
+kom_s <- kommune %>% 
+  select(-c(kommune, kommune_nr, ordenslovbrudd,  
+            nark_alko_kriminalitet, trafikklovbrudd, andre_lovbrudd, 
+            prop_unge_menn))
+
+full_mod <- lm(voldskriminalitet ~ . , data = kom_s)
 summary(full_mod)
 ```
 
@@ -154,23 +164,23 @@ $r^2$ gikk noe opp, til 0.39.
 Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output. 
 
 ```{r}
-full_mod2 <- lm( Vold ~ .^2, data = kom_s)
+full_mod2 <- lm( voldskriminalitet ~ .^2, data = kom_s)
 summary(full_mod2)$r.squared
 ```
 $r^2$ gikk vesentlig opp. Men når vi først driver med kompliserte modellspesifikasjoner som uansett er vanskelige å tolke - hvorfor begrense seg til 2-veis interaksjoner? Her er en versjon med alle 3-veis interaksjoner, og nå begynner $r^2$ virkelig å bli høy!  
 
 
 ```{r}
-full_mod3 <- lm( Vold ~ .^3, data = kom_s)
+full_mod3 <- lm( voldskriminalitet ~ .^3, data = kom_s)
 summary(full_mod3)$r.squared
 ```
 
-Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant dårligere av å ta vekk noen ledd. Så beholdes den "beste" modellen. 
+Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant bedre av å legge til hver av de parametrene, og stopper når modellen ikke blir bedre. Så beholdes den "beste" av disse modellene, ikke nødvendigvis den som er mest komplisert. 
 
 OBS! Merk at dette er en rent mekanisk seleksjon, og frarådes i de fleste samfunnsvitenskapelige sammenhenger. Tolkning av parametre og statistisk usikkerhet er nå på svært tynn is. Men det kan gi god prediksjon likevel.
 
 ```{r ols_step}
-step_mod <- MASS::stepAIC(full_mod3, direction="backward", 
+step_mod <- MASS::stepAIC(full_mod3, direction="forward", 
                           trace = FALSE)
 summary(step_mod)$r.squared
 ```
@@ -183,7 +193,7 @@ Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observer
 kom_pred <- kom_s %>% 
   mutate(pred = predict(step_mod))
 
-ggplot(kom_pred, aes(x = Vold, y = pred)) +
+ggplot(kom_pred, aes(x = voldskriminalitet, y = pred)) +
   geom_point(alpha = .3) +
   geom_smooth(method = "lm", se = FALSE)
 
@@ -195,13 +205,14 @@ Nå kan vi også regne ut RMSE, som altså er "root mean squared error". Med and
 ```{r}
 kom_s %>% 
   mutate(pred = predict(step_mod), 
-         residual = pred - Vold) %>% 
+         residual = pred - voldskriminalitet) %>% 
   mutate(sq.resid = residual^2) %>% 
   summarise(sqrt(mean(sq.resid)))
   
 ```
 
 Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. ^[Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt]. Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.  
+
 
 
 ## Oppgaver

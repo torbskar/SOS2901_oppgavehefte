@@ -22,10 +22,9 @@ book:
     - boosting.qmd
     - unsupervised.qmd
     - references.qmd
-    
-  appendices: 
-    - datasets.qmd
 
+  appendices:
+   - datasets.qmd
 
 bibliography: references.bib
 
@@ -36,6 +35,7 @@ format:
     code-tools: true
   # pdf:
   #   documentclass: scrreprt
+
 
 
 

@@ -1,6 +1,7 @@
 # Introduksjon {.unnumbered}
 
 Dette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. Det lages delvis underveis, så det vil bli oppdateringer jevnlig. 
+Antakeligvis er det enklest å navigere i denne nettsiden, men du kan også <a href="file.txt"> laste ned en pdf-versjon </a>. 
 
 (Dessuten skriver jeg disse oppgavene i Quarto som jeg ikke er så god i, så jeg prøver meg litt frem. Det kan derfor hende layout og andre ting endres underveis. Bær over med meg!)
 

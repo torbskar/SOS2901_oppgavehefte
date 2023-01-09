@@ -1,6 +1,6 @@
 # Datasett
 
-I de følgende oppgavene kan man bruke ulike datasett og gjøre omtrent de samme operasjonene. Hvert kapittel innleder med et empirisk eksempel som illustrerer hvordan det gjøres i R. Det du må finne ut av er hva hver del av koden gjør utover de ganske korte forklaringene i teksten. 
+I oppgavene kan man bruke ulike datasett og gjøre omtrent de samme operasjonene. Hvert kapittel innleder med et empirisk eksempel som illustrerer hvordan det gjøres i R. Det du må finne ut av er hva hver del av koden gjør utover de ganske korte forklaringene i teksten. 
 
 En foreslått arbeidsmåte er da at du først gjør de samme analysene i eksempelet og sørger for at du skjønner hvordan ting fungerer. Deretter velger du et annet datasett (av de nedenforstående) og gjør en tilsvarende analyse på det datasettet. Så kan du fortsette med nye datasett ettersom hva du har tid til. Å gjøre flere analyser med ulike datasett er en fin forberedelse til eksamen. 
 
@@ -18,16 +18,19 @@ library(downloadthis)
 I disse oppgavene skal vi bruke flere forskjellige datasett. Last de ned og legg dem i din data-mappe. 
 
 ## Credit
- 
+Utfallsvariabel: "default" (misligholdelse av lån) 
+Data er hentet fra [datacamp.com](datacamp.com)
 
-
-Dataene inneholder følgende variable.
+Dataene inneholder følgende variable:
 ```{r credit}
 credit <- read.csv("data/credit.csv")
 
 glimpse(credit)
 
 ```
+
+::: {.content-hidden when-format="pdf"}
+
 ```{r}
 #| echo: false
 credit <- read.csv("data/credit.csv")
@@ -41,22 +44,24 @@ credit %>%
     icon = "fa fa-save"
   )
 ```
+:::
 
 ## Attrition
+Utfallsvariabel: "Attrition", dvs om en arbeidstaker slutter i jobben. 
 
 Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset).
 
 ```{r attrition}
-attrition <- read.csv("../data/attrition.csv")
-glimpse(attrition)
 
+attrition <- readRDS("data/attrition.rds")
+glimpse(attrition)
 
 ```
 
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 attrition %>%
-  select(-X) %>% 
   download_this(
     output_name = "attrition dataset",
     output_extension = ".csv",
@@ -67,27 +72,34 @@ attrition %>%
   )
 
 ```
+:::
 
+## Kommunedata
+Disse dataene er hentet fra SSBs offisielle statistikk og koblet sammen på kommunenummer. Fra statistikkbanken tabeller nr. 06944 (inntekt), 12210 (sosialhjelp/KOSTRA), 07459 (befolkning), 08487 (anmeldte lovbrudd). Flere variable kan kobles på. 
+Merk: det er flere endringer i kommunestruktur, særlig i 2020. Kommunene er altså ikke helt det samme over tid. 
 
-## Anmeldte lovbrudd 2016
+Aktuelle utfallsvariable: Flere variable kan være aktuell som utfallsvariable. Prediktorer må nok omarbeides noe etter egne vurderinger (f.eks. omregne til per 1000 eller prosent, summere totaltall etc).  
 
-```{r kom2016}
-load("../data/krim2016.RData")
-glimpse(kom2016)
+```{r kommune}
+kommune <- readRDS("data/kommunedata.rds")
+glimpse(kommune)
 
 ```
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
-kom2016 %>%
+kommune %>%
   download_this(
-    output_name = "kom2016 dataset",
-    output_extension = ".csv",
-    button_label = "Download data as csv",
+    output_name = "kommune dataset",
+    output_extension = ".rds",
+    button_label = "Download data as rds",
     button_type = "default",
     has_icon = TRUE,
     icon = "fa fa-save"
   )
 ```
+:::
+
 
 ## Churn
 
@@ -95,7 +107,7 @@ kom2016 %>%
 churn <- read.csv("data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 glimpse(churn)
 ```
-
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 churn %>%
@@ -108,19 +120,24 @@ churn %>%
     icon = "fa fa-save"
   )
 ```
+:::
 
 ## Recidivism from Iowa prisons
 
 Datasettet inneholder data på 26020 personer løslatt fra fengsel i staten Iowa, USA mellom 2010 og 2015. For hver person er det informasjon om hvorvidt de har blitt fengslet på nytt innen 3 år (dvs. fulgt til mellom 2013 og 2018).
 
+Aktuell utfallsvariabel: "Recidivism...Return.to.Prison.numeric"
+Endre gjerne variabelnavn til noe kortere. 
+
 Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/slonnadube/recidivism-for-offenders-released-from-prison) og er nærmere omtalt der.
 
 ```{r recidivism}
-recidivism <- read.csv("data/3-Year_Recidivism_for_Offenders_Released_from_Prison_in_Iowa_elaborated.csv")
+recidivism <- read.csv("data/3-Year_Recidivism_for_Offenders_Released_from_Prison_in_Iowa_elaborated.csv", stringsAsFactors = TRUE)
 
 glimpse(recidivism)
 
 ```
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 recidivism %>%
@@ -134,16 +151,19 @@ recidivism %>%
   )
 
 ```
+:::
 
 ## Compas
+Utfallsvariabel: "Two_yr_Revidvism"
 
+Data er hentet fra R-pakken fairmodels, modifisert datsett fra [ProPublica](https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis)
 
 ```{r}
 compas <- readRDS("data/compas.rds")
 glimpse(compas)
 ```
 
-
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 compas %>%
@@ -157,6 +177,7 @@ compas %>%
   )
 
 ```
+:::
 
 ## Diabetes rehospitalization
 
@@ -169,6 +190,8 @@ diabetic <- read.csv("data/diabetic_data.csv")
 glimpse(diabetic)
 ```
 
+
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 diabetic %>%
@@ -182,6 +205,7 @@ diabetic %>%
   )
 
 ```
+:::
 
 ## Absenteeism
 
@@ -193,6 +217,7 @@ Data er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/HRAnalyticRepo
 absenteeism <- read.csv("data/MFGEmployees4.csv")
 glimpse(absenteeism)
 ```
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 absenteeism %>%
@@ -206,6 +231,7 @@ absenteeism %>%
   )
 
 ```
+:::
 
 ## Human resources (HR)
 
@@ -217,6 +243,7 @@ glimpse(hr)
 
 ```
 
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 hr %>%
@@ -230,6 +257,7 @@ hr %>%
   )
 
 ```
+:::
 
 ## Nettverk
 
@@ -238,6 +266,7 @@ load("data/networkExample.RData")
 glimpse(dataset)
 ```
 
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 dataset %>%
@@ -251,17 +280,18 @@ dataset %>%
   )
 
 ```
+:::
 
 
+## Occupational wage data
 
-## oes
 
 ```{r oes}
 oes <- readRDS("data/oes.rds")
 class(oes)
 glimpse(oes)
 ```
-
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 oes %>%
@@ -276,6 +306,7 @@ oes %>%
 
 ```
 
+:::
 
 ## Voters
 
@@ -287,6 +318,8 @@ Aktuell problemstilling er å predikere hvilke velgere som støtter Clinton. En 
 voters <- read.csv("data/voters.csv")
 glimpse(voters)
 ```
+
+::: {.content-hidden when-format="pdf"}
 ```{r}
 #| echo: false
 voters %>%
@@ -300,3 +333,4 @@ voters %>%
   )
 
 ```
+:::
