@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SOS2901 Maskinlæring for samfunnsvitere - 7&nbsp; Random forest</title>
+<title>SOS2901 Maskinlæring for samfunnsvitere - 6&nbsp; Random forest</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -168,47 +168,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./grunnleggendeML.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Noen innledende metodiske begrep</span></a>
+  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></a>
+  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></a>
+  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></a>
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./randomForest.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></a>
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
+  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -240,13 +235,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#eksempel" id="toc-eksempel" class="nav-link active" data-scroll-target="#eksempel"><span class="toc-section-number">7.1</span>  Eksempel</a>
+  <li><a href="#eksempel" id="toc-eksempel" class="nav-link active" data-scroll-target="#eksempel"><span class="toc-section-number">6.1</span>  Eksempel</a>
   <ul class="collapse">
-  <li><a href="#variable-importance" id="toc-variable-importance" class="nav-link" data-scroll-target="#variable-importance"><span class="toc-section-number">7.1.1</span>  Variable importance</a></li>
-  <li><a href="#partial-dependence" id="toc-partial-dependence" class="nav-link" data-scroll-target="#partial-dependence"><span class="toc-section-number">7.1.2</span>  Partial dependence</a></li>
+  <li><a href="#variable-importance" id="toc-variable-importance" class="nav-link" data-scroll-target="#variable-importance"><span class="toc-section-number">6.1.1</span>  Variable importance</a></li>
+  <li><a href="#partial-dependence" id="toc-partial-dependence" class="nav-link" data-scroll-target="#partial-dependence"><span class="toc-section-number">6.1.2</span>  Partial dependence</a></li>
   </ul></li>
-  <li><a href="#tuning-av-random-forest" id="toc-tuning-av-random-forest" class="nav-link" data-scroll-target="#tuning-av-random-forest"><span class="toc-section-number">7.2</span>  Tuning av random forest</a></li>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">7.3</span>  Oppgaver</a></li>
+  <li><a href="#tuning-av-random-forest" id="toc-tuning-av-random-forest" class="nav-link" data-scroll-target="#tuning-av-random-forest"><span class="toc-section-number">6.2</span>  Tuning av random forest</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">6.3</span>  Oppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -255,7 +250,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -281,8 +276,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="eksempel" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="eksempel"><span class="header-section-number">7.1</span> Eksempel</h2>
+<section id="eksempel" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="eksempel"><span class="header-section-number">6.1</span> Eksempel</h2>
 <p>Leser inn Compas-dataene.</p>
 <div class="cell">
 <details>
@@ -435,8 +430,8 @@ Confusion matrix:
 1 1366 1443   0.4862941</code></pre>
 </div>
 </div>
-<section id="variable-importance" class="level3" data-number="7.1.1">
-<h3 data-number="7.1.1" class="anchored" data-anchor-id="variable-importance"><span class="header-section-number">7.1.1</span> Variable importance</h3>
+<section id="variable-importance" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="variable-importance"><span class="header-section-number">6.1.1</span> Variable importance</h3>
 <p>For å få ut variable importance må dette settes i estimeringen med <code>importance = TRUE</code>. Det tar nå litt lengre tid å estimere, så med store datasett bør du vente med dette til du ellers er fornøyd med modellen.</p>
 <div class="cell">
 <details>
@@ -474,8 +469,8 @@ Confusion matrix:
 </div>
 <p>Her er det altså antall tidligere dommer som har størst betydning for prediksjon av tilbakefall, etterfulgt av alder og kjønn, og til sist om lovbruddet var en forseelse eller ikke.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 </section>
-<section id="partial-dependence" class="level3" data-number="7.1.2">
-<h3 data-number="7.1.2" class="anchored" data-anchor-id="partial-dependence"><span class="header-section-number">7.1.2</span> Partial dependence</h3>
+<section id="partial-dependence" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="partial-dependence"><span class="header-section-number">6.1.2</span> Partial dependence</h3>
 <p>Her må du velge hvilken variabel du ønsker å se på. Det er oftest de “viktigste variablene” fra variable importanc som er mest relevante å se på.</p>
 <div class="cell">
 <details>
@@ -490,8 +485,8 @@ Confusion matrix:
 </div>
 </section>
 </section>
-<section id="tuning-av-random-forest" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="tuning-av-random-forest"><span class="header-section-number">7.2</span> Tuning av random forest</h2>
+<section id="tuning-av-random-forest" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="tuning-av-random-forest"><span class="header-section-number">6.2</span> Tuning av random forest</h2>
 <p>Det som faktisk endrer resultatene en god del er sampling prosedyren, altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget. Men ved å bruke argumentet <code>sampsize = ...</code> kan vi angi en annen andel. Hvis vi angir to tall er det <em>antallet</em> som trekkes fra hver kategori i utfallsvariabelen. Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori. I disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall.</p>
 <p>Hensikten med å gjøre dette er at hvis det er et mindretall som har tilbakefall, så blir hvert tre bygget med mer informasjon om ikke-residivistene enn residivistene. Hvis vi vekter opp residivistene, så får disse større inflytelse på hvert tre. Dermed vil dette også påvirke resultatet. Det er imidlertid vanskelig å vite helt sikkert hvordan det vil slå ut, så man må prøve seg litt frem. Noen ganger vil man veie gruppene likt, andre ganger ulikt. Her er et eksempel der de veies likt:</p>
 <div class="cell">
@@ -589,10 +584,10 @@ Prediction    0    1
 </div>
 </div>
 </section>
-<section id="oppgaver" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">7.3</span> Oppgaver</h2>
+<section id="oppgaver" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">6.3</span> Oppgaver</h2>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.1 </strong></span>Bruk datasettet credit som i forrige oppgave.</p>
+<p><span class="theorem-title"><strong>Exercise 6.1 </strong></span>Bruk datasettet credit som i forrige oppgave.</p>
 <ol type="a">
 <li>Bruk random forest til å gjøre en tilsvarende klassifisering som du gjorde med klassifikasjonstre. Bruk default instillinger i randomForest().</li>
 <li>Bruk predict() til å klassifisere</li>
@@ -601,13 +596,13 @@ Prediction    0    1
 </ol>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.2 </strong></span>Gjenta oppgave 1, men se om du kan justere modellen til et mer tilfredsstillende resultat. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette. Bruk parameterne sampsize, mtry og ntree.</p>
+<p><span class="theorem-title"><strong>Exercise 6.2 </strong></span>Gjenta oppgave 1, men se om du kan justere modellen til et mer tilfredsstillende resultat. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette. Bruk parameterne sampsize, mtry og ntree.</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.3 </strong></span>Tolk random forest a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning. a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial dependence plot.</p>
+<p><span class="theorem-title"><strong>Exercise 6.3 </strong></span>Tolk random forest a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning. a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial dependence plot.</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.4 </strong></span>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen. Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave. Hvis du virkelig vil at begge skal få lån kan du kanskje justere modellen? Legge til/fjerne variable fra formelen og justere tuning parametrene. Prøv deg frem.</p>
+<p><span class="theorem-title"><strong>Exercise 6.4 </strong></span>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen. Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave. Hvis du virkelig vil at begge skal få lån kan du kanskje justere modellen? Legge til/fjerne variable fra formelen og justere tuning parametrene. Prøv deg frem.</p>
 </div>
 
 
@@ -809,12 +804,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./bagging.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./fairness.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

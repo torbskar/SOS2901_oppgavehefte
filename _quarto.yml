@@ -12,7 +12,6 @@ book:
   chapters:
     - index.qmd
     - introduksjon.qmd
-    - grunnleggendeML.qmd
     - linear_regresjon.qmd
     - logistisk_regresjon.qmd
     - cart.qmd

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SOS2901 Maskinlæring for samfunnsvitere - 4&nbsp; Logistisk regresjon</title>
+<title>SOS2901 Maskinlæring for samfunnsvitere - 3&nbsp; Logistisk regresjon</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -134,7 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -169,47 +169,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./grunnleggendeML.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Noen innledende metodiske begrep</span></a>
+  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></a>
+  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></a>
+  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></a>
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></a>
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
+  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -241,14 +236,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#logistisk-regresjon-i-r" id="toc-logistisk-regresjon-i-r" class="nav-link active" data-scroll-target="#logistisk-regresjon-i-r"><span class="toc-section-number">4.1</span>  Logistisk regresjon i R</a></li>
-  <li><a href="#empirisk-eksempel" id="toc-empirisk-eksempel" class="nav-link" data-scroll-target="#empirisk-eksempel"><span class="toc-section-number">4.2</span>  Empirisk eksempel</a>
+  <li><a href="#logistisk-regresjon-i-r" id="toc-logistisk-regresjon-i-r" class="nav-link active" data-scroll-target="#logistisk-regresjon-i-r"><span class="toc-section-number">3.1</span>  Logistisk regresjon i R</a></li>
+  <li><a href="#empirisk-eksempel" id="toc-empirisk-eksempel" class="nav-link" data-scroll-target="#empirisk-eksempel"><span class="toc-section-number">3.2</span>  Empirisk eksempel</a>
   <ul class="collapse">
-  <li><a href="#enkel-logistisk-regresjon" id="toc-enkel-logistisk-regresjon" class="nav-link" data-scroll-target="#enkel-logistisk-regresjon"><span class="toc-section-number">4.2.1</span>  Enkel logistisk regresjon</a></li>
-  <li><a href="#multippel-logistisk-regresjon" id="toc-multippel-logistisk-regresjon" class="nav-link" data-scroll-target="#multippel-logistisk-regresjon"><span class="toc-section-number">4.2.2</span>  Multippel logistisk regresjon</a></li>
+  <li><a href="#enkel-logistisk-regresjon" id="toc-enkel-logistisk-regresjon" class="nav-link" data-scroll-target="#enkel-logistisk-regresjon"><span class="toc-section-number">3.2.1</span>  Enkel logistisk regresjon</a></li>
+  <li><a href="#multippel-logistisk-regresjon" id="toc-multippel-logistisk-regresjon" class="nav-link" data-scroll-target="#multippel-logistisk-regresjon"><span class="toc-section-number">3.2.2</span>  Multippel logistisk regresjon</a></li>
   </ul></li>
-  <li><a href="#oppgaver-tmpå" id="toc-oppgaver-tmpå" class="nav-link" data-scroll-target="#oppgaver-tmpå"><span class="toc-section-number">4.3</span>  Oppgaver tmpå</a></li>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">4.4</span>  Oppgaver</a></li>
+  <li><a href="#oppgaver-tmpå" id="toc-oppgaver-tmpå" class="nav-link" data-scroll-target="#oppgaver-tmpå"><span class="toc-section-number">3.3</span>  Oppgaver tmpå</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">3.4</span>  Oppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -257,7 +252,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -272,8 +267,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="logistisk-regresjon-i-r" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="logistisk-regresjon-i-r"><span class="header-section-number">4.1</span> Logistisk regresjon i R</h2>
+<section id="logistisk-regresjon-i-r" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="logistisk-regresjon-i-r"><span class="header-section-number">3.1</span> Logistisk regresjon i R</h2>
 <p>Logistisk regresjon har det til felles med lineær regresjon at utfallet er en lineær spesifikasjon.</p>
 <p><span class="math display">\[  log( \frac{\pi}{(1-\pi)}) = \alpha + \beta X \]</span></p>
 <p>Venstresiden av ligningen kalles en <em>logit</em>, der <span class="math inline">\(\pi\)</span> er en sannsynlighet. Uttrykket <span class="math inline">\(\frac{\pi}{(1-\pi)}\)</span> er en <em>odds</em>, som er et forholdstall mellom sannsynligheten for at utfallet skjer mot sannsynligheten for det motsatte. Tolkningen av <span class="math inline">\(\beta\)</span> er da en endring av <em>odds</em> på logaritisk skala. Hvis man eksponensierer <span class="math inline">\(\beta\)</span> er den da tolkbar som en <em>oddsrate</em>.</p>
@@ -283,8 +278,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[  \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} \]</span></p>
 <p>En enkel omregning av regresjonsresultatet gir altså en <em>sannynlighet</em>. Denne sannsynligheten kan vi da bruke til <em>klassifikasjon</em> hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har <span class="math inline">\(P(y = 1) &gt; 0.5\)</span> tilhører den ene gruppen og resten i den andre gruppen.</p>
 </section>
-<section id="empirisk-eksempel" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="empirisk-eksempel"><span class="header-section-number">4.2</span> Empirisk eksempel</h2>
+<section id="empirisk-eksempel" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="empirisk-eksempel"><span class="header-section-number">3.2</span> Empirisk eksempel</h2>
 <p>Som eksempel bruker vi et datasettet Attrition. Dette er et datasett over arbeidstakere i en bedrift der utfallsvariabelen er om arbeidstakeren slutter i jobben eller ikke.</p>
 <p>For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere som slutter tar med seg erfaring og kompetanse, og nye arbeidstakere må læres opp. Arbeidsgiver bør derfor generelt legge til rette for at arbeidstakere ønsker å bli værende, men det kan også være aktuelt med mer målrettede tiltak. Når en arbeidstaker har fått et nytt jobbtilbud kan det være for sent. Hvis man derimot kan komme i forkjøpet kan man kanskje gjøre noe <em>før</em> vedkommende går til det skrittet å søke ny jobb. Hvis man kunne predikere hvem som kommer til å slutte kunne man altså gjort tiltak i forkant.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med <code>read.csv()</code>. Deretter kan vi se på innholdet med <code>skim()</code>:</p>
@@ -902,14 +897,14 @@ $ YearsWithCurrManager     &lt;int&gt; 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2,
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(training) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1055</code></pre>
+<pre><code>[1] 1038</code></pre>
 </div>
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(testing) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 415</code></pre>
+<pre><code>[1] 432</code></pre>
 </div>
 </div>
 <p>OBS! variabelen Attrition er en “factor”, dvs. kategorisk med underliggende nummer. Ta en titt.</p>
@@ -919,14 +914,14 @@ $ YearsWithCurrManager     &lt;int&gt; 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2,
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(training<span class="sc">$</span>Attrition)   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> Factor w/ 2 levels "No","Yes": 2 2 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre><code> Factor w/ 2 levels "No","Yes": 2 1 1 1 1 1 1 1 1 1 ...</code></pre>
 </div>
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(training<span class="sc">$</span>Attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] Yes Yes No  No  No  No 
+<pre><code>[1] Yes No  No  No  No  No 
 Levels: No Yes</code></pre>
 </div>
 <details>
@@ -945,7 +940,7 @@ Levels: No Yes</code></pre>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(training<span class="sc">$</span>Attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 1 0 0 0 0</code></pre>
+<pre><code>[1] 1 0 0 0 0 0</code></pre>
 </div>
 </div>
 <p>Andelen kan vi få med <code>mean()</code>:</p>
@@ -955,7 +950,7 @@ Levels: No Yes</code></pre>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(training<span class="sc">$</span>Attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1658768</code></pre>
+<pre><code>[1] 0.1666667</code></pre>
 </div>
 </div>
 <p>Hvordan plotte slike data? Bruk geom_jitter eller geom_point<br>
@@ -999,8 +994,8 @@ Levels: No Yes</code></pre>
 <p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<section id="enkel-logistisk-regresjon" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="enkel-logistisk-regresjon"><span class="header-section-number">4.2.1</span> Enkel logistisk regresjon</h3>
+<section id="enkel-logistisk-regresjon" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="enkel-logistisk-regresjon"><span class="header-section-number">3.2.1</span> Enkel logistisk regresjon</h3>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1032,8 +1027,8 @@ AIC: 1263.1
 Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 </div>
-<section id="prediksjon" class="level4" data-number="4.2.1.1">
-<h4 data-number="4.2.1.1" class="anchored" data-anchor-id="prediksjon"><span class="header-section-number">4.2.1.1</span> Prediksjon</h4>
+<section id="prediksjon" class="level4" data-number="3.2.1.1">
+<h4 data-number="3.2.1.1" class="anchored" data-anchor-id="prediksjon"><span class="header-section-number">3.2.1.1</span> Prediksjon</h4>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1042,8 +1037,8 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </details>
 </div>
 </section>
-<section id="roc-og-auc" class="level4" data-number="4.2.1.2">
-<h4 data-number="4.2.1.2" class="anchored" data-anchor-id="roc-og-auc"><span class="header-section-number">4.2.1.2</span> ROC og AUC</h4>
+<section id="roc-og-auc" class="level4" data-number="3.2.1.2">
+<h4 data-number="3.2.1.2" class="anchored" data-anchor-id="roc-og-auc"><span class="header-section-number">3.2.1.2</span> ROC og AUC</h4>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1072,8 +1067,8 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <p>Area under the curve er 0.634.</p>
 </section>
 </section>
-<section id="multippel-logistisk-regresjon" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="multippel-logistisk-regresjon"><span class="header-section-number">4.2.2</span> Multippel logistisk regresjon</h3>
+<section id="multippel-logistisk-regresjon" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="multippel-logistisk-regresjon"><span class="header-section-number">3.2.2</span> Multippel logistisk regresjon</h3>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1149,8 +1144,8 @@ AIC: 949.98
 Number of Fisher Scoring iterations: 15</code></pre>
 </div>
 </div>
-<section id="prediksjon-1" class="level4" data-number="4.2.2.1">
-<h4 data-number="4.2.2.1" class="anchored" data-anchor-id="prediksjon-1"><span class="header-section-number">4.2.2.1</span> Prediksjon</h4>
+<section id="prediksjon-1" class="level4" data-number="3.2.2.1">
+<h4 data-number="3.2.2.1" class="anchored" data-anchor-id="prediksjon-1"><span class="header-section-number">3.2.2.1</span> Prediksjon</h4>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1159,8 +1154,8 @@ Number of Fisher Scoring iterations: 15</code></pre>
 </details>
 </div>
 </section>
-<section id="roc-og-auc-1" class="level4" data-number="4.2.2.2">
-<h4 data-number="4.2.2.2" class="anchored" data-anchor-id="roc-og-auc-1"><span class="header-section-number">4.2.2.2</span> ROC og AUC</h4>
+<section id="roc-og-auc-1" class="level4" data-number="3.2.2.2">
+<h4 data-number="3.2.2.2" class="anchored" data-anchor-id="roc-og-auc-1"><span class="header-section-number">3.2.2.2</span> ROC og AUC</h4>
 <p>Funksjonen <code>roc()</code> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter.</p>
 <p>OBS! Man må man angi data som <em>første</em> argument i funksjonen <code>roc()</code>, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!</p>
 <p>Det går an å få ut plottet med en quick-and-dirty versjon med <code>plot(ROC)</code>, men det blir penere med bruk av <code>ggplot()</code> slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).</p>
@@ -1203,15 +1198,15 @@ Number of Fisher Scoring iterations: 15</code></pre>
 </section>
 </section>
 </section>
-<section id="oppgaver-tmpå" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="oppgaver-tmpå"><span class="header-section-number">4.3</span> Oppgaver tmpå</h2>
+<section id="oppgaver-tmpå" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="oppgaver-tmpå"><span class="header-section-number">3.3</span> Oppgaver tmpå</h2>
 <ul>
 <li>Du gjorde et valg av cut-off ovenfor. En måte for å vurdere klassifiseringen er å sammenligne det resultatet med de observerte dataene. Lag en tabell for din klassifisering vs observert slik:<br>
 table(klass, training$Attrition) Synes du dette ble presist nok? Prøv gjerne å endre cut-off for klassifiseringen.</li>
 </ul>
 <p>Slike tabeller skal vi snakke mer om de kommende gangen. Det kalles gjerne en «confusion matrix».</p>
 <div id="exr-stepw1" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.1 </strong></span>Det finnes prosedyrer for automatisk seleksjon av variable. Da søkes det gjennom de spennet av mulige modeller som oppgis og finner den modellen som predikerer best. Oppgi den enkleste modellen du vil starte fra og den mest kompliserte modellen du vil vurdere og estimer disse to modellene.</p>
+<p><span class="theorem-title"><strong>Exercise 3.1 </strong></span>Det finnes prosedyrer for automatisk seleksjon av variable. Da søkes det gjennom de spennet av mulige modeller som oppgis og finner den modellen som predikerer best. Oppgi den enkleste modellen du vil starte fra og den mest kompliserte modellen du vil vurdere og estimer disse to modellene.</p>
 </div>
 <p>En modell med kun konstantledd skrives med <code>~</code> 1 i formelen slik: <code>null_model &lt;- glm(Attrition ~ 1, data = training, family = "binomial")</code></p>
 <p>Lag en mer komplisert formel. Ta med så mange prediktorer du vil! Gjerne samspillsledd og polynomer også. Samspill: <code>variabel1 * variabel2</code>. Polynom, f.eks. kvadratledd: <code>I(variabel\^2)</code>.</p>
@@ -1224,7 +1219,7 @@ direction = “forward”) Ta en titt på endelig resultat:<br>
 summary( ______ )</p>
 <p>Bruk nå predict() som i oppgave en for predikere sannsynligheter, lag en ROC curve og regn ut AUC.</p>
 <div id="exr-stepw-test" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.2 </strong></span>Sjekk så mot test-data! Du har optimalisert en modell til å passe de dataene du hadde. Hvordan vil det funke på nye data? Til dette bruker vi det mindre datasettet testing som du lagde over.</p>
+<p><span class="theorem-title"><strong>Exercise 3.2 </strong></span>Sjekk så mot test-data! Du har optimalisert en modell til å passe de dataene du hadde. Hvordan vil det funke på nye data? Til dette bruker vi det mindre datasettet testing som du lagde over.</p>
 <ul>
 <li>Bruk step_model som du lagde i forrige oppgave og prediker for nye data. Bruk predict(), men husk å spesifisere newdata=testing.<br>
 </li>
@@ -1232,18 +1227,18 @@ summary( ______ )</p>
 </ul>
 </div>
 </section>
-<section id="oppgaver" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">4.4</span> Oppgaver</h2>
+<section id="oppgaver" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">3.4</span> Oppgaver</h2>
 <p>Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger.</p>
 <div id="exr-ols-eksplisitt" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.3 </strong></span>Velg et datasettet og formuler hva en prediksjonsmodell for disse dataene kan kunne brukes til. Du må velge et datasett som har en utfallsvariabel som er kategorisk eller evt. omkode utfallsvariabelen til kategorier. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</p>
+<p><span class="theorem-title"><strong>Exercise 3.3 </strong></span>Velg et datasettet og formuler hva en prediksjonsmodell for disse dataene kan kunne brukes til. Du må velge et datasett som har en utfallsvariabel som er kategorisk eller evt. omkode utfallsvariabelen til kategorier. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</p>
 <p>Merk: som i tidligere oppgaver er det ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</p>
 </div>
 <div id="exr-logit-split" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.4 </strong></span>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</p>
+<p><span class="theorem-title"><strong>Exercise 3.4 </strong></span>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</p>
 </div>
 <div id="exr-logit-sepaa" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.5 </strong></span>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</p>
+<p><span class="theorem-title"><strong>Exercise 3.5 </strong></span>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</p>
 <ol type="a">
 <li>Bruk <code>glimpse()</code> og <code>skim()</code> til å få oversikt over innholdet i datasettet</li>
 <li>Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</li>
@@ -1251,7 +1246,7 @@ summary( ______ )</p>
 </ol>
 </div>
 <div id="exr-logit-train" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.6 </strong></span>Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er <span class="math inline">\(r^2\)</span> og AUC. Regn også ut RMSE.</p>
+<p><span class="theorem-title"><strong>Exercise 3.6 </strong></span>Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er <span class="math inline">\(r^2\)</span> og AUC. Regn også ut RMSE.</p>
 <ol type="a">
 <li>Velg ut tre forklaringsvariable og estimer en regresjonsmodell</li>
 <li>Estimer en ny modell med alle variable i datasettet</li>
@@ -1261,7 +1256,7 @@ summary( ______ )</p>
 <p>Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</p>
 </div>
 <div id="exr-logit-test" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.7 </strong></span>I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger:</p>
+<p><span class="theorem-title"><strong>Exercise 3.7 </strong></span>I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger:</p>
 <ol type="a">
 <li>Prediker utfallet på testing-datasettet</li>
 <li>Regn ut AUC</li>
@@ -1469,12 +1464,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./linear_regresjon.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./cart.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

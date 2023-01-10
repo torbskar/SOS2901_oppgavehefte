@@ -1,24 +1,33 @@
 # Introduksjon {.unnumbered}
 
-Dette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. Det lages delvis underveis, så det vil bli oppdateringer jevnlig. 
-Antakeligvis er det enklest å navigere i denne nettsiden, men du kan også <a href="file.txt"> laste ned en pdf-versjon </a>. 
 
-(Dessuten skriver jeg disse oppgavene i Quarto som jeg ikke er så god i, så jeg prøver meg litt frem. Det kan derfor hende layout og andre ting endres underveis. Bær over med meg!)
+Dette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. Det lages delvis underveis, så det vil bli oppdateringer jevnlig. Ikke alt er klart akkurat nå, og det vil skje endringer i dokumentet underveis gjennom hele semesteret. 
 
-Hvert kapittel i dette heftet starter med en gjennomgang av aktuell teknikk og de kodene som trengs for å gjøre det dere skal. Det vises gjennom eksempler med et datasett. 
+Hvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Deretter kommer noen oppgaver, som dere skal løse. Oppgavene er ganske åpne og det er meningen at dere skal velge et annet datasett og gjøre tilsvarende analyser som i eksempelet. Fra eksempelet får dere også nødvendig kode. Datasettene som er tilgjengelige finner dere i appendikset. Last de ned til egen masking for å jobbe med dem. 
 
-Alle datasettene vi skal bruke finner dere imidletid i Canvas under fanen for Filer. Last de ned til egen masking for å jobbe med dem. Hver uke skal du gjøre følgende: 
+Hver uke skal vi jobbe med på følgende måte: 
 
-1) Gå gjennom eksempelet og sjekke at du klarer reprodusere resultatene og skjønner omtrentlig hva du driver med. 
+1) Gå gjennom eksempelet og sjekk at du klarer reprodusere resultatene og skjønner omtrentlig hva du driver med. 
 1) Velg et av de andre datasettene og gjør tilsvarende analyser med dette 
+1) Gjenta gjerne med flere datasett
 
-*Forberedelse til undervisning*
+
+##Forberedelse til undervisning
 Til hver undervisningsgang skal du ha forberedt to ting: 
 
 1) Valgt et datasett og splittet dette i training/testing 
 1) Formulert noe om hva en prediksjon med denne typen data kan tenkes å brukes til i praksis (en slags problemstilling, med andre ord)
 1) Forberede minst ett spørsmål eller kommentar til det tekniske eller pensum. Vi starter hver undervisning med oppklaringer
 
+
+
+# Hva vi forutsetter av forkunnskaper
+
+Dette kurset forutsetter at man har grunnleggende ferdigheter i kvantitative metoder og har brukt *R* før. Hvis du vet du trenger det: frisk opp litt fra tidligere kurs.
+
+Når det er sagt, så er det begrenset hvor mye man *må* kunne fra før hvis du er motivert til å jobbe med stoffet skal du nok få til dette. Det blir mye nytt uansett. 
+
+Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham & Grolemunds bok ["R for data science"](https://r4ds.had.co.nz/) et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk. 
 
 
 # R og Rstudio
@@ -57,11 +66,5 @@ library(AUC)
 ```
 
 
-## Forutsetninger
 
-Dette kurset forutsetter at man har grunnleggende ferdigheter i kvantitative metoder og har brukt *R* før. Hvis du vet du trenger det: frisk opp litt fra tidligere kurs.
-
-Når det er sagt, så er det begrenset hvor mye man *må* kunne fra før hvis du er motivert til å jobbe med stoffet skal du nok få til dette. Det blir mye nytt uansett. 
-
-Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham & Grolemunds bok ["R for data science"](https://r4ds.had.co.nz/) et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk. 
 
