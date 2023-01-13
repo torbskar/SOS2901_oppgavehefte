@@ -1,5 +1,6 @@
 # Lineær regresjon
 
+Lineær regresjon slik vi skal bruke det her er helt vanlig regresjon slik du har lært om i grunnleggende kurs i kvantitative metoder. Altså lineær funksjon estimert med minste kvadraters metode. Alt du har lært før gjelder også her. Forskjellen er at vi nå ikke er så interessert i å tolke $\beta$ men i den predikerte $\hat{y}$.
 
 ```{r uke2_pakker}
 #| echo: false
@@ -13,9 +14,9 @@ library(tidyverse)
 
 ## OLS i R
 
-Vi illustrerer lineær regresjon med et empirisk eksempel. Her skal vi bruke data for norske kommuner i 2016. La oss si at vi er interessert i hvordan antall voldshendelser per 1000 innbyggere vil endre seg i en kommune. Dette kunne være relevant for langtidsplanlegging av forebygging, politibemanning, helsetjenester osv. Det kan være et område som er i stor endring slik at befolkningssammensetningen forventes å endre seg og/eller det er endrede lokale økonomiske utsikter. 
+Vi illustrerer lineær regresjon med et empirisk eksempel. Her skal vi bruke data for norske kommuner i 2016. La oss si at vi er interessert i hvordan antall voldshendelser per 1000 innbyggere vil endre seg i en kommune. Dette kunne være relevant for langtidsplanlegging av forebygging, politibemanning, helsetjenester osv. Det kan være et område som er i stor endring slik at befolkningssammensetningen forventes å endre seg og/eller det er endrede lokale økonomiske utsikter.
 
-Først leser vi inn dataene og tar en titt på variabellisten. 
+Først leser vi inn dataene og tar en titt på variabellisten.
 
 ```{r}
 kommune <- readRDS( "data/kommunedata.rds")
@@ -23,7 +24,7 @@ glimpse(kommune)
 
 ```
 
-En annen måte å få oversikt over dataene på er å bruke funksjonen `skim()`, som gir noe mer informasjon om fordelingen av hver enkelt variabel. 
+En annen måte å få oversikt over dataene på er å bruke funksjonen `skim()`, som gir noe mer informasjon om fordelingen av hver enkelt variabel.
 
 ```{r}
 
@@ -31,60 +32,77 @@ skim(kommune)
 
 ```
 
-### Enkel lineær regresjon 
-En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i kommunen. Rett og slett fordi dette er den demografiske gruppen som begår mest vold - og kriminalitet generelt, faktisk. Hvis befolkningssammensetningen forventes å bli yngre vil det medføre flere unge menn, og da kan vi kanskje forvente at det blir flere voldshendelser bare av den grunn? Sammenhengen mellom unge menn og voldsrate kan estimeres med helt vanlig lineær regresjon. 
+### Split datasettet
 
-En god start på de fleste empiriske analyser er å beskrive sammenhengen med et plot. Her legger vi på en lineær regresjonslinje med `geom_smooth()` der vi presiserer lineær modell med `method = "lm"` og lar være å ta med konfidensintervallet `se = FALSE`.  
+Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen 'initial_split()' etterfulgt av funksjonene 'training()' og 'testing()'. For å angi at man skal bruke 70% til training settes 'prop = .7'.
+
+Merk bruken av 'set.seed()'. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting[^linear_regresjon-1] og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.
+
+[^linear_regresjon-1]: Bortsett fra for dem som mener det er svaret på "the Ultimate Question of Life, the Universe, and Everything"
+
+```{r}
+library(rsample)
+
+set.seed(42)
+kommune_split <- initial_split(kommune, prop = .7)
+
+kommune_train <- training(kommune_split)
+kommune_test <- testing(kommune_split)
+
+```
+
+### Enkel lineær regresjon
+
+En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i kommunen. Rett og slett fordi dette er den demografiske gruppen som begår mest vold - og kriminalitet generelt, faktisk. Hvis befolkningssammensetningen forventes å bli yngre vil det medføre flere unge menn, og da kan vi kanskje forvente at det blir flere voldshendelser bare av den grunn? Sammenhengen mellom unge menn og voldsrate kan estimeres med helt vanlig lineær regresjon.
+
+En god start på de fleste empiriske analyser er å beskrive sammenhengen med et plot. Her legger vi på en lineær regresjonslinje med `geom_smooth()` der vi presiserer lineær modell med `method = "lm"` og lar være å ta med konfidensintervallet `se = FALSE`.
 
 ```{r}
 #| warning: false
 #| message: false 
-kommune <- kommune %>% 
+kommune_train <- kommune_train %>% 
   mutate(prop_unge_menn = (menn_18_25 + menn_26_35)/bef_totalt*100) 
 
-ggplot(kommune, aes(x = prop_unge_menn, 
+ggplot(kommune_train, aes(x = prop_unge_menn, 
                      y = voldskriminalitet)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) 
 ```
 
-
-
 ```{r}
-est <- lm(voldskriminalitet ~ prop_unge_menn, data=kommune)
+est <- lm(voldskriminalitet ~ prop_unge_menn, data = kommune_train)
 summary(est)
 
 round(summary(est)$r.squared, digits = 3)
 ```
 
-Med andre ord kan voldsraten beskrives som 
+Med andre ord kan voldsraten beskrives som
 
-$$ voldskriminalitet = 0.78 + 0.39 \times ungeMenn  $$
-Men vi har også sett at $r^2$ er ganske lav, bare `r round(summary(est)$r.squared, digits = 3)`. Denne koeffisienten kalles også "coefficient of determination" og sier noe om i hvor stor grad modellen fanger opp variasjoenen i dataene. En lav $r^2$ betyr at modellen i liten grad gjør det. Vi må altså forvente at modellen vil bomme ganske kraftig i sine prediksjoner. Vi kan velge å ta modellen seriøst likevel, men ikke ha for store forventninger for prediksjonene! 
+$$ voldskriminalitet = 0.78 + 0.39 \times ungeMenn  $$ Men vi har også sett at $r^2$ er ganske lav, bare `r round(summary(est)$r.squared, digits = 3)`. Denne koeffisienten kalles også "coefficient of determination" og sier noe om i hvor stor grad modellen fanger opp variasjoenen i dataene. En lav $r^2$ betyr at modellen i liten grad gjør det. Vi må altså forvente at modellen vil bomme ganske kraftig i sine prediksjoner. Vi kan velge å ta modellen seriøst likevel, men ikke ha for store forventninger for prediksjonene!
 
-
-Et annet mål på hvor godt modellen treffer er "Root mean square error", RMSE. Dette kan skrives som: 
+Et annet mål på hvor godt modellen treffer er "Root mean square error", RMSE. Dette kan skrives som:
 
 $$ rmse = \sqrt{ \frac{ \sum{(O_i-P_i)^2} }{N} }  $$
 
-der $O$ er de observerte verdiene og $P$ er de predikerte verdiene for observasjon $i$. Merk at $(O_i-P_i)$ er residualene. I R kan vi hente ut residualene fra regresjons-objektet med dollartegnet `...$res` etter objektnavnet. Da kan du regne ut RMSE som følger:  
+der $O$ er de observerte verdiene og $P$ er de predikerte verdiene for observasjon $i$. Merk at $(O_i-P_i)$ er residualene. I R kan vi hente ut residualene fra regresjons-objektet med dollartegnet `...$res` etter objektnavnet. Da kan du regne ut RMSE som følger:
 
 ```{r}
 rmse <- sqrt(mean(est$res^2))
 rmse
 ```
 
-RMSE sier altså omtrentlig hvor mye modellen i gjennomsnitt bommer på de observerte verdiene. ^[Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt]. Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.  
+RMSE sier altså omtrentlig hvor mye modellen i gjennomsnitt bommer på de observerte verdiene. [^linear_regresjon-2]. Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.
+
+[^linear_regresjon-2]: Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt
 
 For å få litt bedre tak på hva RMSE betyr kan vi se på et plot av de predikerte og observerte verdiene. Vi kan predikere vold for hver enkelt kommune basert på denne modellen, som altså er den forventede voldsraten *hvis modellen er sann*. Funksjonen `predict()` gir oss hva vi trenger.
 
 ```{r}
-kom <- kommune %>% 
+kom <- kommune_train %>% 
   mutate(pred = predict(est))
 ```
 
-Merk at koden her lagde en kopi av datasettet der vi har alle de opprinnelige variablene pluss en variabel med de predikerte verdiene. 
-Vi kan nå sammenlignet prediksjonene med de observerte utfallene. 
+Merk at koden her lagde en kopi av datasettet der vi har alle de opprinnelige variablene pluss en variabel med de predikerte verdiene. Vi kan nå sammenlignet prediksjonene med de observerte utfallene.
 
 ```{r}
 ggplot(kom, aes(x = voldskriminalitet, y = pred)) +
@@ -92,49 +110,49 @@ ggplot(kom, aes(x = voldskriminalitet, y = pred)) +
   geom_smooth(method = "lm", se = FALSE)
 ```
 
-Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe den jo ikke gjør. Modellen bommer altså ganske mye.  
+Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe den jo ikke gjør. Modellen bommer altså ganske mye.
 
-
-Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere `newdata = dt`. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%. 
+Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere `newdata = dt`. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.
 
 ```{r}
 dt <- data.frame(prop_unge_menn = .15)
 predict(est, newdata = dt)
 ```
 
-I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 7.2 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet. 
+I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 7.2 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.
 
 ```{r}
 predict(est, newdata = dt, interval = "prediction")
 ```
-Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med "95% sannsynlighet"^[Dette er en omtrentelig formulering. Alle sannsynligheter gjelder i det lange løp: altså hvis man gjør undersøkelsen veldig mange ganger.] at voldsraten vil være mellom 2.3 og 12.1 per 1000 innbyggere. 
 
+Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med "95% sannsynlighet"[^linear_regresjon-3] at voldsraten vil være mellom 2.3 og 12.1 per 1000 innbyggere.
 
+[^linear_regresjon-3]: Dette er en omtrentelig formulering. Alle sannsynligheter gjelder i det lange løp: altså hvis man gjør undersøkelsen veldig mange ganger.
 
-### Multippel regresjon 
+### Multippel regresjon
 
-Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan komplisere vesentlig ved å inkludere flere variable og bruke alle triksene man evt. har lært om multippel regresjon tidligere, primært interaksjonsledd, polynomer og transformasjoner osv. 
+Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan komplisere vesentlig ved å inkludere flere variable og bruke alle triksene man evt. har lært om multippel regresjon tidligere, primært interaksjonsledd, polynomer og transformasjoner osv.
 
-I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon. 
+I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon.
 
 ```{r}
 
 est_m <- lm(voldskriminalitet ~ prop_unge_menn + inntekt_totalt_median + shj_unge + 
                    ant_husholdninger , 
-            data=kommune)
+            data = kommune_train)
 summary(est_m)
 
 
 ```
 
-Merk at $r^2$ nå har gått betraktelig opp, til ca `r round(summary(est_m)$r.squared, digits = 2)`. Gitt at vi tolker dette som i hvor stor grad vi kan *predikere* utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon. 
+Merk at $r^2$ nå har gått betraktelig opp, til ca `r round(summary(est_m)$r.squared, digits = 2)`. Gitt at vi tolker dette som i hvor stor grad vi kan *predikere* utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon.
 
 Her er et scatterplot av observert mot forventet voldsrater:
 
 ```{r}
 #| warning: false
 #| error: false
-kom_pred <- kommune %>% 
+kom_pred <- kommune_train %>% 
   mutate(pred = predict(est_m))
 
 ggplot(kom_pred, aes(x = voldskriminalitet, y = pred)) +
@@ -143,13 +161,12 @@ ggplot(kom_pred, aes(x = voldskriminalitet, y = pred)) +
 
 ```
 
-
-La oss inkludere alle aktuelle variable i datasettet. Et lite triks her er å fjerne alle variable vi ikke er interessert i og lagre det i et nytt datasett. I `lm()` kan vi da presisere formelen som `Vold ~ . ` som betyr å ta med alle variabelene i stedet for å liste hver enkelt variabel. 
+La oss inkludere alle aktuelle variable i datasettet. Et lite triks her er å fjerne alle variable vi ikke er interessert i og lagre det i et nytt datasett. I `lm()` kan vi da presisere formelen som `Vold ~ .` som betyr å ta med alle variabelene i stedet for å liste hver enkelt variabel.
 
 ```{r}
-glimpse(kommune)
+glimpse(kommune_train)
 
-kom_s <- kommune %>% 
+kom_s <- kommune_train %>% 
   select(-c(kommune, kommune_nr, ordenslovbrudd,  
             nark_alko_kriminalitet, trafikklovbrudd, andre_lovbrudd, 
             prop_unge_menn))
@@ -158,24 +175,23 @@ full_mod <- lm(voldskriminalitet ~ . , data = kom_s)
 summary(full_mod)
 ```
 
-$r^2$ gikk noe opp, til 0.39. 
+$r^2$ gikk noe opp, til 0.39.
 
-
-Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output. 
+Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output.
 
 ```{r}
 full_mod2 <- lm( voldskriminalitet ~ .^2, data = kom_s)
 summary(full_mod2)$r.squared
 ```
-$r^2$ gikk vesentlig opp. Men når vi først driver med kompliserte modellspesifikasjoner som uansett er vanskelige å tolke - hvorfor begrense seg til 2-veis interaksjoner? Her er en versjon med alle 3-veis interaksjoner, og nå begynner $r^2$ virkelig å bli høy!  
 
+$r^2$ gikk vesentlig opp. Men når vi først driver med kompliserte modellspesifikasjoner som uansett er vanskelige å tolke - hvorfor begrense seg til 2-veis interaksjoner? Her er en versjon med alle 3-veis interaksjoner, og nå begynner $r^2$ virkelig å bli høy!
 
 ```{r}
 full_mod3 <- lm( voldskriminalitet ~ .^3, data = kom_s)
 summary(full_mod3)$r.squared
 ```
 
-Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant bedre av å legge til hver av de parametrene, og stopper når modellen ikke blir bedre. Så beholdes den "beste" av disse modellene, ikke nødvendigvis den som er mest komplisert. 
+Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant bedre av å legge til hver av de parametrene, og stopper når modellen ikke blir bedre. Så beholdes den "beste" av disse modellene, ikke nødvendigvis den som er mest komplisert.
 
 OBS! Merk at dette er en rent mekanisk seleksjon, og frarådes i de fleste samfunnsvitenskapelige sammenhenger. Tolkning av parametre og statistisk usikkerhet er nå på svært tynn is. Men det kan gi god prediksjon likevel.
 
@@ -185,7 +201,7 @@ step_mod <- MASS::stepAIC(full_mod3, direction="forward",
 summary(step_mod)$r.squared
 ```
 
-Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observert, så får vi et svært mye bedre sammenfall enn tidligere. 
+Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observert, så får vi et svært mye bedre sammenfall enn tidligere.
 
 ```{r}
 #| warning: false
@@ -199,8 +215,7 @@ ggplot(kom_pred, aes(x = voldskriminalitet, y = pred)) +
 
 ```
 
-
-Nå kan vi også regne ut RMSE, som altså er "root mean squared error". Med andre ord: regn ut residualene (dvs. "error"), og kvadrer denne, og så ta kvadratroten av gjennomsnittet av denne. Her er en kode skrevet litt omstendelig så den er litt lettere å forstå: 
+Nå kan vi også regne ut RMSE, som altså er "root mean squared error". Med andre ord: regn ut residualene (dvs. "error"), og kvadrer denne, og så ta kvadratroten av gjennomsnittet av denne. Her er en kode skrevet litt omstendelig så den er litt lettere å forstå:
 
 ```{r}
 kom_s %>% 
@@ -211,59 +226,114 @@ kom_s %>%
   
 ```
 
-Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. ^[Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt]. Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.  
+Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. [^linear_regresjon-4]. Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.
+
+[^linear_regresjon-4]: Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt
+
+### Predikere for nye data
+
+Men nå har vi bare sett på hvordan prediksjonen fungerer på training-datasettet. Vi må sjekke med testing-datasettet. Det lagde vi i begynnelsen, så nå henter vi det frem og gjør det samme som over. I 'predict()' må vi nå angi 'newdata ='.
+
+```{r}
+#| warning: false
+#| error: false
+kom_pred2 <- kommune_test %>% 
+  mutate(pred = predict(step_mod, newdata = .), 
+         residual = pred - voldskriminalitet)
+
+ggplot(kom_pred2, aes(x = voldskriminalitet, y = pred)) +
+  geom_point(alpha = .3) +
+  geom_smooth(method = "lm", se = FALSE)
+
+```
+
+Ser dette rart ut? Det er to observasjoner som har pedikert skyhøy voldsrate! Disse to prediksjonene bommer voldsomt, og med litt erfaring vil man se at dette her går aldri bra for $r^2$, som regnes ut slik:
+
+```{r}
+kom_pred2  %>% 
+  mutate(residual_total = voldskriminalitet - mean(voldskriminalitet)) %>% 
+  summarise(SSres = sum(residual^2), 
+            SStot = sum(residual_total^2)) %>% 
+  mutate(r_squared = 1 - (SSres/SStot))
+  
+```
+
+Ganske riktig! Dette ble bare tull. Kvadratsummen til residualene ble mye høyere enn total kvadratsum. Dermed blir $r^2$ helt fjerne. 
+
+Det er nok bedre med en enklere modell. Vi prøver heller den: 
+
+```{r}
+#| warning: false
+#| error: false
+kom_pred3 <- kommune_test %>% 
+  mutate(pred = predict(full_mod, newdata = .), 
+         residual = pred - voldskriminalitet)
+
+ggplot(kom_pred3, aes(x = voldskriminalitet, y = pred)) +
+  geom_point(alpha = .3) +
+  geom_smooth(method = "lm", se = FALSE)
+
+```
 
 
+```{r}
+kom_pred3  %>% 
+  mutate(residual_total = voldskriminalitet - mean(voldskriminalitet)) %>% 
+  summarise(SSres = sum(residual^2), 
+            SStot = sum(residual_total^2)) %>% 
+  mutate(r_squared = 1 - (SSres/SStot))
+  
+```
+
+
+
+
+RMSE regnes ut slik:
+
+```{r}
+kom_pred3 %>% 
+  mutate(sq.resid = residual^2) %>% 
+  summarise(sqrt(mean(sq.resid)))
+  
+```
 
 ## Oppgaver
 
 ::: {#exr-ols-eksplisitt}
-Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon. 
+Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.
 
-Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene. 
-
+Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.
 :::
-
 
 ::: {#exr-split}
-Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det. 
+Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.
 :::
-
 
 ::: {#exr-sepaa}
 Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:
 
 a)  Bruk `glimpse()` og `skim()` til å få oversikt over innholdet i datasettet
-a)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang
-a)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable
+b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang
+c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable
 :::
-
 
 ::: {#exr-ols-train}
-Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. 
-Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er $r^2$ og RMSE. 
+Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er $r^2$ og RMSE.
 
 a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell
-a)  Estimer en ny modell med alle variable i datasettet
-a)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd
-a)  Gjør et automatisk modellsøk 
+b)  Estimer en ny modell med alle variable i datasettet
+c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd
+d)  Gjør et automatisk modellsøk
 
-Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE. 
+Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.
 :::
-
 
 ::: {#exr-ols-test}
-I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger: 
+I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger:
 
-a) Prediker utfallet på testing-datasettet
-a) Regn ut AUC og RMSE
-a) Hvor stor er *endringen* i AUC og RMSE fra resultatene når du brukte training-datasettet? 
+a)  Prediker utfallet på testing-datasettet
+b)  Regn ut AUC og RMSE
+c)  Hvor stor er *endringen* i AUC og RMSE fra resultatene når du brukte training-datasettet?
 
-Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring. 
+Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.
 :::
-
-
-
-
-
-
