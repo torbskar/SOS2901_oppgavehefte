@@ -36,5 +36,6 @@ format:
   #   documentclass: scrreprt
 
 
-
+# På kontormaskinen må jeg kjøre denne først: 
+# Sys.setlocale(locale='no_NB.utf8')
 
