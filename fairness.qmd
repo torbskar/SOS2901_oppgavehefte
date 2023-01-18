@@ -6,7 +6,8 @@
 
 
 ```{r}
-#| echo: false
+#| echo: true
+#| code-fold: false
 #| warning: false 
 #| message: false
 library(tidyverse)

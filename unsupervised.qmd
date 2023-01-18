@@ -6,7 +6,7 @@ I dette kapittelt skal vi bruke følgende pakker:
 ```{r}
 #| eval: true
 #| code-fold: false
-#| echo: false
+#| echo: true
 #| warning: false 
 #| message: false
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
