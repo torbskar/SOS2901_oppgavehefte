@@ -1,5 +1,17 @@
 # Lineær regresjon
 
+I dette kapittelt skal vi bruke følgende pakker: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
+```
+
+
+
 Lineær regresjon slik vi skal bruke det her er helt vanlig regresjon slik du har lært om i grunnleggende kurs i kvantitative metoder. Altså lineær funksjon estimert med minste kvadraters metode. Alt du har lært før gjelder også her. Forskjellen er at vi nå ikke er så interessert i å tolke $\beta$ men i den predikerte $\hat{y}$.
 
 ```{r uke2_pakker}
