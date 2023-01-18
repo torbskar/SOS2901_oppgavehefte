@@ -3,7 +3,7 @@
 I dette kapittelt skal vi bruke følgende pakker: 
 
 ```{r}
-#| eval: false
+#| eval: true
 #| code-fold: false
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
 library(skimr)       # funksjonen skim() for å se på data

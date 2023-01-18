@@ -1,5 +1,16 @@
 # Logistisk regresjon
 
+I dette kapittelt skal vi bruke følgende pakker: 
+
+```{r}
+#| eval: true
+#| code-fold: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
+library(AUC)         # For å beregne ROC-curve og AUC
+```
+
 ## Logistisk regresjon i R
 
 Logistisk regresjon har det til felles med lineær regresjon at utfallet er en lineær spesifikasjon.

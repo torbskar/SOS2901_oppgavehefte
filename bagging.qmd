@@ -1,5 +1,21 @@
 # Bagging 
 
+I dette kapittelt skal vi bruke følgende pakker: 
+
+```{r}
+#| eval: true
+#| code-fold: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
+library(rpart)       # for fitting decision trees
+library(ipred)       # for fitting bagged decision trees
+library(e1071)       # for calculating variable importance
+library(caret)       # for general model fitting og confusionMatrix()
+```
+
+
+<!-- #  Kilde: https://www.statology.org/bagging-in-r/ -->
 
 # Introduksjon til bagging
 
@@ -8,13 +24,6 @@
 ```{r}
 #| warning: false
 #| message: false
-
-# Kilde: https://www.statology.org/bagging-in-r/ 
-
-library(e1071)       #for calculating variable importance
-library(caret)       #for general model fitting
-library(rpart)       #for fitting decision trees
-library(ipred)       #for fitting bagged decision trees
 
 credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE) 
 

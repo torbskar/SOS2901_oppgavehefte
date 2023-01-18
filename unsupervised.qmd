@@ -1,10 +1,20 @@
 # Unsupervised learning 
 
+
+I dette kapittelt skal vi bruke følgende pakker: 
+
 ```{r}
-library(tidyverse)
+#| eval: true
+#| code-fold: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
+
 library(dendextend)
 library(directlabels)
+
 ```
+
 
 
 

@@ -1,18 +1,23 @@
 # Random forest
-Random forest bruker klassifikasjonstrær og bagging som byggestener. I prinsippet er det "bagged trees", men i stedet for å bagge samme type trær, så gjøres det en endring i hvert tre. 
 
-
-
+I dette kapittelt skal vi bruke følgende pakker: 
 
 ```{r}
-#| warning: false
-#| message: false
-library(tidyverse)
-library(rsample)
+#| eval: true
+#| code-fold: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
 library(fairmodels)
 library(randomForest)
 library(caret)
+
 ```
+
+
+Random forest bruker klassifikasjonstrær og bagging som byggestener. I prinsippet er det "bagged trees", men i stedet for å bagge samme type trær, så gjøres det en endring i hvert tre. 
+
+
 
 ## Eksempel
 

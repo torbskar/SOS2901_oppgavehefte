@@ -1,15 +1,18 @@
 # Klassifikasjonstrær
 
-```{r}
-#| warning: false 
-#| message: false
+I dette kapittelt skal vi bruke følgende pakker: 
 
-library(tidyverse) 
+```{r}
+#| eval: true
+#| code-fold: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
 library(rpart)      # funksjoner for CART 
 library(rpart.plot) # funksjon for å plotte CART 
 library(caret)      # inneholder funksjon for confusion matrix 
-library(skimr)      # funksjonen skim()
 ```
+
 
 
 Vi skal her bruke datasettet **credit** fra Canvas. Dataene er en banks kundehistorikk for kreditt for 1000 kunder. Variabelen *default*[^cart-1] er «yes» hvis tilbakebetaling som avtalt og «no» hvis ikke. Dette er utfallsvariabelen. Øvrige variable er rimelig selvforklarende etter variabelnavn. Målet er å lage et system for hvilke nye kunder som skal få innvilget kreditt.
