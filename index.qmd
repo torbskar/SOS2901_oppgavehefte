@@ -18,6 +18,10 @@ Til hver undervisningsgang skal du ha forberedt to ting:
 1) Formulert noe om hva en prediksjon med denne typen data kan tenkes å brukes til i praksis (en slags problemstilling, med andre ord)
 1) Forberede minst ett spørsmål eller kommentar til det tekniske eller pensum. Vi starter hver undervisning med oppklaringer
 
+## Undervisningsvideoer
+
+Det legges ut undervisningsvideoer i Canvas. Det går også an å få tilgang til [de samme videoene på denne lenken](https://uio.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=fbd0aeb4-f162-4681-977b-af8e0137df63)
+
 
 
 # Hva vi forutsetter av forkunnskaper
@@ -51,6 +55,8 @@ pkgs <- c("tidyverse", "skimr", "randomForest", "rpart", "rpart.plot", "AUC", "r
 install.packages(pkgs)
 
 ```
+
+Det kan hende vi kommer til å bruke flere etterhvert. 
 
 Men for at du skal kunne bruke pakkene må du aktivere dem i R ved `library()`. Dette må du gjøre hver gang du starter opp R. Det kan se slik ut:
 

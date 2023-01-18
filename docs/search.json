@@ -25,7 +25,7 @@
     "href": "index.html#pakker",
     "title": "SOS2901 Maskinlæring for samfunnsvitere",
     "section": "Pakker",
-    "text": "Pakker\nR er basert på bruk av “pakker” som må installeres for å få tilgang til funksjoner vi skal bruke. Disse installeres med bruk av kommandoen install.packages(). F.eks. kan man installere pakken Tidyverse med følgende: install.packages(\"tidyverse\").\nFor å installere flere pakker kan man kjøre install.packages() flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre install.packages() på dette objektet. Noe slikt:\nVi skal i hvert fall bruke de pakkene som installeres med følgende kode:\n\n\nCode\npkgs <- c(\"tidyverse\", \"skimr\", \"randomForest\", \"rpart\", \"rpart.plot\", \"AUC\", \"rsample\", \"fairness\", \"xgboost\")\ninstall.packages(pkgs)\n\n\nMen for at du skal kunne bruke pakkene må du aktivere dem i R ved library(). Dette må du gjøre hver gang du starter opp R. Det kan se slik ut:\n\n\nCode\nlibrary(tidyverse)\nlibrary(skimr)\nlibrary(randomForest)\nlibrary(caret)\nlibrary(AUC)"
+    "text": "Pakker\nR er basert på bruk av “pakker” som må installeres for å få tilgang til funksjoner vi skal bruke. Disse installeres med bruk av kommandoen install.packages(). F.eks. kan man installere pakken Tidyverse med følgende: install.packages(\"tidyverse\").\nFor å installere flere pakker kan man kjøre install.packages() flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre install.packages() på dette objektet. Noe slikt:\nVi skal i hvert fall bruke de pakkene som installeres med følgende kode:\n\n\nCode\npkgs <- c(\"tidyverse\", \"skimr\", \"randomForest\", \"rpart\", \"rpart.plot\", \"AUC\", \"rsample\", \"fairness\", \"xgboost\")\ninstall.packages(pkgs)\n\n\nDet kan hende vi kommer til å bruke flere etterhvert.\nMen for at du skal kunne bruke pakkene må du aktivere dem i R ved library(). Dette må du gjøre hver gang du starter opp R. Det kan se slik ut:"
   },
   {
     "objectID": "introduksjon.html#noen-innledende-metodiske-begrep",
@@ -376,5 +376,12 @@
     "title": "Appendix B — Introduksjon til R",
     "section": "B.9 Hvorfor bruke set.seed()?",
     "text": "B.9 Hvorfor bruke set.seed()?"
+  },
+  {
+    "objectID": "index.html#undervisningsvideoer",
+    "href": "index.html#undervisningsvideoer",
+    "title": "SOS2901 Maskinlæring for samfunnsvitere",
+    "section": "Undervisningsvideoer",
+    "text": "Undervisningsvideoer\nDet legges ut undervisningsvideoer i Canvas. Det går også an å få tilgang til de samme videoene på denne lenken"
   }
 ]
