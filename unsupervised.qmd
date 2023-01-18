@@ -6,6 +6,9 @@ I dette kapittelt skal vi bruke følgende pakker:
 ```{r}
 #| eval: true
 #| code-fold: false
+#| echo: false
+#| warning: false 
+#| message: false
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
 library(skimr)       # funksjonen skim() for å se på data
 library(rsample)     # for å dele data i training og testing
