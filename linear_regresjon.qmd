@@ -12,7 +12,7 @@ library(tidyverse)
 
 ```
 
-## OLS i R
+## Lese inn data
 
 Vi illustrerer lineær regresjon med et empirisk eksempel. Her skal vi bruke data for norske kommuner i 2016. La oss si at vi er interessert i hvordan antall voldshendelser per 1000 innbyggere vil endre seg i en kommune. Dette kunne være relevant for langtidsplanlegging av forebygging, politibemanning, helsetjenester osv. Det kan være et område som er i stor endring slik at befolkningssammensetningen forventes å endre seg og/eller det er endrede lokale økonomiske utsikter.
 
@@ -32,7 +32,7 @@ skim(kommune)
 
 ```
 
-### Split datasettet
+### Training og testing data
 
 Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen 'initial_split()' etterfulgt av funksjonene 'training()' og 'testing()'. For å angi at man skal bruke 70% til training settes 'prop = .7'.
 
@@ -51,7 +51,7 @@ kommune_test <- testing(kommune_split)
 
 ```
 
-### Enkel lineær regresjon
+### Enkel lineær regresjon i R
 
 En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i kommunen. Rett og slett fordi dette er den demografiske gruppen som begår mest vold - og kriminalitet generelt, faktisk. Hvis befolkningssammensetningen forventes å bli yngre vil det medføre flere unge menn, og da kan vi kanskje forvente at det blir flere voldshendelser bare av den grunn? Sammenhengen mellom unge menn og voldsrate kan estimeres med helt vanlig lineær regresjon.
 
@@ -201,6 +201,8 @@ step_mod <- MASS::stepAIC(full_mod3, direction="forward",
 summary(step_mod)$r.squared
 ```
 
+
+
 Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observert, så får vi et svært mye bedre sammenfall enn tidligere.
 
 ```{r}
@@ -260,7 +262,11 @@ kom_pred2  %>%
 
 Ganske riktig! Dette ble bare tull. Kvadratsummen til residualene ble mye høyere enn total kvadratsum. Dermed blir $r^2$ helt fjerne. 
 
-Det er nok bedre med en enklere modell. Vi prøver heller den: 
+Dette er en ganske ekstrem variant av *overfitting*. Ved å formulere en veldig komplisert modell som passer veldig godt til training-dataene kan vi ende opp med en modell som passer veldig, veldig dårlig til nye data. Hvis man skulle utforme f.eks. politikktiltak på grunnlag av en slik prediksjon vil det kunne gå riktig så dårlig. 
+
+Det er i dette tilfellet kanskje ikke så rart: modellen ble formulert *kun* for å maksimere $r^2$ og uten så mye andre tanker bak. 
+
+Det er nok bedre med en enklere modell. Vi prøver heller å bruke modellen der alle prediktorene er med, men uten alle de kompliserende interaksjonene: 
 
 ```{r}
 #| warning: false
@@ -286,7 +292,7 @@ kom_pred3  %>%
 ```
 
 
-
+Sammenlignet med $r^2$ på trainingdata, 'r summary(full_mod)$r.squared', er dette ikke så værst. Litt dårligere tilpassning må man regne med.
 
 RMSE regnes ut slik:
 
@@ -296,6 +302,18 @@ kom_pred3 %>%
   summarise(sqrt(mean(sq.resid)))
   
 ```
+
+
+Det er altså slik at en enklere modell kan passe til *nye* data langt bedre enn en veldig komplisert modell. Grunnen er overfitting: modellen fanger opp vel så mye tilfeldig støy som det underliggende mønsteret. Støyen vil jo være annerledes i de nye dataene. 
+
+
+### Oppsummerende kommentar
+Dette gjelder generelt: mer komplisert regresjonsmodell vil gi tilsynelatende bedre tilpassning til data enten man måler med $r^2$ eller RMSE. Man kan riktignok bruke mål på tilpassning som justerer for antall parametre etc (f.eks. justert $r^2$, AIC eller BIC), som kanskje kan bedre dette noe, men det vil ofte lede til overfitting likevel. 
+
+Det er derfor veldig viktig å teste modellen mot *nye* data. I praksis testing-dataene man lagde til å begynne med. 
+
+I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstret ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte.  
+
 
 ## Oppgaver
 

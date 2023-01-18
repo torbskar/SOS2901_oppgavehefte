@@ -224,6 +224,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./datasets.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Datasett</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduksjon_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Introduksjon til R</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -578,9 +583,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> default   no yes                      
-      no [.73 .27] when amount &lt;  10842
-     yes [.25 .75] when amount &gt;= 10842</code></pre>
+<pre><code> default    no  yes                                                                                                                                                                                                                                
+      no [ .79  .21] when amount &lt;  3893                           &amp; housing is           own                                                                                                                                                      
+      no [ .78  .22] when amount &lt;  3893                           &amp; housing is other or rent &amp; percent_of_income &lt;  3                                                                                                                             
+      no [ .75  .25] when amount &gt;=         4324 &amp; age is 30 to 49                                                                                                                                                                                 
+      no [ .75  .25] when amount &lt;  3893         &amp; age &gt;=       40 &amp; housing is other or rent &amp; percent_of_income &gt;= 3                                                                                                                             
+      no [ .66  .34] when amount is 3893 to 9214 &amp; age &lt;  30                                                           &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years or unemployed                                              
+      no [ .59  .41] when amount &lt;  3893         &amp; age &lt;  40       &amp; housing is other or rent &amp; percent_of_income &gt;= 3                                                                                &amp; purpose is business or furniture/appliances
+     yes [ .38  .62] when amount is 3893 to 4324 &amp; age is 30 to 49                                                                                                                                                                                 
+     yes [ .32  .68] when amount &gt;=         3893 &amp; age &gt;=       49                                                                                                                                                                                 
+     yes [ .22  .78] when amount &lt;  3893         &amp; age &lt;  40       &amp; housing is other or rent &amp; percent_of_income &gt;= 3                                                                                &amp; purpose is  car or education or renovations
+     yes [ .20  .80] when amount &gt;=         9214 &amp; age &lt;  30                                                           &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years or unemployed                                              
+     yes [ .00 1.00] when amount &gt;=         3893 &amp; age &lt;  30                                                           &amp; employment_duration is                                              &lt; 1 year                                              </code></pre>
 </div>
 </div>
 <p>Vi kan så skrive ut confusion matrix.</p>
@@ -593,8 +607,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>           
 rpart_class  no yes
-        no  498 183
-        yes   6  18</code></pre>
+        no  469 148
+        yes  19  60</code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -605,26 +619,26 @@ rpart_class  no yes
 
           Reference
 Prediction  no yes
-       no  498 183
-       yes   6  18
+       no  469 148
+       yes  19  60
                                           
-               Accuracy : 0.7319          
-                 95% CI : (0.6976, 0.7643)
-    No Information Rate : 0.7149          
-    P-Value [Acc &gt; NIR] : 0.1688          
+               Accuracy : 0.7601          
+                 95% CI : (0.7265, 0.7913)
+    No Information Rate : 0.7011          
+    P-Value [Acc &gt; NIR] : 0.0003151       
                                           
-                  Kappa : 0.1056          
+                  Kappa : 0.3035          
                                           
- Mcnemar's Test P-Value : &lt;2e-16          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
                                           
-            Sensitivity : 0.98810         
-            Specificity : 0.08955         
-         Pos Pred Value : 0.73128         
-         Neg Pred Value : 0.75000         
-             Prevalence : 0.71489         
-         Detection Rate : 0.70638         
-   Detection Prevalence : 0.96596         
-      Balanced Accuracy : 0.53882         
+            Sensitivity : 0.9611          
+            Specificity : 0.2885          
+         Pos Pred Value : 0.7601          
+         Neg Pred Value : 0.7595          
+             Prevalence : 0.7011          
+         Detection Rate : 0.6739          
+   Detection Prevalence : 0.8865          
+      Balanced Accuracy : 0.6248          
                                           
        'Positive' Class : no              
                                           </code></pre>
@@ -641,26 +655,26 @@ Prediction  no yes
 
           Reference
 Prediction  no yes
-       no  192  95
-       yes   4   4
+       no  192  75
+       yes  20  17
                                           
-               Accuracy : 0.6644          
-                 95% CI : (0.6074, 0.7181)
-    No Information Rate : 0.6644          
-    P-Value [Acc &gt; NIR] : 0.5273          
+               Accuracy : 0.6875          
+                 95% CI : (0.6321, 0.7392)
+    No Information Rate : 0.6974          
+    P-Value [Acc &gt; NIR] : 0.6713          
                                           
-                  Kappa : 0.0259          
+                  Kappa : 0.1089          
                                           
- Mcnemar's Test P-Value : &lt;2e-16          
+ Mcnemar's Test P-Value : 3.02e-08        
                                           
-            Sensitivity : 0.9796          
-            Specificity : 0.0404          
-         Pos Pred Value : 0.6690          
-         Neg Pred Value : 0.5000          
-             Prevalence : 0.6644          
-         Detection Rate : 0.6508          
-   Detection Prevalence : 0.9729          
-      Balanced Accuracy : 0.5100          
+            Sensitivity : 0.9057          
+            Specificity : 0.1848          
+         Pos Pred Value : 0.7191          
+         Neg Pred Value : 0.4595          
+             Prevalence : 0.6974          
+         Detection Rate : 0.6316          
+   Detection Prevalence : 0.8783          
+      Balanced Accuracy : 0.5452          
                                           
        'Positive' Class : no              
                                           </code></pre>

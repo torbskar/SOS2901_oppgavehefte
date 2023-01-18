@@ -1,0 +1,59 @@
+# Introduksjon til R 
+
+
+## Rstudio projects 
+Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Lag en egen mappe for dette kurset og lag følgende undermapper: 
+
+* Data
+* Script 
+* Output 
+* Dokumenter
+
+Du kan også lage andre undermapper hvis du vil. Det vil være begrenset behov for å eksportere output, men det er selvsagt mulig. Lag
+
+
+
+
+## Lese inn data
+Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen. 
+
+
+
+
+## Hva er objekter? 
+
+
+## dataframes og variabeltyper 
+
+
+## Dele et datasett i 'training' og 'testing'? 
+
+
+## Databehandling: dplyr-verb / tidyverse
+
+
+### lage/endre variable: mutate
+
+
+### filtrere datasett: filter
+
+
+### summmere data: summarise 
+
+
+### Kombinere: hva gjør en 'pipe-operatoren' %>% ?? 
+
+
+
+## Hvordan bruke `predict()` på samme og nytt datasett
+
+
+
+## Grafikk: quick'n dirty vs ggplot
+
+
+## Hvorfor bruke `set.seed()`?
+
+
+
+

@@ -44,17 +44,18 @@ R er basert på bruk av "pakker" som må installeres for å få tilgang til funk
 
 For å installere flere pakker kan man kjøre `install.packages()` flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre `install.packages()` på dette objektet. Noe slikt:
 
+Vi skal i hvert fall bruke de pakkene som installeres med følgende kode: 
 ```{r}
 #| eval: false
-pkgs <- c("tidyverse", "skimr", "randomForest")
-#install.packages(pkgs)
+pkgs <- c("tidyverse", "skimr", "randomForest", "rpart", "rpart.plot", "AUC", "rsample", "fairness", "xgboost")
+install.packages(pkgs)
 
 ```
 
 Men for at du skal kunne bruke pakkene må du aktivere dem i R ved `library()`. Dette må du gjøre hver gang du starter opp R. Det kan se slik ut:
 
 ```{r }
-#| echo: true
+#| echo: false
 #| eval: false
 library(tidyverse)
 library(skimr)

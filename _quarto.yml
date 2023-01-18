@@ -24,6 +24,7 @@ book:
 
   appendices:
    - datasets.qmd
+   - introduksjon_R.qmd
 
 bibliography: references.bib
 
