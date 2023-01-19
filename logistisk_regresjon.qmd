@@ -14,6 +14,12 @@ library(rsample)     # for å dele data i training og testing
 library(AUC)         # For å beregne ROC-curve og AUC
 ```
 
+## Estimere en sannsynlighet 
+Når utfallsvariabelen er binær (to verdier) kan man likevel bruke lineær regresjon. Det kalles da gjerne en lineær sannsynlighetsmodell. Men det har noen ulemper, derav viktigste er modellen da kan predikere sannsynligheter lavere enn 0 og høyere enn 1. Når man er mest interessert i $\beta$ er det ikke sikkert det er så nøye. Men når vi er interessert i $\hat{y}$ kan det derimot være viktig. Logistisk regresjon kan dessuten håndtere utfall med flere enn to kategorier, noe OLS ikke kan. 
+
+Vi bruker derfor logistisk regresjon når det er kategoriske utfall. I andre sammenhenger vil folk hevde at OLS er bedre å bruke (av diverse grunner), men i *denne sammenhengen* er logistisk regresjon som hovedregel å foretrekke over OLS for kategoriske utfall. 
+
+
 ## Logistisk regresjon i R
 
 Logistisk regresjon har det til felles med lineær regresjon at utfallet er en lineær spesifikasjon.
@@ -30,7 +36,7 @@ Ligningen kan da skrives om slik at venstresiden av ligningen blir en sannsynlig
 
 $$  \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} $$
 
-En enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $P(y = 1) > 0.5$ tilhører den ene gruppen og resten i den andre gruppen.
+En enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $\pi = P(y = 1) > 0.5$ tilhører den ene gruppen og resten i den andre gruppen.
 
 ## Empirisk eksempel
 
@@ -46,14 +52,13 @@ Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv
 library(tidyverse) 
 library(pROC) 
 library(skimr)
-attrition <-read.csv("../data/Attrition.csv", stringsAsFactors = TRUE)  
+attrition <-read.csv("data/Attrition.csv", stringsAsFactors = TRUE)  
 skim(attrition)  
 ```
 
 Merk at det er fire variable vi ikke trenger, så vi sletter disse
 like gjerne med en gang:
 
--   x er et løpenummer.
 -   Over18 er en dummy for om de er over 18 år. Det er alle.
 -   EmployeeCount og StandardHours varierer heller ikke.
 
@@ -63,26 +68,20 @@ Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datase
 #| warning: false 
 #| message: false
 attrition <- attrition %>%  
-  select(-X, - Over18, - EmployeeCount, -StandardHours) 
+  select(- Over18, - EmployeeCount, -StandardHours) 
 glimpse(attrition)
 ```
 
 Del datasettet i to deler. Vi trekker tilfeldig 70% og legger dette i datasettet training. Resten legges i testing.
 
-Lager først en rekke tilfeldige tall mellom 0 og 1 med samme lengde som datasettet:
-
-```{r}
-lottery <- runif(n = nrow(attrition))  
-```
-
-Datasettet deles etter hvilke rader som tilsvarer tilfeldig tall under og over .7
 
 ```{r}
 #| warning: false 
 #| message: false
-grense <- 0.7 
-training <- filter(attrition, lottery < grense) 
-testing  <- filter(attrition, lottery >= grense) 
+attrition_split <- initial_split(attrition)
+
+training <- training(attrition_split) 
+testing  <- testing(attrition_split) 
 ```
 
 Sjekk at antallet i hvert datasett summeres til totalen
@@ -164,6 +163,15 @@ summary(est_logit)
 
 ```
 
+En penere output kan gis med 'gtsummary' på samme måte som for OLS slik: 
+
+```{r}
+library(gtsummary)
+tbl_regression(est_logit)
+```
+
+
+
 #### Prediksjon 
 ```{r}
 attrition_pred <- attrition %>% 
@@ -236,56 +244,22 @@ Når arealet under kurven (AUC) er `r round(auc(ROC), digits = 3)` er det vesent
 
 
 
-## Oppgaver  tmpå
-
-
--   Du gjorde et valg av cut-off ovenfor. En måte for å vurdere klassifiseringen er å sammenligne det resultatet med de observerte dataene. Lag en tabell for din klassifisering vs observert slik:\
-    table(klass, training\$Attrition) Synes du dette ble presist nok? Prøv gjerne å endre cut-off for klassifiseringen.
-
-Slike tabeller skal vi snakke mer om de kommende gangen. Det kalles gjerne en «confusion matrix».
-
-::: {#exr-stepw1}
-Det finnes prosedyrer for automatisk seleksjon av variable. Da søkes det gjennom de spennet av mulige modeller som oppgis og finner den modellen som predikerer best. Oppgi den enkleste modellen du vil starte fra og den mest kompliserte modellen du vil vurdere og estimer disse to modellene.
-:::
-
-En modell med kun konstantledd skrives med `~` 1 i formelen slik: `null_model <- glm(Attrition ~ 1, data = training, family = "binomial")`
-
-Lag en mer komplisert formel. Ta med så mange prediktorer du vil! Gjerne samspillsledd og polynomer også.
-Samspill: `variabel1 * variabel2`. Polynom, f.eks. kvadratledd: `I(variabel\^2)`.
-
-fmla_full \<- Attrition \~ \_\_\_\_\_\_\_\_\_ full_model \<- glm(\_\_\_\_\_ , data = \_\_\_\_\_\_, family="binomial")
-
-Med funksjonen step() søker R gjennom alle modellene. Bruk følgende kode og endelig modell\
-step_model \<- step(null_model,\
-scope = list(lower = null_model,\
-upper = full_model),\
-direction = "forward") Ta en titt på endelig resultat:\
-summary( \_\_\_\_\_\_ )
-
-Bruk nå predict() som i oppgave en for predikere sannsynligheter, lag en ROC curve og regn ut AUC.
-
-::: {#exr-stepw-test}
-Sjekk så mot test-data! Du har optimalisert en modell til å passe de dataene du hadde. Hvordan vil det funke på nye data? Til dette bruker vi det mindre datasettet testing som du lagde over.
-
--   Bruk step_model som du lagde i forrige oppgave og prediker for nye data. Bruk predict(), men husk å spesifisere newdata=testing.\
--   Lag så en ROC curve og regn ut AUC på nytt!
-:::
-
-
-
 
 ## Oppgaver
 
 Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger. 
 
 
-::: {#exr-ols-eksplisitt}
-Velg et datasettet og formuler hva en prediksjonsmodell for disse dataene kan kunne brukes til. Du må velge et datasett som har en utfallsvariabel som er kategorisk eller evt. omkode utfallsvariabelen til kategorier. 
-Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon. 
-
-Merk: som i tidligere oppgaver er det ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene. 
-
+::: {#exr-logit-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
 :::
+
+::: {#exr-logit-eksplisitt}
+Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.
+
+Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.
+:::
+
 
 
 
