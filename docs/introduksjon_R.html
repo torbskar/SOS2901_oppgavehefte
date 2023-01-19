@@ -241,19 +241,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#rstudio-projects" id="toc-rstudio-projects" class="nav-link active" data-scroll-target="#rstudio-projects"><span class="toc-section-number">B.1</span>  Rstudio projects</a></li>
   <li><a href="#lese-inn-data" id="toc-lese-inn-data" class="nav-link" data-scroll-target="#lese-inn-data"><span class="toc-section-number">B.2</span>  Lese inn data</a></li>
-  <li><a href="#hva-er-objekter" id="toc-hva-er-objekter" class="nav-link" data-scroll-target="#hva-er-objekter"><span class="toc-section-number">B.3</span>  Hva er objekter?</a></li>
-  <li><a href="#dataframes-og-variabeltyper" id="toc-dataframes-og-variabeltyper" class="nav-link" data-scroll-target="#dataframes-og-variabeltyper"><span class="toc-section-number">B.4</span>  dataframes og variabeltyper</a></li>
-  <li><a href="#dele-et-datasett-i-training-og-testing" id="toc-dele-et-datasett-i-training-og-testing" class="nav-link" data-scroll-target="#dele-et-datasett-i-training-og-testing"><span class="toc-section-number">B.5</span>  Dele et datasett i ‘training’ og ‘testing’?</a></li>
-  <li><a href="#databehandling-dplyr-verb-tidyverse" id="toc-databehandling-dplyr-verb-tidyverse" class="nav-link" data-scroll-target="#databehandling-dplyr-verb-tidyverse"><span class="toc-section-number">B.6</span>  Databehandling: dplyr-verb / tidyverse</a>
+  <li><a href="#dataframes-og-variabeltyper" id="toc-dataframes-og-variabeltyper" class="nav-link" data-scroll-target="#dataframes-og-variabeltyper"><span class="toc-section-number">B.3</span>  dataframes og variabeltyper</a></li>
+  <li><a href="#dele-et-datasett-i-training-og-testing" id="toc-dele-et-datasett-i-training-og-testing" class="nav-link" data-scroll-target="#dele-et-datasett-i-training-og-testing"><span class="toc-section-number">B.4</span>  Dele et datasett i ‘training’ og ‘testing’?</a></li>
+  <li><a href="#seed-med-set.seed" id="toc-seed-med-set.seed" class="nav-link" data-scroll-target="#seed-med-set.seed"><span class="toc-section-number">B.5</span>  Seed med ‘set.seed()’</a></li>
+  <li><a href="#predict" id="toc-predict" class="nav-link" data-scroll-target="#predict"><span class="toc-section-number">B.6</span>  ‘Predict()’</a></li>
+  <li><a href="#databehandling-dplyr-verb-tidyverse" id="toc-databehandling-dplyr-verb-tidyverse" class="nav-link" data-scroll-target="#databehandling-dplyr-verb-tidyverse"><span class="toc-section-number">B.7</span>  Databehandling: dplyr-verb / tidyverse</a>
   <ul class="collapse">
-  <li><a href="#lageendre-variable-mutate" id="toc-lageendre-variable-mutate" class="nav-link" data-scroll-target="#lageendre-variable-mutate"><span class="toc-section-number">B.6.1</span>  lage/endre variable: mutate</a></li>
-  <li><a href="#filtrere-datasett-filter" id="toc-filtrere-datasett-filter" class="nav-link" data-scroll-target="#filtrere-datasett-filter"><span class="toc-section-number">B.6.2</span>  filtrere datasett: filter</a></li>
-  <li><a href="#summmere-data-summarise" id="toc-summmere-data-summarise" class="nav-link" data-scroll-target="#summmere-data-summarise"><span class="toc-section-number">B.6.3</span>  summmere data: summarise</a></li>
-  <li><a href="#kombinere-hva-gjør-en-pipe-operatoren" id="toc-kombinere-hva-gjør-en-pipe-operatoren" class="nav-link" data-scroll-target="#kombinere-hva-gjør-en-pipe-operatoren"><span class="toc-section-number">B.6.4</span>  Kombinere: hva gjør en ‘pipe-operatoren’ %&gt;% ??</a></li>
+  <li><a href="#hva-gjør-en-pipe-operatoren" id="toc-hva-gjør-en-pipe-operatoren" class="nav-link" data-scroll-target="#hva-gjør-en-pipe-operatoren"><span class="toc-section-number">B.7.1</span>  Hva gjør en ‘pipe-operatoren’ %&gt;% ??</a></li>
+  <li><a href="#lageendre-variable-mutate" id="toc-lageendre-variable-mutate" class="nav-link" data-scroll-target="#lageendre-variable-mutate"><span class="toc-section-number">B.7.2</span>  lage/endre variable: mutate</a></li>
+  <li><a href="#filtrere-datasett-filter" id="toc-filtrere-datasett-filter" class="nav-link" data-scroll-target="#filtrere-datasett-filter"><span class="toc-section-number">B.7.3</span>  filtrere datasett: filter</a></li>
+  <li><a href="#summmere-data-summarise" id="toc-summmere-data-summarise" class="nav-link" data-scroll-target="#summmere-data-summarise"><span class="toc-section-number">B.7.4</span>  summmere data: summarise</a></li>
   </ul></li>
-  <li><a href="#hvordan-bruke-predict-på-samme-og-nytt-datasett" id="toc-hvordan-bruke-predict-på-samme-og-nytt-datasett" class="nav-link" data-scroll-target="#hvordan-bruke-predict-på-samme-og-nytt-datasett"><span class="toc-section-number">B.7</span>  Hvordan bruke <code>predict()</code> på samme og nytt datasett</a></li>
   <li><a href="#grafikk-quickn-dirty-vs-ggplot" id="toc-grafikk-quickn-dirty-vs-ggplot" class="nav-link" data-scroll-target="#grafikk-quickn-dirty-vs-ggplot"><span class="toc-section-number">B.8</span>  Grafikk: quick’n dirty vs ggplot</a></li>
-  <li><a href="#hvorfor-bruke-set.seed" id="toc-hvorfor-bruke-set.seed" class="nav-link" data-scroll-target="#hvorfor-bruke-set.seed"><span class="toc-section-number">B.9</span>  Hvorfor bruke <code>set.seed()</code>?</a></li>
   </ul>
 </nav>
     </div>
@@ -262,7 +261,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">Appendix B — Introduksjon til R</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">Appendix B — Introduksjon til R</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -290,40 +289,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="lese-inn-data" class="level2" data-number="B.2">
 <h2 data-number="B.2" class="anchored" data-anchor-id="lese-inn-data"><span class="header-section-number">B.2</span> Lese inn data</h2>
-<p>Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen.</p>
+<p>Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen for data og leser inn derfra.</p>
+<p>csv-filer kan leses inn med funksjonen ‘read.csv()’ og rds-filer med ‘readRDS()’.</p>
 </section>
-<section id="hva-er-objekter" class="level2" data-number="B.3">
-<h2 data-number="B.3" class="anchored" data-anchor-id="hva-er-objekter"><span class="header-section-number">B.3</span> Hva er objekter?</h2>
+<section id="dataframes-og-variabeltyper" class="level2" data-number="B.3">
+<h2 data-number="B.3" class="anchored" data-anchor-id="dataframes-og-variabeltyper"><span class="header-section-number">B.3</span> dataframes og variabeltyper</h2>
+<p>Vær obs på at når man leser inn csv-filer så vil R gjette på hva slags variabeltyper det er. De vil i hovedsak være numeriske, tekst eller factor. I all hovedsak bør tekstvariable tolkes som factor. Dette kan du få til ved å spesifiser det når dataene leses inn slik:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"data/navnpaadata.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 </section>
-<section id="dataframes-og-variabeltyper" class="level2" data-number="B.4">
-<h2 data-number="B.4" class="anchored" data-anchor-id="dataframes-og-variabeltyper"><span class="header-section-number">B.4</span> dataframes og variabeltyper</h2>
+<section id="dele-et-datasett-i-training-og-testing" class="level2" data-number="B.4">
+<h2 data-number="B.4" class="anchored" data-anchor-id="dele-et-datasett-i-training-og-testing"><span class="header-section-number">B.4</span> Dele et datasett i ‘training’ og ‘testing’?</h2>
+<p>Vi bruker pakken ‘rsample’ til å splitte datasettet. Funksjonen ‘initial_split()’ markerer hvilke observasjoner som er i hvilken del. Så kan du trekke ut disse etterpå med ‘training()’ og ‘testing()’</p>
 </section>
-<section id="dele-et-datasett-i-training-og-testing" class="level2" data-number="B.5">
-<h2 data-number="B.5" class="anchored" data-anchor-id="dele-et-datasett-i-training-og-testing"><span class="header-section-number">B.5</span> Dele et datasett i ‘training’ og ‘testing’?</h2>
+<section id="seed-med-set.seed" class="level2" data-number="B.5">
+<h2 data-number="B.5" class="anchored" data-anchor-id="seed-med-set.seed"><span class="header-section-number">B.5</span> Seed med ‘set.seed()’</h2>
+<p>En tilfeldig inndeling som med ‘initial_split()’ bruker tilfeldige tall som genereres av R. Det finnes ikke helt tilfeldige tall i en datamaskin, det bare ser sånn ut. Det er en slags algoritme som generer disse tallen, og det har et startpunkt som varierer med <em>når</em> du setter den igang. Med andre ord: en tilfeldig inndeling vil bli forskjellig hver eneste gang.</p>
+<p>Funksjonen ‘set.seed()’ definerer startpunktet for neste sekvens av tilfeldige tall slik at du kan reprodusere nøyaktig samme resultat. Hvis dere jobber sammen på oppgaver er det en fordel å sette samme seed slik at dere kan sammenligne resultatet.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dette gjelder for alle funksjoner der det benyttes tilfeldige tall. Det gjelder altså for random forest.</p>
+<p>OBS! Vend deg til å alltid bruke set.seed når du jobber i dette kurset, for du kommer til å trenge det på eksamen! Du kan gjøre ting riktig på eksamen likevel, men da blir ikke resultatene reproduserbare og sensor kan ikke sjekke resultatene. (Dere skal få nøyaktige instruksjoner senere).</p>
 </section>
-<section id="databehandling-dplyr-verb-tidyverse" class="level2" data-number="B.6">
-<h2 data-number="B.6" class="anchored" data-anchor-id="databehandling-dplyr-verb-tidyverse"><span class="header-section-number">B.6</span> Databehandling: dplyr-verb / tidyverse</h2>
-<section id="lageendre-variable-mutate" class="level3" data-number="B.6.1">
-<h3 data-number="B.6.1" class="anchored" data-anchor-id="lageendre-variable-mutate"><span class="header-section-number">B.6.1</span> lage/endre variable: mutate</h3>
+<section id="predict" class="level2" data-number="B.6">
+<h2 data-number="B.6" class="anchored" data-anchor-id="predict"><span class="header-section-number">B.6</span> ‘Predict()’</h2>
+<p>Dere skal bruke funksjonen ‘predict()’ ganske mye. Den tar et objekt fra en eller annen modell og predikerer fra denne. Merk at den bruker det objektet dere har lagret resultatene i, ser hva slags modell det er, og predikerer i henhold til det.</p>
+<p>I utgangspunktet bruker den det samme datasettet som modellen ble estimert med. Men kan også predikere på nye data. Da må argumentet ‘newdata = …’ angis. Det vil typisk være testing-datasettet eller helt nye observasjoner der du ikke vet utfallet. Det nye datasettet må alle de variablene som vari det opprinnelige datasettet for at det skal funke.</p>
 </section>
-<section id="filtrere-datasett-filter" class="level3" data-number="B.6.2">
-<h3 data-number="B.6.2" class="anchored" data-anchor-id="filtrere-datasett-filter"><span class="header-section-number">B.6.2</span> filtrere datasett: filter</h3>
+<section id="databehandling-dplyr-verb-tidyverse" class="level2" data-number="B.7">
+<h2 data-number="B.7" class="anchored" data-anchor-id="databehandling-dplyr-verb-tidyverse"><span class="header-section-number">B.7</span> Databehandling: dplyr-verb / tidyverse</h2>
+<section id="hva-gjør-en-pipe-operatoren" class="level3" data-number="B.7.1">
+<h3 data-number="B.7.1" class="anchored" data-anchor-id="hva-gjør-en-pipe-operatoren"><span class="header-section-number">B.7.1</span> Hva gjør en ‘pipe-operatoren’ %&gt;% ??</h3>
 </section>
-<section id="summmere-data-summarise" class="level3" data-number="B.6.3">
-<h3 data-number="B.6.3" class="anchored" data-anchor-id="summmere-data-summarise"><span class="header-section-number">B.6.3</span> summmere data: summarise</h3>
+<section id="lageendre-variable-mutate" class="level3" data-number="B.7.2">
+<h3 data-number="B.7.2" class="anchored" data-anchor-id="lageendre-variable-mutate"><span class="header-section-number">B.7.2</span> lage/endre variable: mutate</h3>
 </section>
-<section id="kombinere-hva-gjør-en-pipe-operatoren" class="level3" data-number="B.6.4">
-<h3 data-number="B.6.4" class="anchored" data-anchor-id="kombinere-hva-gjør-en-pipe-operatoren"><span class="header-section-number">B.6.4</span> Kombinere: hva gjør en ‘pipe-operatoren’ %&gt;% ??</h3>
+<section id="filtrere-datasett-filter" class="level3" data-number="B.7.3">
+<h3 data-number="B.7.3" class="anchored" data-anchor-id="filtrere-datasett-filter"><span class="header-section-number">B.7.3</span> filtrere datasett: filter</h3>
 </section>
+<section id="summmere-data-summarise" class="level3" data-number="B.7.4">
+<h3 data-number="B.7.4" class="anchored" data-anchor-id="summmere-data-summarise"><span class="header-section-number">B.7.4</span> summmere data: summarise</h3>
 </section>
-<section id="hvordan-bruke-predict-på-samme-og-nytt-datasett" class="level2" data-number="B.7">
-<h2 data-number="B.7" class="anchored" data-anchor-id="hvordan-bruke-predict-på-samme-og-nytt-datasett"><span class="header-section-number">B.7</span> Hvordan bruke <code>predict()</code> på samme og nytt datasett</h2>
 </section>
 <section id="grafikk-quickn-dirty-vs-ggplot" class="level2" data-number="B.8">
 <h2 data-number="B.8" class="anchored" data-anchor-id="grafikk-quickn-dirty-vs-ggplot"><span class="header-section-number">B.8</span> Grafikk: quick’n dirty vs ggplot</h2>
-</section>
-<section id="hvorfor-bruke-set.seed" class="level2" data-number="B.9">
-<h2 data-number="B.9" class="anchored" data-anchor-id="hvorfor-bruke-set.seed"><span class="header-section-number">B.9</span> Hvorfor bruke <code>set.seed()</code>?</h2>
 
 
 <!-- -->
@@ -524,64 +538,85 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-next">
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduksjon til R </span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rstudio projects </span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Lag en egen mappe for dette kurset og lag følgende undermapper: </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Data</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Script </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Output </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Dokumenter</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Du kan også lage andre undermapper hvis du vil. Det vil være begrenset behov for å eksportere output, men det er selvsagt mulig. Lag</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lese inn data</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen. </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hva er objekter? </span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## dataframes og variabeltyper </span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dele et datasett i 'training' og 'testing'? </span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## Databehandling: dplyr-verb / tidyverse</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">### lage/endre variable: mutate</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="fu">### filtrere datasett: filter</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu">### summmere data: summarise </span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### Kombinere: hva gjør en 'pipe-operatoren' %&gt;% ?? </span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hvordan bruke `predict()` på samme og nytt datasett</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## Grafikk: quick'n dirty vs ggplot</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hvorfor bruke `set.seed()`?</span></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduksjon til R </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rstudio projects </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Lag en egen mappe for dette kurset og lag følgende undermapper: </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Data</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Script </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Output </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Dokumenter</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>Du kan også lage andre undermapper hvis du vil. Det vil være begrenset behov for å eksportere output, men det er selvsagt mulig. Lag</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lese inn data</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen for data og leser inn derfra. </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>csv-filer kan leses inn med funksjonen 'read.csv()' og rds-filer med 'readRDS()'. </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">## dataframes og variabeltyper </span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>Vær obs på at når man leser inn csv-filer så vil R gjette på hva slags variabeltyper det er. De vil i hovedsak være numeriske, tekst eller factor. I all hovedsak bør tekstvariable tolkes som factor. Dette kan du få til ved å spesifiser det når dataene leses inn slik: </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="st">"data/navnpaadata.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dele et datasett i 'training' og 'testing'? </span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>Vi bruker pakken 'rsample' til å splitte datasettet. </span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>Funksjonen 'initial_split()' markerer hvilke observasjoner som er i hvilken del. Så kan du trekke ut disse etterpå med 'training()' og 'testing()' </span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="fu">##  Seed med 'set.seed()'</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>En tilfeldig inndeling som med 'initial_split()' bruker tilfeldige tall som genereres av R. Det finnes ikke helt tilfeldige tall i en datamaskin, det bare ser sånn ut. Det er en slags algoritme som generer disse tallen, og det har et startpunkt som varierer med *når* du setter den igang. Med andre ord: en tilfeldig inndeling vil bli forskjellig hver eneste gang. </span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>Funksjonen 'set.seed()' definerer startpunktet for neste sekvens av tilfeldige tall slik at du kan reprodusere nøyaktig samme resultat. Hvis dere jobber sammen på oppgaver er det en fordel å sette samme seed slik at dere kan sammenligne resultatet. </span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>Dette gjelder for alle funksjoner der det benyttes tilfeldige tall. Det gjelder altså for random forest. </span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>OBS! Vend deg til å alltid bruke set.seed når du jobber i dette kurset, for du kommer til å trenge det på eksamen! Du kan gjøre ting riktig på eksamen likevel, men da blir ikke resultatene reproduserbare og sensor kan ikke sjekke resultatene. (Dere skal få nøyaktige instruksjoner senere).</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## 'Predict()'</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>Dere skal bruke funksjonen 'predict()' ganske mye. Den tar et objekt fra en eller annen modell og predikerer fra denne. Merk at den bruker det objektet dere har lagret resultatene i, ser hva slags modell det er, og predikerer i henhold til det. </span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>I utgangspunktet bruker den det samme datasettet som modellen ble estimert med. Men kan også predikere på nye data. Da må argumentet 'newdata = ...' angis. Det vil typisk være testing-datasettet eller helt nye observasjoner der du ikke vet utfallet. Det nye datasettet må alle de variablene som vari det opprinnelige datasettet for at det skal funke. </span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Databehandling: dplyr-verb / tidyverse</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hva gjør en 'pipe-operatoren' %&gt;% ?? </span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### lage/endre variable: mutate</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="fu">### filtrere datasett: filter</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="fu">### summmere data: summarise </span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="fu">## Grafikk: quick'n dirty vs ggplot</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

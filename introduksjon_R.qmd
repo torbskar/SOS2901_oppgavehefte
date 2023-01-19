@@ -12,24 +12,53 @@ Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Lag 
 Du kan også lage andre undermapper hvis du vil. Det vil være begrenset behov for å eksportere output, men det er selvsagt mulig. Lag
 
 
-
-
 ## Lese inn data
-Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen. 
+Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen for data og leser inn derfra. 
 
+csv-filer kan leses inn med funksjonen 'read.csv()' og rds-filer med 'readRDS()'. 
 
-
-
-## Hva er objekter? 
 
 
 ## dataframes og variabeltyper 
+Vær obs på at når man leser inn csv-filer så vil R gjette på hva slags variabeltyper det er. De vil i hovedsak være numeriske, tekst eller factor. I all hovedsak bør tekstvariable tolkes som factor. Dette kan du få til ved å spesifiser det når dataene leses inn slik: 
+
+```{r}
+#| eval: false
+read.csv("data/navnpaadata.csv", stringsAsFactors = TRUE)
+```
 
 
 ## Dele et datasett i 'training' og 'testing'? 
+Vi bruker pakken 'rsample' til å splitte datasettet. 
+Funksjonen 'initial_split()' markerer hvilke observasjoner som er i hvilken del. Så kan du trekke ut disse etterpå med 'training()' og 'testing()' 
+
+
+##  Seed med 'set.seed()'
+En tilfeldig inndeling som med 'initial_split()' bruker tilfeldige tall som genereres av R. Det finnes ikke helt tilfeldige tall i en datamaskin, det bare ser sånn ut. Det er en slags algoritme som generer disse tallen, og det har et startpunkt som varierer med *når* du setter den igang. Med andre ord: en tilfeldig inndeling vil bli forskjellig hver eneste gang. 
+
+Funksjonen 'set.seed()' definerer startpunktet for neste sekvens av tilfeldige tall slik at du kan reprodusere nøyaktig samme resultat. Hvis dere jobber sammen på oppgaver er det en fordel å sette samme seed slik at dere kan sammenligne resultatet. 
+
+```{r}
+#| eval: false
+#| code-fold: false
+set.seed(42)
+```
+
+Dette gjelder for alle funksjoner der det benyttes tilfeldige tall. Det gjelder altså for random forest. 
+
+OBS! Vend deg til å alltid bruke set.seed når du jobber i dette kurset, for du kommer til å trenge det på eksamen! Du kan gjøre ting riktig på eksamen likevel, men da blir ikke resultatene reproduserbare og sensor kan ikke sjekke resultatene. (Dere skal få nøyaktige instruksjoner senere).
+
+
+## 'Predict()'
+Dere skal bruke funksjonen 'predict()' ganske mye. Den tar et objekt fra en eller annen modell og predikerer fra denne. Merk at den bruker det objektet dere har lagret resultatene i, ser hva slags modell det er, og predikerer i henhold til det. 
+
+I utgangspunktet bruker den det samme datasettet som modellen ble estimert med. Men kan også predikere på nye data. Da må argumentet 'newdata = ...' angis. Det vil typisk være testing-datasettet eller helt nye observasjoner der du ikke vet utfallet. Det nye datasettet må alle de variablene som vari det opprinnelige datasettet for at det skal funke. 
+
 
 
 ## Databehandling: dplyr-verb / tidyverse
+
+### Hva gjør en 'pipe-operatoren' %>% ?? 
 
 
 ### lage/endre variable: mutate
@@ -41,18 +70,9 @@ Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen.
 ### summmere data: summarise 
 
 
-### Kombinere: hva gjør en 'pipe-operatoren' %>% ?? 
-
-
-
-## Hvordan bruke `predict()` på samme og nytt datasett
-
 
 
 ## Grafikk: quick'n dirty vs ggplot
-
-
-## Hvorfor bruke `set.seed()`?
 
 
 
