@@ -582,19 +582,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> default   no yes                                                                                                                                                                                   
-      no [.83 .17] when amount &lt;  4050          &amp; age &gt;=       35                                                                                                                                   
-      no [.78 .22] when amount &lt;  4050          &amp; age &lt;  35                                                                                      &amp; housing is other or rent &amp; percent_of_income &lt;  3
-      no [.75 .25] when amount &gt;=          4050 &amp; age is 30 to 39                                                                                                                                   
-      no [.73 .27] when amount &lt;  4050          &amp; age &lt;  35       &amp; employment_duration is   &lt; 1 year or &gt; 7 years or 1 - 4 years or 4 - 7 years &amp; housing is           own                         
-      no [.67 .33] when amount is 5241 to 10553 &amp; age &lt;  30       &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years or unemployed                                                    
-      no [.66 .34] when amount &gt;=          4050 &amp; age &gt;=       39                                                                                                           &amp; percent_of_income &lt;  3
-     yes [.42 .58] when amount &lt;  4050          &amp; age &lt;  35                                                                                      &amp; housing is other or rent &amp; percent_of_income &gt;= 3
-     yes [.42 .58] when amount is 4050 to  5241 &amp; age &lt;  30       &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years or unemployed                                                    
-     yes [.33 .67] when amount &gt;=          4050 &amp; age &gt;=       39                                                                                                           &amp; percent_of_income &gt;= 3
-     yes [.29 .71] when amount &lt;  4050          &amp; age &lt;  35       &amp; employment_duration is                                            unemployed &amp; housing is           own                         
-     yes [.11 .89] when amount &gt;=         10553 &amp; age &lt;  30       &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years or unemployed                                                    
-     yes [.08 .92] when amount &gt;=          4050 &amp; age &lt;  30       &amp; employment_duration is                                              &lt; 1 year                                                    </code></pre>
+<pre><code> default    no  yes                                                                                                                                                                                                                           
+      no [ .83  .17] when amount &lt;   3910          &amp; age &gt;=       35                                                                                                                                                                          
+      no [ .83  .17] when amount is  3910 to 11849 &amp; age is 35 to 42                                                                                                                                                                          
+      no [ .77  .23] when amount &lt;  11849          &amp; age &lt;  33       &amp; employment_duration is                  &lt; 1 year or unemployed &amp; percent_of_income &gt;= 3 &amp; purpose is        business or furniture/appliances &amp; housing is           own
+      no [ .76  .24] when amount is   955 to  6193 &amp; age &lt;  35       &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years                                                                                                         
+      no [ .69  .31] when amount &lt;  11849          &amp; age &lt;  35       &amp; employment_duration is                  &lt; 1 year or unemployed &amp; percent_of_income &lt;  3 &amp; purpose is business or car or furniture/appliances                           
+      no [ .68  .32] when amount is  3910 to 11849 &amp; age &gt;=       42                                                                  &amp; percent_of_income &lt;  3                                                                                
+      no [ .67  .33] when amount &lt;    893          &amp; age &lt;  35       &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years                                                                                                         
+      no [ .61  .39] when amount is  6193 to 11849 &amp; age is 27 to 35 &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years                                                                                                         
+     yes [ .36  .64] when amount &lt;  11849          &amp; age &lt;  35       &amp; employment_duration is                  &lt; 1 year or unemployed &amp; percent_of_income &gt;= 3 &amp; purpose is        business or furniture/appliances &amp; housing is other or rent
+     yes [ .29  .71] when amount is  3910 to 11849 &amp; age &gt;=       42                                                                  &amp; percent_of_income &gt;= 3                                                                                
+     yes [ .29  .71] when amount &lt;  11849          &amp; age &lt;  35       &amp; employment_duration is                  &lt; 1 year or unemployed &amp; percent_of_income &gt;= 3 &amp; purpose is                                     car                           
+     yes [ .29  .71] when amount &lt;  11849          &amp; age is 33 to 35 &amp; employment_duration is                  &lt; 1 year or unemployed &amp; percent_of_income &gt;= 3 &amp; purpose is        business or furniture/appliances &amp; housing is           own
+     yes [ .19  .81] when amount &gt;=          11849                                                                                                                                                                                            
+     yes [ .14  .86] when amount is   893 to   955 &amp; age &lt;  35       &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years                                                                                                         
+     yes [ .14  .86] when amount is  6193 to 11849 &amp; age &lt;  27       &amp; employment_duration is &gt; 7 years or 1 - 4 years or 4 - 7 years                                                                                                         
+     yes [ .00 1.00] when amount &lt;  11849          &amp; age &lt;  35       &amp; employment_duration is                  &lt; 1 year or unemployed                          &amp; purpose is                education or renovations                           </code></pre>
 </div>
 </div>
 <p>Vi kan så skrive ut confusion matrix.</p>
@@ -607,8 +611,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>           
 rpart_class  no yes
-        no  445 134
-        yes  43  84</code></pre>
+        no  465 136
+        yes  22  70</code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -619,26 +623,26 @@ rpart_class  no yes
 
           Reference
 Prediction  no yes
-       no  445 134
-       yes  43  84
+       no  465 136
+       yes  22  70
                                           
-               Accuracy : 0.7493          
-                 95% CI : (0.7156, 0.7809)
-    No Information Rate : 0.6912          
-    P-Value [Acc &gt; NIR] : 0.0003934       
+               Accuracy : 0.772           
+                 95% CI : (0.7389, 0.8027)
+    No Information Rate : 0.7027          
+    P-Value [Acc &gt; NIR] : 2.638e-05       
                                           
-                  Kappa : 0.336           
+                  Kappa : 0.3506          
                                           
- Mcnemar's Test P-Value : 1.335e-11       
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
                                           
-            Sensitivity : 0.9119          
-            Specificity : 0.3853          
-         Pos Pred Value : 0.7686          
-         Neg Pred Value : 0.6614          
-             Prevalence : 0.6912          
-         Detection Rate : 0.6303          
-   Detection Prevalence : 0.8201          
-      Balanced Accuracy : 0.6486          
+            Sensitivity : 0.9548          
+            Specificity : 0.3398          
+         Pos Pred Value : 0.7737          
+         Neg Pred Value : 0.7609          
+             Prevalence : 0.7027          
+         Detection Rate : 0.6710          
+   Detection Prevalence : 0.8672          
+      Balanced Accuracy : 0.6473          
                                           
        'Positive' Class : no              
                                           </code></pre>
@@ -655,26 +659,26 @@ Prediction  no yes
 
           Reference
 Prediction  no yes
-       no  194  65
-       yes  18  17
+       no  189  76
+       yes  24  18
                                           
-               Accuracy : 0.7177          
-                 95% CI : (0.6625, 0.7684)
-    No Information Rate : 0.7211          
-    P-Value [Acc &gt; NIR] : 0.5809          
+               Accuracy : 0.6743          
+                 95% CI : (0.6187, 0.7264)
+    No Information Rate : 0.6938          
+    P-Value [Acc &gt; NIR] : 0.7904          
                                           
-                  Kappa : 0.1485          
+                  Kappa : 0.0932          
                                           
- Mcnemar's Test P-Value : 4.438e-07       
+ Mcnemar's Test P-Value : 3.397e-07       
                                           
-            Sensitivity : 0.9151          
-            Specificity : 0.2073          
-         Pos Pred Value : 0.7490          
-         Neg Pred Value : 0.4857          
-             Prevalence : 0.7211          
-         Detection Rate : 0.6599          
-   Detection Prevalence : 0.8810          
-      Balanced Accuracy : 0.5612          
+            Sensitivity : 0.8873          
+            Specificity : 0.1915          
+         Pos Pred Value : 0.7132          
+         Neg Pred Value : 0.4286          
+             Prevalence : 0.6938          
+         Detection Rate : 0.6156          
+   Detection Prevalence : 0.8632          
+      Balanced Accuracy : 0.5394          
                                           
        'Positive' Class : no              
                                           </code></pre>
