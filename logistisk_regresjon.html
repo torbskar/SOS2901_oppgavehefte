@@ -1,0 +1,2539 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>SOS2901 Maskinlæring for samfunnsvitere - 3&nbsp; Logistisk regresjon</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./cart.html" rel="next">
+<link href="./linear_regresjon.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">SOS2901 Maskinlæring for samfunnsvitere</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduksjon</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduksjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduksjon til maskinlæring</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Datasett</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduksjon_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Introduksjon til R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#empirisk-eksempel" id="toc-empirisk-eksempel" class="nav-link active" data-scroll-target="#empirisk-eksempel"><span class="toc-section-number">3.1</span>  Empirisk eksempel</a></li>
+  <li><a href="#estimere-en-sannsynlighet" id="toc-estimere-en-sannsynlighet" class="nav-link" data-scroll-target="#estimere-en-sannsynlighet"><span class="toc-section-number">3.2</span>  Estimere en sannsynlighet</a></li>
+  <li><a href="#logistisk-regresjon-i-r" id="toc-logistisk-regresjon-i-r" class="nav-link" data-scroll-target="#logistisk-regresjon-i-r"><span class="toc-section-number">3.3</span>  Logistisk regresjon i R</a></li>
+  <li><a href="#prediksjon" id="toc-prediksjon" class="nav-link" data-scroll-target="#prediksjon"><span class="toc-section-number">3.4</span>  Prediksjon</a>
+  <ul class="collapse">
+  <li><a href="#roc-og-auc" id="toc-roc-og-auc" class="nav-link" data-scroll-target="#roc-og-auc"><span class="toc-section-number">3.4.1</span>  ROC og AUC</a></li>
+  </ul></li>
+  <li><a href="#multippel-logistisk-regresjon" id="toc-multippel-logistisk-regresjon" class="nav-link" data-scroll-target="#multippel-logistisk-regresjon"><span class="toc-section-number">3.5</span>  Multippel logistisk regresjon</a>
+  <ul class="collapse">
+  <li><a href="#roc-og-auc-1" id="toc-roc-og-auc-1" class="nav-link" data-scroll-target="#roc-og-auc-1"><span class="toc-section-number">3.5.1</span>  ROC og AUC</a></li>
+  </ul></li>
+  <li><a href="#testing-data" id="toc-testing-data" class="nav-link" data-scroll-target="#testing-data"><span class="toc-section-number">3.6</span>  Testing-data</a></li>
+  <li><a href="#klassifikasjon" id="toc-klassifikasjon" class="nav-link" data-scroll-target="#klassifikasjon"><span class="toc-section-number">3.7</span>  Klassifikasjon</a>
+  <ul class="collapse">
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix"><span class="toc-section-number">3.7.1</span>  Confusion matrix</a></li>
+  </ul></li>
+  <li><a href="#hvor-feil-kan-man-ta" id="toc-hvor-feil-kan-man-ta" class="nav-link" data-scroll-target="#hvor-feil-kan-man-ta"><span class="toc-section-number">3.8</span>  Hvor feil kan man ta?</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">3.9</span>  Oppgaver</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>I dette kapittelt skal vi bruke følgende pakker:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)        <span class="co"># Beregne ROC-curve</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)   <span class="co"># Pent formatert regresjonstabell</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># Funksjonen confusionMatrix()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="empirisk-eksempel" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="empirisk-eksempel"><span class="header-section-number">3.1</span> Empirisk eksempel</h2>
+<p>Som eksempel bruker vi et datasettet Attrition. Dette er et datasett over arbeidstakere i en bedrift der utfallsvariabelen er om arbeidstakeren slutter i jobben eller ikke.</p>
+<p>For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere som slutter tar med seg erfaring og kompetanse, og nye arbeidstakere må læres opp. Arbeidsgiver bør derfor generelt legge til rette for at arbeidstakere ønsker å bli værende, men det kan også være aktuelt med mer målrettede tiltak. Når en arbeidstaker har fått et nytt jobbtilbud kan det være for sent. Hvis man derimot kan komme i forkjøpet kan man kanskje gjøre noe <em>før</em> vedkommende går til det skrittet å søke ny jobb. Hvis man kunne predikere hvem som kommer til å slutte kunne man altså gjort tiltak i forkant.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med <code>read.csv()</code>. Deretter kan vi se på innholdet med <code>skim()</code>:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>attrition <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/attrition.rds"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(attrition)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">attrition</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1470</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">factor</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">ordered</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: left;">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Attrition</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 1233, Yes: 237</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BusinessTravel</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Tra: 1043, Tra: 277, Non: 150</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Department</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Res: 961, Sal: 446, Hum: 63</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EducationField</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Lif: 606, Med: 464, Mar: 159, Tec: 132</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Gender</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Mal: 882, Fem: 588</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">JobRole</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">Sal: 326, Res: 292, Lab: 259, Man: 145</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MaritalStatus</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Mar: 673, Sin: 470, Div: 327</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OverTime</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">No: 1054, Yes: 416</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 9%">
+<col style="width: 12%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">36.92</td>
+<td style="text-align: right;">9.14</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">30.00</td>
+<td style="text-align: right;">36.0</td>
+<td style="text-align: right;">43.00</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: left;">▂▇▇▃▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DailyRate</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">802.49</td>
+<td style="text-align: right;">403.51</td>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">465.00</td>
+<td style="text-align: right;">802.0</td>
+<td style="text-align: right;">1157.00</td>
+<td style="text-align: right;">1499</td>
+<td style="text-align: left;">▇▇▇▇▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DistanceFromHome</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.19</td>
+<td style="text-align: right;">8.11</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">7.0</td>
+<td style="text-align: right;">14.00</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: left;">▇▅▂▂▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Education</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.91</td>
+<td style="text-align: right;">1.02</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">▂▃▇▆▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">EmployeeNumber</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1024.87</td>
+<td style="text-align: right;">602.02</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">491.25</td>
+<td style="text-align: right;">1020.5</td>
+<td style="text-align: right;">1555.75</td>
+<td style="text-align: right;">2068</td>
+<td style="text-align: left;">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EnvironmentSatisfaction</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.72</td>
+<td style="text-align: right;">1.09</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">▅▅▁▇▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HourlyRate</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">65.89</td>
+<td style="text-align: right;">20.33</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">48.00</td>
+<td style="text-align: right;">66.0</td>
+<td style="text-align: right;">83.75</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: left;">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">JobInvolvement</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.73</td>
+<td style="text-align: right;">0.71</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">▁▃▁▇▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">JobLevel</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.06</td>
+<td style="text-align: right;">1.11</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">▇▇▃▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">JobSatisfaction</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.73</td>
+<td style="text-align: right;">1.10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">▅▅▁▇▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MonthlyIncome</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6502.93</td>
+<td style="text-align: right;">4707.96</td>
+<td style="text-align: right;">1009</td>
+<td style="text-align: right;">2911.00</td>
+<td style="text-align: right;">4919.0</td>
+<td style="text-align: right;">8379.00</td>
+<td style="text-align: right;">19999</td>
+<td style="text-align: left;">▇▅▂▁▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MonthlyRate</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14313.10</td>
+<td style="text-align: right;">7117.79</td>
+<td style="text-align: right;">2094</td>
+<td style="text-align: right;">8047.00</td>
+<td style="text-align: right;">14235.5</td>
+<td style="text-align: right;">20461.50</td>
+<td style="text-align: right;">26999</td>
+<td style="text-align: left;">▇▇▇▇▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NumCompaniesWorked</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.69</td>
+<td style="text-align: right;">2.50</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">▇▃▂▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PercentSalaryHike</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">15.21</td>
+<td style="text-align: right;">3.66</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">12.00</td>
+<td style="text-align: right;">14.0</td>
+<td style="text-align: right;">18.00</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">▇▅▃▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PerformanceRating</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.15</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">▇▁▁▁▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RelationshipSatisfaction</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.71</td>
+<td style="text-align: right;">1.08</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">▅▅▁▇▇</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">StockOptionLevel</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.79</td>
+<td style="text-align: right;">0.85</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">▇▇▁▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TotalWorkingYears</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11.28</td>
+<td style="text-align: right;">7.78</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6.00</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: right;">15.00</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: left;">▇▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TrainingTimesLastYear</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.80</td>
+<td style="text-align: right;">1.29</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">▂▇▇▂▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">WorkLifeBalance</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.76</td>
+<td style="text-align: right;">0.71</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">▁▃▁▇▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">YearsAtCompany</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7.01</td>
+<td style="text-align: right;">6.13</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">9.00</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: left;">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">YearsInCurrentRole</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.23</td>
+<td style="text-align: right;">3.62</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">7.00</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">▇▃▂▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">YearsSinceLastPromotion</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.19</td>
+<td style="text-align: right;">3.22</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">YearsWithCurrManager</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.12</td>
+<td style="text-align: right;">3.57</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">7.00</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: left;">▇▂▅▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Merk at det er en variabel vi helt sikkert ikke trenger, så vi sletter denne like gjerne med en gang: <em>EmployeeNumber</em> er et løpenummer for person. Siden det er et 1:1 forhold mellom dette og utfallsvariabelen, så bør den tas ut.</p>
+<p>Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datasettet med det modifiserte datasettet</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>attrition <span class="ot">&lt;-</span> attrition <span class="sc">%&gt;%</span>  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> EmployeeNumber) </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(attrition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,470
+Columns: 31
+$ Age                      &lt;int&gt; 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, 35, 2…
+$ Attrition                &lt;fct&gt; Yes, No, Yes, No, No, No, No, No, No, No, No,…
+$ BusinessTravel           &lt;fct&gt; Travel_Rarely, Travel_Frequently, Travel_Rare…
+$ DailyRate                &lt;int&gt; 1102, 279, 1373, 1392, 591, 1005, 1324, 1358,…
+$ Department               &lt;fct&gt; Sales, Research &amp; Development, Research &amp; Dev…
+$ DistanceFromHome         &lt;int&gt; 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15, 26, …
+$ Education                &lt;int&gt; 2, 1, 2, 4, 1, 2, 3, 1, 3, 3, 3, 2, 1, 2, 3, …
+$ EducationField           &lt;fct&gt; Life Sciences, Life Sciences, Other, Life Sci…
+$ EnvironmentSatisfaction  &lt;int&gt; 2, 3, 4, 4, 1, 4, 3, 4, 4, 3, 1, 4, 1, 2, 3, …
+$ Gender                   &lt;fct&gt; Female, Male, Male, Female, Male, Male, Femal…
+$ HourlyRate               &lt;int&gt; 94, 61, 92, 56, 40, 79, 81, 67, 44, 94, 84, 4…
+$ JobInvolvement           &lt;int&gt; 3, 2, 2, 3, 3, 3, 4, 3, 2, 3, 4, 2, 3, 3, 2, …
+$ JobLevel                 &lt;int&gt; 2, 2, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1, …
+$ JobRole                  &lt;fct&gt; Sales Executive, Research Scientist, Laborato…
+$ JobSatisfaction          &lt;int&gt; 4, 2, 3, 3, 2, 4, 1, 3, 3, 3, 2, 3, 3, 4, 3, …
+$ MaritalStatus            &lt;fct&gt; Single, Married, Single, Married, Married, Si…
+$ MonthlyIncome            &lt;int&gt; 5993, 5130, 2090, 2909, 3468, 3068, 2670, 269…
+$ MonthlyRate              &lt;int&gt; 19479, 24907, 2396, 23159, 16632, 11864, 9964…
+$ NumCompaniesWorked       &lt;int&gt; 8, 1, 6, 1, 9, 0, 4, 1, 0, 6, 0, 0, 1, 0, 5, …
+$ OverTime                 &lt;fct&gt; Yes, No, Yes, Yes, No, No, Yes, No, No, No, N…
+$ PercentSalaryHike        &lt;int&gt; 11, 23, 15, 11, 12, 13, 20, 22, 21, 13, 13, 1…
+$ PerformanceRating        &lt;int&gt; 3, 4, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 3, …
+$ RelationshipSatisfaction &lt;int&gt; 1, 4, 2, 3, 4, 3, 1, 2, 2, 2, 3, 4, 4, 3, 2, …
+$ StockOptionLevel         &lt;int&gt; 0, 1, 0, 0, 1, 0, 3, 1, 0, 2, 1, 0, 1, 1, 0, …
+$ TotalWorkingYears        &lt;int&gt; 8, 10, 7, 8, 6, 8, 12, 1, 10, 17, 6, 10, 5, 3…
+$ TrainingTimesLastYear    &lt;int&gt; 0, 3, 3, 3, 3, 2, 3, 2, 2, 3, 5, 3, 1, 2, 4, …
+$ WorkLifeBalance          &lt;int&gt; 1, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3, …
+$ YearsAtCompany           &lt;int&gt; 6, 10, 0, 8, 2, 7, 1, 1, 9, 7, 5, 9, 5, 2, 4,…
+$ YearsInCurrentRole       &lt;int&gt; 4, 7, 0, 7, 2, 7, 0, 0, 7, 7, 4, 5, 2, 2, 2, …
+$ YearsSinceLastPromotion  &lt;int&gt; 0, 1, 0, 3, 2, 3, 0, 0, 1, 7, 0, 0, 4, 1, 0, …
+$ YearsWithCurrManager     &lt;int&gt; 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, 3, …</code></pre>
+</div>
+</div>
+<p>Del datasettet i to deler. Vi trekker tilfeldig 70% og legger dette i datasettet training. Resten legges i testing. De nye datasettene behøver jo ikke hete akkurat dette. Kall det hva du vil.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">426</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>attrition_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(attrition)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(attrition_split) </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(attrition_split) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Sjekk at antallet i hvert datasett summeres til totalen</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1470</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(training) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1102</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(testing) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 368</code></pre>
+</div>
+</div>
+<p>OBS! variabelen Attrition er en “factor”, dvs. kategorisk med underliggende nummer. Ta en titt.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(training<span class="sc">$</span>Attrition)   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> Factor w/ 2 levels "No","Yes": 1 2 1 2 1 1 1 2 1 1 ...</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(training<span class="sc">$</span>Attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] No  Yes No  Yes No  No 
+Levels: No Yes</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(training<span class="sc">$</span>Attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "No"  "Yes"</code></pre>
+</div>
+</div>
+<p>I en regresjon vil lm() og glm() håndtere en factor automatisk som dummy. Men det funker ikke nødvendigvis like greit for plotting etc. Gjør om factor til dummy-variabel. Inni parentesen er et logisk uttrykk som får TRUE/FALSE, men med å eksplisitt be om at variabelen skal være numerisk blir det 1/0 Vi overskriver variablen slik:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>training<span class="sc">$</span>Attrition <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(training<span class="sc">$</span>Attrition <span class="sc">==</span> <span class="st">"Yes"</span>) </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(training<span class="sc">$</span>Attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0 1 0 1 0 0</code></pre>
+</div>
+</div>
+<p>Andelen kan vi få med <code>mean()</code>:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(training<span class="sc">$</span>Attrition) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1533575</code></pre>
+</div>
+</div>
+<p>Vi kan vise hvordan det å slutte i jobben varierer med f.eks. alder ved å beregne andel per verdi av alder.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>training_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Attrition =</span> <span class="fu">mean</span>(Attrition <span class="sc">==</span> <span class="dv">1</span>)) </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training_p, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="estimere-en-sannsynlighet" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="estimere-en-sannsynlighet"><span class="header-section-number">3.2</span> Estimere en sannsynlighet</h2>
+<p>Når utfallsvariabelen er binær (to verdier) kan man likevel bruke lineær regresjon. Det kalles da gjerne en lineær sannsynlighetsmodell.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>lm_est <span class="ot">&lt;-</span> <span class="fu">lm</span>(Attrition <span class="sc">~</span> Age , <span class="at">data =</span> training)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_est)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Attrition ~ Age, data = training)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.28444 -0.18737 -0.14576 -0.06256  0.99292 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.409254   0.044335   9.231  &lt; 2e-16 ***
+Age         -0.006934   0.001166  -5.948 3.65e-09 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.355 on 1100 degrees of freedom
+Multiple R-squared:  0.03116,   Adjusted R-squared:  0.03027 
+F-statistic: 35.37 on 1 and 1100 DF,  p-value: 3.652e-09</code></pre>
+</div>
+</div>
+<p>Dette betyr at vi har estimert følgende regresjonsligning:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><span class="math display">\[
+\operatorname{\widehat{Attrition}} = 0.409 - 0.007(\operatorname{Age})
+\]</span></p>
+</div>
+</div>
+<p>Vi kan da predikere for ulike aldre ved å første lage et nytt datasett med kun alder som variabel og de verdiene som finnes i datasettet, og så bruke ‘predict()’ på dette datasettet etterpå. Da kan vi også se resultatet for ulike aldre. Her er et eksempel:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>n_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Age =</span> <span class="fu">seq</span>(<span class="dv">18</span>, <span class="dv">65</span>))</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>n_data<span class="sc">$</span>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm_est, <span class="at">newdata =</span> n_data)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training_p, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span>n_data, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Merk at det her er vist predikerte sannsynligheter litt utenfor omfanget av de opprinnelige dataene, dvs. opp til 65 år i stedet for bare til 60. Da får vi en negativ sannsynlighet. Dette er kanskje ikke så problematisk hvis man er nøye på å ikke tolke resultatene utenfor training-data. Men det kan jo hente <em>nye</em> data vil ha slike verdier. Det blir mer komplisert hvis det er mange prediktorer og kompliserte modeller. En ting er om de predikerte sannsynlighetene blir lavere enn 0 eller høyere enn 1, men vi vil uansett forvente at stigningstallet vil avta når det nærmer seg disse grenseverdiene.</p>
+<p>Den viktigste ulempen med lineære sannsynlighetsmodeller er altså at modellen da kan predikere sannsynligheter lavere enn 0 og høyere enn 1. Når man er mest interessert i <span class="math inline">\(\beta\)</span> er det ikke sikkert det er så nøye. Men når vi er interessert i <span class="math inline">\(\hat{y}\)</span> kan det derimot være viktig.</p>
+</section>
+<section id="logistisk-regresjon-i-r" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="logistisk-regresjon-i-r"><span class="header-section-number">3.3</span> Logistisk regresjon i R</h2>
+<p>Logistisk regresjon har det til felles med lineær regresjon at utfallet er en lineær spesifikasjon.</p>
+<p><span class="math display">\[  log( \frac{\pi}{(1-\pi)}) = \alpha + \beta X \]</span></p>
+<p>Venstresiden av ligningen kalles en <em>logit</em>, der <span class="math inline">\(\pi\)</span> er en sannsynlighet. Uttrykket <span class="math inline">\(\frac{\pi}{(1-\pi)}\)</span> er en <em>odds</em>, som er et forholdstall mellom sannsynligheten for at utfallet skjer mot sannsynligheten for det motsatte. Tolkningen av <span class="math inline">\(\beta\)</span> er da en endring av <em>odds</em> på logaritisk skala. Hvis man eksponensierer <span class="math inline">\(\beta\)</span> er den da tolkbar som en <em>oddsrate</em>.</p>
+<p>Som du nå sikkert skjønner så er altså tolkningen av regresjonskoeffisientene nokså krøkete å tolke substansielt for de fleste av oss. Det kan i seg selv være et argument mot å bruke logistisk regresjon i en del sammenhenger.</p>
+<p>Men man kan regne om til sannsynligheter som er vesentlig enklere å forstå. Særlig hvis man ikke er så interessert i tolkningen av <span class="math inline">\(\beta\)</span>, men prediksjon av <span class="math inline">\(\pi\)</span>.</p>
+<p>Ligningen kan da skrives om slik at venstresiden av ligningen blir en sannsynlighet direkte:</p>
+<p><span class="math display">\[  \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} \]</span></p>
+<p>En enkel omregning av regresjonsresultatet gir altså en <em>sannynlighet</em>. Denne sannsynligheten kan vi da bruke til <em>klassifikasjon</em> hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har <span class="math inline">\(\pi = P(y = 1) &gt; 0.5\)</span> tilhører den ene gruppen og resten i den andre gruppen.</p>
+<p>Logistisk regresjon kan dessuten håndtere utfall med flere enn to kategorier, noe OLS ikke kan. Vi bruker derfor logistisk regresjon når det er kategoriske utfall. I andre sammenhenger vil folk hevde at OLS er bedre å bruke (av diverse grunner), men i <em>denne sammenhengen</em> er logistisk regresjon som hovedregel å foretrekke over OLS for kategoriske utfall.</p>
+<p>Her er et eksempel på hvordan estimere enkel logistisk regresjon i R:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>est_logit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Attrition <span class="sc">~</span> Age, <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_logit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = Attrition ~ Age, family = "binomial", data = training)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.9093  -0.6310  -0.5343  -0.3790   2.4998  
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  0.41516    0.36402   1.140    0.254    
+Age         -0.06026    0.01050  -5.741 9.43e-09 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 944.39  on 1101  degrees of freedom
+Residual deviance: 907.48  on 1100  degrees of freedom
+AIC: 911.48
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<p>En penere output kan gis med ‘gtsummary’ på samme måte som for OLS slik:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(est_logit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<div id="lxflodjiau" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+:where(#lxflodjiau) .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+:where(#lxflodjiau) .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+:where(#lxflodjiau) .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+:where(#lxflodjiau) .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+:where(#lxflodjiau) .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+:where(#lxflodjiau) .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+:where(#lxflodjiau) .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+:where(#lxflodjiau) .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+:where(#lxflodjiau) .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+:where(#lxflodjiau) .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+:where(#lxflodjiau) .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+:where(#lxflodjiau) .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+:where(#lxflodjiau) .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+:where(#lxflodjiau) .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#lxflodjiau) .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+:where(#lxflodjiau) .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+:where(#lxflodjiau) .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#lxflodjiau) .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+:where(#lxflodjiau) .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#lxflodjiau) .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+:where(#lxflodjiau) .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#lxflodjiau) .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#lxflodjiau) .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#lxflodjiau) .gt_left {
+  text-align: left;
+}
+
+:where(#lxflodjiau) .gt_center {
+  text-align: center;
+}
+
+:where(#lxflodjiau) .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+:where(#lxflodjiau) .gt_font_normal {
+  font-weight: normal;
+}
+
+:where(#lxflodjiau) .gt_font_bold {
+  font-weight: bold;
+}
+
+:where(#lxflodjiau) .gt_font_italic {
+  font-style: italic;
+}
+
+:where(#lxflodjiau) .gt_super {
+  font-size: 65%;
+}
+
+:where(#lxflodjiau) .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+:where(#lxflodjiau) .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+:where(#lxflodjiau) .gt_indent_1 {
+  text-indent: 5px;
+}
+
+:where(#lxflodjiau) .gt_indent_2 {
+  text-indent: 10px;
+}
+
+:where(#lxflodjiau) .gt_indent_3 {
+  text-indent: 15px;
+}
+
+:where(#lxflodjiau) .gt_indent_4 {
+  text-indent: 20px;
+}
+
+:where(#lxflodjiau) .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>log(OR)</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>log(OR)</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">Age</td>
+<td headers="estimate" class="gt_row gt_center">-0.06</td>
+<td headers="ci" class="gt_row gt_center">-0.08, -0.04</td>
+<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> OR = Odds Ratio, CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><span class="math display">\[
+\log\left[ \frac { \widehat{P( \operatorname{Attrition} = \operatorname{1} )} }{ 1 - \widehat{P( \operatorname{Attrition} = \operatorname{1} )} } \right] = 0.415 - 0.06(\operatorname{Age})
+\]</span></p>
+</div>
+</div>
+<p>Hvordan plotte slike data? Bruk geom_jitter eller geom_point. Å legge til en regresjonslinje har brukte vi geom_smooth(). Med stat_smoot() kan vi spesifisere andre typer regresjonsmodeller, herunder logistisk regresjon.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">3</span>)<span class="sc">+</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">"glm"</span>, <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family=</span><span class="st">"binomial"</span>), <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">col=</span><span class="st">"red"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Du synes sikkert dette plottet ser litt rart ut. Bytt ut geom_point() med følgende: <code>geom_jitter(height = .02, alpha=.3)</code> så skal du få omtrent følgende resultat:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> .<span class="dv">02</span>, <span class="at">alpha=</span>.<span class="dv">3</span>)<span class="sc">+</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">"glm"</span>, <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family=</span><span class="st">"binomial"</span>), <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">col=</span><span class="st">"red"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Det ser muligens fremdels rart ut, men litt tydeligere, kanskje.</p>
+<p>Her er en variant der andelen som slutter i jobben er regnet ut for hvert alderstrinn. Da er utfallsvariabelen en andel som er litt enklere å tolke når det plottes, og regresjonslinjen er den samme.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>training_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Attrition =</span> <span class="fu">mean</span>(Attrition <span class="sc">==</span> <span class="dv">1</span>)) </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training_p, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span> </span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">"glm"</span>, <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family=</span><span class="st">"binomial"</span>), <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">col=</span><span class="st">"red"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="prediksjon" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="prediksjon"><span class="header-section-number">3.4</span> Prediksjon</h2>
+<p>Vi kan predikere med bruk av ‘predict()’ som tidligere. Nå er det imidlertid viktig å presisere hva vi ønsker å predikere: <span class="math inline">\(log( \frac{\pi}{(1-\pi)})\)</span> eller <span class="math inline">\(\pi\)</span>. Vi ønsker det siste fordi det er direkte tolkbart. Vi må da skrive ‘type = “response”’ som følger.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>attrition_pred <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_logit, <span class="at">type =</span> <span class="st">"response"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="roc-og-auc" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="roc-og-auc"><span class="header-section-number">3.4.1</span> ROC og AUC</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ROC <span class="ot">&lt;-</span> <span class="fu">roc</span>( attrition_pred<span class="sc">$</span>Attrition, attrition_pred<span class="sc">$</span>prob )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting levels: control = 0, case = 1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting direction: controls &lt; cases</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Sensitivity =</span> ROC<span class="sc">$</span>sensitivities, </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Specificity =</span> ROC<span class="sc">$</span>specificities)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">y =</span> Sensitivity, <span class="at">x=</span> (<span class="dv">1</span><span class="sc">-</span>Specificity))) <span class="sc">+</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray"</span>)<span class="sc">+</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Area under the curve er 0.65.</p>
+</section>
+</section>
+<section id="multippel-logistisk-regresjon" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="multippel-logistisk-regresjon"><span class="header-section-number">3.5</span> Multippel logistisk regresjon</h2>
+<p>Vi kan estimere en multippel regresjon på tilsvarende måte som for lineær regresjon ved å legge til flere variable eller angi å bruke samtlige variable i datasettet med ‘Attrition ~ .’</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>est_multlogit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Attrition <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_multlogit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = Attrition ~ ., family = "binomial", data = training)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.6864  -0.4792  -0.2391  -0.0884   3.2219  
+
+Coefficients:
+                                   Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                      -1.035e+01  4.542e+02  -0.023 0.981824    
+Age                              -3.565e-02  1.628e-02  -2.190 0.028495 *  
+BusinessTravelTravel_Frequently   1.628e+00  4.675e-01   3.482 0.000498 ***
+BusinessTravelTravel_Rarely       8.988e-01  4.267e-01   2.106 0.035192 *  
+DailyRate                        -3.117e-04  2.648e-04  -1.177 0.239034    
+DepartmentResearch &amp; Development  1.203e+01  4.542e+02   0.026 0.978861    
+DepartmentSales                   1.239e+01  4.542e+02   0.027 0.978244    
+DistanceFromHome                  4.145e-02  1.300e-02   3.189 0.001428 ** 
+Education                        -1.376e-02  1.039e-01  -0.132 0.894627    
+EducationFieldLife Sciences      -8.013e-01  1.027e+00  -0.781 0.435083    
+EducationFieldMarketing          -2.129e-01  1.076e+00  -0.198 0.843199    
+EducationFieldMedical            -8.617e-01  1.028e+00  -0.838 0.401983    
+EducationFieldOther              -7.977e-01  1.098e+00  -0.727 0.467345    
+EducationFieldTechnical Degree    1.370e-01  1.048e+00   0.131 0.896014    
+EnvironmentSatisfaction          -4.957e-01  9.942e-02  -4.986 6.18e-07 ***
+GenderMale                        2.156e-01  2.149e-01   1.003 0.315665    
+HourlyRate                       -3.532e-03  5.385e-03  -0.656 0.511937    
+JobInvolvement                   -5.422e-01  1.452e-01  -3.734 0.000189 ***
+JobLevel                          1.864e-02  3.817e-01   0.049 0.961047    
+JobRoleHuman Resources            1.308e+01  4.542e+02   0.029 0.977028    
+JobRoleLaboratory Technician      1.531e+00  5.543e-01   2.762 0.005746 ** 
+JobRoleManager                   -1.451e+00  1.269e+00  -1.144 0.252636    
+JobRoleManufacturing Director    -3.131e-01  6.086e-01  -0.514 0.606923    
+JobRoleResearch Director         -2.440e+00  1.244e+00  -1.961 0.049843 *  
+JobRoleResearch Scientist         3.417e-01  5.694e-01   0.600 0.548406    
+JobRoleSales Executive            3.595e-01  1.603e+00   0.224 0.822589    
+JobRoleSales Representative       1.518e+00  1.650e+00   0.920 0.357555    
+JobSatisfaction                  -3.169e-01  9.701e-02  -3.267 0.001087 ** 
+MaritalStatusMarried              3.453e-01  3.135e-01   1.101 0.270697    
+MaritalStatusSingle               8.690e-01  4.056e-01   2.143 0.032140 *  
+MonthlyIncome                     8.613e-05  9.875e-05   0.872 0.383105    
+MonthlyRate                       8.922e-06  1.482e-05   0.602 0.547277    
+NumCompaniesWorked                1.721e-01  4.623e-02   3.722 0.000198 ***
+OverTimeYes                       1.877e+00  2.296e-01   8.174 2.98e-16 ***
+PercentSalaryHike                -6.102e-02  4.687e-02  -1.302 0.192953    
+PerformanceRating                 6.920e-01  4.794e-01   1.443 0.148883    
+RelationshipSatisfaction         -3.738e-01  9.827e-02  -3.804 0.000142 ***
+StockOptionLevel                 -3.059e-01  1.810e-01  -1.690 0.091064 .  
+TotalWorkingYears                -6.605e-02  3.580e-02  -1.845 0.065052 .  
+TrainingTimesLastYear            -2.129e-01  8.533e-02  -2.495 0.012582 *  
+WorkLifeBalance                  -2.150e-01  1.456e-01  -1.476 0.139869    
+YearsAtCompany                    6.067e-02  4.877e-02   1.244 0.213537    
+YearsInCurrentRole               -9.948e-02  5.569e-02  -1.786 0.074038 .  
+YearsSinceLastPromotion           2.052e-01  5.182e-02   3.960 7.50e-05 ***
+YearsWithCurrManager             -1.866e-01  6.072e-02  -3.073 0.002122 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 944.39  on 1101  degrees of freedom
+Residual deviance: 619.99  on 1057  degrees of freedom
+AIC: 709.99
+
+Number of Fisher Scoring iterations: 14</code></pre>
+</div>
+</div>
+<section id="roc-og-auc-1" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="roc-og-auc-1"><span class="header-section-number">3.5.1</span> ROC og AUC</h3>
+<p>For å beregne ROC og AUC gjør vi tilsvarende som over med predict og angi type respons. Dette brukes så videre i ROC og AUC.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>attrition_pred <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">type =</span> <span class="st">"response"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Funksjonen <code>roc()</code> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="citation" data-cites="hsieh2008">(<a href="#ref-hsieh2008" role="doc-biblioref">Hsieh 2008</a>)</span>.</p>
+<p>OBS! Man må man angi data som <em>første</em> argument i funksjonen <code>roc()</code>, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!</p>
+<p>Det går an å få ut plottet med en quick-and-dirty versjon med <code>plot(ROC)</code>, men det blir penere med bruk av <code>ggplot()</code> slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>ROC <span class="ot">&lt;-</span> <span class="fu">roc</span>(attrition_pred, Attrition, prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting levels: control = 0, case = 1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting direction: controls &lt; cases</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Sensitivity =</span> ROC<span class="sc">$</span>sensitivities, </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Specificity =</span> ROC<span class="sc">$</span>specificities)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">y =</span> Sensitivity, <span class="at">x=</span> (<span class="dv">1</span><span class="sc">-</span>Specificity))) <span class="sc">+</span> </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray"</span>)<span class="sc">+</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Vi kan da få rapportert arealet under kurven med <code>auc()</code> slik:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">auc</span>(ROC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area under the curve: 0.8675</code></pre>
+</div>
+</div>
+<p>Når arealet under kurven (AUC) er 0.867 er det vesentlig bedre prediksjon enn den enkle modellen.</p>
+</section>
+</section>
+<section id="testing-data" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="testing-data"><span class="header-section-number">3.6</span> Testing-data</h2>
+<p>Ovenfor er øvelsen gjort på training-data, men vi må sjekke på testing-dataene.</p>
+<p>For å beregne ROC og AUC gjør vi tilsvarende som over med predict, men nå er det viktig å angi ‘newdata = …’ slik at prediksjonen gjøres på riktig datasett.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">newdata =</span> testing, <span class="at">type =</span> <span class="st">"response"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Funksjonen <code>roc()</code> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="citation" data-cites="hsieh2008">(<a href="#ref-hsieh2008" role="doc-biblioref">Hsieh 2008</a>)</span>.</p>
+<p>OBS! Man må man angi data som <em>første</em> argument i funksjonen <code>roc()</code>, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!</p>
+<p>Det går an å få ut plottet med en quick-and-dirty versjon med <code>plot(ROC)</code>, men det blir penere med bruk av <code>ggplot()</code> slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>ROC_test <span class="ot">&lt;-</span> <span class="fu">roc</span>(attrition_test, Attrition, prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting levels: control = No, case = Yes</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Setting direction: controls &lt; cases</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Sensitivity =</span> ROC_test<span class="sc">$</span>sensitivities, </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Specificity =</span> ROC_test<span class="sc">$</span>specificities)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">y =</span> Sensitivity, <span class="at">x=</span> (<span class="dv">1</span><span class="sc">-</span>Specificity))) <span class="sc">+</span> </span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray"</span>)<span class="sc">+</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Vi kan da få rapportert arealet under kurven med <code>auc()</code> slik:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">auc</span>(ROC_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area under the curve: 0.8397</code></pre>
+</div>
+</div>
+<p>Når arealet under kurven (AUC) er 0.84. Kanskje litt overraskende, men dette like godt som for på training dataene. Dette altså selv om det er tydelige forskjeller på ROC-curvene som er plottet. AUC er altså <em>arealet under kurven</em>. Litt ulik form kan i prinsippet ha samme areal.</p>
+</section>
+<section id="klassifikasjon" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="klassifikasjon"><span class="header-section-number">3.7</span> Klassifikasjon</h2>
+<p>Men for et handlingsvalg må vi gjøre faktisk klassifisering. Det vi har estimert så langt er bare en sannsynlighet. Selve klassifiseringen krever at man tar et aktivt valg på en cut-off for hvem man tror faktisk slutter. La oss først se på fordelingen av sannsynligheter.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(attrition_test, <span class="fu">aes</span>(<span class="at">x =</span> prob)) <span class="sc">+</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="logistisk_regresjon_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Vi kan bestemme oss for at et rimelig cut-off er 50/50, altså med sannsynlighet 0.5. Her gjøres en klassifisering for testing-datasettet, og lager en krysstabell med den klassifiserte etter prediksjon mot observert utfall. En slik krysstabell kalles altså en <em>confusion matrix</em>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">attrition_class =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&lt;</span> .<span class="dv">5</span>, <span class="st">"No"</span>, <span class="st">"Yes"</span>)))</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Attrition, attrition_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         attrition_class
+Attrition  No Yes
+      No  287  13
+      Yes  45  23</code></pre>
+</div>
+</div>
+<p>Hvis du nå lurer på om det spiller noen rolle om du har observert eller predikert i rader/kollonner, så gjør det ikke det. Det er bare to variable krysset mot hverandre. I dette tilfellet er det altså 30 personer som er gjettet riktig at vil slutte, men bare halvparten av de som faktisk sluttet ble fanget opp (27 av 30). Det var 12 som ble feilaktig gjettet at ville slutte, men som altså ikke gjorde det.</p>
+<section id="confusion-matrix" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="confusion-matrix"><span class="header-section-number">3.7.1</span> Confusion matrix</h3>
+<p>Fra pakken ‘caret’ er det en funksjon for confusion matrix som regner ut masse greier for oss. (Vi skal bare bruke akkurat den funksjonen fra ‘caret’).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(attrition_test<span class="sc">$</span>Attrition, attrition_test<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction  No Yes
+       No  287  13
+       Yes  45  23
+                                          
+               Accuracy : 0.8424          
+                 95% CI : (0.8011, 0.8781)
+    No Information Rate : 0.9022          
+    P-Value [Acc &gt; NIR] : 0.9999          
+                                          
+                  Kappa : 0.3605          
+                                          
+ Mcnemar's Test P-Value : 4.691e-05       
+                                          
+            Sensitivity : 0.63889         
+            Specificity : 0.86446         
+         Pos Pred Value : 0.33824         
+         Neg Pred Value : 0.95667         
+             Prevalence : 0.09783         
+         Detection Rate : 0.06250         
+   Detection Prevalence : 0.18478         
+      Balanced Accuracy : 0.75167         
+                                          
+       'Positive' Class : Yes             
+                                          </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="hvor-feil-kan-man-ta" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="hvor-feil-kan-man-ta"><span class="header-section-number">3.8</span> Hvor feil kan man ta?</h2>
+<p>I klassifiseringen over er det gjort et klart valg for hvem man tror faktisk vil slutte i jobben eller ikke. Det er selvsagt slik at noen er mer sannsynlige vil slutte enn andre, men ingen har 0 sannsynlighet. Ingen har 1 heller, for den saks skyld. Det er altså usikkerhet. Men hvis vi skal gjøre et <em>tiltak</em>, så må vi ta det valget!</p>
+<p>Hvis vi gjør klassifiseringen på 0.5 som over, så betyr jo det at vi synes begge feil er like viktige: Falske positive eller falske negative. Hvis det er et langt større problem at folk slutter enn at noen f.eks. får tilbud om goder eller ekstra oppfølging etc, så kan det hende cut-off skal settes lavere? Da får man flere sanne positive, men også flere feil. Det kan det jo være verd, men kommer jo an på hva konsekvensene. Vi kommer tilbake til dette, men test gjerne ut selv med ulik cut-off og se hvordan resultatene endrer seg.</p>
+</section>
+<section id="oppgaver" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">3.9</span> Oppgaver</h2>
+<p>Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger.</p>
+<div id="exr-logit-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.1 </strong></span>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+</div>
+<div id="exr-logit-eksplisitt" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.2 </strong></span>Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</p>
+<p>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</p>
+</div>
+<div id="exr-logit-split" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.3 </strong></span>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</p>
+</div>
+<div id="exr-logit-sepaa" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.4 </strong></span>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</p>
+<ol type="a">
+<li>Bruk <code>glimpse()</code> og <code>skim()</code> til å få oversikt over innholdet i datasettet</li>
+<li>Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</li>
+<li>Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</li>
+</ol>
+</div>
+<div id="exr-logit-train" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.5 </strong></span>Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve.</p>
+<ol type="a">
+<li>Velg ut tre forklaringsvariable og estimer en regresjonsmodell</li>
+<li>Estimer en ny modell med alle variable i datasettet</li>
+<li>Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</li>
+<li>Gjør et automatisk modellsøk</li>
+</ol>
+<p>Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</p>
+</div>
+<div id="exr-logit-test" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.6 </strong></span>I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger:</p>
+<ol type="a">
+<li>Prediker utfallet på testing-datasettet</li>
+<li>Regn ut AUC</li>
+<li>Hvor stor er <em>endringen</em> i AUC er fra resultatene når du brukte training-datasettet?</li>
+</ol>
+<p>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor <em>endring</em> i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</p>
+</div>
+<div id="exr-logit-class" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3.7 </strong></span>Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet.</p>
+</div>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-hsieh2008" class="csl-entry" role="doc-biblioentry">
+Hsieh, John. 2008. <span>“Receiver Operating Characteristic (ROC) Curve.”</span> In <em>Encyclopedia of Epidemiology</em>, 895–98. Thousand Oaks, California: Sage. <a href="https://doi.org/10.4135/9781412953948">https://doi.org/10.4135/9781412953948</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Her kunne man jo også tenke seg at den gode lederen har en dialog med de ansatte og fanger opp deres frustrasjoner og behov slik at maskinell prediksjon ikke trengs. Det er jo også en form for prediksjon med kvalitative data! Så her er vi i en setting der dette ikke fungerer eller det er så store forhold at en kvalitativ tilnærming ikke er praktisk mulig eller noe sånt.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./linear_regresjon.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./cart.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb58" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Logistisk regresjon</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker:</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
+<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)        <span class="co"># Beregne ROC-curve</span></span>
+<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)   <span class="co"># Pent formatert regresjonstabell</span></span>
+<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># Funksjonen confusionMatrix()</span></span>
+<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirisk eksempel</span></span>
+<span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a>Som eksempel bruker vi et datasettet Attrition. Dette er et datasett over arbeidstakere i en bedrift der utfallsvariabelen er om arbeidstakeren slutter i jobben eller ikke.</span>
+<span id="cb58-24"><a href="#cb58-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-25"><a href="#cb58-25" aria-hidden="true" tabindex="-1"></a>For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere som slutter tar med seg erfaring og kompetanse, og nye arbeidstakere må læres opp. Arbeidsgiver bør derfor generelt legge til rette for at arbeidstakere ønsker å bli værende, men det kan også være aktuelt med mer målrettede tiltak. Når en arbeidstaker har fått et nytt jobbtilbud kan det være for sent. Hvis man derimot kan komme i forkjøpet kan man kanskje gjøre noe *før* vedkommende går til det skrittet å søke ny jobb. Hvis man kunne predikere hvem som kommer til å slutte kunne man altså gjort tiltak i forkant.<span class="ot">[^logistisk_regresjon-1]</span></span>
+<span id="cb58-26"><a href="#cb58-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-27"><a href="#cb58-27" aria-hidden="true" tabindex="-1"></a><span class="ot">[^logistisk_regresjon-1]: </span>Her kunne man jo også tenke seg at den gode lederen har en dialog med de ansatte og fanger opp deres frustrasjoner og behov slik at maskinell prediksjon ikke trengs. Det er jo også en form for prediksjon med kvalitative data! Så her er vi i en setting der dette ikke fungerer eller det er så store forhold at en kvalitativ tilnærming ikke er praktisk mulig eller noe sånt.</span>
+<span id="cb58-28"><a href="#cb58-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-29"><a href="#cb58-29" aria-hidden="true" tabindex="-1"></a>Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med <span class="in">`read.csv()`</span>. Deretter kan vi se på innholdet med <span class="in">`skim()`</span>:</span>
+<span id="cb58-30"><a href="#cb58-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-33"><a href="#cb58-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-34"><a href="#cb58-34" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-35"><a href="#cb58-35" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-36"><a href="#cb58-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-37"><a href="#cb58-37" aria-hidden="true" tabindex="-1"></a>attrition <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/attrition.rds"</span>)</span>
+<span id="cb58-38"><a href="#cb58-38" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(attrition)  </span>
+<span id="cb58-39"><a href="#cb58-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-40"><a href="#cb58-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-41"><a href="#cb58-41" aria-hidden="true" tabindex="-1"></a>Merk at det er en variabel vi helt sikkert ikke trenger, så vi sletter denne like gjerne med en gang: *EmployeeNumber* er et løpenummer for person. Siden det er et 1:1 forhold mellom dette og utfallsvariabelen, så bør den tas ut. </span>
+<span id="cb58-42"><a href="#cb58-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-43"><a href="#cb58-43" aria-hidden="true" tabindex="-1"></a>Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datasettet med det modifiserte datasettet</span>
+<span id="cb58-44"><a href="#cb58-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-47"><a href="#cb58-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-48"><a href="#cb58-48" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-49"><a href="#cb58-49" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-50"><a href="#cb58-50" aria-hidden="true" tabindex="-1"></a>attrition <span class="ot">&lt;-</span> attrition <span class="sc">%&gt;%</span>  </span>
+<span id="cb58-51"><a href="#cb58-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> EmployeeNumber) </span>
+<span id="cb58-52"><a href="#cb58-52" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(attrition)</span>
+<span id="cb58-53"><a href="#cb58-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-54"><a href="#cb58-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-55"><a href="#cb58-55" aria-hidden="true" tabindex="-1"></a>Del datasettet i to deler. Vi trekker tilfeldig 70% og legger dette i datasettet training. Resten legges i testing. De nye datasettene behøver jo ikke hete akkurat dette. Kall det hva du vil.</span>
+<span id="cb58-56"><a href="#cb58-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-59"><a href="#cb58-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-60"><a href="#cb58-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-61"><a href="#cb58-61" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-62"><a href="#cb58-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-63"><a href="#cb58-63" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">426</span>)</span>
+<span id="cb58-64"><a href="#cb58-64" aria-hidden="true" tabindex="-1"></a>attrition_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(attrition)</span>
+<span id="cb58-65"><a href="#cb58-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-66"><a href="#cb58-66" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(attrition_split) </span>
+<span id="cb58-67"><a href="#cb58-67" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(attrition_split) </span>
+<span id="cb58-68"><a href="#cb58-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-69"><a href="#cb58-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-70"><a href="#cb58-70" aria-hidden="true" tabindex="-1"></a>Sjekk at antallet i hvert datasett summeres til totalen</span>
+<span id="cb58-71"><a href="#cb58-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-74"><a href="#cb58-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-75"><a href="#cb58-75" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(attrition) </span>
+<span id="cb58-76"><a href="#cb58-76" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(training) </span>
+<span id="cb58-77"><a href="#cb58-77" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(testing) </span>
+<span id="cb58-78"><a href="#cb58-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-79"><a href="#cb58-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-80"><a href="#cb58-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-81"><a href="#cb58-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-82"><a href="#cb58-82" aria-hidden="true" tabindex="-1"></a>OBS! variabelen Attrition er en "factor", dvs. kategorisk med underliggende nummer. Ta en titt.</span>
+<span id="cb58-83"><a href="#cb58-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-86"><a href="#cb58-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-87"><a href="#cb58-87" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(training<span class="sc">$</span>Attrition)   </span>
+<span id="cb58-88"><a href="#cb58-88" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(training<span class="sc">$</span>Attrition) </span>
+<span id="cb58-89"><a href="#cb58-89" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(training<span class="sc">$</span>Attrition) </span>
+<span id="cb58-90"><a href="#cb58-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-91"><a href="#cb58-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-92"><a href="#cb58-92" aria-hidden="true" tabindex="-1"></a>I en regresjon vil lm() og glm() håndtere en factor automatisk som dummy. Men det funker ikke nødvendigvis like greit for plotting etc. Gjør om factor til dummy-variabel. Inni parentesen er et logisk uttrykk som får TRUE/FALSE, men med å eksplisitt be om at variabelen skal være numerisk blir det 1/0 Vi overskriver variablen slik:</span>
+<span id="cb58-93"><a href="#cb58-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-96"><a href="#cb58-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-97"><a href="#cb58-97" aria-hidden="true" tabindex="-1"></a>training<span class="sc">$</span>Attrition <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(training<span class="sc">$</span>Attrition <span class="sc">==</span> <span class="st">"Yes"</span>) </span>
+<span id="cb58-98"><a href="#cb58-98" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(training<span class="sc">$</span>Attrition) </span>
+<span id="cb58-99"><a href="#cb58-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-100"><a href="#cb58-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-101"><a href="#cb58-101" aria-hidden="true" tabindex="-1"></a>Andelen kan vi få med <span class="in">`mean()`</span>:</span>
+<span id="cb58-102"><a href="#cb58-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-105"><a href="#cb58-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-106"><a href="#cb58-106" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(training<span class="sc">$</span>Attrition) </span>
+<span id="cb58-107"><a href="#cb58-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-108"><a href="#cb58-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-109"><a href="#cb58-109" aria-hidden="true" tabindex="-1"></a>Vi kan vise hvordan det å slutte i jobben varierer med f.eks. alder ved å beregne andel per verdi av alder.</span>
+<span id="cb58-110"><a href="#cb58-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-113"><a href="#cb58-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-114"><a href="#cb58-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-115"><a href="#cb58-115" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-116"><a href="#cb58-116" aria-hidden="true" tabindex="-1"></a>training_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb58-117"><a href="#cb58-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-118"><a href="#cb58-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Attrition =</span> <span class="fu">mean</span>(Attrition <span class="sc">==</span> <span class="dv">1</span>)) </span>
+<span id="cb58-119"><a href="#cb58-119" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training_p, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb58-120"><a href="#cb58-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb58-121"><a href="#cb58-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-122"><a href="#cb58-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-123"><a href="#cb58-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-124"><a href="#cb58-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Estimere en sannsynlighet</span></span>
+<span id="cb58-125"><a href="#cb58-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-126"><a href="#cb58-126" aria-hidden="true" tabindex="-1"></a>Når utfallsvariabelen er binær (to verdier) kan man likevel bruke lineær regresjon. Det kalles da gjerne en lineær sannsynlighetsmodell.</span>
+<span id="cb58-127"><a href="#cb58-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-130"><a href="#cb58-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-131"><a href="#cb58-131" aria-hidden="true" tabindex="-1"></a>lm_est <span class="ot">&lt;-</span> <span class="fu">lm</span>(Attrition <span class="sc">~</span> Age , <span class="at">data =</span> training)</span>
+<span id="cb58-132"><a href="#cb58-132" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_est)</span>
+<span id="cb58-133"><a href="#cb58-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-134"><a href="#cb58-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-135"><a href="#cb58-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-136"><a href="#cb58-136" aria-hidden="true" tabindex="-1"></a>Dette betyr at vi har estimert følgende regresjonsligning:</span>
+<span id="cb58-137"><a href="#cb58-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-140"><a href="#cb58-140" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-141"><a href="#cb58-141" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb58-142"><a href="#cb58-142" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(equatiomatic)</span>
+<span id="cb58-143"><a href="#cb58-143" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_eq</span>(lm_est, <span class="at">use_coefs =</span> <span class="cn">TRUE</span>, <span class="at">coef_digits =</span> <span class="dv">3</span>)</span>
+<span id="cb58-144"><a href="#cb58-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-145"><a href="#cb58-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-146"><a href="#cb58-146" aria-hidden="true" tabindex="-1"></a>Vi kan da predikere for ulike aldre ved å første lage et nytt datasett med kun alder som variabel og de verdiene som finnes i datasettet, og så bruke 'predict()' på dette datasettet etterpå. Da kan vi også se resultatet for ulike aldre. Her er et eksempel:</span>
+<span id="cb58-147"><a href="#cb58-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-150"><a href="#cb58-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-151"><a href="#cb58-151" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb58-152"><a href="#cb58-152" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-153"><a href="#cb58-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-154"><a href="#cb58-154" aria-hidden="true" tabindex="-1"></a>n_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Age =</span> <span class="fu">seq</span>(<span class="dv">18</span>, <span class="dv">65</span>))</span>
+<span id="cb58-155"><a href="#cb58-155" aria-hidden="true" tabindex="-1"></a>n_data<span class="sc">$</span>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm_est, <span class="at">newdata =</span> n_data)</span>
+<span id="cb58-156"><a href="#cb58-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-157"><a href="#cb58-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-158"><a href="#cb58-158" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training_p, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb58-159"><a href="#cb58-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span> </span>
+<span id="cb58-160"><a href="#cb58-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span>n_data, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> pred))</span>
+<span id="cb58-161"><a href="#cb58-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-162"><a href="#cb58-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-163"><a href="#cb58-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-164"><a href="#cb58-164" aria-hidden="true" tabindex="-1"></a>Merk at det her er vist predikerte sannsynligheter litt utenfor omfanget av de opprinnelige dataene, dvs. opp til 65 år i stedet for bare til 60. Da får vi en negativ sannsynlighet. Dette er kanskje ikke så problematisk hvis man er nøye på å ikke tolke resultatene utenfor training-data. Men det kan jo hente *nye* data vil ha slike verdier. Det blir mer komplisert hvis det er mange prediktorer og kompliserte modeller. En ting er om de predikerte sannsynlighetene blir lavere enn 0 eller høyere enn 1, men vi vil uansett forvente at stigningstallet vil avta når det nærmer seg disse grenseverdiene.</span>
+<span id="cb58-165"><a href="#cb58-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-166"><a href="#cb58-166" aria-hidden="true" tabindex="-1"></a>Den viktigste ulempen med lineære sannsynlighetsmodeller er altså at modellen da kan predikere sannsynligheter lavere enn 0 og høyere enn 1. Når man er mest interessert i $\beta$ er det ikke sikkert det er så nøye. Men når vi er interessert i $\hat{y}$ kan det derimot være viktig.</span>
+<span id="cb58-167"><a href="#cb58-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-168"><a href="#cb58-168" aria-hidden="true" tabindex="-1"></a><span class="fu">## Logistisk regresjon i R</span></span>
+<span id="cb58-169"><a href="#cb58-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-170"><a href="#cb58-170" aria-hidden="true" tabindex="-1"></a>Logistisk regresjon har det til felles med lineær regresjon at utfallet er en lineær spesifikasjon.</span>
+<span id="cb58-171"><a href="#cb58-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-172"><a href="#cb58-172" aria-hidden="true" tabindex="-1"></a>$$  log( \frac{\pi}{(1-\pi)}) = \alpha + \beta X $$</span>
+<span id="cb58-173"><a href="#cb58-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-174"><a href="#cb58-174" aria-hidden="true" tabindex="-1"></a>Venstresiden av ligningen kalles en *logit*, der $\pi$ er en sannsynlighet. Uttrykket $\frac{\pi}{(1-\pi)}$ er en *odds*, som er et forholdstall mellom sannsynligheten for at utfallet skjer mot sannsynligheten for det motsatte. Tolkningen av $\beta$ er da en endring av *odds* på logaritisk skala. Hvis man eksponensierer $\beta$ er den da tolkbar som en *oddsrate*.</span>
+<span id="cb58-175"><a href="#cb58-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-176"><a href="#cb58-176" aria-hidden="true" tabindex="-1"></a>Som du nå sikkert skjønner så er altså tolkningen av regresjonskoeffisientene nokså krøkete å tolke substansielt for de fleste av oss. Det kan i seg selv være et argument mot å bruke logistisk regresjon i en del sammenhenger.</span>
+<span id="cb58-177"><a href="#cb58-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-178"><a href="#cb58-178" aria-hidden="true" tabindex="-1"></a>Men man kan regne om til sannsynligheter som er vesentlig enklere å forstå. Særlig hvis man ikke er så interessert i tolkningen av $\beta$, men prediksjon av $\pi$.</span>
+<span id="cb58-179"><a href="#cb58-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-180"><a href="#cb58-180" aria-hidden="true" tabindex="-1"></a>Ligningen kan da skrives om slik at venstresiden av ligningen blir en sannsynlighet direkte:</span>
+<span id="cb58-181"><a href="#cb58-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-182"><a href="#cb58-182" aria-hidden="true" tabindex="-1"></a>$$  \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} $$</span>
+<span id="cb58-183"><a href="#cb58-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-184"><a href="#cb58-184" aria-hidden="true" tabindex="-1"></a>En enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $\pi = P(y = 1) &gt; 0.5$ tilhører den ene gruppen og resten i den andre gruppen.</span>
+<span id="cb58-185"><a href="#cb58-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-186"><a href="#cb58-186" aria-hidden="true" tabindex="-1"></a>Logistisk regresjon kan dessuten håndtere utfall med flere enn to kategorier, noe OLS ikke kan. Vi bruker derfor logistisk regresjon når det er kategoriske utfall. I andre sammenhenger vil folk hevde at OLS er bedre å bruke (av diverse grunner), men i *denne sammenhengen* er logistisk regresjon som hovedregel å foretrekke over OLS for kategoriske utfall.</span>
+<span id="cb58-187"><a href="#cb58-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-188"><a href="#cb58-188" aria-hidden="true" tabindex="-1"></a>Her er et eksempel på hvordan estimere enkel logistisk regresjon i R:</span>
+<span id="cb58-189"><a href="#cb58-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-192"><a href="#cb58-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-193"><a href="#cb58-193" aria-hidden="true" tabindex="-1"></a>est_logit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Attrition <span class="sc">~</span> Age, <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb58-194"><a href="#cb58-194" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_logit)</span>
+<span id="cb58-195"><a href="#cb58-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-196"><a href="#cb58-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-197"><a href="#cb58-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-198"><a href="#cb58-198" aria-hidden="true" tabindex="-1"></a>En penere output kan gis med 'gtsummary' på samme måte som for OLS slik:</span>
+<span id="cb58-199"><a href="#cb58-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-202"><a href="#cb58-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-203"><a href="#cb58-203" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(est_logit)</span>
+<span id="cb58-204"><a href="#cb58-204" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-205"><a href="#cb58-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-208"><a href="#cb58-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-209"><a href="#cb58-209" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb58-210"><a href="#cb58-210" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(equatiomatic)</span>
+<span id="cb58-211"><a href="#cb58-211" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_eq</span>(est_logit, <span class="at">use_coefs =</span> <span class="cn">TRUE</span>, <span class="at">coef_digits =</span> <span class="dv">3</span>)</span>
+<span id="cb58-212"><a href="#cb58-212" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-213"><a href="#cb58-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-214"><a href="#cb58-214" aria-hidden="true" tabindex="-1"></a>Hvordan plotte slike data? Bruk geom_jitter eller geom_point. </span>
+<span id="cb58-215"><a href="#cb58-215" aria-hidden="true" tabindex="-1"></a>Å legge til en regresjonslinje har brukte vi geom_smooth(). Med stat_smoot() kan vi spesifisere andre typer regresjonsmodeller, herunder logistisk regresjon. </span>
+<span id="cb58-216"><a href="#cb58-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-219"><a href="#cb58-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-220"><a href="#cb58-220" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-221"><a href="#cb58-221" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-222"><a href="#cb58-222" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb58-223"><a href="#cb58-223" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">3</span>)<span class="sc">+</span> </span>
+<span id="cb58-224"><a href="#cb58-224" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">"glm"</span>, <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family=</span><span class="st">"binomial"</span>), <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">col=</span><span class="st">"red"</span>) </span>
+<span id="cb58-225"><a href="#cb58-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-226"><a href="#cb58-226" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-227"><a href="#cb58-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-228"><a href="#cb58-228" aria-hidden="true" tabindex="-1"></a>Du synes sikkert dette plottet ser litt rart ut. Bytt ut geom_point() med følgende: <span class="in">`geom_jitter(height = .02, alpha=.3)`</span> så skal du få omtrent følgende resultat:</span>
+<span id="cb58-229"><a href="#cb58-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-232"><a href="#cb58-232" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-233"><a href="#cb58-233" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-234"><a href="#cb58-234" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-235"><a href="#cb58-235" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb58-236"><a href="#cb58-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> .<span class="dv">02</span>, <span class="at">alpha=</span>.<span class="dv">3</span>)<span class="sc">+</span> </span>
+<span id="cb58-237"><a href="#cb58-237" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">"glm"</span>, <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family=</span><span class="st">"binomial"</span>), <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">col=</span><span class="st">"red"</span>) </span>
+<span id="cb58-238"><a href="#cb58-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-239"><a href="#cb58-239" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-240"><a href="#cb58-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-241"><a href="#cb58-241" aria-hidden="true" tabindex="-1"></a>Det ser muligens fremdels rart ut, men litt tydeligere, kanskje.</span>
+<span id="cb58-242"><a href="#cb58-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-243"><a href="#cb58-243" aria-hidden="true" tabindex="-1"></a>Her er en variant der andelen som slutter i jobben er regnet ut for hvert alderstrinn. Da er utfallsvariabelen en andel som er litt enklere å tolke når det plottes, og regresjonslinjen er den samme.</span>
+<span id="cb58-244"><a href="#cb58-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-247"><a href="#cb58-247" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-248"><a href="#cb58-248" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb58-249"><a href="#cb58-249" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-250"><a href="#cb58-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-251"><a href="#cb58-251" aria-hidden="true" tabindex="-1"></a>training_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb58-252"><a href="#cb58-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Age) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-253"><a href="#cb58-253" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Attrition =</span> <span class="fu">mean</span>(Attrition <span class="sc">==</span> <span class="dv">1</span>)) </span>
+<span id="cb58-254"><a href="#cb58-254" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(training_p, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>Attrition))<span class="sc">+</span> </span>
+<span id="cb58-255"><a href="#cb58-255" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span> </span>
+<span id="cb58-256"><a href="#cb58-256" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method=</span><span class="st">"glm"</span>, <span class="at">method.args=</span><span class="fu">list</span>(<span class="at">family=</span><span class="st">"binomial"</span>), <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">col=</span><span class="st">"red"</span>) </span>
+<span id="cb58-257"><a href="#cb58-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-258"><a href="#cb58-258" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-259"><a href="#cb58-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-260"><a href="#cb58-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prediksjon</span></span>
+<span id="cb58-261"><a href="#cb58-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-262"><a href="#cb58-262" aria-hidden="true" tabindex="-1"></a>Vi kan predikere med bruk av 'predict()' som tidligere. Nå er det imidlertid viktig å presisere hva vi ønsker å predikere: $log( \frac{\pi}{(1-\pi)})$ eller $\pi$. Vi ønsker det siste fordi det er direkte tolkbart. Vi må da skrive 'type = "response"' som følger. </span>
+<span id="cb58-263"><a href="#cb58-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-264"><a href="#cb58-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-265"><a href="#cb58-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-268"><a href="#cb58-268" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-269"><a href="#cb58-269" aria-hidden="true" tabindex="-1"></a>attrition_pred <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb58-270"><a href="#cb58-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_logit, <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb58-271"><a href="#cb58-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-272"><a href="#cb58-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-273"><a href="#cb58-273" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-274"><a href="#cb58-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-275"><a href="#cb58-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-276"><a href="#cb58-276" aria-hidden="true" tabindex="-1"></a><span class="fu">### ROC og AUC</span></span>
+<span id="cb58-277"><a href="#cb58-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-280"><a href="#cb58-280" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-281"><a href="#cb58-281" aria-hidden="true" tabindex="-1"></a>ROC <span class="ot">&lt;-</span> <span class="fu">roc</span>( attrition_pred<span class="sc">$</span>Attrition, attrition_pred<span class="sc">$</span>prob )</span>
+<span id="cb58-282"><a href="#cb58-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-283"><a href="#cb58-283" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Sensitivity =</span> ROC<span class="sc">$</span>sensitivities, </span>
+<span id="cb58-284"><a href="#cb58-284" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Specificity =</span> ROC<span class="sc">$</span>specificities)</span>
+<span id="cb58-285"><a href="#cb58-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-286"><a href="#cb58-286" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">y =</span> Sensitivity, <span class="at">x=</span> (<span class="dv">1</span><span class="sc">-</span>Specificity))) <span class="sc">+</span> </span>
+<span id="cb58-287"><a href="#cb58-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb58-288"><a href="#cb58-288" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray"</span>)<span class="sc">+</span></span>
+<span id="cb58-289"><a href="#cb58-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span>
+<span id="cb58-290"><a href="#cb58-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-291"><a href="#cb58-291" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-292"><a href="#cb58-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-293"><a href="#cb58-293" aria-hidden="true" tabindex="-1"></a>Area under the curve er <span class="in">`r round(auc(ROC), digits = 3)`</span>.</span>
+<span id="cb58-294"><a href="#cb58-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-295"><a href="#cb58-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-296"><a href="#cb58-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-297"><a href="#cb58-297" aria-hidden="true" tabindex="-1"></a><span class="fu">## Multippel logistisk regresjon</span></span>
+<span id="cb58-298"><a href="#cb58-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-299"><a href="#cb58-299" aria-hidden="true" tabindex="-1"></a>Vi kan estimere en multippel regresjon på tilsvarende måte som for lineær regresjon ved å legge til flere variable eller angi å bruke samtlige variable i datasettet med 'Attrition ~ . ' </span>
+<span id="cb58-300"><a href="#cb58-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-301"><a href="#cb58-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-304"><a href="#cb58-304" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-305"><a href="#cb58-305" aria-hidden="true" tabindex="-1"></a>est_multlogit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Attrition <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb58-306"><a href="#cb58-306" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_multlogit)</span>
+<span id="cb58-307"><a href="#cb58-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-308"><a href="#cb58-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-309"><a href="#cb58-309" aria-hidden="true" tabindex="-1"></a><span class="fu">### ROC og AUC</span></span>
+<span id="cb58-310"><a href="#cb58-310" aria-hidden="true" tabindex="-1"></a>For å beregne ROC og AUC gjør vi tilsvarende som over med predict og angi type respons. Dette brukes så videre i ROC og AUC. </span>
+<span id="cb58-311"><a href="#cb58-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-314"><a href="#cb58-314" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-315"><a href="#cb58-315" aria-hidden="true" tabindex="-1"></a>attrition_pred <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb58-316"><a href="#cb58-316" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">type =</span> <span class="st">"response"</span>)) </span>
+<span id="cb58-317"><a href="#cb58-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-318"><a href="#cb58-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-319"><a href="#cb58-319" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-320"><a href="#cb58-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-321"><a href="#cb58-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-322"><a href="#cb58-322" aria-hidden="true" tabindex="-1"></a>Funksjonen <span class="in">`roc()`</span> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="co">[</span><span class="ot">@hsieh2008</span><span class="co">]</span>.</span>
+<span id="cb58-323"><a href="#cb58-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-324"><a href="#cb58-324" aria-hidden="true" tabindex="-1"></a>OBS! Man må man angi data som *første* argument i funksjonen <span class="in">`roc()`</span>, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!</span>
+<span id="cb58-325"><a href="#cb58-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-326"><a href="#cb58-326" aria-hidden="true" tabindex="-1"></a>Det går an å få ut plottet med en quick-and-dirty versjon med <span class="in">`plot(ROC)`</span>, men det blir penere med bruk av <span class="in">`ggplot()`</span> slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).</span>
+<span id="cb58-327"><a href="#cb58-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-330"><a href="#cb58-330" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-331"><a href="#cb58-331" aria-hidden="true" tabindex="-1"></a>ROC <span class="ot">&lt;-</span> <span class="fu">roc</span>(attrition_pred, Attrition, prob)</span>
+<span id="cb58-332"><a href="#cb58-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-333"><a href="#cb58-333" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Sensitivity =</span> ROC<span class="sc">$</span>sensitivities, </span>
+<span id="cb58-334"><a href="#cb58-334" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Specificity =</span> ROC<span class="sc">$</span>specificities)</span>
+<span id="cb58-335"><a href="#cb58-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-336"><a href="#cb58-336" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">y =</span> Sensitivity, <span class="at">x=</span> (<span class="dv">1</span><span class="sc">-</span>Specificity))) <span class="sc">+</span> </span>
+<span id="cb58-337"><a href="#cb58-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb58-338"><a href="#cb58-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray"</span>)<span class="sc">+</span></span>
+<span id="cb58-339"><a href="#cb58-339" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span>
+<span id="cb58-340"><a href="#cb58-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-341"><a href="#cb58-341" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-342"><a href="#cb58-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-343"><a href="#cb58-343" aria-hidden="true" tabindex="-1"></a>Vi kan da få rapportert arealet under kurven med <span class="in">`auc()`</span> slik:</span>
+<span id="cb58-344"><a href="#cb58-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-347"><a href="#cb58-347" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-348"><a href="#cb58-348" aria-hidden="true" tabindex="-1"></a><span class="fu">auc</span>(ROC)</span>
+<span id="cb58-349"><a href="#cb58-349" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-350"><a href="#cb58-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-351"><a href="#cb58-351" aria-hidden="true" tabindex="-1"></a>Når arealet under kurven (AUC) er <span class="in">`r round(auc(ROC), digits = 3)`</span> er det vesentlig bedre prediksjon enn den enkle modellen.</span>
+<span id="cb58-352"><a href="#cb58-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-353"><a href="#cb58-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-354"><a href="#cb58-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-355"><a href="#cb58-355" aria-hidden="true" tabindex="-1"></a><span class="fu">## Testing-data</span></span>
+<span id="cb58-356"><a href="#cb58-356" aria-hidden="true" tabindex="-1"></a>Ovenfor er øvelsen gjort på training-data, men vi må sjekke på testing-dataene. </span>
+<span id="cb58-357"><a href="#cb58-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-358"><a href="#cb58-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-359"><a href="#cb58-359" aria-hidden="true" tabindex="-1"></a>For å beregne ROC og AUC gjør vi tilsvarende som over med predict, men nå er det viktig å angi 'newdata = ...' slik at prediksjonen gjøres på riktig datasett. </span>
+<span id="cb58-360"><a href="#cb58-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-363"><a href="#cb58-363" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-364"><a href="#cb58-364" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
+<span id="cb58-365"><a href="#cb58-365" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">newdata =</span> testing, <span class="at">type =</span> <span class="st">"response"</span>)) </span>
+<span id="cb58-366"><a href="#cb58-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-367"><a href="#cb58-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-368"><a href="#cb58-368" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-369"><a href="#cb58-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-370"><a href="#cb58-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-371"><a href="#cb58-371" aria-hidden="true" tabindex="-1"></a>Funksjonen <span class="in">`roc()`</span> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="co">[</span><span class="ot">@hsieh2008</span><span class="co">]</span>.</span>
+<span id="cb58-372"><a href="#cb58-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-373"><a href="#cb58-373" aria-hidden="true" tabindex="-1"></a>OBS! Man må man angi data som *første* argument i funksjonen <span class="in">`roc()`</span>, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!</span>
+<span id="cb58-374"><a href="#cb58-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-375"><a href="#cb58-375" aria-hidden="true" tabindex="-1"></a>Det går an å få ut plottet med en quick-and-dirty versjon med <span class="in">`plot(ROC)`</span>, men det blir penere med bruk av <span class="in">`ggplot()`</span> slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).</span>
+<span id="cb58-376"><a href="#cb58-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-379"><a href="#cb58-379" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-380"><a href="#cb58-380" aria-hidden="true" tabindex="-1"></a>ROC_test <span class="ot">&lt;-</span> <span class="fu">roc</span>(attrition_test, Attrition, prob)</span>
+<span id="cb58-381"><a href="#cb58-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-382"><a href="#cb58-382" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Sensitivity =</span> ROC_test<span class="sc">$</span>sensitivities, </span>
+<span id="cb58-383"><a href="#cb58-383" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Specificity =</span> ROC_test<span class="sc">$</span>specificities)</span>
+<span id="cb58-384"><a href="#cb58-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-385"><a href="#cb58-385" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">y =</span> Sensitivity, <span class="at">x=</span> (<span class="dv">1</span><span class="sc">-</span>Specificity))) <span class="sc">+</span> </span>
+<span id="cb58-386"><a href="#cb58-386" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb58-387"><a href="#cb58-387" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray"</span>)<span class="sc">+</span></span>
+<span id="cb58-388"><a href="#cb58-388" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>()</span>
+<span id="cb58-389"><a href="#cb58-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-390"><a href="#cb58-390" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-391"><a href="#cb58-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-392"><a href="#cb58-392" aria-hidden="true" tabindex="-1"></a>Vi kan da få rapportert arealet under kurven med <span class="in">`auc()`</span> slik:</span>
+<span id="cb58-393"><a href="#cb58-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-396"><a href="#cb58-396" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-397"><a href="#cb58-397" aria-hidden="true" tabindex="-1"></a><span class="fu">auc</span>(ROC_test)</span>
+<span id="cb58-398"><a href="#cb58-398" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-399"><a href="#cb58-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-400"><a href="#cb58-400" aria-hidden="true" tabindex="-1"></a>Når arealet under kurven (AUC) er <span class="in">`r round(auc(ROC_test), digits = 3)`</span>. Kanskje litt overraskende, men dette like godt som for på training dataene. Dette altså selv om det er tydelige forskjeller på ROC-curvene som er plottet. AUC er altså *arealet under kurven*. Litt ulik form kan i prinsippet ha samme areal. </span>
+<span id="cb58-401"><a href="#cb58-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-402"><a href="#cb58-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-403"><a href="#cb58-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-404"><a href="#cb58-404" aria-hidden="true" tabindex="-1"></a><span class="fu">## Klassifikasjon </span></span>
+<span id="cb58-405"><a href="#cb58-405" aria-hidden="true" tabindex="-1"></a>Men for et handlingsvalg må vi gjøre faktisk klassifisering. Det vi har estimert så langt er bare en sannsynlighet. Selve klassifiseringen krever at man tar et aktivt valg på en cut-off for hvem man tror faktisk slutter. La oss først se på fordelingen av sannsynligheter. </span>
+<span id="cb58-406"><a href="#cb58-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-407"><a href="#cb58-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-410"><a href="#cb58-410" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-411"><a href="#cb58-411" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb58-412"><a href="#cb58-412" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb58-413"><a href="#cb58-413" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(attrition_test, <span class="fu">aes</span>(<span class="at">x =</span> prob)) <span class="sc">+</span></span>
+<span id="cb58-414"><a href="#cb58-414" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span>
+<span id="cb58-415"><a href="#cb58-415" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-416"><a href="#cb58-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-417"><a href="#cb58-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-418"><a href="#cb58-418" aria-hidden="true" tabindex="-1"></a>Vi kan bestemme oss for at et rimelig cut-off er 50/50, altså med sannsynlighet 0.5. Her gjøres en klassifisering for testing-datasettet, og lager en krysstabell med den klassifiserte etter prediksjon mot observert utfall. En slik krysstabell kalles altså en *confusion matrix*. </span>
+<span id="cb58-419"><a href="#cb58-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-422"><a href="#cb58-422" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-423"><a href="#cb58-423" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb58-424"><a href="#cb58-424" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">attrition_class =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&lt;</span> .<span class="dv">5</span>, <span class="st">"No"</span>, <span class="st">"Yes"</span>)))</span>
+<span id="cb58-425"><a href="#cb58-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-426"><a href="#cb58-426" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb58-427"><a href="#cb58-427" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Attrition, attrition_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-428"><a href="#cb58-428" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb58-429"><a href="#cb58-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-430"><a href="#cb58-430" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-431"><a href="#cb58-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-432"><a href="#cb58-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-433"><a href="#cb58-433" aria-hidden="true" tabindex="-1"></a>Hvis du nå lurer på om det spiller noen rolle om du har observert eller predikert i rader/kollonner, så gjør det ikke det. Det er bare to variable krysset mot hverandre. I dette tilfellet er det altså 30 personer som er gjettet riktig at vil slutte, men bare halvparten av de som faktisk sluttet ble fanget opp (27 av 30). Det var 12 som ble feilaktig gjettet at ville slutte, men som altså ikke gjorde det. </span>
+<span id="cb58-434"><a href="#cb58-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-435"><a href="#cb58-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-436"><a href="#cb58-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-437"><a href="#cb58-437" aria-hidden="true" tabindex="-1"></a><span class="fu">### Confusion matrix</span></span>
+<span id="cb58-438"><a href="#cb58-438" aria-hidden="true" tabindex="-1"></a>Fra pakken 'caret' er det en funksjon for confusion matrix som regner ut masse greier for oss. (Vi skal bare bruke akkurat den funksjonen fra 'caret'). </span>
+<span id="cb58-439"><a href="#cb58-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-440"><a href="#cb58-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-441"><a href="#cb58-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-444"><a href="#cb58-444" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb58-445"><a href="#cb58-445" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(attrition_test<span class="sc">$</span>Attrition, attrition_test<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
+<span id="cb58-446"><a href="#cb58-446" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb58-447"><a href="#cb58-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-448"><a href="#cb58-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-449"><a href="#cb58-449" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hvor feil kan man ta? </span></span>
+<span id="cb58-450"><a href="#cb58-450" aria-hidden="true" tabindex="-1"></a>I klassifiseringen over er det gjort et klart valg for hvem man tror faktisk vil slutte i jobben eller ikke. Det er selvsagt slik at noen er mer sannsynlige vil slutte enn andre, men ingen har 0 sannsynlighet. Ingen har 1 heller, for den saks skyld. Det er altså usikkerhet. Men hvis vi skal gjøre et *tiltak*, så må vi ta det valget! </span>
+<span id="cb58-451"><a href="#cb58-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-452"><a href="#cb58-452" aria-hidden="true" tabindex="-1"></a>Hvis vi gjør klassifiseringen på 0.5 som over, så betyr jo det at vi synes begge feil er like viktige: Falske positive eller falske negative. Hvis det er et langt større problem at folk slutter enn at noen f.eks. får tilbud om goder eller ekstra oppfølging etc, så kan det hende cut-off skal settes lavere? Da får man flere sanne positive, men også flere feil. Det kan det jo være verd, men kommer jo an på hva konsekvensene. Vi kommer tilbake til dette, men test gjerne ut selv med ulik cut-off og se hvordan resultatene endrer seg. </span>
+<span id="cb58-453"><a href="#cb58-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-454"><a href="#cb58-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-455"><a href="#cb58-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-456"><a href="#cb58-456" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb58-457"><a href="#cb58-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-458"><a href="#cb58-458" aria-hidden="true" tabindex="-1"></a>Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger.</span>
+<span id="cb58-459"><a href="#cb58-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-460"><a href="#cb58-460" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-rep}</span>
+<span id="cb58-461"><a href="#cb58-461" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb58-462"><a href="#cb58-462" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-463"><a href="#cb58-463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-464"><a href="#cb58-464" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-eksplisitt}</span>
+<span id="cb58-465"><a href="#cb58-465" aria-hidden="true" tabindex="-1"></a>Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</span>
+<span id="cb58-466"><a href="#cb58-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-467"><a href="#cb58-467" aria-hidden="true" tabindex="-1"></a>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</span>
+<span id="cb58-468"><a href="#cb58-468" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-469"><a href="#cb58-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-470"><a href="#cb58-470" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-split}</span>
+<span id="cb58-471"><a href="#cb58-471" aria-hidden="true" tabindex="-1"></a>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</span>
+<span id="cb58-472"><a href="#cb58-472" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-473"><a href="#cb58-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-474"><a href="#cb58-474" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-sepaa}</span>
+<span id="cb58-475"><a href="#cb58-475" aria-hidden="true" tabindex="-1"></a>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</span>
+<span id="cb58-476"><a href="#cb58-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-477"><a href="#cb58-477" aria-hidden="true" tabindex="-1"></a>a)  Bruk <span class="in">`glimpse()`</span> og <span class="in">`skim()`</span> til å få oversikt over innholdet i datasettet</span>
+<span id="cb58-478"><a href="#cb58-478" aria-hidden="true" tabindex="-1"></a>b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</span>
+<span id="cb58-479"><a href="#cb58-479" aria-hidden="true" tabindex="-1"></a>c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</span>
+<span id="cb58-480"><a href="#cb58-480" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-481"><a href="#cb58-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-482"><a href="#cb58-482" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-train}</span>
+<span id="cb58-483"><a href="#cb58-483" aria-hidden="true" tabindex="-1"></a>Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve.</span>
+<span id="cb58-484"><a href="#cb58-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-485"><a href="#cb58-485" aria-hidden="true" tabindex="-1"></a>a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell</span>
+<span id="cb58-486"><a href="#cb58-486" aria-hidden="true" tabindex="-1"></a>b)  Estimer en ny modell med alle variable i datasettet</span>
+<span id="cb58-487"><a href="#cb58-487" aria-hidden="true" tabindex="-1"></a>c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</span>
+<span id="cb58-488"><a href="#cb58-488" aria-hidden="true" tabindex="-1"></a>d)  Gjør et automatisk modellsøk</span>
+<span id="cb58-489"><a href="#cb58-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-490"><a href="#cb58-490" aria-hidden="true" tabindex="-1"></a>Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</span>
+<span id="cb58-491"><a href="#cb58-491" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-492"><a href="#cb58-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-493"><a href="#cb58-493" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-test}</span>
+<span id="cb58-494"><a href="#cb58-494" aria-hidden="true" tabindex="-1"></a>I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger:</span>
+<span id="cb58-495"><a href="#cb58-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-496"><a href="#cb58-496" aria-hidden="true" tabindex="-1"></a>a)  Prediker utfallet på testing-datasettet</span>
+<span id="cb58-497"><a href="#cb58-497" aria-hidden="true" tabindex="-1"></a>b)  Regn ut AUC</span>
+<span id="cb58-498"><a href="#cb58-498" aria-hidden="true" tabindex="-1"></a>c)  Hvor stor er *endringen* i AUC er fra resultatene når du brukte training-datasettet?</span>
+<span id="cb58-499"><a href="#cb58-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-500"><a href="#cb58-500" aria-hidden="true" tabindex="-1"></a>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</span>
+<span id="cb58-501"><a href="#cb58-501" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-502"><a href="#cb58-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-503"><a href="#cb58-503" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-class}</span>
+<span id="cb58-504"><a href="#cb58-504" aria-hidden="true" tabindex="-1"></a>Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet.</span>
+<span id="cb58-505"><a href="#cb58-505" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb58-506"><a href="#cb58-506" aria-hidden="true" tabindex="-1"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>
