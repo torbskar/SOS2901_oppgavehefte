@@ -1,6 +1,6 @@
 # Logistisk regresjon
 
-I dette kapittelt skal vi bruke følgende pakker: 
+I dette kapittelt skal vi bruke følgende pakker:
 
 ```{r}
 #| eval: true
@@ -11,16 +11,138 @@ I dette kapittelt skal vi bruke følgende pakker:
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
 library(skimr)       # funksjonen skim() for å se på data
 library(rsample)     # for å dele data i training og testing
-library(AUC)         # For å beregne ROC-curve og AUC
+library(pROC)        # Beregne ROC-curve
+library(gtsummary)   # Pent formatert regresjonstabell
+library(caret)       # Funksjonen confusionMatrix()
 ```
 
-## Estimere en sannsynlighet 
-Når utfallsvariabelen er binær (to verdier) kan man likevel bruke lineær regresjon. Det kalles da gjerne en lineær sannsynlighetsmodell. Men det har noen ulemper, derav viktigste er modellen da kan predikere sannsynligheter lavere enn 0 og høyere enn 1. Når man er mest interessert i $\beta$ er det ikke sikkert det er så nøye. Men når vi er interessert i $\hat{y}$ kan det derimot være viktig. Logistisk regresjon kan dessuten håndtere utfall med flere enn to kategorier, noe OLS ikke kan. 
+## Empirisk eksempel
 
-Vi bruker derfor logistisk regresjon når det er kategoriske utfall. I andre sammenhenger vil folk hevde at OLS er bedre å bruke (av diverse grunner), men i *denne sammenhengen* er logistisk regresjon som hovedregel å foretrekke over OLS for kategoriske utfall. 
+Som eksempel bruker vi et datasettet Attrition. Dette er et datasett over arbeidstakere i en bedrift der utfallsvariabelen er om arbeidstakeren slutter i jobben eller ikke.
+
+For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere som slutter tar med seg erfaring og kompetanse, og nye arbeidstakere må læres opp. Arbeidsgiver bør derfor generelt legge til rette for at arbeidstakere ønsker å bli værende, men det kan også være aktuelt med mer målrettede tiltak. Når en arbeidstaker har fått et nytt jobbtilbud kan det være for sent. Hvis man derimot kan komme i forkjøpet kan man kanskje gjøre noe *før* vedkommende går til det skrittet å søke ny jobb. Hvis man kunne predikere hvem som kommer til å slutte kunne man altså gjort tiltak i forkant.[^logistisk_regresjon-1]
+
+[^logistisk_regresjon-1]: Her kunne man jo også tenke seg at den gode lederen har en dialog med de ansatte og fanger opp deres frustrasjoner og behov slik at maskinell prediksjon ikke trengs. Det er jo også en form for prediksjon med kvalitative data! Så her er vi i en setting der dette ikke fungerer eller det er så store forhold at en kvalitativ tilnærming ikke er praktisk mulig eller noe sånt.
+
+Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med `read.csv()`. Deretter kan vi se på innholdet med `skim()`:
+
+```{r}
+#| warning: false 
+#| message: false
+
+attrition <-read.csv("data/Attrition.csv", stringsAsFactors = TRUE)  
+skim(attrition)  
+```
+
+Merk at det er fire variable vi ikke trenger, så vi sletter disse like gjerne med en gang:
+
+-   Over18 er en dummy for om de er over 18 år. Det er alle.
+-   EmployeeCount og StandardHours varierer heller ikke.
+
+Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datasettet med det modifiserte datasettet
+
+```{r}
+#| warning: false 
+#| message: false
+attrition <- attrition %>%  
+  select(- Over18, - EmployeeCount, -StandardHours) 
+glimpse(attrition)
+```
+
+Del datasettet i to deler. Vi trekker tilfeldig 70% og legger dette i datasettet training. Resten legges i testing. De nye datasettene behøver jo ikke hete akkurat dette. Kall det hva du vil.
+
+```{r}
+#| warning: false 
+#| message: false
+
+set.seed(426)
+attrition_split <- initial_split(attrition)
+
+training <- training(attrition_split) 
+testing  <- testing(attrition_split) 
+```
+
+Sjekk at antallet i hvert datasett summeres til totalen
+
+```{r}
+nrow(attrition) 
+nrow(training) 
+nrow(testing) 
 
 
+```
 
+OBS! variabelen Attrition er en "factor", dvs. kategorisk med underliggende nummer. Ta en titt.
+
+```{r}
+str(training$Attrition)   
+head(training$Attrition) 
+levels(training$Attrition) 
+```
+
+I en regresjon vil lm() og glm() håndtere en factor automatisk som dummy. Men det funker ikke nødvendigvis like greit for plotting etc. Gjør om factor til dummy-variabel. Inni parentesen er et logisk uttrykk som får TRUE/FALSE, men med å eksplisitt be om at variabelen skal være numerisk blir det 1/0 Vi overskriver variablen slik:
+
+```{r}
+training$Attrition <- as.numeric(training$Attrition == "Yes") 
+head(training$Attrition) 
+```
+
+Andelen kan vi få med `mean()`:
+
+```{r}
+mean(training$Attrition) 
+```
+
+Vi kan vise hvordan det å slutte i jobben varierer med f.eks. alder ved å beregne andel per verdi av alder.
+
+```{r}
+#| warning: false 
+#| message: false
+training_p <- training %>% 
+  group_by(Age) %>% 
+  summarise(Attrition = mean(Attrition == 1)) 
+ggplot(training_p, aes(x=Age, y=Attrition))+ 
+  geom_point()
+
+```
+
+## Estimere en sannsynlighet
+
+Når utfallsvariabelen er binær (to verdier) kan man likevel bruke lineær regresjon. Det kalles da gjerne en lineær sannsynlighetsmodell.
+
+```{r}
+lm_est <- lm(Attrition ~ Age , data = training)
+summary(lm_est)
+
+```
+
+Dette betyr at vi har estimert følgende regresjonsligning:
+
+```{r}
+#| echo: false
+library(equatiomatic)
+extract_eq(lm_est, use_coefs = TRUE, coef_digits = 3)
+```
+
+Vi kan da predikere for ulike aldre ved å første lage et nytt datasett med kun alder som variabel og de verdiene som finnes i datasettet, og så bruke 'predict()' på dette datasettet etterpå. Da kan vi også se resultatet for ulike aldre. Her er et eksempel:
+
+```{r}
+#| warning: false
+#| message: false
+
+n_data <- data.frame(Age = seq(18, 65))
+n_data$pred <- predict(lm_est, newdata = n_data)
+
+
+ggplot(training_p, aes(x=Age, y=Attrition))+ 
+  geom_point()+ 
+  geom_line(data =n_data, aes(x = Age, y = pred))
+
+```
+
+Merk at det her er vist predikerte sannsynligheter litt utenfor omfanget av de opprinnelige dataene, dvs. opp til 65 år i stedet for bare til 60. Da får vi en negativ sannsynlighet. Dette er kanskje ikke så problematisk hvis man er nøye på å ikke tolke resultatene utenfor training-data. Men det kan jo hente *nye* data vil ha slike verdier. Det blir mer komplisert hvis det er mange prediktorer og kompliserte modeller. En ting er om de predikerte sannsynlighetene blir lavere enn 0 eller høyere enn 1, men vi vil uansett forvente at stigningstallet vil avta når det nærmer seg disse grenseverdiene.
+
+Den viktigste ulempen med lineære sannsynlighetsmodeller er altså at modellen da kan predikere sannsynligheter lavere enn 0 og høyere enn 1. Når man er mest interessert i $\beta$ er det ikke sikkert det er så nøye. Men når vi er interessert i $\hat{y}$ kan det derimot være viktig.
 
 ## Logistisk regresjon i R
 
@@ -40,85 +162,31 @@ $$  \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} $$
 
 En enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $\pi = P(y = 1) > 0.5$ tilhører den ene gruppen og resten i den andre gruppen.
 
-## Empirisk eksempel
+Logistisk regresjon kan dessuten håndtere utfall med flere enn to kategorier, noe OLS ikke kan. Vi bruker derfor logistisk regresjon når det er kategoriske utfall. I andre sammenhenger vil folk hevde at OLS er bedre å bruke (av diverse grunner), men i *denne sammenhengen* er logistisk regresjon som hovedregel å foretrekke over OLS for kategoriske utfall.
 
-Som eksempel bruker vi et datasettet Attrition. Dette er et datasett over arbeidstakere i en bedrift der utfallsvariabelen er om arbeidstakeren slutter i jobben eller ikke.
-
-For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere som slutter tar med seg erfaring og kompetanse, og nye arbeidstakere må læres opp. Arbeidsgiver bør derfor generelt legge til rette for at arbeidstakere ønsker å bli værende, men det kan også være aktuelt med mer målrettede tiltak. Når en arbeidstaker har fått et nytt jobbtilbud kan det være for sent. Hvis man derimot kan komme i forkjøpet kan man kanskje gjøre noe *før* vedkommende går til det skrittet å søke ny jobb. Hvis man kunne predikere hvem som kommer til å slutte kunne man altså gjort tiltak i forkant.^[Her kunne man jo også tenke seg at den gode lederen har en dialog med de ansatte og fanger opp deres frustrasjoner og behov slik at maskinell prediksjon ikke trengs. Det er jo også en form for prediksjon med kvalitative data! Så her er vi i en setting der dette ikke fungerer eller det er så store forhold at en kvalitativ tilnærming ikke er praktisk mulig eller noe sånt.] 
-
-Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med `read.csv()`. Deretter kan vi se på innholdet med `skim()`:
+Her er et eksempel på hvordan estimere enkel logistisk regresjon i R:
 
 ```{r}
-#| warning: false 
-#| message: false
-library(tidyverse) 
-library(pROC) 
-library(skimr)
-attrition <-read.csv("data/Attrition.csv", stringsAsFactors = TRUE)  
-skim(attrition)  
+est_logit <- glm(Attrition ~ Age, data = training, family = "binomial")
+summary(est_logit)
+
 ```
 
-Merk at det er fire variable vi ikke trenger, så vi sletter disse
-like gjerne med en gang:
-
--   Over18 er en dummy for om de er over 18 år. Det er alle.
--   EmployeeCount og StandardHours varierer heller ikke.
-
-Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datasettet med det modifiserte datasettet
+En penere output kan gis med 'gtsummary' på samme måte som for OLS slik:
 
 ```{r}
-#| warning: false 
-#| message: false
-attrition <- attrition %>%  
-  select(- Over18, - EmployeeCount, -StandardHours) 
-glimpse(attrition)
+
+tbl_regression(est_logit)
 ```
-
-Del datasettet i to deler. Vi trekker tilfeldig 70% og legger dette i datasettet training. Resten legges i testing.
-
 
 ```{r}
-#| warning: false 
-#| message: false
-attrition_split <- initial_split(attrition)
-
-training <- training(attrition_split) 
-testing  <- testing(attrition_split) 
+#| echo: false
+library(equatiomatic)
+extract_eq(est_logit, use_coefs = TRUE, coef_digits = 3)
 ```
 
-Sjekk at antallet i hvert datasett summeres til totalen
-
-```{r}
-nrow(attrition) 
-nrow(training) 
-nrow(testing) 
-```
-
-OBS! variabelen Attrition er en "factor", dvs. kategorisk med underliggende nummer. Ta en titt.
-
-```{r}
-str(training$Attrition)   
-head(training$Attrition) 
-levels(training$Attrition) 
-```
-
-I en regresjon vil lm() og glm() håndtere en factor automatisk som dummy Men det funker ikke nødvendigvis like greit for plotting etc.
-Gjør om factor til dummy-variabel. Inni parentesen er et logisk uttrykk som får TRUE/FALSE, men med å eksplisitt be om at variabelen skal være numerisk blir det 1/0 Vi overskriver variablen slik:
-
-```{r}
-training$Attrition <- as.numeric(training$Attrition == "Yes") 
-head(training$Attrition) 
-```
-
-Andelen kan vi få med `mean()`:
-
-```{r}
-mean(training$Attrition) 
-```
-
-Hvordan plotte slike data?
-Bruk geom_jitter eller geom_point\
-Å legge til en regresjonslinje har brukte vi geom_smooth() sist gang. Med stat_smoot() kan vi spesifisere andre typer regresjonsmodeller
+Hvordan plotte slike data? Bruk geom_jitter eller geom_point. 
+Å legge til en regresjonslinje har brukte vi geom_smooth(). Med stat_smoot() kan vi spesifisere andre typer regresjonsmodeller, herunder logistisk regresjon. 
 
 ```{r}
 #| warning: false 
@@ -142,8 +210,8 @@ ggplot(training, aes(x=Age, y=Attrition))+
 
 Det ser muligens fremdels rart ut, men litt tydeligere, kanskje.
 
+Her er en variant der andelen som slutter i jobben er regnet ut for hvert alderstrinn. Da er utfallsvariabelen en andel som er litt enklere å tolke når det plottes, og regresjonslinjen er den samme.
 
-Her er en variant der andelen som slutter i jobben er regnet ut for hvert alderstrinn. Da er utfallsvariabelen en andel som er litt enklere å tolke når det plottes, og regresjonslinjen er den samme. 
 ```{r}
 #| warning: false 
 #| message: false
@@ -157,34 +225,24 @@ ggplot(training_p, aes(x=Age, y=Attrition))+
 
 ```
 
-### Enkel logistisk regresjon
+## Prediksjon
+
+Vi kan predikere med bruk av 'predict()' som tidligere. Nå er det imidlertid viktig å presisere hva vi ønsker å predikere: $log( \frac{\pi}{(1-\pi)})$ eller $\pi$. Vi ønsker det siste fordi det er direkte tolkbart. Vi må da skrive 'type = "response"' som følger. 
+
+
 
 ```{r}
-est_logit <- glm(Attrition ~ Age, data = attrition, family = "binomial")
-summary(est_logit)
-
-```
-
-En penere output kan gis med 'gtsummary' på samme måte som for OLS slik: 
-
-```{r}
-library(gtsummary)
-tbl_regression(est_logit)
-```
-
-
-
-#### Prediksjon 
-```{r}
-attrition_pred <- attrition %>% 
+attrition_pred <- training %>% 
   mutate(prob = predict(est_logit, type = "response"))
 
 
 ```
 
-#### ROC og AUC
+
+### ROC og AUC
 
 ```{r}
+
 ROC <- roc( attrition_pred$Attrition, attrition_pred$prob )
 
 df <- data.frame(Sensitivity = ROC$sensitivities, 
@@ -197,28 +255,34 @@ ggplot(df, aes(y = Sensitivity, x= (1-Specificity))) +
 
 ```
 
-Area under the curve er `r round(auc(ROC), digits = 3)`. 
+Area under the curve er `r round(auc(ROC), digits = 3)`.
 
 
-### Multippel logistisk regresjon 
+
+## Multippel logistisk regresjon
+
+Vi kan estimere en multippel regresjon på tilsvarende måte som for lineær regresjon ved å legge til flere variable eller angi å bruke samtlige variable i datasettet med 'Attrition ~ . ' 
+
+
 ```{r}
-est_multlogit <- glm(Attrition ~ ., data = attrition, family = "binomial")
+est_multlogit <- glm(Attrition ~ ., data = training, family = "binomial")
 summary(est_multlogit)
 ```
 
-#### Prediksjon 
+### ROC og AUC
+For å beregne ROC og AUC gjør vi tilsvarende som over med predict og angi type respons. Dette brukes så videre i ROC og AUC. 
 
 ```{r}
-attrition_pred <- attrition %>% 
+attrition_pred <- training %>% 
   mutate(prob = predict(est_multlogit, type = "response")) 
 
 
 ```
 
-#### ROC og AUC
-Funksjonen `roc()` gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter [@hsieh2008]. 
 
-OBS! Man må man angi data som *første* argument i funksjonen `roc()`, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig! 
+Funksjonen `roc()` gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter [@hsieh2008].
+
+OBS! Man må man angi data som *første* argument i funksjonen `roc()`, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!
 
 Det går an å få ut plottet med en quick-and-dirty versjon med `plot(ROC)`, men det blir penere med bruk av `ggplot()` slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).
 
@@ -235,22 +299,110 @@ ggplot(df, aes(y = Sensitivity, x= (1-Specificity))) +
 
 ```
 
-Vi kan da få rapportert arealet under kurven med `auc()` slik: 
+Vi kan da få rapportert arealet under kurven med `auc()` slik:
+
 ```{r}
+
 auc(ROC)
 ```
 
+Når arealet under kurven (AUC) er `r round(auc(ROC), digits = 3)` er det vesentlig bedre prediksjon enn den enkle modellen.
 
-Når arealet under kurven (AUC) er `r round(auc(ROC), digits = 3)` er det vesentlig bedre prediksjon enn den enkle modellen. 
 
 
+## Testing-data
+Ovenfor er øvelsen gjort på training-data, men vi må sjekke på testing-dataene. 
+
+
+For å beregne ROC og AUC gjør vi tilsvarende som over med predict, men nå er det viktig å angi 'newdata = ...' slik at prediksjonen gjøres på riktig datasett. 
+
+```{r}
+attrition_test <- testing %>% 
+  mutate(prob = predict(est_multlogit, newdata = testing, type = "response")) 
+
+
+```
+
+
+Funksjonen `roc()` gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter [@hsieh2008].
+
+OBS! Man må man angi data som *første* argument i funksjonen `roc()`, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!
+
+Det går an å få ut plottet med en quick-and-dirty versjon med `plot(ROC)`, men det blir penere med bruk av `ggplot()` slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).
+
+```{r}
+ROC_test <- roc(attrition_test, Attrition, prob)
+
+df <- data.frame(Sensitivity = ROC_test$sensitivities, 
+                 Specificity = ROC_test$specificities)
+
+ggplot(df, aes(y = Sensitivity, x= (1-Specificity))) + 
+  geom_line() + 
+  geom_abline(intercept = 0, slope = 1, col = "gray")+
+  coord_equal()
+
+```
+
+Vi kan da få rapportert arealet under kurven med `auc()` slik:
+
+```{r}
+auc(ROC_test)
+```
+
+Når arealet under kurven (AUC) er `r round(auc(ROC_test), digits = 3)`. Kanskje litt overraskende, men dette like godt som for på training dataene. Dette altså selv om det er tydelige forskjeller på ROC-curvene som er plottet. AUC er altså *arealet under kurven*. Litt ulik form kan i prinsippet ha samme areal. 
+
+
+
+## Klassifikasjon 
+Men for et handlingsvalg må vi gjøre faktisk klassifisering. Det vi har estimert så langt er bare en sannsynlighet. Selve klassifiseringen krever at man tar et aktivt valg på en cut-off for hvem man tror faktisk slutter. La oss først se på fordelingen av sannsynligheter. 
+
+
+```{r}
+#| message: false
+#| warning: false
+ggplot(attrition_test, aes(x = prob)) +
+  geom_histogram()
+```
+
+
+Vi kan bestemme oss for at et rimelig cut-off er 50/50, altså med sannsynlighet 0.5. Her gjøres en klassifisering for testing-datasettet, og lager en krysstabell med den klassifiserte etter prediksjon mot observert utfall. En slik krysstabell kalles altså en *confusion matrix*. 
+
+```{r}
+attrition_test <- attrition_test %>% 
+  mutate(attrition_class = as.factor(ifelse(prob < .5, "No", "Yes")))
+
+attrition_test %>% 
+  select(Attrition, attrition_class) %>% 
+  table()
+
+```
+
+
+Hvis du nå lurer på om det spiller noen rolle om du har observert eller predikert i rader/kollonner, så gjør det ikke det. Det er bare to variable krysset mot hverandre. I dette tilfellet er det altså 30 personer som er gjettet riktig at vil slutte, men bare halvparten av de som faktisk sluttet ble fanget opp (27 av 30). Det var 12 som ble feilaktig gjettet at ville slutte, men som altså ikke gjorde det. 
+
+
+
+### Confusion matrix
+Fra pakken 'caret' er det en funksjon for confusion matrix som regner ut masse greier for oss. (Vi skal bare bruke akkurat den funksjonen fra 'caret'). 
+
+
+
+```{r}
+
+confusionMatrix(attrition_test$Attrition, attrition_test$attrition_class, positive = "Yes")
+```
+
+
+## Hvor feil kan man ta? 
+I klassifiseringen over er det gjort et klart valg for hvem man tror faktisk vil slutte i jobben eller ikke. Det er selvsagt slik at noen er mer sannsynlige vil slutte enn andre, men ingen har 0 sannsynlighet. Ingen har 1 heller, for den saks skyld. Det er altså usikkerhet. Men hvis vi skal gjøre et *tiltak*, så må vi ta det valget! 
+
+Hvis vi gjør klassifiseringen på 0.5 som over, så betyr jo det at vi synes begge feil er like viktige: Falske positive eller falske negative. Hvis det er et langt større problem at folk slutter enn at noen f.eks. får tilbud om goder eller ekstra oppfølging etc, så kan det hende cut-off skal settes lavere? Da får man flere sanne positive, men også flere feil. Det kan det jo være verd, men kommer jo an på hva konsekvensene. Vi kommer tilbake til dette, men test gjerne ut selv med ulik cut-off og se hvordan resultatene endrer seg. 
 
 
 
 ## Oppgaver
 
-Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger. 
-
+Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger.
 
 ::: {#exr-logit-rep}
 Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
@@ -262,51 +414,41 @@ Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se
 Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.
 :::
 
-
-
-
 ::: {#exr-logit-split}
-Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det. 
+Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.
 :::
-
 
 ::: {#exr-logit-sepaa}
 Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:
 
 a)  Bruk `glimpse()` og `skim()` til å få oversikt over innholdet i datasettet
-a)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang
-a)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable
+b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang
+c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable
 :::
-
 
 ::: {#exr-logit-train}
-Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. 
-Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve. 
+Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve.
 
 a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell
-a)  Estimer en ny modell med alle variable i datasettet
-a)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd
-a)  Gjør et automatisk modellsøk 
+b)  Estimer en ny modell med alle variable i datasettet
+c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd
+d)  Gjør et automatisk modellsøk
 
-Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE. 
+Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.
 :::
-
 
 ::: {#exr-logit-test}
-I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger: 
+I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger:
 
-a) Prediker utfallet på testing-datasettet
-a) Regn ut AUC
-a) Hvor stor er *endringen* i AUC er fra resultatene når du brukte training-datasettet? 
+a)  Prediker utfallet på testing-datasettet
+b)  Regn ut AUC
+c)  Hvor stor er *endringen* i AUC er fra resultatene når du brukte training-datasettet?
 
-Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring. 
+Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.
 :::
 
-
-
 ::: {#exr-logit-class}
-Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet. 
-
+Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet.
 :::
 
 
