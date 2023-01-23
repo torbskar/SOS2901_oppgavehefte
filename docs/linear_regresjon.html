@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>SOS2901 Maskinlæring for samfunnsvitere - 2&nbsp; Lineær regresjon</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./logistisk_regresjon.html" rel="next">
+<link href="./introduksjon.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">SOS2901 Maskinlæring for samfunnsvitere</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduksjon</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduksjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduksjon til maskinlæring</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Datasett</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduksjon_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Introduksjon til R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lese-inn-data" id="toc-lese-inn-data" class="nav-link active" data-scroll-target="#lese-inn-data"><span class="toc-section-number">2.1</span>  Lese inn data</a>
+  <ul class="collapse">
+  <li><a href="#training-og-testing-data" id="toc-training-og-testing-data" class="nav-link" data-scroll-target="#training-og-testing-data"><span class="toc-section-number">2.1.1</span>  Training og testing data</a></li>
+  <li><a href="#enkel-lineær-regresjon-i-r" id="toc-enkel-lineær-regresjon-i-r" class="nav-link" data-scroll-target="#enkel-lineær-regresjon-i-r"><span class="toc-section-number">2.1.2</span>  Enkel lineær regresjon i R</a></li>
+  <li><a href="#multippel-regresjon" id="toc-multippel-regresjon" class="nav-link" data-scroll-target="#multippel-regresjon"><span class="toc-section-number">2.1.3</span>  Multippel regresjon</a></li>
+  <li><a href="#predikere-for-nye-data" id="toc-predikere-for-nye-data" class="nav-link" data-scroll-target="#predikere-for-nye-data"><span class="toc-section-number">2.1.4</span>  Predikere for nye data</a></li>
+  <li><a href="#oppsummerende-kommentar" id="toc-oppsummerende-kommentar" class="nav-link" data-scroll-target="#oppsummerende-kommentar"><span class="toc-section-number">2.1.5</span>  Oppsummerende kommentar</a></li>
+  </ul></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">2.2</span>  Oppgaver</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>I dette kapittelt skal vi bruke følgende pakker:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lineær regresjon slik vi skal bruke det her er helt vanlig regresjon slik du har lært om i grunnleggende kurs i kvantitative metoder. Altså lineær funksjon estimert med minste kvadraters metode. Alt du har lært før gjelder også her. Forskjellen er at vi nå ikke er så interessert i å tolke <span class="math inline">\(\beta\)</span> men i den predikerte <span class="math inline">\(\hat{y}\)</span>.</p>
+<div class="cell">
+
+</div>
+<section id="lese-inn-data" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="lese-inn-data"><span class="header-section-number">2.1</span> Lese inn data</h2>
+<p>Vi illustrerer lineær regresjon med et empirisk eksempel. Her skal vi bruke data for norske kommuner i 2016. La oss si at vi er interessert i hvordan antall voldshendelser per 1000 innbyggere vil endre seg i en kommune. Dette kunne være relevant for langtidsplanlegging av forebygging, politibemanning, helsetjenester osv. Det kan være et område som er i stor endring slik at befolkningssammensetningen forventes å endre seg og/eller det er endrede lokale økonomiske utsikter.</p>
+<p>Først leser vi inn dataene og tar en titt på variabellisten.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>kommune <span class="ot">&lt;-</span> <span class="fu">readRDS</span>( <span class="st">"data/kommunedata.rds"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(kommune)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,529
+Columns: 28
+$ kommune_nr             &lt;chr&gt; "0101", "0101", "0101", "0101", "0104", "0104",…
+$ kommune                &lt;chr&gt; "Halden (-2019)", "Halden (-2019)", "Halden (-2…
+$ year                   &lt;dbl&gt; 2015, 2016, 2017, 2018, 2015, 2016, 2017, 2018,…
+$ bef_18min              &lt;int&gt; 3556, 3503, 3505, 3544, 3594, 3652, 3704, 3655,…
+$ bef_18_25              &lt;int&gt; 3575, 3585, 3432, 3438, 3405, 3404, 3355, 3370,…
+$ bef_26_35              &lt;int&gt; 3728, 3804, 3985, 4035, 4057, 4071, 4124, 4110,…
+$ bef_totalt             &lt;int&gt; 30328, 30544, 30790, 31037, 31802, 32182, 32407…
+$ menn_18_25             &lt;int&gt; 1847, 1865, 1813, 1819, 1789, 1802, 1789, 1810,…
+$ menn_26_35             &lt;int&gt; 1880, 1919, 2005, 2062, 2063, 2083, 2113, 2134,…
+$ menn_36_67             &lt;int&gt; 7067, 7051, 7085, 7057, 7418, 7453, 7408, 7407,…
+$ menn_67plus            &lt;int&gt; 2496, 2624, 2697, 2806, 2671, 2777, 2856, 2895,…
+$ menn_18min             &lt;int&gt; 1880, 1847, 1873, 1876, 1842, 1885, 1919, 1878,…
+$ kvinner_18_25          &lt;int&gt; 1728, 1720, 1619, 1619, 1616, 1602, 1566, 1560,…
+$ kvinner_26_35          &lt;int&gt; 1848, 1885, 1980, 1973, 1994, 1988, 2011, 1976,…
+$ kvinner_36_67          &lt;int&gt; 6880, 6832, 6844, 6848, 7479, 7519, 7537, 7596,…
+$ kvinner_67plus         &lt;int&gt; 3026, 3145, 3242, 3309, 3178, 3306, 3423, 3555,…
+$ kvinner_18min          &lt;int&gt; 1676, 1656, 1632, 1668, 1752, 1767, 1785, 1777,…
+$ inntekt_totalt_median  &lt;int&gt; 555000, 562000, 580000, 591000, 561000, 568000,…
+$ inntekt_eskatt_median  &lt;int&gt; 451000, 453000, 470000, 480000, 449000, 456000,…
+$ ant_husholdninger      &lt;int&gt; 13890, 14124, 14281, 14454, 15046, 15132, 15313…
+$ shj_klienter           &lt;int&gt; 1183, 1137, 1099, 1128, 1155, 1129, 1152, 1137,…
+$ shj_unge               &lt;int&gt; 262, 247, 248, 242, 267, 263, 238, 222, 307, 28…
+$ vinningskriminalitet   &lt;dbl&gt; 19.7, 18.7, 16.5, 14.5, 24.5, 21.5, 18.0, 18.0,…
+$ voldskriminalitet      &lt;dbl&gt; 11.2, 12.6, 12.3, 11.2, 7.8, 8.3, 8.7, 9.7, 6.8…
+$ nark_alko_kriminalitet &lt;dbl&gt; 21.0, 21.9, 21.0, 20.3, 12.0, 10.2, 10.9, 10.1,…
+$ ordenslovbrudd         &lt;dbl&gt; 18.5, 16.5, 14.9, 13.7, 8.9, 9.0, 9.1, 9.2, 8.2…
+$ trafikklovbrudd        &lt;dbl&gt; 15.5, 16.3, 16.7, 19.2, 7.4, 6.3, 6.9, 8.0, 9.6…
+$ andre_lovbrudd         &lt;dbl&gt; 25.5, 26.5, 26.1, 25.2, 12.1, 12.2, 11.9, 12.4,…</code></pre>
+</div>
+</div>
+<p>En annen måte å få oversikt over dataene på er å bruke funksjonen <code>skim()</code>, som gir noe mer informasjon om fordelingen av hver enkelt variabel.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(kommune)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">kommune</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1529</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">kommune_nr</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">561</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">kommune</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">561</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2017.17</td>
+<td style="text-align: right;">1.70</td>
+<td style="text-align: right;">2015.0</td>
+<td style="text-align: right;">2016.0</td>
+<td style="text-align: right;">2017.0</td>
+<td style="text-align: right;">2018.0</td>
+<td style="text-align: right;">2020.0</td>
+<td style="text-align: left;">▇▃▃▁▃</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bef_18min</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2051.72</td>
+<td style="text-align: right;">5134.84</td>
+<td style="text-align: right;">82.0</td>
+<td style="text-align: right;">478.0</td>
+<td style="text-align: right;">843.0</td>
+<td style="text-align: right;">1912.0</td>
+<td style="text-align: right;">71566.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bef_18_25</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2010.07</td>
+<td style="text-align: right;">5876.07</td>
+<td style="text-align: right;">90.0</td>
+<td style="text-align: right;">423.0</td>
+<td style="text-align: right;">772.0</td>
+<td style="text-align: right;">1723.0</td>
+<td style="text-align: right;">80730.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bef_26_35</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2637.60</td>
+<td style="text-align: right;">10179.34</td>
+<td style="text-align: right;">80.0</td>
+<td style="text-align: right;">466.0</td>
+<td style="text-align: right;">873.0</td>
+<td style="text-align: right;">2013.0</td>
+<td style="text-align: right;">156988.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bef_totalt</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">17351.92</td>
+<td style="text-align: right;">48195.14</td>
+<td style="text-align: right;">934.0</td>
+<td style="text-align: right;">4062.0</td>
+<td style="text-align: right;">6952.0</td>
+<td style="text-align: right;">15656.0</td>
+<td style="text-align: right;">693494.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">menn_18_25</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1033.97</td>
+<td style="text-align: right;">2872.20</td>
+<td style="text-align: right;">45.0</td>
+<td style="text-align: right;">224.0</td>
+<td style="text-align: right;">404.0</td>
+<td style="text-align: right;">904.0</td>
+<td style="text-align: right;">38847.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">menn_26_35</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1348.18</td>
+<td style="text-align: right;">5122.76</td>
+<td style="text-align: right;">44.0</td>
+<td style="text-align: right;">240.0</td>
+<td style="text-align: right;">456.0</td>
+<td style="text-align: right;">1017.0</td>
+<td style="text-align: right;">78059.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">menn_36_67</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3940.48</td>
+<td style="text-align: right;">10521.30</td>
+<td style="text-align: right;">234.0</td>
+<td style="text-align: right;">939.0</td>
+<td style="text-align: right;">1630.0</td>
+<td style="text-align: right;">3650.0</td>
+<td style="text-align: right;">150390.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">menn_67plus</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1361.18</td>
+<td style="text-align: right;">3039.57</td>
+<td style="text-align: right;">56.0</td>
+<td style="text-align: right;">383.0</td>
+<td style="text-align: right;">639.0</td>
+<td style="text-align: right;">1330.0</td>
+<td style="text-align: right;">42590.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">menn_18min</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1050.44</td>
+<td style="text-align: right;">2618.78</td>
+<td style="text-align: right;">44.0</td>
+<td style="text-align: right;">244.0</td>
+<td style="text-align: right;">434.0</td>
+<td style="text-align: right;">974.0</td>
+<td style="text-align: right;">36298.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">kvinner_18_25</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">976.11</td>
+<td style="text-align: right;">3006.75</td>
+<td style="text-align: right;">38.0</td>
+<td style="text-align: right;">201.0</td>
+<td style="text-align: right;">365.0</td>
+<td style="text-align: right;">813.0</td>
+<td style="text-align: right;">41945.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">kvinner_26_35</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1289.42</td>
+<td style="text-align: right;">5058.28</td>
+<td style="text-align: right;">35.0</td>
+<td style="text-align: right;">224.0</td>
+<td style="text-align: right;">420.0</td>
+<td style="text-align: right;">989.0</td>
+<td style="text-align: right;">78929.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">kvinner_36_67</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3770.34</td>
+<td style="text-align: right;">9932.02</td>
+<td style="text-align: right;">200.0</td>
+<td style="text-align: right;">862.0</td>
+<td style="text-align: right;">1561.0</td>
+<td style="text-align: right;">3487.0</td>
+<td style="text-align: right;">140473.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">kvinner_67plus</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1580.52</td>
+<td style="text-align: right;">3696.66</td>
+<td style="text-align: right;">64.0</td>
+<td style="text-align: right;">428.0</td>
+<td style="text-align: right;">729.0</td>
+<td style="text-align: right;">1488.0</td>
+<td style="text-align: right;">50757.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">kvinner_18min</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1001.28</td>
+<td style="text-align: right;">2516.27</td>
+<td style="text-align: right;">38.0</td>
+<td style="text-align: right;">232.0</td>
+<td style="text-align: right;">405.0</td>
+<td style="text-align: right;">933.0</td>
+<td style="text-align: right;">35268.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">inntekt_totalt_median</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">654721.39</td>
+<td style="text-align: right;">75785.29</td>
+<td style="text-align: right;">463000.0</td>
+<td style="text-align: right;">601000.0</td>
+<td style="text-align: right;">646000.0</td>
+<td style="text-align: right;">697000.0</td>
+<td style="text-align: right;">898000.0</td>
+<td style="text-align: left;">▁▇▇▃▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">inntekt_eskatt_median</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">519417.92</td>
+<td style="text-align: right;">52786.68</td>
+<td style="text-align: right;">376000.0</td>
+<td style="text-align: right;">482000.0</td>
+<td style="text-align: right;">514000.0</td>
+<td style="text-align: right;">550000.0</td>
+<td style="text-align: right;">675000.0</td>
+<td style="text-align: left;">▁▆▇▃▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ant_husholdninger</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7873.76</td>
+<td style="text-align: right;">23631.34</td>
+<td style="text-align: right;">426.0</td>
+<td style="text-align: right;">1831.0</td>
+<td style="text-align: right;">3137.0</td>
+<td style="text-align: right;">6896.0</td>
+<td style="text-align: right;">348864.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">shj_klienter</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">449.81</td>
+<td style="text-align: right;">1383.19</td>
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">98.0</td>
+<td style="text-align: right;">179.0</td>
+<td style="text-align: right;">376.0</td>
+<td style="text-align: right;">20401.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">shj_unge</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">89.36</td>
+<td style="text-align: right;">197.02</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: right;">39.0</td>
+<td style="text-align: right;">89.0</td>
+<td style="text-align: right;">2488.0</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">vinningskriminalitet</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.19</td>
+<td style="text-align: right;">7.05</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">7.2</td>
+<td style="text-align: right;">11.5</td>
+<td style="text-align: right;">91.2</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">voldskriminalitet</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5.61</td>
+<td style="text-align: right;">2.28</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">5.2</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">18.8</td>
+<td style="text-align: left;">▇▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">nark_alko_kriminalitet</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.91</td>
+<td style="text-align: right;">4.60</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">5.9</td>
+<td style="text-align: right;">8.9</td>
+<td style="text-align: right;">55.5</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ordenslovbrudd</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.91</td>
+<td style="text-align: right;">3.23</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">4.1</td>
+<td style="text-align: right;">5.9</td>
+<td style="text-align: right;">34.9</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trafikklovbrudd</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10.49</td>
+<td style="text-align: right;">11.36</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">8.1</td>
+<td style="text-align: right;">11.7</td>
+<td style="text-align: right;">219.7</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">andre_lovbrudd</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9.59</td>
+<td style="text-align: right;">4.34</td>
+<td style="text-align: right;">2.3</td>
+<td style="text-align: right;">7.1</td>
+<td style="text-align: right;">8.8</td>
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;">52.5</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="training-og-testing-data" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="training-og-testing-data"><span class="header-section-number">2.1.1</span> Training og testing data</h3>
+<p>Vi starter med å dele datasettet i <em>training</em> og <em>testing</em>. Her kan vi bruke pakken ‘rsample’ og funksjonen ‘initial_split()’ etterfulgt av funksjonene ‘training()’ og ‘testing()’. For å angi at man skal bruke 70% til training settes ‘prop = .7’.</p>
+<p>Merk bruken av ‘set.seed()’. For å splitte genererer R tilfeldige tall, og <em>seed</em> styrer hvor den algoritmen starter. Når <em>seed</em> er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>kommune_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(kommune, <span class="at">prop =</span> .<span class="dv">7</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>kommune_train <span class="ot">&lt;-</span> <span class="fu">training</span>(kommune_split)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>kommune_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(kommune_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="enkel-lineær-regresjon-i-r" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="enkel-lineær-regresjon-i-r"><span class="header-section-number">2.1.2</span> Enkel lineær regresjon i R</h3>
+<p>En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i kommunen. Rett og slett fordi dette er den demografiske gruppen som begår mest vold - og kriminalitet generelt, faktisk. Hvis befolkningssammensetningen forventes å bli yngre vil det medføre flere unge menn, og da kan vi kanskje forvente at det blir flere voldshendelser bare av den grunn? Sammenhengen mellom unge menn og voldsrate kan estimeres med helt vanlig lineær regresjon.</p>
+<p>En god start på de fleste empiriske analyser er å beskrive sammenhengen med et plot. Her legger vi på en lineær regresjonslinje med <code>geom_smooth()</code> der vi presiserer lineær modell med <code>method = "lm"</code> og lar være å ta med konfidensintervallet <code>se = FALSE</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>kommune_train <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop_unge_menn =</span> (menn_18_25 <span class="sc">+</span> menn_26_35)<span class="sc">/</span>bef_totalt<span class="sc">*</span><span class="dv">100</span>) </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kommune_train, <span class="fu">aes</span>(<span class="at">x =</span> prop_unge_menn, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> voldskriminalitet)) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="linear_regresjon_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Lineær regresjon estimeres med ‘lm()’ og du kan få en enkel output med bruk av ‘summary()’.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> prop_unge_menn, <span class="at">data =</span> kommune_train)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = voldskriminalitet ~ prop_unge_menn, data = kommune_train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.0302 -1.5764 -0.3951  1.1826 11.3367 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     0.50954    0.63482   0.803    0.422    
+prop_unge_menn  0.41329    0.05097   8.109  1.4e-15 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.248 on 1068 degrees of freedom
+Multiple R-squared:  0.05799,   Adjusted R-squared:  0.05711 
+F-statistic: 65.75 on 1 and 1068 DF,  p-value: 1.395e-15</code></pre>
+</div>
+</div>
+<p>Man kan også hente ut kun <span class="math inline">\(r^2\)</span> med følgende kode:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.05799176</code></pre>
+</div>
+</div>
+<p>For ordens skyld: I tidligere metodekurs har du kanskje lært å få ut en penere regresjonstabell med f.eks. gtsummary-pakken. (Det finnes andre pakker også som gjør tilsvarende). Da vil de samme resultatene se ut som følger. Hvordan output er formatert spiller ingen rolle. I denne sammenhengen har vi lite bruk for en pen regresjonstabell da <span class="math inline">\(\beta\)</span> ikke er av primær interesse.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(est, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<div id="kujptbyjvn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+:where(#kujptbyjvn) .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+:where(#kujptbyjvn) .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+:where(#kujptbyjvn) .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+:where(#kujptbyjvn) .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+:where(#kujptbyjvn) .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+:where(#kujptbyjvn) .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+:where(#kujptbyjvn) .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+:where(#kujptbyjvn) .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+:where(#kujptbyjvn) .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+:where(#kujptbyjvn) .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+:where(#kujptbyjvn) .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+:where(#kujptbyjvn) .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+:where(#kujptbyjvn) .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+:where(#kujptbyjvn) .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#kujptbyjvn) .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+:where(#kujptbyjvn) .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+:where(#kujptbyjvn) .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#kujptbyjvn) .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+:where(#kujptbyjvn) .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#kujptbyjvn) .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+:where(#kujptbyjvn) .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#kujptbyjvn) .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#kujptbyjvn) .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#kujptbyjvn) .gt_left {
+  text-align: left;
+}
+
+:where(#kujptbyjvn) .gt_center {
+  text-align: center;
+}
+
+:where(#kujptbyjvn) .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+:where(#kujptbyjvn) .gt_font_normal {
+  font-weight: normal;
+}
+
+:where(#kujptbyjvn) .gt_font_bold {
+  font-weight: bold;
+}
+
+:where(#kujptbyjvn) .gt_font_italic {
+  font-style: italic;
+}
+
+:where(#kujptbyjvn) .gt_super {
+  font-size: 65%;
+}
+
+:where(#kujptbyjvn) .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+:where(#kujptbyjvn) .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+:where(#kujptbyjvn) .gt_indent_1 {
+  text-indent: 5px;
+}
+
+:where(#kujptbyjvn) .gt_indent_2 {
+  text-indent: 10px;
+}
+
+:where(#kujptbyjvn) .gt_indent_3 {
+  text-indent: 15px;
+}
+
+:where(#kujptbyjvn) .gt_indent_4 {
+  text-indent: 20px;
+}
+
+:where(#kujptbyjvn) .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Beta</strong>"><strong>Beta</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_center">0.51</td>
+<td headers="ci" class="gt_row gt_center">-0.74, 1.8</td>
+<td headers="p.value" class="gt_row gt_center">0.4</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">prop_unge_menn</td>
+<td headers="estimate" class="gt_row gt_center">0.41</td>
+<td headers="ci" class="gt_row gt_center">0.31, 0.51</td>
+<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+</div>
+<p>Med andre ord kan voldsraten beskrives som:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><span class="math display">\[
+\operatorname{\widehat{voldskriminalitet}} = 0.51 + 0.41(\operatorname{prop\_unge\_menn})
+\]</span></p>
+</div>
+</div>
+<p>Men vi har også sett at <span class="math inline">\(r^2\)</span> er ganske lav, bare 0.058. Denne koeffisienten kalles også “coefficient of determination” og sier noe om i hvor stor grad modellen fanger opp variasjoenen i dataene. En lav <span class="math inline">\(r^2\)</span> betyr at modellen i liten grad gjør det. Vi må altså forvente at modellen vil bomme ganske kraftig i sine prediksjoner. Vi kan velge å ta modellen seriøst likevel, men ikke ha for store forventninger for prediksjonene!</p>
+<p>Et annet mål på hvor godt modellen treffer er “Root mean square error”, RMSE. Dette kan skrives som:</p>
+<p><span class="math display">\[ rmse = \sqrt{ \frac{ \sum{(O_i-P_i)^2} }{N} }  \]</span></p>
+<p>der <span class="math inline">\(O\)</span> er de observerte verdiene og <span class="math inline">\(P\)</span> er de predikerte verdiene for observasjon <span class="math inline">\(i\)</span>. Merk at <span class="math inline">\((O_i-P_i)\)</span> er residualene. I R kan vi hente ut residualene fra regresjons-objektet med dollartegnet <code>...$res</code> etter objektnavnet. Da kan du regne ut RMSE som følger:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(est<span class="sc">$</span>res<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.245685</code></pre>
+</div>
+</div>
+<p>RMSE sier altså omtrentlig hvor mye modellen i gjennomsnitt bommer på de observerte verdiene. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Hvorvidt det er presist <em>nok</em> eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.</p>
+<p>For å få litt bedre tak på hva RMSE betyr kan vi se på et plot av de predikerte og observerte verdiene. Vi kan predikere vold for hver enkelt kommune basert på denne modellen, som altså er den forventede voldsraten <em>hvis modellen er sann</em>. Funksjonen <code>predict()</code> gir oss hva vi trenger.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>kom <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(est))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Merk at koden her lagde en kopi av datasettet der vi har alle de opprinnelige variablene pluss en variabel med de predikerte verdiene. Vi kan nå sammenlignet prediksjonene med de observerte utfallene.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="linear_regresjon_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe den jo ikke gjør. Modellen bommer altså ganske mye.</p>
+<p>Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere <code>newdata = dt</code>. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prop_unge_menn =</span> .<span class="dv">15</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        1 
+0.5715387 </code></pre>
+</div>
+</div>
+<p>I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 7.2 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et <em>konfidensintervall</em>, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>        fit       lwr      upr
+1 0.5715387 -4.007532 5.150609</code></pre>
+</div>
+</div>
+<p>Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med “95% sannsynlighet”<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> at voldsraten vil være mellom 2.3 og 12.1 per 1000 innbyggere.</p>
+</section>
+<section id="multippel-regresjon" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="multippel-regresjon"><span class="header-section-number">2.1.3</span> Multippel regresjon</h3>
+<p>Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan komplisere vesentlig ved å inkludere flere variable og bruke alle triksene man evt. har lært om multippel regresjon tidligere, primært interaksjonsledd, polynomer og transformasjoner osv. (Det er ok om du ikke har lært alt dette tidligere).</p>
+<p>I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>est_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> prop_unge_menn <span class="sc">+</span> inntekt_totalt_median <span class="sc">+</span> shj_unge <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                   ant_husholdninger , </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> kommune_train)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = voldskriminalitet ~ prop_unge_menn + inntekt_totalt_median + 
+    shj_unge + ant_husholdninger, data = kommune_train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.6862 -1.3599 -0.2042  1.0689 12.4822 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)            7.421e+00  7.333e-01  10.121  &lt; 2e-16 ***
+prop_unge_menn         4.177e-01  5.328e-02   7.840 1.09e-14 ***
+inntekt_totalt_median -1.099e-05  8.539e-07 -12.871  &lt; 2e-16 ***
+shj_unge               4.461e-03  1.016e-03   4.392 1.23e-05 ***
+ant_husholdninger     -2.163e-05  8.361e-06  -2.587  0.00983 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.037 on 1065 degrees of freedom
+Multiple R-squared:  0.2288,    Adjusted R-squared:  0.2259 
+F-statistic:    79 on 4 and 1065 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Merk at <span class="math inline">\(r^2\)</span> nå har gått betraktelig opp, til ca 0.23. Gitt at vi tolker dette som i hvor stor grad vi kan <em>predikere</em> utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon.</p>
+<p>Her er et scatterplot av observert mot forventet voldsrater:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(est_m))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="linear_regresjon_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>La oss inkludere alle aktuelle variable i datasettet. Et lite triks her er å fjerne alle variable vi ikke er interessert i og lagre det i et nytt datasett. I <code>lm()</code> kan vi da presisere formelen som <code>Vold ~ .</code> som i denne sammenhengen betyr å ta med alle variabelene i stedet for å liste opp hver enkelt variabel.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>kom_s <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(kommune, kommune_nr, ordenslovbrudd,  </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>            nark_alko_kriminalitet, trafikklovbrudd, andre_lovbrudd, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            prop_unge_menn))</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>full_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> . , <span class="at">data =</span> kom_s)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = voldskriminalitet ~ ., data = kom_s)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.9650 -1.2333 -0.1813  0.8919 12.2114 
+
+Coefficients: (4 not defined because of singularities)
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)           -1.198e+02  9.309e+01  -1.287  0.19851    
+year                   6.234e-02  4.646e-02   1.342  0.17998    
+bef_18min              3.156e-03  1.839e-03   1.716  0.08637 .  
+bef_18_25             -1.885e-05  1.513e-03  -0.012  0.99006    
+bef_26_35              1.180e-03  1.006e-03   1.173  0.24109    
+bef_totalt            -2.272e-03  7.130e-04  -3.187  0.00148 ** 
+menn_18_25             3.698e-03  2.136e-03   1.731  0.08373 .  
+menn_26_35            -1.481e-03  2.013e-03  -0.736  0.46197    
+menn_36_67             2.710e-03  9.461e-04   2.865  0.00425 ** 
+menn_67plus            1.654e-03  1.339e-03   1.236  0.21676    
+menn_18min             2.461e-03  2.875e-03   0.856  0.39223    
+kvinner_18_25                 NA         NA      NA       NA    
+kvinner_26_35                 NA         NA      NA       NA    
+kvinner_36_67         -1.269e-04  9.021e-04  -0.141  0.88816    
+kvinner_67plus                NA         NA      NA       NA    
+kvinner_18min                 NA         NA      NA       NA    
+inntekt_totalt_median -4.693e-05  7.600e-06  -6.176 9.40e-10 ***
+inntekt_eskatt_median  5.580e-05  1.108e-05   5.037 5.55e-07 ***
+ant_husholdninger      1.555e-03  3.169e-04   4.908 1.07e-06 ***
+shj_klienter           2.170e-03  9.967e-04   2.177  0.02968 *  
+shj_unge               2.191e-03  3.054e-03   0.718  0.47322    
+vinningskriminalitet   1.066e-01  1.014e-02  10.513  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.891 on 1052 degrees of freedom
+Multiple R-squared:  0.343, Adjusted R-squared:  0.3324 
+F-statistic:  32.3 on 17 and 1052 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(r^2\)</span> gikk noe opp, til ‘r round(summary(full_mod)$r.squared, digits = 3)’</p>
+<p>Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på <span class="math inline">\(r^2\)</span> som kan hentes ut uten å ta med resten av output.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>full_mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>, <span class="at">data =</span> kom_s)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod2)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5224374</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(r^2\)</span> gikk vesentlig opp. Men når vi først driver med kompliserte modellspesifikasjoner som uansett er vanskelige å tolke - hvorfor begrense seg til 2-veis interaksjoner? Her er en versjon med alle 3-veis interaksjoner, og nå begynner <span class="math inline">\(r^2\)</span> virkelig å bli høy!</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>full_mod3 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">3</span>, <span class="at">data =</span> kom_s)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod3)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8163974</code></pre>
+</div>
+</div>
+<p>Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant bedre av å legge til hver av de parametrene, og stopper når modellen ikke blir bedre. Så beholdes den “beste” av disse modellene, ikke nødvendigvis den som er mest komplisert.</p>
+<p>OBS! Merk at dette er en rent mekanisk seleksjon, og frarådes i de fleste samfunnsvitenskapelige sammenhenger. Tolkning av parametre og statistisk usikkerhet er nå på svært tynn is. Men det kan gi god prediksjon likevel.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>step_mod <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">stepAIC</span>(full_mod3, <span class="at">direction=</span><span class="st">"forward"</span>, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(step_mod)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8163974</code></pre>
+</div>
+</div>
+<p>Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observert, så får vi et svært mye bedre sammenfall enn tidligere.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kom_s <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod))</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="linear_regresjon_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Nå kan vi også regne ut RMSE, som altså er “root mean squared error”. Med andre ord: regn ut residualene (dvs. “error”), og kvadrer denne, og så ta kvadratroten av gjennomsnittet av denne. Her er en kode skrevet litt omstendelig så den er litt lettere å forstå:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>kom_s <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod), </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sqrt(mean(sq.resid))
+1            0.9914275</code></pre>
+</div>
+</div>
+<p>Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Hvorvidt det er presist <em>nok</em> eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.</p>
+</section>
+<section id="predikere-for-nye-data" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="predikere-for-nye-data"><span class="header-section-number">2.1.4</span> Predikere for nye data</h3>
+<p>Men nå har vi bare sett på hvordan prediksjonen fungerer på training-datasettet. Vi må sjekke med testing-datasettet. Det lagde vi i begynnelsen, så nå henter vi det frem og gjør det samme som over. I ‘predict()’ må vi nå angi ‘newdata =’.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>kom_pred2 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod, <span class="at">newdata =</span> .), </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred2, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="linear_regresjon_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Ser dette rart ut? Det er to observasjoner som har pedikert skyhøy voldsrate! Disse to prediksjonene bommer voldsomt, og med litt erfaring vil man se at dette her går aldri bra for <span class="math inline">\(r^2\)</span>, som regnes ut slik:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>kom_pred2  <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       SSres    SStot r_squared
+1 4473767911 2238.179  -1998842</code></pre>
+</div>
+</div>
+<p>Ganske riktig! Dette ble bare tull. Kvadratsummen til residualene ble mye høyere enn total kvadratsum. Dermed blir <span class="math inline">\(r^2\)</span> helt fjerne.</p>
+<p>Dette er en ganske ekstrem variant av <em>overfitting</em>. Ved å formulere en veldig komplisert modell som passer veldig godt til training-dataene kan vi ende opp med en modell som passer veldig, veldig dårlig til nye data. Hvis man skulle utforme f.eks. politikktiltak på grunnlag av en slik prediksjon vil det kunne gå riktig så dårlig.</p>
+<p>Det er i dette tilfellet kanskje ikke så rart: modellen ble formulert <em>kun</em> for å maksimere <span class="math inline">\(r^2\)</span> og uten så mye andre tanker bak.</p>
+<p>Det er nok bedre med en enklere modell. Vi prøver heller å bruke modellen der alle prediktorene er med, men uten alle de kompliserende interaksjonene:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(full_mod, <span class="at">newdata =</span> .), </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred3, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="linear_regresjon_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>kom_pred3  <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     SSres    SStot r_squared
+1 1507.998 2238.179 0.3262389</code></pre>
+</div>
+</div>
+<p>Sammenlignet med <span class="math inline">\(r^2\)</span> på trainingdata, ‘r summary(full_mod)$r.squared’, er dette ikke så værst. Litt dårligere tilpassning må man regne med.</p>
+<p>RMSE regnes ut slik:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sqrt(mean(sq.resid))
+1             1.812567</code></pre>
+</div>
+</div>
+<p>Det er altså slik at en enklere modell kan passe til <em>nye</em> data langt bedre enn en veldig komplisert modell. Grunnen er overfitting: modellen fanger opp vel så mye tilfeldig støy som det underliggende mønsteret. Støyen vil jo være annerledes i de nye dataene.</p>
+</section>
+<section id="oppsummerende-kommentar" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="oppsummerende-kommentar"><span class="header-section-number">2.1.5</span> Oppsummerende kommentar</h3>
+<p>Dette gjelder generelt: mer komplisert regresjonsmodell vil gi tilsynelatende bedre tilpassning til data enten man måler med <span class="math inline">\(r^2\)</span> eller RMSE. Man kan riktignok bruke mål på tilpassning som justerer for antall parametre etc (f.eks. justert <span class="math inline">\(r^2\)</span>, AIC eller BIC), som kanskje kan bedre dette noe, men det vil ofte lede til overfitting likevel.</p>
+<p>Det er derfor veldig viktig å teste modellen mot <em>nye</em> data. I praksis testing-dataene man lagde til å begynne med.</p>
+<p>I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstret ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte.</p>
+</section>
+</section>
+<section id="oppgaver" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">2.2</span> Oppgaver</h2>
+<div id="exr-ols-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.1 </strong></span>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+</div>
+<div id="exr-ols-eksplisitt" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.2 </strong></span>Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</p>
+<p>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</p>
+</div>
+<div id="exr-split" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.3 </strong></span>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</p>
+</div>
+<div id="exr-sepaa" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.4 </strong></span>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</p>
+<ol type="a">
+<li>Bruk <code>glimpse()</code> og <code>skim()</code> til å få oversikt over innholdet i datasettet</li>
+<li>Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</li>
+<li>Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</li>
+</ol>
+</div>
+<div id="exr-ols-train" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.5 </strong></span>Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er <span class="math inline">\(r^2\)</span> og RMSE.</p>
+<ol type="a">
+<li>Velg ut tre forklaringsvariable og estimer en regresjonsmodell</li>
+<li>Estimer en ny modell med alle variable i datasettet</li>
+<li>Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</li>
+<li>Gjør et automatisk modellsøk</li>
+</ol>
+<p>Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</p>
+</div>
+<div id="exr-ols-test" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2.6 </strong></span>I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut <span class="math inline">\(r^2\)</span> og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger:</p>
+<ol type="a">
+<li>Prediker utfallet på testing-datasettet</li>
+<li>Regn ut <span class="math inline">\(r^2\)</span> og RMSE</li>
+<li>Hvor stor er <em>endringen</em> i <span class="math inline">\(r^2\)</span> og RMSE fra resultatene når du brukte training-datasettet?</li>
+</ol>
+<p>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor <em>endring</em> i <span class="math inline">\(r^2\)</span> og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</p>
+</div>
+
+
+<!-- -->
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Bortsett fra for dem som mener det er svaret på “the Ultimate Question of Life, the Universe, and Everything”<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Dette er en omtrentelig formulering. Alle sannsynligheter gjelder i det lange løp: altså hvis man gjør undersøkelsen veldig mange ganger.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./introduksjon.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduksjon til maskinlæring</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./logistisk_regresjon.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb42" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Lineær regresjon</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker:</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>Lineær regresjon slik vi skal bruke det her er helt vanlig regresjon slik du har lært om i grunnleggende kurs i kvantitative metoder. Altså lineær funksjon estimert med minste kvadraters metode. Alt du har lært før gjelder også her. Forskjellen er at vi nå ikke er så interessert i å tolke $\beta$ men i den predikerte $\hat{y}$.</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r uke2_pakker}</span></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lese inn data</span></span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>Vi illustrerer lineær regresjon med et empirisk eksempel. Her skal vi bruke data for norske kommuner i 2016. La oss si at vi er interessert i hvordan antall voldshendelser per 1000 innbyggere vil endre seg i en kommune. Dette kunne være relevant for langtidsplanlegging av forebygging, politibemanning, helsetjenester osv. Det kan være et område som er i stor endring slik at befolkningssammensetningen forventes å endre seg og/eller det er endrede lokale økonomiske utsikter.</span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>Først leser vi inn dataene og tar en titt på variabellisten.</span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a>kommune <span class="ot">&lt;-</span> <span class="fu">readRDS</span>( <span class="st">"data/kommunedata.rds"</span>)</span>
+<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(kommune)</span>
+<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a>En annen måte å få oversikt over dataene på er å bruke funksjonen <span class="in">`skim()`</span>, som gir noe mer informasjon om fordelingen av hver enkelt variabel.</span>
+<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-49"><a href="#cb42-49" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(kommune)</span>
+<span id="cb42-50"><a href="#cb42-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-51"><a href="#cb42-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a><span class="fu">### Training og testing data</span></span>
+<span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a>Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen 'initial_split()' etterfulgt av funksjonene 'training()' og 'testing()'. For å angi at man skal bruke 70% til training settes 'prop = .7'.</span>
+<span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-57"><a href="#cb42-57" aria-hidden="true" tabindex="-1"></a>Merk bruken av 'set.seed()'. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<span class="ot">[^linear_regresjon-1]</span> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</span>
+<span id="cb42-58"><a href="#cb42-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-59"><a href="#cb42-59" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-1]: </span>Bortsett fra for dem som mener det er svaret på "the Ultimate Question of Life, the Universe, and Everything"</span>
+<span id="cb42-60"><a href="#cb42-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-63"><a href="#cb42-63" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-64"><a href="#cb42-64" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)</span>
+<span id="cb42-65"><a href="#cb42-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-66"><a href="#cb42-66" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb42-67"><a href="#cb42-67" aria-hidden="true" tabindex="-1"></a>kommune_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(kommune, <span class="at">prop =</span> .<span class="dv">7</span>)</span>
+<span id="cb42-68"><a href="#cb42-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-69"><a href="#cb42-69" aria-hidden="true" tabindex="-1"></a>kommune_train <span class="ot">&lt;-</span> <span class="fu">training</span>(kommune_split)</span>
+<span id="cb42-70"><a href="#cb42-70" aria-hidden="true" tabindex="-1"></a>kommune_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(kommune_split)</span>
+<span id="cb42-71"><a href="#cb42-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-72"><a href="#cb42-72" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-73"><a href="#cb42-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-74"><a href="#cb42-74" aria-hidden="true" tabindex="-1"></a><span class="fu">### Enkel lineær regresjon i R</span></span>
+<span id="cb42-75"><a href="#cb42-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-76"><a href="#cb42-76" aria-hidden="true" tabindex="-1"></a>En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i kommunen. Rett og slett fordi dette er den demografiske gruppen som begår mest vold - og kriminalitet generelt, faktisk. Hvis befolkningssammensetningen forventes å bli yngre vil det medføre flere unge menn, og da kan vi kanskje forvente at det blir flere voldshendelser bare av den grunn? Sammenhengen mellom unge menn og voldsrate kan estimeres med helt vanlig lineær regresjon.</span>
+<span id="cb42-77"><a href="#cb42-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-78"><a href="#cb42-78" aria-hidden="true" tabindex="-1"></a>En god start på de fleste empiriske analyser er å beskrive sammenhengen med et plot. Her legger vi på en lineær regresjonslinje med <span class="in">`geom_smooth()`</span> der vi presiserer lineær modell med <span class="in">`method = "lm"`</span> og lar være å ta med konfidensintervallet <span class="in">`se = FALSE`</span>.</span>
+<span id="cb42-79"><a href="#cb42-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-82"><a href="#cb42-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-83"><a href="#cb42-83" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-84"><a href="#cb42-84" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false </span></span>
+<span id="cb42-85"><a href="#cb42-85" aria-hidden="true" tabindex="-1"></a>kommune_train <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb42-86"><a href="#cb42-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop_unge_menn =</span> (menn_18_25 <span class="sc">+</span> menn_26_35)<span class="sc">/</span>bef_totalt<span class="sc">*</span><span class="dv">100</span>) </span>
+<span id="cb42-87"><a href="#cb42-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-88"><a href="#cb42-88" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kommune_train, <span class="fu">aes</span>(<span class="at">x =</span> prop_unge_menn, </span>
+<span id="cb42-89"><a href="#cb42-89" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> voldskriminalitet)) <span class="sc">+</span></span>
+<span id="cb42-90"><a href="#cb42-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb42-91"><a href="#cb42-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb42-92"><a href="#cb42-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-93"><a href="#cb42-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-94"><a href="#cb42-94" aria-hidden="true" tabindex="-1"></a>Lineær regresjon estimeres med 'lm()' og du kan få en enkel output med bruk av 'summary()'.</span>
+<span id="cb42-95"><a href="#cb42-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-98"><a href="#cb42-98" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-99"><a href="#cb42-99" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> prop_unge_menn, <span class="at">data =</span> kommune_train)</span>
+<span id="cb42-100"><a href="#cb42-100" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est)</span>
+<span id="cb42-101"><a href="#cb42-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-102"><a href="#cb42-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-103"><a href="#cb42-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-104"><a href="#cb42-104" aria-hidden="true" tabindex="-1"></a>Man kan også hente ut kun $r^2$ med følgende kode: </span>
+<span id="cb42-105"><a href="#cb42-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-108"><a href="#cb42-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-109"><a href="#cb42-109" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb42-110"><a href="#cb42-110" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est)<span class="sc">$</span>r.squared</span>
+<span id="cb42-111"><a href="#cb42-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-112"><a href="#cb42-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-113"><a href="#cb42-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-114"><a href="#cb42-114" aria-hidden="true" tabindex="-1"></a>For ordens skyld: I tidligere metodekurs har du kanskje lært å få ut en penere regresjonstabell med f.eks. gtsummary-pakken. (Det finnes andre pakker også som gjør tilsvarende). Da vil de samme resultatene se ut som følger. Hvordan output er formatert spiller ingen rolle. I denne sammenhengen har vi lite bruk for en pen regresjonstabell da $\beta$ ikke er av primær interesse.</span>
+<span id="cb42-115"><a href="#cb42-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-118"><a href="#cb42-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-119"><a href="#cb42-119" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb42-120"><a href="#cb42-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-121"><a href="#cb42-121" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_regression</span>(est, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-122"><a href="#cb42-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-123"><a href="#cb42-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-124"><a href="#cb42-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-125"><a href="#cb42-125" aria-hidden="true" tabindex="-1"></a>Med andre ord kan voldsraten beskrives som:</span>
+<span id="cb42-126"><a href="#cb42-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-129"><a href="#cb42-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-130"><a href="#cb42-130" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb42-131"><a href="#cb42-131" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(equatiomatic)</span>
+<span id="cb42-132"><a href="#cb42-132" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_eq</span>(est, <span class="at">use_coefs =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-133"><a href="#cb42-133" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-134"><a href="#cb42-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-135"><a href="#cb42-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-136"><a href="#cb42-136" aria-hidden="true" tabindex="-1"></a>Men vi har også sett at $r^2$ er ganske lav, bare <span class="in">`r round(summary(est)$r.squared, digits = 3)`</span>. Denne koeffisienten kalles også "coefficient of determination" og sier noe om i hvor stor grad modellen fanger opp variasjoenen i dataene. En lav $r^2$ betyr at modellen i liten grad gjør det. Vi må altså forvente at modellen vil bomme ganske kraftig i sine prediksjoner. Vi kan velge å ta modellen seriøst likevel, men ikke ha for store forventninger for prediksjonene!</span>
+<span id="cb42-137"><a href="#cb42-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-138"><a href="#cb42-138" aria-hidden="true" tabindex="-1"></a>Et annet mål på hvor godt modellen treffer er "Root mean square error", RMSE. Dette kan skrives som:</span>
+<span id="cb42-139"><a href="#cb42-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-140"><a href="#cb42-140" aria-hidden="true" tabindex="-1"></a>$$ rmse = \sqrt{ \frac{ \sum{(O_i-P_i)^2} }{N} }  $$</span>
+<span id="cb42-141"><a href="#cb42-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-142"><a href="#cb42-142" aria-hidden="true" tabindex="-1"></a>der $O$ er de observerte verdiene og $P$ er de predikerte verdiene for observasjon $i$. Merk at $(O_i-P_i)$ er residualene. I R kan vi hente ut residualene fra regresjons-objektet med dollartegnet <span class="in">`...$res`</span> etter objektnavnet. Da kan du regne ut RMSE som følger:</span>
+<span id="cb42-143"><a href="#cb42-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-146"><a href="#cb42-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-147"><a href="#cb42-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb42-148"><a href="#cb42-148" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(est<span class="sc">$</span>res<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb42-149"><a href="#cb42-149" aria-hidden="true" tabindex="-1"></a>rmse</span>
+<span id="cb42-150"><a href="#cb42-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-151"><a href="#cb42-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-152"><a href="#cb42-152" aria-hidden="true" tabindex="-1"></a>RMSE sier altså omtrentlig hvor mye modellen i gjennomsnitt bommer på de observerte verdiene. <span class="ot">[^linear_regresjon-2]</span>. Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.</span>
+<span id="cb42-153"><a href="#cb42-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-154"><a href="#cb42-154" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-2]: </span>Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt. </span>
+<span id="cb42-155"><a href="#cb42-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-156"><a href="#cb42-156" aria-hidden="true" tabindex="-1"></a>For å få litt bedre tak på hva RMSE betyr kan vi se på et plot av de predikerte og observerte verdiene. Vi kan predikere vold for hver enkelt kommune basert på denne modellen, som altså er den forventede voldsraten *hvis modellen er sann*. Funksjonen <span class="in">`predict()`</span> gir oss hva vi trenger.</span>
+<span id="cb42-157"><a href="#cb42-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-160"><a href="#cb42-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-161"><a href="#cb42-161" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb42-162"><a href="#cb42-162" aria-hidden="true" tabindex="-1"></a>kom <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb42-163"><a href="#cb42-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(est))</span>
+<span id="cb42-164"><a href="#cb42-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-165"><a href="#cb42-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-166"><a href="#cb42-166" aria-hidden="true" tabindex="-1"></a>Merk at koden her lagde en kopi av datasettet der vi har alle de opprinnelige variablene pluss en variabel med de predikerte verdiene. Vi kan nå sammenlignet prediksjonene med de observerte utfallene.</span>
+<span id="cb42-167"><a href="#cb42-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-170"><a href="#cb42-170" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-171"><a href="#cb42-171" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-172"><a href="#cb42-172" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-173"><a href="#cb42-173" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb42-174"><a href="#cb42-174" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-175"><a href="#cb42-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb42-176"><a href="#cb42-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-177"><a href="#cb42-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-178"><a href="#cb42-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-179"><a href="#cb42-179" aria-hidden="true" tabindex="-1"></a>Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe den jo ikke gjør. Modellen bommer altså ganske mye.</span>
+<span id="cb42-180"><a href="#cb42-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-181"><a href="#cb42-181" aria-hidden="true" tabindex="-1"></a>Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere <span class="in">`newdata = dt`</span>. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.</span>
+<span id="cb42-182"><a href="#cb42-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-185"><a href="#cb42-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-186"><a href="#cb42-186" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb42-187"><a href="#cb42-187" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prop_unge_menn =</span> .<span class="dv">15</span>)</span>
+<span id="cb42-188"><a href="#cb42-188" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt)</span>
+<span id="cb42-189"><a href="#cb42-189" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-190"><a href="#cb42-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-191"><a href="#cb42-191" aria-hidden="true" tabindex="-1"></a>I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 7.2 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.</span>
+<span id="cb42-192"><a href="#cb42-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-195"><a href="#cb42-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-196"><a href="#cb42-196" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
+<span id="cb42-197"><a href="#cb42-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-198"><a href="#cb42-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-199"><a href="#cb42-199" aria-hidden="true" tabindex="-1"></a>Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med "95% sannsynlighet"<span class="ot">[^linear_regresjon-3]</span> at voldsraten vil være mellom 2.3 og 12.1 per 1000 innbyggere.</span>
+<span id="cb42-200"><a href="#cb42-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-201"><a href="#cb42-201" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-3]: </span>Dette er en omtrentelig formulering. Alle sannsynligheter gjelder i det lange løp: altså hvis man gjør undersøkelsen veldig mange ganger.</span>
+<span id="cb42-202"><a href="#cb42-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-203"><a href="#cb42-203" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multippel regresjon</span></span>
+<span id="cb42-204"><a href="#cb42-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-205"><a href="#cb42-205" aria-hidden="true" tabindex="-1"></a>Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan komplisere vesentlig ved å inkludere flere variable og bruke alle triksene man evt. har lært om multippel regresjon tidligere, primært interaksjonsledd, polynomer og transformasjoner osv. (Det er ok om du ikke har lært alt dette tidligere).</span>
+<span id="cb42-206"><a href="#cb42-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-207"><a href="#cb42-207" aria-hidden="true" tabindex="-1"></a>I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon.</span>
+<span id="cb42-208"><a href="#cb42-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-211"><a href="#cb42-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-212"><a href="#cb42-212" aria-hidden="true" tabindex="-1"></a>est_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> prop_unge_menn <span class="sc">+</span> inntekt_totalt_median <span class="sc">+</span> shj_unge <span class="sc">+</span> </span>
+<span id="cb42-213"><a href="#cb42-213" aria-hidden="true" tabindex="-1"></a>                   ant_husholdninger , </span>
+<span id="cb42-214"><a href="#cb42-214" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> kommune_train)</span>
+<span id="cb42-215"><a href="#cb42-215" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_m)</span>
+<span id="cb42-216"><a href="#cb42-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-217"><a href="#cb42-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-218"><a href="#cb42-218" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-219"><a href="#cb42-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-220"><a href="#cb42-220" aria-hidden="true" tabindex="-1"></a>Merk at $r^2$ nå har gått betraktelig opp, til ca <span class="in">`r round(summary(est_m)$r.squared, digits = 2)`</span>. Gitt at vi tolker dette som i hvor stor grad vi kan *predikere* utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon.</span>
+<span id="cb42-221"><a href="#cb42-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-222"><a href="#cb42-222" aria-hidden="true" tabindex="-1"></a>Her er et scatterplot av observert mot forventet voldsrater:</span>
+<span id="cb42-223"><a href="#cb42-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-226"><a href="#cb42-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-227"><a href="#cb42-227" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-228"><a href="#cb42-228" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-229"><a href="#cb42-229" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb42-230"><a href="#cb42-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(est_m))</span>
+<span id="cb42-231"><a href="#cb42-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-232"><a href="#cb42-232" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-233"><a href="#cb42-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb42-234"><a href="#cb42-234" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-235"><a href="#cb42-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-236"><a href="#cb42-236" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-237"><a href="#cb42-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-238"><a href="#cb42-238" aria-hidden="true" tabindex="-1"></a>La oss inkludere alle aktuelle variable i datasettet. Et lite triks her er å fjerne alle variable vi ikke er interessert i og lagre det i et nytt datasett. I <span class="in">`lm()`</span> kan vi da presisere formelen som <span class="in">`Vold ~ .`</span> som i denne sammenhengen betyr å ta med alle variabelene i stedet for å liste opp hver enkelt variabel.</span>
+<span id="cb42-239"><a href="#cb42-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-242"><a href="#cb42-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-243"><a href="#cb42-243" aria-hidden="true" tabindex="-1"></a>kom_s <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb42-244"><a href="#cb42-244" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(kommune, kommune_nr, ordenslovbrudd,  </span>
+<span id="cb42-245"><a href="#cb42-245" aria-hidden="true" tabindex="-1"></a>            nark_alko_kriminalitet, trafikklovbrudd, andre_lovbrudd, </span>
+<span id="cb42-246"><a href="#cb42-246" aria-hidden="true" tabindex="-1"></a>            prop_unge_menn))</span>
+<span id="cb42-247"><a href="#cb42-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-248"><a href="#cb42-248" aria-hidden="true" tabindex="-1"></a>full_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> . , <span class="at">data =</span> kom_s)</span>
+<span id="cb42-249"><a href="#cb42-249" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod)</span>
+<span id="cb42-250"><a href="#cb42-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-251"><a href="#cb42-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-252"><a href="#cb42-252" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk noe opp, til 'r round(summary(full_mod)$r.squared, digits = 3)'</span>
+<span id="cb42-253"><a href="#cb42-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-254"><a href="#cb42-254" aria-hidden="true" tabindex="-1"></a>Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output.</span>
+<span id="cb42-255"><a href="#cb42-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-258"><a href="#cb42-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-259"><a href="#cb42-259" aria-hidden="true" tabindex="-1"></a>full_mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>, <span class="at">data =</span> kom_s)</span>
+<span id="cb42-260"><a href="#cb42-260" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod2)<span class="sc">$</span>r.squared</span>
+<span id="cb42-261"><a href="#cb42-261" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-262"><a href="#cb42-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-263"><a href="#cb42-263" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk vesentlig opp. Men når vi først driver med kompliserte modellspesifikasjoner som uansett er vanskelige å tolke - hvorfor begrense seg til 2-veis interaksjoner? Her er en versjon med alle 3-veis interaksjoner, og nå begynner $r^2$ virkelig å bli høy!</span>
+<span id="cb42-264"><a href="#cb42-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-267"><a href="#cb42-267" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-268"><a href="#cb42-268" aria-hidden="true" tabindex="-1"></a>full_mod3 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">3</span>, <span class="at">data =</span> kom_s)</span>
+<span id="cb42-269"><a href="#cb42-269" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod3)<span class="sc">$</span>r.squared</span>
+<span id="cb42-270"><a href="#cb42-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-271"><a href="#cb42-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-272"><a href="#cb42-272" aria-hidden="true" tabindex="-1"></a>Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant bedre av å legge til hver av de parametrene, og stopper når modellen ikke blir bedre. Så beholdes den "beste" av disse modellene, ikke nødvendigvis den som er mest komplisert.</span>
+<span id="cb42-273"><a href="#cb42-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-274"><a href="#cb42-274" aria-hidden="true" tabindex="-1"></a>OBS! Merk at dette er en rent mekanisk seleksjon, og frarådes i de fleste samfunnsvitenskapelige sammenhenger. Tolkning av parametre og statistisk usikkerhet er nå på svært tynn is. Men det kan gi god prediksjon likevel.</span>
+<span id="cb42-275"><a href="#cb42-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-276"><a href="#cb42-276" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ols_step}</span></span>
+<span id="cb42-277"><a href="#cb42-277" aria-hidden="true" tabindex="-1"></a>step_mod <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">stepAIC</span>(full_mod3, <span class="at">direction=</span><span class="st">"forward"</span>, </span>
+<span id="cb42-278"><a href="#cb42-278" aria-hidden="true" tabindex="-1"></a>                          <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-279"><a href="#cb42-279" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(step_mod)<span class="sc">$</span>r.squared</span>
+<span id="cb42-280"><a href="#cb42-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-281"><a href="#cb42-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-282"><a href="#cb42-282" aria-hidden="true" tabindex="-1"></a>Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observert, så får vi et svært mye bedre sammenfall enn tidligere.</span>
+<span id="cb42-283"><a href="#cb42-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-286"><a href="#cb42-286" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-287"><a href="#cb42-287" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-288"><a href="#cb42-288" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-289"><a href="#cb42-289" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kom_s <span class="sc">%&gt;%</span> </span>
+<span id="cb42-290"><a href="#cb42-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod))</span>
+<span id="cb42-291"><a href="#cb42-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-292"><a href="#cb42-292" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-293"><a href="#cb42-293" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb42-294"><a href="#cb42-294" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-295"><a href="#cb42-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-296"><a href="#cb42-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-297"><a href="#cb42-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-298"><a href="#cb42-298" aria-hidden="true" tabindex="-1"></a>Nå kan vi også regne ut RMSE, som altså er "root mean squared error". Med andre ord: regn ut residualene (dvs. "error"), og kvadrer denne, og så ta kvadratroten av gjennomsnittet av denne. Her er en kode skrevet litt omstendelig så den er litt lettere å forstå:</span>
+<span id="cb42-299"><a href="#cb42-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-302"><a href="#cb42-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-303"><a href="#cb42-303" aria-hidden="true" tabindex="-1"></a>kom_s <span class="sc">%&gt;%</span> </span>
+<span id="cb42-304"><a href="#cb42-304" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod), </span>
+<span id="cb42-305"><a href="#cb42-305" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-306"><a href="#cb42-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-307"><a href="#cb42-307" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span>
+<span id="cb42-308"><a href="#cb42-308" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-309"><a href="#cb42-309" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-310"><a href="#cb42-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-311"><a href="#cb42-311" aria-hidden="true" tabindex="-1"></a>Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. <span class="ot">[^linear_regresjon-4]</span> Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.</span>
+<span id="cb42-312"><a href="#cb42-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-313"><a href="#cb42-313" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-4]: </span>Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt</span>
+<span id="cb42-314"><a href="#cb42-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-315"><a href="#cb42-315" aria-hidden="true" tabindex="-1"></a><span class="fu">### Predikere for nye data</span></span>
+<span id="cb42-316"><a href="#cb42-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-317"><a href="#cb42-317" aria-hidden="true" tabindex="-1"></a>Men nå har vi bare sett på hvordan prediksjonen fungerer på training-datasettet. Vi må sjekke med testing-datasettet. Det lagde vi i begynnelsen, så nå henter vi det frem og gjør det samme som over. I 'predict()' må vi nå angi 'newdata ='.</span>
+<span id="cb42-318"><a href="#cb42-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-321"><a href="#cb42-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-322"><a href="#cb42-322" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb42-323"><a href="#cb42-323" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-324"><a href="#cb42-324" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-325"><a href="#cb42-325" aria-hidden="true" tabindex="-1"></a>kom_pred2 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
+<span id="cb42-326"><a href="#cb42-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod, <span class="at">newdata =</span> .), </span>
+<span id="cb42-327"><a href="#cb42-327" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
+<span id="cb42-328"><a href="#cb42-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-329"><a href="#cb42-329" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred2, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-330"><a href="#cb42-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb42-331"><a href="#cb42-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-332"><a href="#cb42-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-333"><a href="#cb42-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-334"><a href="#cb42-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-335"><a href="#cb42-335" aria-hidden="true" tabindex="-1"></a>Ser dette rart ut? Det er to observasjoner som har pedikert skyhøy voldsrate! Disse to prediksjonene bommer voldsomt, og med litt erfaring vil man se at dette her går aldri bra for $r^2$, som regnes ut slik:</span>
+<span id="cb42-336"><a href="#cb42-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-339"><a href="#cb42-339" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-340"><a href="#cb42-340" aria-hidden="true" tabindex="-1"></a>kom_pred2  <span class="sc">%&gt;%</span> </span>
+<span id="cb42-341"><a href="#cb42-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-342"><a href="#cb42-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
+<span id="cb42-343"><a href="#cb42-343" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-344"><a href="#cb42-344" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span>
+<span id="cb42-345"><a href="#cb42-345" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-346"><a href="#cb42-346" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-347"><a href="#cb42-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-348"><a href="#cb42-348" aria-hidden="true" tabindex="-1"></a>Ganske riktig! Dette ble bare tull. Kvadratsummen til residualene ble mye høyere enn total kvadratsum. Dermed blir $r^2$ helt fjerne.</span>
+<span id="cb42-349"><a href="#cb42-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-350"><a href="#cb42-350" aria-hidden="true" tabindex="-1"></a>Dette er en ganske ekstrem variant av *overfitting*. Ved å formulere en veldig komplisert modell som passer veldig godt til training-dataene kan vi ende opp med en modell som passer veldig, veldig dårlig til nye data. Hvis man skulle utforme f.eks. politikktiltak på grunnlag av en slik prediksjon vil det kunne gå riktig så dårlig.</span>
+<span id="cb42-351"><a href="#cb42-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-352"><a href="#cb42-352" aria-hidden="true" tabindex="-1"></a>Det er i dette tilfellet kanskje ikke så rart: modellen ble formulert *kun* for å maksimere $r^2$ og uten så mye andre tanker bak.</span>
+<span id="cb42-353"><a href="#cb42-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-354"><a href="#cb42-354" aria-hidden="true" tabindex="-1"></a>Det er nok bedre med en enklere modell. Vi prøver heller å bruke modellen der alle prediktorene er med, men uten alle de kompliserende interaksjonene:</span>
+<span id="cb42-355"><a href="#cb42-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-358"><a href="#cb42-358" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-359"><a href="#cb42-359" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-360"><a href="#cb42-360" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-361"><a href="#cb42-361" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
+<span id="cb42-362"><a href="#cb42-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(full_mod, <span class="at">newdata =</span> .), </span>
+<span id="cb42-363"><a href="#cb42-363" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
+<span id="cb42-364"><a href="#cb42-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-365"><a href="#cb42-365" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred3, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-366"><a href="#cb42-366" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb42-367"><a href="#cb42-367" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-368"><a href="#cb42-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-369"><a href="#cb42-369" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-370"><a href="#cb42-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-373"><a href="#cb42-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-374"><a href="#cb42-374" aria-hidden="true" tabindex="-1"></a>kom_pred3  <span class="sc">%&gt;%</span> </span>
+<span id="cb42-375"><a href="#cb42-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-376"><a href="#cb42-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
+<span id="cb42-377"><a href="#cb42-377" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-378"><a href="#cb42-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span>
+<span id="cb42-379"><a href="#cb42-379" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-380"><a href="#cb42-380" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-381"><a href="#cb42-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-382"><a href="#cb42-382" aria-hidden="true" tabindex="-1"></a>Sammenlignet med $r^2$ på trainingdata, 'r summary(full_mod)\$r.squared', er dette ikke så værst. Litt dårligere tilpassning må man regne med.</span>
+<span id="cb42-383"><a href="#cb42-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-384"><a href="#cb42-384" aria-hidden="true" tabindex="-1"></a>RMSE regnes ut slik:</span>
+<span id="cb42-385"><a href="#cb42-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-388"><a href="#cb42-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-389"><a href="#cb42-389" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="sc">%&gt;%</span> </span>
+<span id="cb42-390"><a href="#cb42-390" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-391"><a href="#cb42-391" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span>
+<span id="cb42-392"><a href="#cb42-392" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-393"><a href="#cb42-393" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-394"><a href="#cb42-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-395"><a href="#cb42-395" aria-hidden="true" tabindex="-1"></a>Det er altså slik at en enklere modell kan passe til *nye* data langt bedre enn en veldig komplisert modell. Grunnen er overfitting: modellen fanger opp vel så mye tilfeldig støy som det underliggende mønsteret. Støyen vil jo være annerledes i de nye dataene.</span>
+<span id="cb42-396"><a href="#cb42-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-397"><a href="#cb42-397" aria-hidden="true" tabindex="-1"></a><span class="fu">### Oppsummerende kommentar</span></span>
+<span id="cb42-398"><a href="#cb42-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-399"><a href="#cb42-399" aria-hidden="true" tabindex="-1"></a>Dette gjelder generelt: mer komplisert regresjonsmodell vil gi tilsynelatende bedre tilpassning til data enten man måler med $r^2$ eller RMSE. Man kan riktignok bruke mål på tilpassning som justerer for antall parametre etc (f.eks. justert $r^2$, AIC eller BIC), som kanskje kan bedre dette noe, men det vil ofte lede til overfitting likevel.</span>
+<span id="cb42-400"><a href="#cb42-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-401"><a href="#cb42-401" aria-hidden="true" tabindex="-1"></a>Det er derfor veldig viktig å teste modellen mot *nye* data. I praksis testing-dataene man lagde til å begynne med.</span>
+<span id="cb42-402"><a href="#cb42-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-403"><a href="#cb42-403" aria-hidden="true" tabindex="-1"></a>I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstret ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte.</span>
+<span id="cb42-404"><a href="#cb42-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-405"><a href="#cb42-405" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb42-406"><a href="#cb42-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-407"><a href="#cb42-407" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-rep}</span>
+<span id="cb42-408"><a href="#cb42-408" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb42-409"><a href="#cb42-409" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-410"><a href="#cb42-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-411"><a href="#cb42-411" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-eksplisitt}</span>
+<span id="cb42-412"><a href="#cb42-412" aria-hidden="true" tabindex="-1"></a>Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</span>
+<span id="cb42-413"><a href="#cb42-413" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-414"><a href="#cb42-414" aria-hidden="true" tabindex="-1"></a>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</span>
+<span id="cb42-415"><a href="#cb42-415" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-416"><a href="#cb42-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-417"><a href="#cb42-417" aria-hidden="true" tabindex="-1"></a>::: {#exr-split}</span>
+<span id="cb42-418"><a href="#cb42-418" aria-hidden="true" tabindex="-1"></a>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</span>
+<span id="cb42-419"><a href="#cb42-419" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-420"><a href="#cb42-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-421"><a href="#cb42-421" aria-hidden="true" tabindex="-1"></a>::: {#exr-sepaa}</span>
+<span id="cb42-422"><a href="#cb42-422" aria-hidden="true" tabindex="-1"></a>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</span>
+<span id="cb42-423"><a href="#cb42-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-424"><a href="#cb42-424" aria-hidden="true" tabindex="-1"></a>a)  Bruk <span class="in">`glimpse()`</span> og <span class="in">`skim()`</span> til å få oversikt over innholdet i datasettet</span>
+<span id="cb42-425"><a href="#cb42-425" aria-hidden="true" tabindex="-1"></a>b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</span>
+<span id="cb42-426"><a href="#cb42-426" aria-hidden="true" tabindex="-1"></a>c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</span>
+<span id="cb42-427"><a href="#cb42-427" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-428"><a href="#cb42-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-429"><a href="#cb42-429" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-train}</span>
+<span id="cb42-430"><a href="#cb42-430" aria-hidden="true" tabindex="-1"></a>Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er $r^2$ og RMSE.</span>
+<span id="cb42-431"><a href="#cb42-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-432"><a href="#cb42-432" aria-hidden="true" tabindex="-1"></a>a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell</span>
+<span id="cb42-433"><a href="#cb42-433" aria-hidden="true" tabindex="-1"></a>b)  Estimer en ny modell med alle variable i datasettet</span>
+<span id="cb42-434"><a href="#cb42-434" aria-hidden="true" tabindex="-1"></a>c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</span>
+<span id="cb42-435"><a href="#cb42-435" aria-hidden="true" tabindex="-1"></a>d)  Gjør et automatisk modellsøk</span>
+<span id="cb42-436"><a href="#cb42-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-437"><a href="#cb42-437" aria-hidden="true" tabindex="-1"></a>Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</span>
+<span id="cb42-438"><a href="#cb42-438" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-439"><a href="#cb42-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-440"><a href="#cb42-440" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-test}</span>
+<span id="cb42-441"><a href="#cb42-441" aria-hidden="true" tabindex="-1"></a>I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut $r^2$ og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger:</span>
+<span id="cb42-442"><a href="#cb42-442" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-443"><a href="#cb42-443" aria-hidden="true" tabindex="-1"></a>a)  Prediker utfallet på testing-datasettet</span>
+<span id="cb42-444"><a href="#cb42-444" aria-hidden="true" tabindex="-1"></a>b)  Regn ut $r^2$ og RMSE</span>
+<span id="cb42-445"><a href="#cb42-445" aria-hidden="true" tabindex="-1"></a>c)  Hvor stor er *endringen* i $r^2$ og RMSE fra resultatene når du brukte training-datasettet?</span>
+<span id="cb42-446"><a href="#cb42-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-447"><a href="#cb42-447" aria-hidden="true" tabindex="-1"></a>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i $r^2$ og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</span>
+<span id="cb42-448"><a href="#cb42-448" aria-hidden="true" tabindex="-1"></a>:::</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+</body></html>
