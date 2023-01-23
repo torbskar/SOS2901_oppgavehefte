@@ -30,14 +30,11 @@ Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv
 #| warning: false 
 #| message: false
 
-attrition <-read.csv("data/Attrition.csv", stringsAsFactors = TRUE)  
+attrition <- readRDS("data/attrition.rds")
 skim(attrition)  
 ```
 
-Merk at det er fire variable vi ikke trenger, så vi sletter disse like gjerne med en gang:
-
--   Over18 er en dummy for om de er over 18 år. Det er alle.
--   EmployeeCount og StandardHours varierer heller ikke.
+Merk at det er en variabel vi helt sikkert ikke trenger, så vi sletter denne like gjerne med en gang: *EmployeeNumber* er et løpenummer for person. Siden det er et 1:1 forhold mellom dette og utfallsvariabelen, så bør den tas ut. 
 
 Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datasettet med det modifiserte datasettet
 
@@ -45,7 +42,7 @@ Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datase
 #| warning: false 
 #| message: false
 attrition <- attrition %>%  
-  select(- Over18, - EmployeeCount, -StandardHours) 
+  select(- EmployeeNumber) 
 glimpse(attrition)
 ```
 
