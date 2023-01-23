@@ -796,8 +796,8 @@ $ andre_lovbrudd         &lt;dbl&gt; 25.5, 26.5, 26.1, 25.2, 12.1, 12.2, 11.9, 1
 </div>
 <section id="training-og-testing-data" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="training-og-testing-data"><span class="header-section-number">2.1.1</span> Training og testing data</h3>
-<p>Vi starter med å dele datasettet i <em>training</em> og <em>testing</em>. Her kan vi bruke pakken ‘rsample’ og funksjonen ‘initial_split()’ etterfulgt av funksjonene ‘training()’ og ‘testing()’. For å angi at man skal bruke 70% til training settes ‘prop = .7’.</p>
-<p>Merk bruken av ‘set.seed()’. For å splitte genererer R tilfeldige tall, og <em>seed</em> styrer hvor den algoritmen starter. Når <em>seed</em> er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</p>
+<p>Vi starter med å dele datasettet i <em>training</em> og <em>testing</em>. Her kan vi bruke pakken ‘rsample’ og funksjonen <code>initial_split()</code> etterfulgt av funksjonene <code>training()</code> og <code>testing()</code>. Forhåndsvalget for splitten er 0.75, så dermed brukes 75% til training og resten til testing.</p>
+<p>Merk bruken av <code>set.seed()</code>. For å splitte genererer R tilfeldige tall, og <em>seed</em> styrer hvor den algoritmen starter. Når <em>seed</em> er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -830,7 +830,7 @@ $ andre_lovbrudd         &lt;dbl&gt; 25.5, 26.5, 26.1, 25.2, 12.1, 12.2, 11.9, 1
 <p><img src="linear_regresjon_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Lineær regresjon estimeres med ‘lm()’ og du kan få en enkel output med bruk av ‘summary()’.</p>
+<p>Lineær regresjon estimeres med <code>lm()</code> og du kan få en enkel output med bruk av <code>summary()</code>.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -1482,7 +1482,7 @@ Multiple R-squared:  0.343, Adjusted R-squared:  0.3324
 F-statistic:  32.3 on 17 and 1052 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p><span class="math inline">\(r^2\)</span> gikk noe opp, til ‘r round(summary(full_mod)$r.squared, digits = 3)’</p>
+<p><span class="math inline">\(r^2\)</span> gikk noe opp, til 0.343.</p>
 <p>Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på <span class="math inline">\(r^2\)</span> som kan hentes ut uten å ta med resten av output.</p>
 <div class="cell">
 <details>
@@ -1935,9 +1935,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a><span class="fu">### Training og testing data</span></span>
 <span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a>Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen 'initial_split()' etterfulgt av funksjonene 'training()' og 'testing()'. For å angi at man skal bruke 70% til training settes 'prop = .7'.</span>
+<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a>Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen <span class="in">`initial_split()`</span> etterfulgt av funksjonene <span class="in">`training()`</span> og <span class="in">`testing()`</span>. Forhåndsvalget for splitten er 0.75, så dermed brukes  75% til training og resten til testing.</span>
 <span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-57"><a href="#cb42-57" aria-hidden="true" tabindex="-1"></a>Merk bruken av 'set.seed()'. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<span class="ot">[^linear_regresjon-1]</span> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</span>
+<span id="cb42-57"><a href="#cb42-57" aria-hidden="true" tabindex="-1"></a>Merk bruken av <span class="in">`set.seed()`</span>. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<span class="ot">[^linear_regresjon-1]</span> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</span>
 <span id="cb42-58"><a href="#cb42-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-59"><a href="#cb42-59" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-1]: </span>Bortsett fra for dem som mener det er svaret på "the Ultimate Question of Life, the Universe, and Everything"</span>
 <span id="cb42-60"><a href="#cb42-60" aria-hidden="true" tabindex="-1"></a></span>
@@ -1970,7 +1970,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb42-91"><a href="#cb42-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) </span>
 <span id="cb42-92"><a href="#cb42-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-93"><a href="#cb42-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-94"><a href="#cb42-94" aria-hidden="true" tabindex="-1"></a>Lineær regresjon estimeres med 'lm()' og du kan få en enkel output med bruk av 'summary()'.</span>
+<span id="cb42-94"><a href="#cb42-94" aria-hidden="true" tabindex="-1"></a>Lineær regresjon estimeres med <span class="in">`lm()`</span> og du kan få en enkel output med bruk av <span class="in">`summary()`</span>.</span>
 <span id="cb42-95"><a href="#cb42-95" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-98"><a href="#cb42-98" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb42-99"><a href="#cb42-99" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> prop_unge_menn, <span class="at">data =</span> kommune_train)</span>
@@ -2104,7 +2104,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb42-249"><a href="#cb42-249" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod)</span>
 <span id="cb42-250"><a href="#cb42-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-251"><a href="#cb42-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-252"><a href="#cb42-252" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk noe opp, til 'r round(summary(full_mod)$r.squared, digits = 3)'</span>
+<span id="cb42-252"><a href="#cb42-252" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk noe opp, til <span class="in">`r round(summary(full_mod)$r.squared, digits = 3)`</span>.</span>
 <span id="cb42-253"><a href="#cb42-253" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-254"><a href="#cb42-254" aria-hidden="true" tabindex="-1"></a>Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output.</span>
 <span id="cb42-255"><a href="#cb42-255" aria-hidden="true" tabindex="-1"></a></span>

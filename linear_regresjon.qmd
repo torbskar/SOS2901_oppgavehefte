@@ -47,9 +47,9 @@ skim(kommune)
 
 ### Training og testing data
 
-Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen 'initial_split()' etterfulgt av funksjonene 'training()' og 'testing()'. For å angi at man skal bruke 70% til training settes 'prop = .7'.
+Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen `initial_split()` etterfulgt av funksjonene `training()` og `testing()`. Forhåndsvalget for splitten er 0.75, så dermed brukes  75% til training og resten til testing.
 
-Merk bruken av 'set.seed()'. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting[^linear_regresjon-1] og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.
+Merk bruken av `set.seed()`. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting[^linear_regresjon-1] og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.
 
 [^linear_regresjon-1]: Bortsett fra for dem som mener det er svaret på "the Ultimate Question of Life, the Universe, and Everything"
 
@@ -82,7 +82,7 @@ ggplot(kommune_train, aes(x = prop_unge_menn,
   geom_smooth(method = "lm", se = FALSE) 
 ```
 
-Lineær regresjon estimeres med 'lm()' og du kan få en enkel output med bruk av 'summary()'.
+Lineær regresjon estimeres med `lm()` og du kan få en enkel output med bruk av `summary()`.
 
 ```{r}
 est <- lm(voldskriminalitet ~ prop_unge_menn, data = kommune_train)
@@ -216,7 +216,7 @@ full_mod <- lm(voldskriminalitet ~ . , data = kom_s)
 summary(full_mod)
 ```
 
-$r^2$ gikk noe opp, til 'r round(summary(full_mod)$r.squared, digits = 3)'
+$r^2$ gikk noe opp, til `r round(summary(full_mod)$r.squared, digits = 3)`.
 
 Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output.
 
