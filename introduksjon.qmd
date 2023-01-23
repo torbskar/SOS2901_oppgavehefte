@@ -113,7 +113,7 @@ I diskusjoner av anvendelser av maskinlæring står rettferdighet helt sentralt.
 
 Hvilke konsekvenser som er akseptable er viktig. Men det er også viktig *før* man bygger modellen. Software kommer med default innstillinger, men det betyr jo ikke at de er "nøytrale". Resultatene kan til en viss grad styres, så det må man rett og slett gjøre.
 
-### Fundamentale skjvheter i data
+### Fundamentale skjevheter i data
 
 Siden maskinlæring baserer seg på å lære av tilgjengelige data for å benytte det på nye tilfeller spiller det vesentlig rolle hvordan de opprinnelige dataene ble generert i utgangspunktet.
 

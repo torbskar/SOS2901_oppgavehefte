@@ -20,6 +20,8 @@ Når utfallsvariabelen er binær (to verdier) kan man likevel bruke lineær regr
 Vi bruker derfor logistisk regresjon når det er kategoriske utfall. I andre sammenhenger vil folk hevde at OLS er bedre å bruke (av diverse grunner), men i *denne sammenhengen* er logistisk regresjon som hovedregel å foretrekke over OLS for kategoriske utfall. 
 
 
+
+
 ## Logistisk regresjon i R
 
 Logistisk regresjon har det til felles med lineær regresjon at utfallet er en lineær spesifikasjon.
@@ -278,8 +280,8 @@ a)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt ett
 
 
 ::: {#exr-logit-train}
-Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. 
-Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er $r^2$ og AUC. Regn også ut RMSE. 
+Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. 
+Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve. 
 
 a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell
 a)  Estimer en ny modell med alle variable i datasettet
@@ -291,7 +293,7 @@ Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du 
 
 
 ::: {#exr-logit-test}
-I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger: 
+I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger: 
 
 a) Prediker utfallet på testing-datasettet
 a) Regn ut AUC
@@ -299,3 +301,12 @@ a) Hvor stor er *endringen* i AUC er fra resultatene når du brukte training-dat
 
 Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring. 
 :::
+
+
+
+::: {#exr-logit-class}
+Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet. 
+
+:::
+
+
