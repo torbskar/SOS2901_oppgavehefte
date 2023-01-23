@@ -1,0 +1,50 @@
+# En lett introduksjon til fairness 
+
+I dette kapittelt skal vi bruke følgende pakker:
+
+```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
+library(tidyverse)   # Datahåndtering, grafikk og glimpse()
+library(rsample)     # for å dele data i training og testing
+library(caret)       # Funksjonen confusionMatrix()
+library(fairness)    # Beregne mål på fairness
+```
+
+Det kan være nyttig å gi allerede nå begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger. 
+
+
+## Hva slags rettferdighet 
+I denne settingen kan rettferdighet kommer i betraktning på flere måter, herunder følgende: 
+
+* I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak
+* I hvilken grad *dataene* algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering 
+* I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av *asymetriske feilrater* 
+* I hvilken grad forrige punkt er avpasset mot hvilke *tiltak* man så setter i verk
+* I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen 
+
+Det er nok av ting å tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Hvis datakvaliteten er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene kan i prinsippet motarbeides, så er det vel i praksis slik at en skjevhet kommer sjelden alene?
+
+Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter med det. Deretter skal vi se på mål på skjevheter over undergrupper. Prinsippet er relativt enkelt, uten at vurderingene blir enkle av den grunn. 
+
+
+## Mer confusion matrix
+
+
+
+
+
+## Mål på fairness 
+
+
+
+
+
+
+
+
+
+

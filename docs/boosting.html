@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SOS2901 Maskinlæring for samfunnsvitere - 8&nbsp; Boosting</title>
+<title>SOS2901 Maskinlæring for samfunnsvitere - 9&nbsp; Boosting</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -178,32 +178,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
+  <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></a>
+  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></a>
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></a>
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -240,9 +245,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#adaptive-boosting---adaboost" id="toc-adaptive-boosting---adaboost" class="nav-link active" data-scroll-target="#adaptive-boosting---adaboost"><span class="toc-section-number">8.1</span>  Adaptive boosting - Adaboost</a></li>
-  <li><a href="#gradient-boosting---gbm" id="toc-gradient-boosting---gbm" class="nav-link" data-scroll-target="#gradient-boosting---gbm"><span class="toc-section-number">8.2</span>  Gradient boosting - gbm</a></li>
-  <li><a href="#extreme-gradient-boosting---xgboost" id="toc-extreme-gradient-boosting---xgboost" class="nav-link" data-scroll-target="#extreme-gradient-boosting---xgboost"><span class="toc-section-number">8.3</span>  Extreme gradient boosting - XGboost</a></li>
+  <li><a href="#adaptive-boosting---adaboost" id="toc-adaptive-boosting---adaboost" class="nav-link active" data-scroll-target="#adaptive-boosting---adaboost"><span class="toc-section-number">9.1</span>  Adaptive boosting - Adaboost</a></li>
+  <li><a href="#gradient-boosting---gbm" id="toc-gradient-boosting---gbm" class="nav-link" data-scroll-target="#gradient-boosting---gbm"><span class="toc-section-number">9.2</span>  Gradient boosting - gbm</a></li>
+  <li><a href="#extreme-gradient-boosting---xgboost" id="toc-extreme-gradient-boosting---xgboost" class="nav-link" data-scroll-target="#extreme-gradient-boosting---xgboost"><span class="toc-section-number">9.3</span>  Extreme gradient boosting - XGboost</a></li>
   </ul>
 </nav>
     </div>
@@ -251,7 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -275,16 +280,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Det er flere typer boosting-algoritmer. Vi skal først se på adaptive boosting fordi det er den enkleste (og eldste) varianten. Deretter ser vi på gradient boosting fordi andre mer avanserte boosting-algoritmer er varianter av denne.</p>
 <!-- # Kilde: https://towardsdatascience.com/how-to-select-between-boosting-algorithm-e8d1b15924f7 -->
-<section id="adaptive-boosting---adaboost" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="adaptive-boosting---adaboost"><span class="header-section-number">8.1</span> Adaptive boosting - Adaboost</h2>
+<section id="adaptive-boosting---adaboost" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="adaptive-boosting---adaboost"><span class="header-section-number">9.1</span> Adaptive boosting - Adaboost</h2>
 <p>Adaptive boosting har et enkelt prinsipp: Først estimeres en modell, og deretter estimeres en ny modell der feilklassifikasjonene fra forrige modell vektes tyngre. Teorien tilsier at dette vil bedre klassifikasjonen. Så fortsetter den slik og estimerer nye vektede modeller til vi ikke får noen vesetnlig forbedring.</p>
 </section>
-<section id="gradient-boosting---gbm" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="gradient-boosting---gbm"><span class="header-section-number">8.2</span> Gradient boosting - gbm</h2>
+<section id="gradient-boosting---gbm" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="gradient-boosting---gbm"><span class="header-section-number">9.2</span> Gradient boosting - gbm</h2>
 <p>Gradient boosting er bygget på et tilsvarende prinsipp, men vekter ikke dataene. Derimot bruker den loss-funksjon i stedet.</p>
 </section>
-<section id="extreme-gradient-boosting---xgboost" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="extreme-gradient-boosting---xgboost"><span class="header-section-number">8.3</span> Extreme gradient boosting - XGboost</h2>
+<section id="extreme-gradient-boosting---xgboost" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="extreme-gradient-boosting---xgboost"><span class="header-section-number">9.3</span> Extreme gradient boosting - XGboost</h2>
 
 
 <!-- -->
@@ -479,12 +484,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./fairness.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./unsupervised.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

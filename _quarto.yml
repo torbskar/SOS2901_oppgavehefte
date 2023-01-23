@@ -14,6 +14,7 @@ book:
     - introduksjon.qmd
     - linear_regresjon.qmd
     - logistisk_regresjon.qmd
+    - intro_fairness.qmd
     - cart.qmd
     - bagging.qmd
     - randomForest.qmd

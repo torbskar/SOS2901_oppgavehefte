@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SOS2901 Maskinlæring for samfunnsvitere - 4&nbsp; Klassifikasjonstrær</title>
+<title>SOS2901 Maskinlæring for samfunnsvitere - 5&nbsp; Klassifikasjonstrær</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -94,7 +94,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./bagging.html" rel="next">
-<link href="./logistisk_regresjon.html" rel="prev">
+<link href="./intro_fairness.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -178,32 +178,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cart.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
+  <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></a>
+  <a href="./cart.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></a>
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Boosting</span></a>
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -240,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link active" data-scroll-target="#oppgaver"><span class="toc-section-number">4.1</span>  Oppgaver</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link active" data-scroll-target="#oppgaver"><span class="toc-section-number">5.1</span>  Oppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -249,7 +254,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -582,16 +587,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> default   no yes                                                                                                    
-      no [.80 .20] when amount is 5909 to 12297 &amp; age is 30 to 42                                                    
-      no [.79 .21] when amount &lt;  5909                            &amp; percent_of_income &lt;  3 &amp; housing is other or rent
-      no [.77 .23] when amount &lt;  5909                                                     &amp; housing is           own
-      no [.72 .28] when amount &lt;  5909          &amp; age &gt;=       36 &amp; percent_of_income &gt;= 3 &amp; housing is other or rent
-      no [.71 .29] when amount is 5909 to 12297 &amp; age &gt;=       42 &amp; percent_of_income &lt;  3                           
-     yes [.37 .63] when amount &lt;  5909          &amp; age &lt;  36       &amp; percent_of_income &gt;= 3 &amp; housing is other or rent
-     yes [.23 .77] when amount &gt;=          5909 &amp; age &lt;  30                                                          
-     yes [.23 .77] when amount is 5909 to 12297 &amp; age &gt;=       42 &amp; percent_of_income &gt;= 3                           
-     yes [.12 .88] when amount &gt;=         12297 &amp; age &gt;=       30                                                    </code></pre>
+<pre><code> default   no yes                                                                                                                                                                                                      
+      no [.82 .18] when amount &lt;  7840         &amp; age &lt;  26 &amp; percent_of_income &lt;  2                                                                                                                                    
+      no [.80 .20] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &lt;  4                                                                                                                                    
+      no [.73 .27] when amount &lt;  1207         &amp; age &lt;  26 &amp; percent_of_income &gt;=      2                                                                                                                               
+      no [.72 .28] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &gt;=      4 &amp; housing is           own                                                                                                    
+      no [.70 .30] when amount is 1491 to 7840 &amp; age &lt;  26 &amp; percent_of_income is 2 to 4                                                                              &amp; employment_duration is &gt; 7 years or 4 - 7 years
+      no [.67 .33] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &gt;=      4 &amp; housing is other or rent &amp; purpose is          car or furniture/appliances                                                  
+      no [.65 .35] when amount is 1491 to 7840 &amp; age &lt;  26 &amp; percent_of_income &gt;=      4                                                                                                                               
+      no [.56 .44] when amount &gt;=         7840 &amp; age &gt;= 30                                                                                                                                                             
+     yes [.39 .61] when amount is 1491 to 7840 &amp; age &lt;  26 &amp; percent_of_income is 2 to 4                                                                              &amp; employment_duration is  &lt; 1 year or 1 - 4 years
+     yes [.26 .74] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &gt;=      4 &amp; housing is other or rent &amp; purpose is business or education or renovations                                                  
+     yes [.25 .75] when amount is 1207 to 1491 &amp; age &lt;  26 &amp; percent_of_income &gt;=      2                                                                                                                               
+     yes [.20 .80] when amount &gt;=         7840 &amp; age &lt;  30                                                                                                                                                             </code></pre>
 </div>
 </div>
 <p>Vi kan så skrive ut confusion matrix.</p>
@@ -604,8 +612,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>           
 rpart_class  no yes
-        no  450 134
-        yes  30  72</code></pre>
+        no  454 158
+        yes  22  56</code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -616,26 +624,26 @@ rpart_class  no yes
 
           Reference
 Prediction  no yes
-       no  450 134
-       yes  30  72
+       no  454 158
+       yes  22  56
                                           
-               Accuracy : 0.7609          
-                 95% CI : (0.7272, 0.7924)
-    No Information Rate : 0.6997          
-    P-Value [Acc &gt; NIR] : 0.000211        
+               Accuracy : 0.7391          
+                 95% CI : (0.7047, 0.7715)
+    No Information Rate : 0.6899          
+    P-Value [Acc &gt; NIR] : 0.002592        
                                           
-                  Kappa : 0.3353          
+                  Kappa : 0.2611          
                                           
- Mcnemar's Test P-Value : 8.77e-16        
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
                                           
-            Sensitivity : 0.9375          
-            Specificity : 0.3495          
-         Pos Pred Value : 0.7705          
-         Neg Pred Value : 0.7059          
-             Prevalence : 0.6997          
-         Detection Rate : 0.6560          
-   Detection Prevalence : 0.8513          
-      Balanced Accuracy : 0.6435          
+            Sensitivity : 0.9538          
+            Specificity : 0.2617          
+         Pos Pred Value : 0.7418          
+         Neg Pred Value : 0.7179          
+             Prevalence : 0.6899          
+         Detection Rate : 0.6580          
+   Detection Prevalence : 0.8870          
+      Balanced Accuracy : 0.6077          
                                           
        'Positive' Class : no              
                                           </code></pre>
@@ -652,38 +660,38 @@ Prediction  no yes
 
           Reference
 Prediction  no yes
-       no  192  70
-       yes  28  24
+       no  207  72
+       yes  17  14
                                           
-               Accuracy : 0.6879          
-                 95% CI : (0.6335, 0.7388)
-    No Information Rate : 0.7006          
-    P-Value [Acc &gt; NIR] : 0.7123          
+               Accuracy : 0.7129          
+                 95% CI : (0.6591, 0.7626)
+    No Information Rate : 0.7226          
+    P-Value [Acc &gt; NIR] : 0.6742          
                                           
-                  Kappa : 0.1468          
+                  Kappa : 0.1082          
                                           
- Mcnemar's Test P-Value : 3.449e-05       
+ Mcnemar's Test P-Value : 1.041e-08       
                                           
-            Sensitivity : 0.8727          
-            Specificity : 0.2553          
-         Pos Pred Value : 0.7328          
-         Neg Pred Value : 0.4615          
-             Prevalence : 0.7006          
-         Detection Rate : 0.6115          
-   Detection Prevalence : 0.8344          
-      Balanced Accuracy : 0.5640          
+            Sensitivity : 0.9241          
+            Specificity : 0.1628          
+         Pos Pred Value : 0.7419          
+         Neg Pred Value : 0.4516          
+             Prevalence : 0.7226          
+         Detection Rate : 0.6677          
+   Detection Prevalence : 0.9000          
+      Balanced Accuracy : 0.5434          
                                           
        'Positive' Class : no              
                                           </code></pre>
 </div>
 </div>
-<section id="oppgaver" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">4.1</span> Oppgaver</h2>
+<section id="oppgaver" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">5.1</span> Oppgaver</h2>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.1 </strong></span>Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth.</p>
+<p><span class="theorem-title"><strong>Exercise 5.1 </strong></span>Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth.</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.2 </strong></span>Bruk datasettet credit til å predikere kredittverdighet for nye kunder.</p>
+<p><span class="theorem-title"><strong>Exercise 5.2 </strong></span>Bruk datasettet credit til å predikere kredittverdighet for nye kunder.</p>
 <ol type="a">
 <li>Spesifiser en formel med et fåtall variable og lag et klassifikasjonstre.</li>
 <li>Plot med rpart.plot()</li>
@@ -699,11 +707,11 @@ Prediction  no yes
 </ol>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.3 </strong></span>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.<br>
+<p><span class="theorem-title"><strong>Exercise 5.3 </strong></span>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.<br>
 Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4.4 </strong></span>Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.</p>
+<p><span class="theorem-title"><strong>Exercise 5.4 </strong></span>Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.</p>
 </div>
 
 
@@ -904,13 +912,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./logistisk_regresjon.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></span>
+      <a href="./intro_fairness.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./bagging.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
