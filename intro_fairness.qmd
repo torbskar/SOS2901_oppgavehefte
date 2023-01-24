@@ -1,7 +1,4 @@
-# En lett introduksjon til fairness 
-
-
-
+# En lett introduksjon til fairness
 
 I dette kapittelt skal vi bruke følgende pakker:
 
@@ -17,7 +14,6 @@ library(caret)       # Funksjonen confusionMatrix()
 library(fairness)    # Beregne mål på fairness
 ```
 
-
 ```{r}
 #| echo: false
 #| warning: false 
@@ -31,23 +27,21 @@ training <- training(attrition_split)
 testing  <- testing(attrition_split) 
 ```
 
+Det kan være nyttig å gi allerede nå begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.
 
-Det kan være nyttig å gi allerede nå begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger. 
+## Hva slags rettferdighet
 
+I denne settingen kan rettferdighet kommer i betraktning på flere måter, herunder følgende:
 
-## Hva slags rettferdighet 
-I denne settingen kan rettferdighet kommer i betraktning på flere måter, herunder følgende: 
-
-* I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak
-* I hvilken grad *dataene* algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering 
-* I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av *asymetriske feilrater* 
-* I hvilken grad forrige punkt er avpasset mot hvilke *tiltak* man så setter i verk
-* I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen 
+-   I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak
+-   I hvilken grad *dataene* algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering
+-   I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av *asymetriske feilrater*
+-   I hvilken grad forrige punkt er avpasset mot hvilke *tiltak* man så setter i verk
+-   I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen
 
 Det er nok av ting å tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Hvis datakvaliteten er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene kan i prinsippet motarbeides, så er det vel i praksis slik at en skjevhet kommer sjelden alene?
 
-Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter med det. Deretter skal vi se på mål på skjevheter over undergrupper. Prinsippet er relativt enkelt, uten at vurderingene blir enkle av den grunn. 
-
+Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter med det. Deretter skal vi se på mål på skjevheter over undergrupper. Prinsippet er relativt enkelt, uten at vurderingene blir enkle av den grunn.
 
 ## Mer confusion matrix
 
@@ -56,7 +50,6 @@ est_multlogit <- glm(Attrition ~ ., data = training, family = "binomial")
 summary(est_multlogit)
 ```
 
-
 ```{r}
 attrition_test <- testing %>% 
   mutate(prob = predict(est_multlogit, newdata = testing, type = "response")) %>% 
@@ -64,18 +57,13 @@ attrition_test <- testing %>%
 
 ```
 
-
-
 ```{r}
 cm <- confusionMatrix(attrition_test$Attrition, attrition_test$attrition_class, positive = "Yes")
 
 cm
 ```
 
-
-
-
-## Mål på fairness 
+## Mål på fairness
 
 Ovenfor så vi blant annet at "positive predicted value" , altså andelen sanne positive av alle predikerte positive, er `r round(cm$byClass[3], digits = 3)`.
 
@@ -86,7 +74,7 @@ Men det er ulike typer jobber i denne bedriften. Her er fordelingen for test-dat
 gtsummary::tbl_summary(attrition_test, include = JobRole, by = Attrition)
 ```
 
-For illustrasjonens skyld  kan vi da dele inn datamaterialet i to deler: lab-teknikkere og resten. For hver gruppe kan vi så lage en confusion matrix og undersøke verdiene. 
+For illustrasjonens skyld kan vi da dele inn datamaterialet i to deler: lab-teknikkere og resten. For hver gruppe kan vi så lage en confusion matrix og undersøke verdiene.
 
 ```{r}
 #| warning: false
@@ -106,13 +94,13 @@ cm2
 
 ```
 
-Positive predicted value for lab-teknikker er `r round(cm1$byClass[3], digits = 3)` og for resten `r round(cm2$byClass[3], digits = 3)`. 
+Positive predicted value for lab-teknikker er `r round(cm1$byClass[3], digits = 3)` og for resten `r round(cm2$byClass[3], digits = 3)`.
 
-Forholdstallet mellom disse er `r cm2$byClass[3]/cm1$byClass[3]`, alså nesten likt. Slik sett kan vi si at modellen er rettferdig på dette målet ved at disse to gruppene er like. 
+Forholdstallet mellom disse er `r cm2$byClass[3]/cm1$byClass[3]`, alså nesten likt. Slik sett kan vi si at modellen er rettferdig på dette målet ved at disse to gruppene er like.
 
-Men hvis du sjekker output fra confusionMatrix ovenfor, så er jo ikke alle tallene like. Så det kommer an på hvilke mål du sammenligner. 
+Men hvis du sjekker output fra confusionMatrix ovenfor, så er jo ikke alle tallene like. Så det kommer an på hvilke mål du sammenligner.
 
-Pakken *fairness* gjør en tilsvarende beregning for deg og kan gi resultatet grafisk. Her er sammenligning av positive predicted value gjort for alle grupper av jobber: 
+Pakken *fairness* gjør en tilsvarende beregning for deg og kan gi resultatet grafisk. Her er sammenligning av positive predicted value gjort for alle grupper av jobber:
 
 ```{r}
 pred_rate_parity(data = attrition_test,
@@ -123,8 +111,35 @@ pred_rate_parity(data = attrition_test,
                  )[[2]]
 ```
 
-Nå er det vesentig større forskjeller. Utvilsomt er grunnen at gruppen av 'andre' var sammensatt av veldig ulike grupper som var veldig forskjellig innbyrdes, men  som jevnet hverandre ut i snitt. Noen av disse gruppene var dessuten små. 
+Nå er det vesentig større forskjeller. Utvilsomt er grunnen at gruppen av 'andre' var sammensatt av veldig ulike grupper som var veldig forskjellig innbyrdes, men som jevnet hverandre ut i snitt. Noen av disse gruppene var dessuten små.
+
+## Oppgaver
+
+::: {#exr-fair-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
+:::
+
+::: {#exr-fair-fler}
+Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.
+:::
+
+::: {#exr-fair-vurd}
+Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:
+
+-   Er det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en "fair" modell?
+-   Hvilke mål på "fairness" vil du si er viktigst i dette eksempelet? Hvorfor?
+:::
 
 
+::: {#exr-fair-enkel}
+Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder: 
+
+* Ble accuracy bedre eller verre? 
+* Ble resultatet mer "fair"?
+
+:::
 
 
+::: {#exr-fair-nyedata}
+Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.  
+:::

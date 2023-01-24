@@ -432,5 +432,12 @@
     "title": "Appendix B — Introduksjon til R",
     "section": "B.8 Grafikk: quick’n dirty vs ggplot",
     "text": "B.8 Grafikk: quick’n dirty vs ggplot"
+  },
+  {
+    "objectID": "intro_fairness.html#oppgaver",
+    "href": "intro_fairness.html#oppgaver",
+    "title": "4  En lett introduksjon til fairness",
+    "section": "4.4 Oppgaver",
+    "text": "4.4 Oppgaver\n\nExercise 4.1 Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.\n\n\nExercise 4.2 Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.\n\n\nExercise 4.3 Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:\n\nEr det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en “fair” modell?\nHvilke mål på “fairness” vil du si er viktigst i dette eksempelet? Hvorfor?\n\n\n\nExercise 4.4 Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder:\n\nBle accuracy bedre eller verre?\nBle resultatet mer “fair”?\n\n\n\nExercise 4.5 Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på “fairness” igjen. Gjør tilsvarende som over."
   }
 ]
