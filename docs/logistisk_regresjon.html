@@ -319,7 +319,7 @@ div.csl-indent {
 <h2 data-number="3.1" class="anchored" data-anchor-id="empirisk-eksempel"><span class="header-section-number">3.1</span> Empirisk eksempel</h2>
 <p>Som eksempel bruker vi et datasettet Attrition. Dette er et datasett over arbeidstakere i en bedrift der utfallsvariabelen er om arbeidstakeren slutter i jobben eller ikke.</p>
 <p>For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere som slutter tar med seg erfaring og kompetanse, og nye arbeidstakere må læres opp. Arbeidsgiver bør derfor generelt legge til rette for at arbeidstakere ønsker å bli værende, men det kan også være aktuelt med mer målrettede tiltak. Når en arbeidstaker har fått et nytt jobbtilbud kan det være for sent. Hvis man derimot kan komme i forkjøpet kan man kanskje gjøre noe <em>før</em> vedkommende går til det skrittet å søke ny jobb. Hvis man kunne predikere hvem som kommer til å slutte kunne man altså gjort tiltak i forkant.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med <code>read.csv()</code>. Deretter kan vi se på innholdet med <code>skim()</code>:</p>
+<p>Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med <code>readRDS()</code>. Deretter kan vi se på innholdet med <code>skim()</code>:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -2115,7 +2115,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb58-26"><a href="#cb58-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-27"><a href="#cb58-27" aria-hidden="true" tabindex="-1"></a><span class="ot">[^logistisk_regresjon-1]: </span>Her kunne man jo også tenke seg at den gode lederen har en dialog med de ansatte og fanger opp deres frustrasjoner og behov slik at maskinell prediksjon ikke trengs. Det er jo også en form for prediksjon med kvalitative data! Så her er vi i en setting der dette ikke fungerer eller det er så store forhold at en kvalitativ tilnærming ikke er praktisk mulig eller noe sånt.</span>
 <span id="cb58-28"><a href="#cb58-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-29"><a href="#cb58-29" aria-hidden="true" tabindex="-1"></a>Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med <span class="in">`read.csv()`</span>. Deretter kan vi se på innholdet med <span class="in">`skim()`</span>:</span>
+<span id="cb58-29"><a href="#cb58-29" aria-hidden="true" tabindex="-1"></a>Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med <span class="in">`readRDS()`</span>. Deretter kan vi se på innholdet med <span class="in">`skim()`</span>:</span>
 <span id="cb58-30"><a href="#cb58-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-33"><a href="#cb58-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb58-34"><a href="#cb58-34" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>

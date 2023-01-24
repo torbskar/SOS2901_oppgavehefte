@@ -1,5 +1,8 @@
 # En lett introduksjon til fairness 
 
+
+
+
 I dette kapittelt skal vi bruke følgende pakker:
 
 ```{r}
@@ -13,6 +16,21 @@ library(rsample)     # for å dele data i training og testing
 library(caret)       # Funksjonen confusionMatrix()
 library(fairness)    # Beregne mål på fairness
 ```
+
+
+```{r}
+#| echo: false
+#| warning: false 
+#| message: false
+attrition <- readRDS("data/attrition.rds")
+
+set.seed(426)
+attrition_split <- initial_split(attrition)
+
+training <- training(attrition_split) 
+testing  <- testing(attrition_split) 
+```
+
 
 Det kan være nyttig å gi allerede nå begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger. 
 
@@ -33,17 +51,79 @@ Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter me
 
 ## Mer confusion matrix
 
+```{r}
+est_multlogit <- glm(Attrition ~ ., data = training, family = "binomial")
+summary(est_multlogit)
+```
+
+
+```{r}
+attrition_test <- testing %>% 
+  mutate(prob = predict(est_multlogit, newdata = testing, type = "response")) %>% 
+    mutate(attrition_class = as.factor(ifelse(prob < .5, "No", "Yes")))
+
+```
+
+
+
+```{r}
+cm <- confusionMatrix(attrition_test$Attrition, attrition_test$attrition_class, positive = "Yes")
+
+cm
+```
 
 
 
 
 ## Mål på fairness 
 
+Ovenfor så vi blant annet at "positive predicted value" , altså andelen sanne positive av alle predikerte positive, er `r round(cm$byClass[3], digits = 3)`.
 
+Men det er ulike typer jobber i denne bedriften. Her er fordelingen for test-datasettet:
 
+```{r}
+#| echo: false
+gtsummary::tbl_summary(attrition_test, include = JobRole, by = Attrition)
+```
 
+For illustrasjonens skyld  kan vi da dele inn datamaterialet i to deler: lab-teknikkere og resten. For hver gruppe kan vi så lage en confusion matrix og undersøke verdiene. 
 
+```{r}
+#| warning: false
+#| message: false
+labTech <- attrition_test %>% 
+  filter(JobRole %in% c("Laboratory Technician"))
 
+others <- attrition_test %>% 
+  filter( !(JobRole %in% c("Laboratory Technician") ))
+
+cm1 <- confusionMatrix(labTech$Attrition, labTech$attrition_class, positive = "Yes")
+
+cm2 <- confusionMatrix(others$Attrition, others$attrition_class, positive = "Yes")
+
+cm1 
+cm2
+
+```
+
+Positive predicted value for lab-teknikker er `r round(cm1$byClass[3], digits = 3)` og for resten `r round(cm2$byClass[3], digits = 3)`. 
+
+Forholdstallet mellom disse er `r cm2$byClass[3]/cm1$byClass[3]`, alså nesten likt. Slik sett kan vi si at modellen er rettferdig på dette målet ved at disse to gruppene er like. 
+
+Men hvis du sjekker output fra confusionMatrix ovenfor, så er jo ikke alle tallene like. Så det kommer an på hvilke mål du sammenligner. 
+
+Pakken *fairness* gjør en tilsvarende beregning for deg og kan gi resultatet grafisk. Her er sammenligning av positive predicted value gjort for alle grupper av jobber: 
+
+```{r}
+pred_rate_parity(data = attrition_test,
+                 outcome = "Attrition", 
+                 group = "JobRole", 
+                 preds = "attrition_class", 
+                 base = "Laboratory Technician"
+                 )[[2]]
+```
+
+Nå er det vesentig større forskjeller. Utvilsomt er grunnen at gruppen av 'andre' var sammensatt av veldig ulike grupper som var veldig forskjellig innbyrdes, men  som jevnet hverandre ut i snitt. Noen av disse gruppene var dessuten små. 
 
 
 

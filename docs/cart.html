@@ -587,19 +587,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> default   no yes                                                                                                                                                                                                      
-      no [.82 .18] when amount &lt;  7840         &amp; age &lt;  26 &amp; percent_of_income &lt;  2                                                                                                                                    
-      no [.80 .20] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &lt;  4                                                                                                                                    
-      no [.73 .27] when amount &lt;  1207         &amp; age &lt;  26 &amp; percent_of_income &gt;=      2                                                                                                                               
-      no [.72 .28] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &gt;=      4 &amp; housing is           own                                                                                                    
-      no [.70 .30] when amount is 1491 to 7840 &amp; age &lt;  26 &amp; percent_of_income is 2 to 4                                                                              &amp; employment_duration is &gt; 7 years or 4 - 7 years
-      no [.67 .33] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &gt;=      4 &amp; housing is other or rent &amp; purpose is          car or furniture/appliances                                                  
-      no [.65 .35] when amount is 1491 to 7840 &amp; age &lt;  26 &amp; percent_of_income &gt;=      4                                                                                                                               
-      no [.56 .44] when amount &gt;=         7840 &amp; age &gt;= 30                                                                                                                                                             
-     yes [.39 .61] when amount is 1491 to 7840 &amp; age &lt;  26 &amp; percent_of_income is 2 to 4                                                                              &amp; employment_duration is  &lt; 1 year or 1 - 4 years
-     yes [.26 .74] when amount &lt;  7840         &amp; age &gt;= 26 &amp; percent_of_income &gt;=      4 &amp; housing is other or rent &amp; purpose is business or education or renovations                                                  
-     yes [.25 .75] when amount is 1207 to 1491 &amp; age &lt;  26 &amp; percent_of_income &gt;=      2                                                                                                                               
-     yes [.20 .80] when amount &gt;=         7840 &amp; age &lt;  30                                                                                                                                                             </code></pre>
+<pre><code> default   no yes                                       
+      no [.74 .26] when amount &lt;  6193                  
+      no [.72 .28] when amount &gt;= 6193 &amp; age is 30 to 42
+     yes [.37 .63] when amount &gt;= 6193 &amp; age &gt;=       42
+     yes [.29 .71] when amount &gt;= 6193 &amp; age &lt;  30      </code></pre>
 </div>
 </div>
 <p>Vi kan så skrive ut confusion matrix.</p>
@@ -612,8 +604,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>           
 rpart_class  no yes
-        no  454 158
-        yes  22  56</code></pre>
+        no  468 164
+        yes  19  39</code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -624,26 +616,26 @@ rpart_class  no yes
 
           Reference
 Prediction  no yes
-       no  454 158
-       yes  22  56
+       no  468 164
+       yes  19  39
                                           
-               Accuracy : 0.7391          
-                 95% CI : (0.7047, 0.7715)
-    No Information Rate : 0.6899          
-    P-Value [Acc &gt; NIR] : 0.002592        
+               Accuracy : 0.7348          
+                 95% CI : (0.7002, 0.7674)
+    No Information Rate : 0.7058          
+    P-Value [Acc &gt; NIR] : 0.05058         
                                           
-                  Kappa : 0.2611          
+                  Kappa : 0.1934          
                                           
- Mcnemar's Test P-Value : &lt; 2.2e-16       
+ Mcnemar's Test P-Value : &lt; 2e-16         
                                           
-            Sensitivity : 0.9538          
-            Specificity : 0.2617          
-         Pos Pred Value : 0.7418          
-         Neg Pred Value : 0.7179          
-             Prevalence : 0.6899          
-         Detection Rate : 0.6580          
-   Detection Prevalence : 0.8870          
-      Balanced Accuracy : 0.6077          
+            Sensitivity : 0.9610          
+            Specificity : 0.1921          
+         Pos Pred Value : 0.7405          
+         Neg Pred Value : 0.6724          
+             Prevalence : 0.7058          
+         Detection Rate : 0.6783          
+   Detection Prevalence : 0.9159          
+      Balanced Accuracy : 0.5766          
                                           
        'Positive' Class : no              
                                           </code></pre>
@@ -660,29 +652,29 @@ Prediction  no yes
 
           Reference
 Prediction  no yes
-       no  207  72
-       yes  17  14
-                                          
-               Accuracy : 0.7129          
-                 95% CI : (0.6591, 0.7626)
-    No Information Rate : 0.7226          
-    P-Value [Acc &gt; NIR] : 0.6742          
-                                          
-                  Kappa : 0.1082          
-                                          
- Mcnemar's Test P-Value : 1.041e-08       
-                                          
-            Sensitivity : 0.9241          
-            Specificity : 0.1628          
-         Pos Pred Value : 0.7419          
-         Neg Pred Value : 0.4516          
-             Prevalence : 0.7226          
-         Detection Rate : 0.6677          
-   Detection Prevalence : 0.9000          
-      Balanced Accuracy : 0.5434          
-                                          
-       'Positive' Class : no              
-                                          </code></pre>
+       no  195  84
+       yes  18  13
+                                         
+               Accuracy : 0.671          
+                 95% CI : (0.6156, 0.723)
+    No Information Rate : 0.6871         
+    P-Value [Acc &gt; NIR] : 0.751          
+                                         
+                  Kappa : 0.0608         
+                                         
+ Mcnemar's Test P-Value : 1.227e-10      
+                                         
+            Sensitivity : 0.9155         
+            Specificity : 0.1340         
+         Pos Pred Value : 0.6989         
+         Neg Pred Value : 0.4194         
+             Prevalence : 0.6871         
+         Detection Rate : 0.6290         
+   Detection Prevalence : 0.9000         
+      Balanced Accuracy : 0.5248         
+                                         
+       'Positive' Class : no             
+                                         </code></pre>
 </div>
 </div>
 <section id="oppgaver" class="level2" data-number="5.1">
