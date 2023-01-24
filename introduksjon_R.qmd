@@ -1,8 +1,18 @@
 # Introduksjon til R 
 
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| code-fold: false
+library(caret)
+```
+
 
 ## Rstudio projects 
-Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Lag en egen mappe for dette kurset og lag følgende undermapper: 
+Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Hensikten med dette er å ha en hensiktsmessig og ryddig mappestruktur for alt arbeidet ditt. Dette er forklart nærmere i [@r4ds], se kapittelet om [workflow](https://r4ds.had.co.nz/workflow-projects.html) og særlig [avsnittet om projects](https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects). 
+
+Lag en egen mappe for dette kurset og lag følgende undermapper: 
 
 * Data
 * Script 
@@ -12,31 +22,63 @@ Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Lag 
 Du kan også lage andre undermapper hvis du vil. Det vil være begrenset behov for å eksportere output, men det er selvsagt mulig. Lag
 
 
+## Litt begrepsbruk 
+I R er alt du **gjør** er med <u>funksjoner</u> og alt du gjør noe **med** er <u>objekter</u>.^[Man kan si at dette ligner litt på subjekt og verb i vanlige språk.] 
+
+Altså: Alle datasett som leses inn legger du i et <u>objekt</u> og du bruker ulike <u>funksjoner</u> for å estimere modeller. Men du kan også lagre resultater i nye objekter, som f.eks. resultatet av en regresjonsmodell. Objektene kan altså være av forskjellig *type*, og hvis du lurer på hva slags objekt du har kan du spørre R om det slik: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+class(dittobjekt)
+```
+
+
+Du gir objektene et navn som du kan referere til senere. Det spiller ingen rolle hva du kaller objektene, men kan ikke ha mellomrom. Bruk navn som gir en viss mening når du jobber med det. 
+
+Du kan ha mange objekter i arbeidsminnet i R samtidig. Hvis du bruker et navn som er i bruk fra før, så overskriver du det gamle objektet. 
+
+
+<u>Funksjonene</u> har også et navn og etterfølges av en parentes. Inni parentesen angis funksjonens <u>argumenter</u>. Noen slike argumenter er obligatoriske, mens andre er valgfrie. Ofte vil det være forhåndsvalg til en funksjon slik at du ikke behøver å oppgi mer enn et par ting. Et eksempel er å lese inn data med `read.csv()`, så trenger du bare angi filbanen til datasettet. Denne funksjonen antar at filen er kommaseparert, men hvis det er brukt semikolon kan du angi det med å legge til argumentet `sep = ";"`. 
+
+
 ## Lese inn data
-Dataene er i csv eller rds formater. Disse later du ned og lagrer i mappen for data og leser inn derfra. 
+Data kommer generelt i mange ulike formater og noen ganger skaper det uforutsette utfordringer med å få data inn i R. I dette kurset er imidlertid dataene i formatene .rds eller .csv. 
 
-csv-filer kan leses inn med funksjonen 'read.csv()' og rds-filer med 'readRDS()'. 
+Alle datasett laster du ned og lagrer i mappen for data (se forrige avsnitt) og leser inn i R derfra. For å lære mer om innlesning av data, se [@r4ds] i kapittelet om [data import](https://r4ds.had.co.nz/data-import.html). 
 
+Merk at csv-filer er tekstfiler der kollonnene er separert med komma eller semikolon. Hvis dataene ser veldig rare ut etter å lest de inn kan det være fordi det var et annet skilletegn enn du trodde. 
 
+csv-filer kan leses inn med funksjonen `read.csv()` for komma-separerte filer og `read.csv2()` for semikolon-separerte filer, mens rds-filer leses med `readRDS()`. 
 
-## dataframes og variabeltyper 
 Vær obs på at når man leser inn csv-filer så vil R gjette på hva slags variabeltyper det er. De vil i hovedsak være numeriske, tekst eller factor. I all hovedsak bør tekstvariable tolkes som factor. Dette kan du få til ved å spesifiser det når dataene leses inn slik: 
 
 ```{r}
 #| eval: false
+#| code-fold: false
 read.csv("data/navnpaadata.csv", stringsAsFactors = TRUE)
 ```
 
+Se mer om factor-variable i neste avsnitt. 
 
-## Dele et datasett i 'training' og 'testing'? 
-Vi bruker pakken 'rsample' til å splitte datasettet. 
-Funksjonen 'initial_split()' markerer hvilke observasjoner som er i hvilken del. Så kan du trekke ut disse etterpå med 'training()' og 'testing()' 
+## Variabeltyper 
+Variable kan være av forskjellige typer, primært numerisk eller kategoriske. Numeriske kan igjen være heltall eller lagret med et angitt presisjonsnivå (integer, numeric eller double), men forskjellen mellom disse har i praksis ikke noe å si for vårt bruk her. Datovariable er også numeriske, men vi skal ikke jobbe med datoer her. 
+
+Kategoriske variable er 'string' (dvs en tekst-streng) eller *factor*. Du kan lese mer om factor-variable i @r4ds i [kapittelet om factor](https://r4ds.had.co.nz/factors.html). Kort sagt er factor-variable tekst-variable som har en tilhørende underliggende numerisk verdi som gjør at den kan benyttes i modeller og beregninger. 
+
+Et alternativ er å kode om faktorvariable eller tekst-variable til dummy-variable med verdiene 0 eller 1.^[Dette kalles også noen ganger for *indikatorvariable* eller *one-hot-encoding*, litt avhengig av fagfelt og tradisjoner, men er det samme.] 
 
 
-##  Seed med 'set.seed()'
-En tilfeldig inndeling som med 'initial_split()' bruker tilfeldige tall som genereres av R. Det finnes ikke helt tilfeldige tall i en datamaskin, det bare ser sånn ut. Det er en slags algoritme som generer disse tallen, og det har et startpunkt som varierer med *når* du setter den igang. Med andre ord: en tilfeldig inndeling vil bli forskjellig hver eneste gang. 
 
-Funksjonen 'set.seed()' definerer startpunktet for neste sekvens av tilfeldige tall slik at du kan reprodusere nøyaktig samme resultat. Hvis dere jobber sammen på oppgaver er det en fordel å sette samme seed slik at dere kan sammenligne resultatet. 
+## Dele et datasett i *training* og *testing*? 
+Vi bruker pakken *rsample* til å splitte datasettet. 
+Funksjonen `initial_split()` markerer hvilke observasjoner som er i hvilken del. Så kan du trekke ut disse etterpå med `training()`  og `testing()`. 
+
+
+##  Seed - gjør koden eksakt reproduserbar 
+En tilfeldig inndeling som med `initial_split()` bruker tilfeldige tall som genereres av R. Det finnes ikke helt tilfeldige tall i en datamaskin, det bare ser sånn ut. Det er en slags algoritme som generer disse tallen, og det har et startpunkt som varierer med *når* du setter den igang. Med andre ord: en tilfeldig inndeling vil bli forskjellig hver eneste gang. 
+
+Funksjonen `set.seed()`  definerer startpunktet for neste sekvens av tilfeldige tall slik at du kan reprodusere nøyaktig samme resultat. Hvis dere jobber sammen på oppgaver er det en fordel å sette samme seed slik at dere kan sammenligne resultatet. 
 
 ```{r}
 #| eval: false
@@ -49,31 +91,90 @@ Dette gjelder for alle funksjoner der det benyttes tilfeldige tall. Det gjelder 
 OBS! Vend deg til å alltid bruke set.seed når du jobber i dette kurset, for du kommer til å trenge det på eksamen! Du kan gjøre ting riktig på eksamen likevel, men da blir ikke resultatene reproduserbare og sensor kan ikke sjekke resultatene. (Dere skal få nøyaktige instruksjoner senere).
 
 
-## 'Predict()'
-Dere skal bruke funksjonen 'predict()' ganske mye. Den tar et objekt fra en eller annen modell og predikerer fra denne. Merk at den bruker det objektet dere har lagret resultatene i, ser hva slags modell det er, og predikerer i henhold til det. 
+## Prediksjon med `predict()`
+Dere skal bruke funksjonen `predict()` ganske mye. Den tar et objekt fra en eller annen modell og predikerer fra denne. Merk at den bruker det objektet dere har lagret resultatene i, ser hva slags modell det er, og predikerer i henhold til det. 
 
-I utgangspunktet bruker den det samme datasettet som modellen ble estimert med. Men kan også predikere på nye data. Da må argumentet 'newdata = ...' angis. Det vil typisk være testing-datasettet eller helt nye observasjoner der du ikke vet utfallet. Det nye datasettet må alle de variablene som vari det opprinnelige datasettet for at det skal funke. 
+I utgangspunktet bruker den det samme datasettet som modellen ble estimert med. Men kan også predikere på nye data. Da må argumentet `newdata = ...` angis. Det vil typisk være testing-datasettet eller helt nye observasjoner der du ikke vet utfallet. Det nye datasettet må alle de variablene som vari det opprinnelige datasettet for at det skal funke. 
 
+
+## Bruke *formula* for utfallsvariable og prediktorer 
+De modellen vi skal bruke her angir utfallsvariabel og prediktorer med en *formula* som angir omtrent slik: 
+`utfallsvariabel ~ prediktor1 + prediktor2`. Dette tilsvarer altså å skrive $y = x1 + x2$. For lineær regresjon vil den så estimere de tilhørende regresjonsparametrene $\alpha$,  $\beta_1$ og $\beta_2$. 
+
+For andre modeller der det *ikke* skal estimeres parametere på samme måte vil man angi variablene på samme måte. 
+
+For regresjon kan man angi spesifikasjonen som følger: 
+
+* flere variable: `y ~ x + z + k + m`
+* inkludere alle variable: `y ~ .` 
+* annengradsledd: `y ~ x + I(x^2)` 
+* tredjegradsledd: `y ~ x + I(x^2) + I(x^3)` 
+* interaksjoner: `y ~ x + z + x*z` 
+
+Disse kan også kombineres. 
 
 
 ## Databehandling: dplyr-verb / tidyverse
+Det som kalles *tidyverse* er en samling R-pakker som til sammen danner et konsistent system for databehandling og grafikk. Hvis du bruker R uten å laste noen pakker, kalles dette *base-R*. Tidyverse er slik sett en dialekt av R.^[Det finnes flere slike *dialekter* av R, men som ikke er relevant her. Men greit å vite om, særlig hvis man søker på nettet etter hjelp for spesielle problemer. Tidyverse utvikles av firmaet *Posit* som også lager Rstudio. De leverer også et eget rammeverk for maskinlæring som heter *tidymodels*, som bl.a. pakken *rsample* er en del av. Vi holder oss til basis-pakkene for de spesifikke funksjonene på dette kurset.]
 
-### Hva gjør en 'pipe-operatoren' %>% ?? 
+Databehandling med *dplyr* (fra tidyverse) har som hovedgrep noen *verb* som kan settes sammen i lengre uttrykk.
+
+* `mutate()` brukes til å lage nye variable eller endre på variable 
+* `filter()` brukes til å filtrere data, f.eks. velge ut en undergruppe 
+* `select()` brukes til å velge ut variable - eller velge bort variable 
+* `summarise()` brukes til å summere verdier, f.eks. gjennomsnitt og standardavvik
+* `group_by()` brukes hvis man skal summere over grupper av observasjoner med `summarise()` eller `mutate()`.  
+* `arrange()` sorterer et datasett 
+
+Alle disse verbene starter med at man angir hvilket objekt man skal gjøre noe med (dvs datasett) og deretter hva man vil gjøre.  
+For eksempel kan du lage en ny variabel som er summen av variable med navn X og Y slik: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+nyedata <- mutate(dinedata, sumXY = X + y)
+```
+
+Du kan lese mer om disse verbene i R4DS [@r4ds] kapittelet [*Transform*](https://r4ds.had.co.nz/transform.html)
+
+I dette kurset skal vi ofte lage en ny variabel med `predict()` og det gjør vi da inni en `mutate()`, omtrentlig slik: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+endretdata <- dinedata %>% 
+  mutate( nyvariabel = predict(modellobjekt))
+
+```
+Her skal resultatet være et kopi av det opprinnelige datasettet, *dinedata*, som lages i et nytt objekt *endretdata*, der den andre linjen legger til en ny variabel som inneholder predikerte verdier fra en modell lagret i *modellobjekt*. 
 
 
-### lage/endre variable: mutate
+### Hva gjør 'pipe-operatoren' `%>%` ?? 
 
+Du kan sette sammen flere kombinsjoner av `mutate()`, `select()` og andre dplyr-verb med `%>%`. Les mer om den i R4DS [@r4ds] i et eget avsnitt om [pipes](https://r4ds.had.co.nz/pipes.html). 
 
-### filtrere datasett: filter
-
-
-### summmere data: summarise 
-
+Enkelt sagt tar `%>%` og legger det som er til *venstre* over som *første* argument i neste dplyr-verb. Dermed kan man sette sammen en rekke av dplyr-verb der du både filtrerer, lager nye variable, summerer osv. 
 
 
 
 ## Grafikk: quick'n dirty vs ggplot
+En rekke modeller har noen standard funksjoner for å plotte. Funksjonen `plot()` vil kjenne igjen hva slags objekt det er snakk om og så lage en viss type plot. Bruker du dette på et objekt for lineær regresjon får du et annet type plot enn hvis du gjør det på et randomForest-objekt. Dette kan være helt utmerket for en kjapp titt på resultatene, men du har litt mindre kontroll på hva du ber om. Grafikken er ganske pen, men kanskje ikke publiseringsklar. 
+
+I en del eksempler her brukes `ggplot()`. Dette er for avansert grafikk og er det som brukes i standard statistikkurs på bachelornivå på SV-fakultetet (på alle fag, tror jeg). Det er en viktig grunn til at det brukes her også. For en del visualisering av tre-baserte metoder er det vesentlig lettere å bruke spesialiserte funksjoner via `plot()`. Men for all del: `ggplot()` kan lage disse figurene også, det bare krever mer arbeid enn vi prioriterer her. 
+
+Du kan lære mer om `ggplot()` i R4DS [@r4ds] i kapittelet om [visualisering](https://r4ds.had.co.nz/data-visualisation.html).
 
 
+## Hjelp-filer og dokumentasjon
+Alle funksjoner i R har en hjelp-fil som inneholder syntax, forklaring av argumentene, noen detaljer (ved behov), og eksempler. For å få tilgang til denne setter du et spørsmålstegn foran funksjonsnavnet slik: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+?confusionMatrix
+
+```
+
+Hjelpfilene kan være vanskelige å forstå hvordan fungerer. Det er ikke alltid selvforklarende, for å si det forsiktig. Men det viktige er at du ser hvilke argumenter som hører til funksjonen og hva de betyr. 
 
 

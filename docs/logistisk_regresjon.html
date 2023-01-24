@@ -1663,7 +1663,7 @@ Number of Fisher Scoring iterations: 14</code></pre>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">type =</span> <span class="st">"response"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Funksjonen <code>roc()</code> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="citation" data-cites="hsieh2008">(<a href="references.html#ref-hsieh2008" role="doc-biblioref">Hsieh 2008</a>)</span>.</p>
+<p>Funksjonen <code>roc()</code> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="citation" data-cites="hsieh2008">(<a href="#ref-hsieh2008" role="doc-biblioref">Hsieh 2008</a>)</span>.</p>
 <p>OBS! Man må man angi data som <em>første</em> argument i funksjonen <code>roc()</code>, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!</p>
 <p>Det går an å få ut plottet med en quick-and-dirty versjon med <code>plot(ROC)</code>, men det blir penere med bruk av <code>ggplot()</code> slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).</p>
 <div class="cell">
@@ -1715,7 +1715,7 @@ Number of Fisher Scoring iterations: 14</code></pre>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">newdata =</span> testing, <span class="at">type =</span> <span class="st">"response"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Funksjonen <code>roc()</code> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="citation" data-cites="hsieh2008">(<a href="references.html#ref-hsieh2008" role="doc-biblioref">Hsieh 2008</a>)</span>.</p>
+<p>Funksjonen <code>roc()</code> gjør utregningene som trengs for ROC-kurven basert på observert utfall og predikerte sannsynligheter <span class="citation" data-cites="hsieh2008">(<a href="#ref-hsieh2008" role="doc-biblioref">Hsieh 2008</a>)</span>.</p>
 <p>OBS! Man må man angi data som <em>første</em> argument i funksjonen <code>roc()</code>, deretter observerte utfall og til sist predikert sannsynlighet. Rekkefølgen er viktig!</p>
 <p>Det går an å få ut plottet med en quick-and-dirty versjon med <code>plot(ROC)</code>, men det blir penere med bruk av <code>ggplot()</code> slik som er gjort nedenfor. Det krever at man lager en data.frame først ved å plukke ut de relevante tallene fra ROC-objektet. (Men layout er strengt tatt ikke viktig i dette kurset).</p>
 <div class="cell">
@@ -1879,7 +1879,7 @@ Prediction  No Yes
 
 <!-- -->
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-hsieh2008" class="csl-entry" role="doc-biblioentry">
 Hsieh, John. 2008. <span>“Receiver Operating Characteristic (ROC) Curve.”</span> In <em>Encyclopedia of Epidemiology</em>, 895–98. Thousand Oaks, California: Sage. <a href="https://doi.org/10.4135/9781412953948">https://doi.org/10.4135/9781412953948</a>.
 </div>

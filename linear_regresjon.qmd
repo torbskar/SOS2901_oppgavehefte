@@ -47,7 +47,7 @@ skim(kommune)
 
 ### Training og testing data
 
-Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen `initial_split()` etterfulgt av funksjonene `training()` og `testing()`. Forhåndsvalget for splitten er 0.75, så dermed brukes  75% til training og resten til testing.
+Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen `initial_split()` etterfulgt av funksjonene `training()` og `testing()`. Forhåndsvalget for splitten er 0.75, så dermed brukes  75% til training og resten til testing. Du kan også legge til argumentet `prop = ` og sette en annen andel, f.eks. 0.7 for 70%. 
 
 Merk bruken av `set.seed()`. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting[^linear_regresjon-1] og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.
 
@@ -155,21 +155,23 @@ ggplot(kom, aes(x = voldskriminalitet, y = pred)) +
 
 Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe den jo ikke gjør. Modellen bommer altså ganske mye.
 
-Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere `newdata = dt`. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.
+Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere `newdata = dt`. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.[^](OBS! I en tidligere versjon stod det 0.15 i koden under, men merk at variabelen er på skalaen prosentpoeng og ikke anderl. Hivs du stusset på dette, så var det altså riktig tenkt.)
 
 ```{r}
 #| code-fold: false
-dt <- data.frame(prop_unge_menn = .15)
-predict(est, newdata = dt)
+dt <- data.frame(prop_unge_menn = 15)
+p <- predict(est, newdata = dt)
+p
 ```
 
-I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 7.2 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.
+I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en `r round(p, digits = 3)` voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.
 
 ```{r}
-predict(est, newdata = dt, interval = "prediction")
+p_ki <- predict(est, newdata = dt, interval = "prediction")
+p_ki
 ```
 
-Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med "95% sannsynlighet"[^linear_regresjon-3] at voldsraten vil være mellom 2.3 og 12.1 per 1000 innbyggere.
+Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med "95% sannsynlighet"[^linear_regresjon-3] at voldsraten vil være mellom  `r round(p_ki[2], 1)` og `r round(p_ki[3], 1)` per 1000 innbyggere.
 
 [^linear_regresjon-3]: Dette er en omtrentelig formulering. Alle sannsynligheter gjelder i det lange løp: altså hvis man gjør undersøkelsen veldig mange ganger.
 
@@ -349,7 +351,8 @@ Dette gjelder generelt: mer komplisert regresjonsmodell vil gi tilsynelatende be
 
 Det er derfor veldig viktig å teste modellen mot *nye* data. I praksis testing-dataene man lagde til å begynne med.
 
-I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstret ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte.
+I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstret ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte. 
+
 
 ## Oppgaver
 

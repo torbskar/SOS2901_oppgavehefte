@@ -801,7 +801,7 @@ $ andre_lovbrudd         &lt;dbl&gt; 25.5, 26.5, 26.1, 25.2, 12.1, 12.2, 11.9, 1
 </div>
 <section id="training-og-testing-data" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="training-og-testing-data"><span class="header-section-number">2.1.1</span> Training og testing data</h3>
-<p>Vi starter med å dele datasettet i <em>training</em> og <em>testing</em>. Her kan vi bruke pakken ‘rsample’ og funksjonen <code>initial_split()</code> etterfulgt av funksjonene <code>training()</code> og <code>testing()</code>. Forhåndsvalget for splitten er 0.75, så dermed brukes 75% til training og resten til testing.</p>
+<p>Vi starter med å dele datasettet i <em>training</em> og <em>testing</em>. Her kan vi bruke pakken ‘rsample’ og funksjonen <code>initial_split()</code> etterfulgt av funksjonene <code>training()</code> og <code>testing()</code>. Forhåndsvalget for splitten er 0.75, så dermed brukes 75% til training og resten til testing. Du kan også legge til argumentet <code>prop =</code> og sette en annen andel, f.eks. 0.7 for 70%.</p>
 <p>Merk bruken av <code>set.seed()</code>. For å splitte genererer R tilfeldige tall, og <em>seed</em> styrer hvor den algoritmen starter. Når <em>seed</em> er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</p>
 <div class="cell">
 <details>
@@ -1359,27 +1359,29 @@ F-statistic: 65.75 on 1 and 1068 DF,  p-value: 1.395e-15</code></pre>
 </div>
 </div>
 <p>Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe den jo ikke gjør. Modellen bommer altså ganske mye.</p>
-<p>Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere <code>newdata = dt</code>. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.</p>
+<p>Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere <code>newdata = dt</code>. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.[^](OBS! I en tidligere versjon stod det 0.15 i koden under, men merk at variabelen er på skalaen prosentpoeng og ikke anderl. Hivs du stusset på dette, så var det altså riktig tenkt.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prop_unge_menn =</span> .<span class="dv">15</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prop_unge_menn =</span> <span class="dv">15</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">predict</span>(est, <span class="at">newdata =</span> dt)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        1 
-0.5715387 </code></pre>
+<pre><code>       1 
+6.708919 </code></pre>
 </div>
 </div>
-<p>I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 7.2 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et <em>konfidensintervall</em>, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.</p>
+<p>I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 6.709 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et <em>konfidensintervall</em>, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>p_ki <span class="ot">&lt;-</span> <span class="fu">predict</span>(est, <span class="at">newdata =</span> dt, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>p_ki</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>        fit       lwr      upr
-1 0.5715387 -4.007532 5.150609</code></pre>
+<pre><code>       fit      lwr      upr
+1 6.708919 2.288514 11.12932</code></pre>
 </div>
 </div>
-<p>Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med “95% sannsynlighet”<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> at voldsraten vil være mellom 2.3 og 12.1 per 1000 innbyggere.</p>
+<p>Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med “95% sannsynlighet”<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> at voldsraten vil være mellom 2.3 og 11.1 per 1000 innbyggere.</p>
 </section>
 <section id="multippel-regresjon" class="level3" data-number="2.1.3">
 <h3 data-number="2.1.3" class="anchored" data-anchor-id="multippel-regresjon"><span class="header-section-number">2.1.3</span> Multippel regresjon</h3>
@@ -1940,7 +1942,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a><span class="fu">### Training og testing data</span></span>
 <span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a>Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen <span class="in">`initial_split()`</span> etterfulgt av funksjonene <span class="in">`training()`</span> og <span class="in">`testing()`</span>. Forhåndsvalget for splitten er 0.75, så dermed brukes  75% til training og resten til testing.</span>
+<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a>Vi starter med å dele datasettet i *training* og *testing*. Her kan vi bruke pakken 'rsample' og funksjonen <span class="in">`initial_split()`</span> etterfulgt av funksjonene <span class="in">`training()`</span> og <span class="in">`testing()`</span>. Forhåndsvalget for splitten er 0.75, så dermed brukes  75% til training og resten til testing. Du kan også legge til argumentet <span class="in">`prop = `</span> og sette en annen andel, f.eks. 0.7 for 70%. </span>
 <span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-57"><a href="#cb42-57" aria-hidden="true" tabindex="-1"></a>Merk bruken av <span class="in">`set.seed()`</span>. For å splitte genererer R tilfeldige tall, og *seed* styrer hvor den algoritmen starter. Når *seed* er satt vil du få nøyaktig samme resultatet som gjort her. Dette vil du trenge på eksamen for at sensor skal kunne sjekke resultatene dine, så begynn å bruke det med en gang. Tallet inni parentesen betyr ingenting<span class="ot">[^linear_regresjon-1]</span> og bare sørger for reproduserbarhet der hvor det er tilfeldige tall involvert.</span>
 <span id="cb42-58"><a href="#cb42-58" aria-hidden="true" tabindex="-1"></a></span>
@@ -2048,246 +2050,249 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb42-178"><a href="#cb42-178" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-179"><a href="#cb42-179" aria-hidden="true" tabindex="-1"></a>Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe den jo ikke gjør. Modellen bommer altså ganske mye.</span>
 <span id="cb42-180"><a href="#cb42-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-181"><a href="#cb42-181" aria-hidden="true" tabindex="-1"></a>Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere <span class="in">`newdata = dt`</span>. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.</span>
+<span id="cb42-181"><a href="#cb42-181" aria-hidden="true" tabindex="-1"></a>Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere <span class="in">`newdata = dt`</span>. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.<span class="co">[</span><span class="ot">^</span><span class="co">](OBS! I en tidligere versjon stod det 0.15 i koden under, men merk at variabelen er på skalaen prosentpoeng og ikke anderl. Hivs du stusset på dette, så var det altså riktig tenkt.)</span></span>
 <span id="cb42-182"><a href="#cb42-182" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-185"><a href="#cb42-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb42-186"><a href="#cb42-186" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb42-187"><a href="#cb42-187" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prop_unge_menn =</span> .<span class="dv">15</span>)</span>
-<span id="cb42-188"><a href="#cb42-188" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt)</span>
-<span id="cb42-189"><a href="#cb42-189" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-190"><a href="#cb42-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-191"><a href="#cb42-191" aria-hidden="true" tabindex="-1"></a>I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en 7.2 voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.</span>
-<span id="cb42-192"><a href="#cb42-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-195"><a href="#cb42-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-196"><a href="#cb42-196" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(est, <span class="at">newdata =</span> dt, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
-<span id="cb42-197"><a href="#cb42-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-198"><a href="#cb42-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-199"><a href="#cb42-199" aria-hidden="true" tabindex="-1"></a>Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med "95% sannsynlighet"<span class="ot">[^linear_regresjon-3]</span> at voldsraten vil være mellom 2.3 og 12.1 per 1000 innbyggere.</span>
+<span id="cb42-187"><a href="#cb42-187" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">prop_unge_menn =</span> <span class="dv">15</span>)</span>
+<span id="cb42-188"><a href="#cb42-188" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">predict</span>(est, <span class="at">newdata =</span> dt)</span>
+<span id="cb42-189"><a href="#cb42-189" aria-hidden="true" tabindex="-1"></a>p</span>
+<span id="cb42-190"><a href="#cb42-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-191"><a href="#cb42-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-192"><a href="#cb42-192" aria-hidden="true" tabindex="-1"></a>I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en <span class="in">`r round(p, digits = 3)`</span> voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.</span>
+<span id="cb42-193"><a href="#cb42-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-196"><a href="#cb42-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-197"><a href="#cb42-197" aria-hidden="true" tabindex="-1"></a>p_ki <span class="ot">&lt;-</span> <span class="fu">predict</span>(est, <span class="at">newdata =</span> dt, <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
+<span id="cb42-198"><a href="#cb42-198" aria-hidden="true" tabindex="-1"></a>p_ki</span>
+<span id="cb42-199"><a href="#cb42-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-200"><a href="#cb42-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-201"><a href="#cb42-201" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-3]: </span>Dette er en omtrentelig formulering. Alle sannsynligheter gjelder i det lange løp: altså hvis man gjør undersøkelsen veldig mange ganger.</span>
+<span id="cb42-201"><a href="#cb42-201" aria-hidden="true" tabindex="-1"></a>Tolkningen er ellers tilsvarende som for konfidensintervall: vi forventer med "95% sannsynlighet"<span class="ot">[^linear_regresjon-3]</span> at voldsraten vil være mellom  <span class="in">`r round(p_ki[2], 1)`</span> og <span class="in">`r round(p_ki[3], 1)`</span> per 1000 innbyggere.</span>
 <span id="cb42-202"><a href="#cb42-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-203"><a href="#cb42-203" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multippel regresjon</span></span>
+<span id="cb42-203"><a href="#cb42-203" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-3]: </span>Dette er en omtrentelig formulering. Alle sannsynligheter gjelder i det lange løp: altså hvis man gjør undersøkelsen veldig mange ganger.</span>
 <span id="cb42-204"><a href="#cb42-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-205"><a href="#cb42-205" aria-hidden="true" tabindex="-1"></a>Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan komplisere vesentlig ved å inkludere flere variable og bruke alle triksene man evt. har lært om multippel regresjon tidligere, primært interaksjonsledd, polynomer og transformasjoner osv. (Det er ok om du ikke har lært alt dette tidligere).</span>
+<span id="cb42-205"><a href="#cb42-205" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multippel regresjon</span></span>
 <span id="cb42-206"><a href="#cb42-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-207"><a href="#cb42-207" aria-hidden="true" tabindex="-1"></a>I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon.</span>
+<span id="cb42-207"><a href="#cb42-207" aria-hidden="true" tabindex="-1"></a>Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan komplisere vesentlig ved å inkludere flere variable og bruke alle triksene man evt. har lært om multippel regresjon tidligere, primært interaksjonsledd, polynomer og transformasjoner osv. (Det er ok om du ikke har lært alt dette tidligere).</span>
 <span id="cb42-208"><a href="#cb42-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-211"><a href="#cb42-211" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-212"><a href="#cb42-212" aria-hidden="true" tabindex="-1"></a>est_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> prop_unge_menn <span class="sc">+</span> inntekt_totalt_median <span class="sc">+</span> shj_unge <span class="sc">+</span> </span>
-<span id="cb42-213"><a href="#cb42-213" aria-hidden="true" tabindex="-1"></a>                   ant_husholdninger , </span>
-<span id="cb42-214"><a href="#cb42-214" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> kommune_train)</span>
-<span id="cb42-215"><a href="#cb42-215" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_m)</span>
-<span id="cb42-216"><a href="#cb42-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-217"><a href="#cb42-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-218"><a href="#cb42-218" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-209"><a href="#cb42-209" aria-hidden="true" tabindex="-1"></a>I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon.</span>
+<span id="cb42-210"><a href="#cb42-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-213"><a href="#cb42-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-214"><a href="#cb42-214" aria-hidden="true" tabindex="-1"></a>est_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> prop_unge_menn <span class="sc">+</span> inntekt_totalt_median <span class="sc">+</span> shj_unge <span class="sc">+</span> </span>
+<span id="cb42-215"><a href="#cb42-215" aria-hidden="true" tabindex="-1"></a>                   ant_husholdninger , </span>
+<span id="cb42-216"><a href="#cb42-216" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> kommune_train)</span>
+<span id="cb42-217"><a href="#cb42-217" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_m)</span>
+<span id="cb42-218"><a href="#cb42-218" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-219"><a href="#cb42-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-220"><a href="#cb42-220" aria-hidden="true" tabindex="-1"></a>Merk at $r^2$ nå har gått betraktelig opp, til ca <span class="in">`r round(summary(est_m)$r.squared, digits = 2)`</span>. Gitt at vi tolker dette som i hvor stor grad vi kan *predikere* utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon.</span>
+<span id="cb42-220"><a href="#cb42-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-221"><a href="#cb42-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-222"><a href="#cb42-222" aria-hidden="true" tabindex="-1"></a>Her er et scatterplot av observert mot forventet voldsrater:</span>
+<span id="cb42-222"><a href="#cb42-222" aria-hidden="true" tabindex="-1"></a>Merk at $r^2$ nå har gått betraktelig opp, til ca <span class="in">`r round(summary(est_m)$r.squared, digits = 2)`</span>. Gitt at vi tolker dette som i hvor stor grad vi kan *predikere* utfallet fra datasettet, så er det kanskje likevel ikke imponerende høyt: vi vil fremdeles forvente mye feil prediksjon.</span>
 <span id="cb42-223"><a href="#cb42-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-226"><a href="#cb42-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-227"><a href="#cb42-227" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb42-228"><a href="#cb42-228" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
-<span id="cb42-229"><a href="#cb42-229" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
-<span id="cb42-230"><a href="#cb42-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(est_m))</span>
-<span id="cb42-231"><a href="#cb42-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-232"><a href="#cb42-232" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
-<span id="cb42-233"><a href="#cb42-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb42-234"><a href="#cb42-234" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-235"><a href="#cb42-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-236"><a href="#cb42-236" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-224"><a href="#cb42-224" aria-hidden="true" tabindex="-1"></a>Her er et scatterplot av observert mot forventet voldsrater:</span>
+<span id="cb42-225"><a href="#cb42-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-228"><a href="#cb42-228" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-229"><a href="#cb42-229" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-230"><a href="#cb42-230" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-231"><a href="#cb42-231" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb42-232"><a href="#cb42-232" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(est_m))</span>
+<span id="cb42-233"><a href="#cb42-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-234"><a href="#cb42-234" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-235"><a href="#cb42-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb42-236"><a href="#cb42-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb42-237"><a href="#cb42-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-238"><a href="#cb42-238" aria-hidden="true" tabindex="-1"></a>La oss inkludere alle aktuelle variable i datasettet. Et lite triks her er å fjerne alle variable vi ikke er interessert i og lagre det i et nytt datasett. I <span class="in">`lm()`</span> kan vi da presisere formelen som <span class="in">`Vold ~ .`</span> som i denne sammenhengen betyr å ta med alle variabelene i stedet for å liste opp hver enkelt variabel.</span>
+<span id="cb42-238"><a href="#cb42-238" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-239"><a href="#cb42-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-242"><a href="#cb42-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-243"><a href="#cb42-243" aria-hidden="true" tabindex="-1"></a>kom_s <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
-<span id="cb42-244"><a href="#cb42-244" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(kommune, kommune_nr, ordenslovbrudd,  </span>
-<span id="cb42-245"><a href="#cb42-245" aria-hidden="true" tabindex="-1"></a>            nark_alko_kriminalitet, trafikklovbrudd, andre_lovbrudd, </span>
-<span id="cb42-246"><a href="#cb42-246" aria-hidden="true" tabindex="-1"></a>            prop_unge_menn))</span>
-<span id="cb42-247"><a href="#cb42-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-248"><a href="#cb42-248" aria-hidden="true" tabindex="-1"></a>full_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> . , <span class="at">data =</span> kom_s)</span>
-<span id="cb42-249"><a href="#cb42-249" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod)</span>
-<span id="cb42-250"><a href="#cb42-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-251"><a href="#cb42-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-252"><a href="#cb42-252" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk noe opp, til <span class="in">`r round(summary(full_mod)$r.squared, digits = 3)`</span>.</span>
+<span id="cb42-240"><a href="#cb42-240" aria-hidden="true" tabindex="-1"></a>La oss inkludere alle aktuelle variable i datasettet. Et lite triks her er å fjerne alle variable vi ikke er interessert i og lagre det i et nytt datasett. I <span class="in">`lm()`</span> kan vi da presisere formelen som <span class="in">`Vold ~ .`</span> som i denne sammenhengen betyr å ta med alle variabelene i stedet for å liste opp hver enkelt variabel.</span>
+<span id="cb42-241"><a href="#cb42-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-244"><a href="#cb42-244" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-245"><a href="#cb42-245" aria-hidden="true" tabindex="-1"></a>kom_s <span class="ot">&lt;-</span> kommune_train <span class="sc">%&gt;%</span> </span>
+<span id="cb42-246"><a href="#cb42-246" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(kommune, kommune_nr, ordenslovbrudd,  </span>
+<span id="cb42-247"><a href="#cb42-247" aria-hidden="true" tabindex="-1"></a>            nark_alko_kriminalitet, trafikklovbrudd, andre_lovbrudd, </span>
+<span id="cb42-248"><a href="#cb42-248" aria-hidden="true" tabindex="-1"></a>            prop_unge_menn))</span>
+<span id="cb42-249"><a href="#cb42-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-250"><a href="#cb42-250" aria-hidden="true" tabindex="-1"></a>full_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(voldskriminalitet <span class="sc">~</span> . , <span class="at">data =</span> kom_s)</span>
+<span id="cb42-251"><a href="#cb42-251" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod)</span>
+<span id="cb42-252"><a href="#cb42-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-253"><a href="#cb42-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-254"><a href="#cb42-254" aria-hidden="true" tabindex="-1"></a>Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output.</span>
+<span id="cb42-254"><a href="#cb42-254" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk noe opp, til <span class="in">`r round(summary(full_mod)$r.squared, digits = 3)`</span>.</span>
 <span id="cb42-255"><a href="#cb42-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-258"><a href="#cb42-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-259"><a href="#cb42-259" aria-hidden="true" tabindex="-1"></a>full_mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>, <span class="at">data =</span> kom_s)</span>
-<span id="cb42-260"><a href="#cb42-260" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod2)<span class="sc">$</span>r.squared</span>
-<span id="cb42-261"><a href="#cb42-261" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-262"><a href="#cb42-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-263"><a href="#cb42-263" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk vesentlig opp. Men når vi først driver med kompliserte modellspesifikasjoner som uansett er vanskelige å tolke - hvorfor begrense seg til 2-veis interaksjoner? Her er en versjon med alle 3-veis interaksjoner, og nå begynner $r^2$ virkelig å bli høy!</span>
+<span id="cb42-256"><a href="#cb42-256" aria-hidden="true" tabindex="-1"></a>Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksjonsledd. En åpenbar ulempe med dette er at hver enkelt koeffisent blir svært mye vanskeligere å tolke. Vi fokuserer derfor kun på $r^2$ som kan hentes ut uten å ta med resten av output.</span>
+<span id="cb42-257"><a href="#cb42-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-260"><a href="#cb42-260" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-261"><a href="#cb42-261" aria-hidden="true" tabindex="-1"></a>full_mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>, <span class="at">data =</span> kom_s)</span>
+<span id="cb42-262"><a href="#cb42-262" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod2)<span class="sc">$</span>r.squared</span>
+<span id="cb42-263"><a href="#cb42-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-264"><a href="#cb42-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-267"><a href="#cb42-267" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-268"><a href="#cb42-268" aria-hidden="true" tabindex="-1"></a>full_mod3 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">3</span>, <span class="at">data =</span> kom_s)</span>
-<span id="cb42-269"><a href="#cb42-269" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod3)<span class="sc">$</span>r.squared</span>
-<span id="cb42-270"><a href="#cb42-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-271"><a href="#cb42-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-272"><a href="#cb42-272" aria-hidden="true" tabindex="-1"></a>Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant bedre av å legge til hver av de parametrene, og stopper når modellen ikke blir bedre. Så beholdes den "beste" av disse modellene, ikke nødvendigvis den som er mest komplisert.</span>
+<span id="cb42-265"><a href="#cb42-265" aria-hidden="true" tabindex="-1"></a>$r^2$ gikk vesentlig opp. Men når vi først driver med kompliserte modellspesifikasjoner som uansett er vanskelige å tolke - hvorfor begrense seg til 2-veis interaksjoner? Her er en versjon med alle 3-veis interaksjoner, og nå begynner $r^2$ virkelig å bli høy!</span>
+<span id="cb42-266"><a href="#cb42-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-269"><a href="#cb42-269" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-270"><a href="#cb42-270" aria-hidden="true" tabindex="-1"></a>full_mod3 <span class="ot">&lt;-</span> <span class="fu">lm</span>( voldskriminalitet <span class="sc">~</span> .<span class="sc">^</span><span class="dv">3</span>, <span class="at">data =</span> kom_s)</span>
+<span id="cb42-271"><a href="#cb42-271" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod3)<span class="sc">$</span>r.squared</span>
+<span id="cb42-272"><a href="#cb42-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-273"><a href="#cb42-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-274"><a href="#cb42-274" aria-hidden="true" tabindex="-1"></a>OBS! Merk at dette er en rent mekanisk seleksjon, og frarådes i de fleste samfunnsvitenskapelige sammenhenger. Tolkning av parametre og statistisk usikkerhet er nå på svært tynn is. Men det kan gi god prediksjon likevel.</span>
+<span id="cb42-274"><a href="#cb42-274" aria-hidden="true" tabindex="-1"></a>Vi kan trimme modellen så den ikke har med så voldsomt mange parametre. En mulighet er å overlate dette til datamaskinen ved å la den gjøre en trinnvis test av hvorvidt modellene blir signifikant bedre av å legge til hver av de parametrene, og stopper når modellen ikke blir bedre. Så beholdes den "beste" av disse modellene, ikke nødvendigvis den som er mest komplisert.</span>
 <span id="cb42-275"><a href="#cb42-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-276"><a href="#cb42-276" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ols_step}</span></span>
-<span id="cb42-277"><a href="#cb42-277" aria-hidden="true" tabindex="-1"></a>step_mod <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">stepAIC</span>(full_mod3, <span class="at">direction=</span><span class="st">"forward"</span>, </span>
-<span id="cb42-278"><a href="#cb42-278" aria-hidden="true" tabindex="-1"></a>                          <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-279"><a href="#cb42-279" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(step_mod)<span class="sc">$</span>r.squared</span>
-<span id="cb42-280"><a href="#cb42-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-281"><a href="#cb42-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-282"><a href="#cb42-282" aria-hidden="true" tabindex="-1"></a>Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observert, så får vi et svært mye bedre sammenfall enn tidligere.</span>
+<span id="cb42-276"><a href="#cb42-276" aria-hidden="true" tabindex="-1"></a>OBS! Merk at dette er en rent mekanisk seleksjon, og frarådes i de fleste samfunnsvitenskapelige sammenhenger. Tolkning av parametre og statistisk usikkerhet er nå på svært tynn is. Men det kan gi god prediksjon likevel.</span>
+<span id="cb42-277"><a href="#cb42-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-278"><a href="#cb42-278" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ols_step}</span></span>
+<span id="cb42-279"><a href="#cb42-279" aria-hidden="true" tabindex="-1"></a>step_mod <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">stepAIC</span>(full_mod3, <span class="at">direction=</span><span class="st">"forward"</span>, </span>
+<span id="cb42-280"><a href="#cb42-280" aria-hidden="true" tabindex="-1"></a>                          <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb42-281"><a href="#cb42-281" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(step_mod)<span class="sc">$</span>r.squared</span>
+<span id="cb42-282"><a href="#cb42-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-283"><a href="#cb42-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-286"><a href="#cb42-286" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-287"><a href="#cb42-287" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb42-288"><a href="#cb42-288" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
-<span id="cb42-289"><a href="#cb42-289" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kom_s <span class="sc">%&gt;%</span> </span>
-<span id="cb42-290"><a href="#cb42-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod))</span>
-<span id="cb42-291"><a href="#cb42-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-292"><a href="#cb42-292" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
-<span id="cb42-293"><a href="#cb42-293" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb42-294"><a href="#cb42-294" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-295"><a href="#cb42-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-296"><a href="#cb42-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-284"><a href="#cb42-284" aria-hidden="true" tabindex="-1"></a>Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observert, så får vi et svært mye bedre sammenfall enn tidligere.</span>
+<span id="cb42-285"><a href="#cb42-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-288"><a href="#cb42-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-289"><a href="#cb42-289" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-290"><a href="#cb42-290" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-291"><a href="#cb42-291" aria-hidden="true" tabindex="-1"></a>kom_pred <span class="ot">&lt;-</span> kom_s <span class="sc">%&gt;%</span> </span>
+<span id="cb42-292"><a href="#cb42-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod))</span>
+<span id="cb42-293"><a href="#cb42-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-294"><a href="#cb42-294" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-295"><a href="#cb42-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb42-296"><a href="#cb42-296" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb42-297"><a href="#cb42-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-298"><a href="#cb42-298" aria-hidden="true" tabindex="-1"></a>Nå kan vi også regne ut RMSE, som altså er "root mean squared error". Med andre ord: regn ut residualene (dvs. "error"), og kvadrer denne, og så ta kvadratroten av gjennomsnittet av denne. Her er en kode skrevet litt omstendelig så den er litt lettere å forstå:</span>
+<span id="cb42-298"><a href="#cb42-298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-299"><a href="#cb42-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-302"><a href="#cb42-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-303"><a href="#cb42-303" aria-hidden="true" tabindex="-1"></a>kom_s <span class="sc">%&gt;%</span> </span>
-<span id="cb42-304"><a href="#cb42-304" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod), </span>
-<span id="cb42-305"><a href="#cb42-305" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-306"><a href="#cb42-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-307"><a href="#cb42-307" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span>
-<span id="cb42-308"><a href="#cb42-308" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb42-309"><a href="#cb42-309" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-310"><a href="#cb42-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-311"><a href="#cb42-311" aria-hidden="true" tabindex="-1"></a>Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. <span class="ot">[^linear_regresjon-4]</span> Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.</span>
+<span id="cb42-300"><a href="#cb42-300" aria-hidden="true" tabindex="-1"></a>Nå kan vi også regne ut RMSE, som altså er "root mean squared error". Med andre ord: regn ut residualene (dvs. "error"), og kvadrer denne, og så ta kvadratroten av gjennomsnittet av denne. Her er en kode skrevet litt omstendelig så den er litt lettere å forstå:</span>
+<span id="cb42-301"><a href="#cb42-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-304"><a href="#cb42-304" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-305"><a href="#cb42-305" aria-hidden="true" tabindex="-1"></a>kom_s <span class="sc">%&gt;%</span> </span>
+<span id="cb42-306"><a href="#cb42-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod), </span>
+<span id="cb42-307"><a href="#cb42-307" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-308"><a href="#cb42-308" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-309"><a href="#cb42-309" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span>
+<span id="cb42-310"><a href="#cb42-310" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-311"><a href="#cb42-311" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-312"><a href="#cb42-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-313"><a href="#cb42-313" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-4]: </span>Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt</span>
+<span id="cb42-313"><a href="#cb42-313" aria-hidden="true" tabindex="-1"></a>Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. <span class="ot">[^linear_regresjon-4]</span> Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.</span>
 <span id="cb42-314"><a href="#cb42-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-315"><a href="#cb42-315" aria-hidden="true" tabindex="-1"></a><span class="fu">### Predikere for nye data</span></span>
+<span id="cb42-315"><a href="#cb42-315" aria-hidden="true" tabindex="-1"></a><span class="ot">[^linear_regresjon-4]: </span>Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt</span>
 <span id="cb42-316"><a href="#cb42-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-317"><a href="#cb42-317" aria-hidden="true" tabindex="-1"></a>Men nå har vi bare sett på hvordan prediksjonen fungerer på training-datasettet. Vi må sjekke med testing-datasettet. Det lagde vi i begynnelsen, så nå henter vi det frem og gjør det samme som over. I 'predict()' må vi nå angi 'newdata ='.</span>
+<span id="cb42-317"><a href="#cb42-317" aria-hidden="true" tabindex="-1"></a><span class="fu">### Predikere for nye data</span></span>
 <span id="cb42-318"><a href="#cb42-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-321"><a href="#cb42-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-322"><a href="#cb42-322" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb42-323"><a href="#cb42-323" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb42-324"><a href="#cb42-324" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
-<span id="cb42-325"><a href="#cb42-325" aria-hidden="true" tabindex="-1"></a>kom_pred2 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
-<span id="cb42-326"><a href="#cb42-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod, <span class="at">newdata =</span> .), </span>
-<span id="cb42-327"><a href="#cb42-327" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
-<span id="cb42-328"><a href="#cb42-328" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-329"><a href="#cb42-329" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred2, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
-<span id="cb42-330"><a href="#cb42-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb42-331"><a href="#cb42-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-332"><a href="#cb42-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-333"><a href="#cb42-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-319"><a href="#cb42-319" aria-hidden="true" tabindex="-1"></a>Men nå har vi bare sett på hvordan prediksjonen fungerer på training-datasettet. Vi må sjekke med testing-datasettet. Det lagde vi i begynnelsen, så nå henter vi det frem og gjør det samme som over. I 'predict()' må vi nå angi 'newdata ='.</span>
+<span id="cb42-320"><a href="#cb42-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-323"><a href="#cb42-323" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-324"><a href="#cb42-324" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb42-325"><a href="#cb42-325" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-326"><a href="#cb42-326" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-327"><a href="#cb42-327" aria-hidden="true" tabindex="-1"></a>kom_pred2 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
+<span id="cb42-328"><a href="#cb42-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(step_mod, <span class="at">newdata =</span> .), </span>
+<span id="cb42-329"><a href="#cb42-329" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
+<span id="cb42-330"><a href="#cb42-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-331"><a href="#cb42-331" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred2, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-332"><a href="#cb42-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb42-333"><a href="#cb42-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb42-334"><a href="#cb42-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-335"><a href="#cb42-335" aria-hidden="true" tabindex="-1"></a>Ser dette rart ut? Det er to observasjoner som har pedikert skyhøy voldsrate! Disse to prediksjonene bommer voldsomt, og med litt erfaring vil man se at dette her går aldri bra for $r^2$, som regnes ut slik:</span>
+<span id="cb42-335"><a href="#cb42-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-336"><a href="#cb42-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-339"><a href="#cb42-339" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-340"><a href="#cb42-340" aria-hidden="true" tabindex="-1"></a>kom_pred2  <span class="sc">%&gt;%</span> </span>
-<span id="cb42-341"><a href="#cb42-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-342"><a href="#cb42-342" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
-<span id="cb42-343"><a href="#cb42-343" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-344"><a href="#cb42-344" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span>
-<span id="cb42-345"><a href="#cb42-345" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb42-346"><a href="#cb42-346" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-347"><a href="#cb42-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-348"><a href="#cb42-348" aria-hidden="true" tabindex="-1"></a>Ganske riktig! Dette ble bare tull. Kvadratsummen til residualene ble mye høyere enn total kvadratsum. Dermed blir $r^2$ helt fjerne.</span>
+<span id="cb42-337"><a href="#cb42-337" aria-hidden="true" tabindex="-1"></a>Ser dette rart ut? Det er to observasjoner som har pedikert skyhøy voldsrate! Disse to prediksjonene bommer voldsomt, og med litt erfaring vil man se at dette her går aldri bra for $r^2$, som regnes ut slik:</span>
+<span id="cb42-338"><a href="#cb42-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-341"><a href="#cb42-341" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-342"><a href="#cb42-342" aria-hidden="true" tabindex="-1"></a>kom_pred2  <span class="sc">%&gt;%</span> </span>
+<span id="cb42-343"><a href="#cb42-343" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-344"><a href="#cb42-344" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
+<span id="cb42-345"><a href="#cb42-345" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-346"><a href="#cb42-346" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span>
+<span id="cb42-347"><a href="#cb42-347" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-348"><a href="#cb42-348" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-349"><a href="#cb42-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-350"><a href="#cb42-350" aria-hidden="true" tabindex="-1"></a>Dette er en ganske ekstrem variant av *overfitting*. Ved å formulere en veldig komplisert modell som passer veldig godt til training-dataene kan vi ende opp med en modell som passer veldig, veldig dårlig til nye data. Hvis man skulle utforme f.eks. politikktiltak på grunnlag av en slik prediksjon vil det kunne gå riktig så dårlig.</span>
+<span id="cb42-350"><a href="#cb42-350" aria-hidden="true" tabindex="-1"></a>Ganske riktig! Dette ble bare tull. Kvadratsummen til residualene ble mye høyere enn total kvadratsum. Dermed blir $r^2$ helt fjerne.</span>
 <span id="cb42-351"><a href="#cb42-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-352"><a href="#cb42-352" aria-hidden="true" tabindex="-1"></a>Det er i dette tilfellet kanskje ikke så rart: modellen ble formulert *kun* for å maksimere $r^2$ og uten så mye andre tanker bak.</span>
+<span id="cb42-352"><a href="#cb42-352" aria-hidden="true" tabindex="-1"></a>Dette er en ganske ekstrem variant av *overfitting*. Ved å formulere en veldig komplisert modell som passer veldig godt til training-dataene kan vi ende opp med en modell som passer veldig, veldig dårlig til nye data. Hvis man skulle utforme f.eks. politikktiltak på grunnlag av en slik prediksjon vil det kunne gå riktig så dårlig.</span>
 <span id="cb42-353"><a href="#cb42-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-354"><a href="#cb42-354" aria-hidden="true" tabindex="-1"></a>Det er nok bedre med en enklere modell. Vi prøver heller å bruke modellen der alle prediktorene er med, men uten alle de kompliserende interaksjonene:</span>
+<span id="cb42-354"><a href="#cb42-354" aria-hidden="true" tabindex="-1"></a>Det er i dette tilfellet kanskje ikke så rart: modellen ble formulert *kun* for å maksimere $r^2$ og uten så mye andre tanker bak.</span>
 <span id="cb42-355"><a href="#cb42-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-358"><a href="#cb42-358" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-359"><a href="#cb42-359" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb42-360"><a href="#cb42-360" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
-<span id="cb42-361"><a href="#cb42-361" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
-<span id="cb42-362"><a href="#cb42-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(full_mod, <span class="at">newdata =</span> .), </span>
-<span id="cb42-363"><a href="#cb42-363" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
-<span id="cb42-364"><a href="#cb42-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-365"><a href="#cb42-365" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred3, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
-<span id="cb42-366"><a href="#cb42-366" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb42-367"><a href="#cb42-367" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-368"><a href="#cb42-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-369"><a href="#cb42-369" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-356"><a href="#cb42-356" aria-hidden="true" tabindex="-1"></a>Det er nok bedre med en enklere modell. Vi prøver heller å bruke modellen der alle prediktorene er med, men uten alle de kompliserende interaksjonene:</span>
+<span id="cb42-357"><a href="#cb42-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-360"><a href="#cb42-360" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-361"><a href="#cb42-361" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb42-362"><a href="#cb42-362" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb42-363"><a href="#cb42-363" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="ot">&lt;-</span> kommune_test <span class="sc">%&gt;%</span> </span>
+<span id="cb42-364"><a href="#cb42-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(full_mod, <span class="at">newdata =</span> .), </span>
+<span id="cb42-365"><a href="#cb42-365" aria-hidden="true" tabindex="-1"></a>         <span class="at">residual =</span> pred <span class="sc">-</span> voldskriminalitet)</span>
+<span id="cb42-366"><a href="#cb42-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-367"><a href="#cb42-367" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(kom_pred3, <span class="fu">aes</span>(<span class="at">x =</span> voldskriminalitet, <span class="at">y =</span> pred)) <span class="sc">+</span></span>
+<span id="cb42-368"><a href="#cb42-368" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb42-369"><a href="#cb42-369" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb42-370"><a href="#cb42-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-373"><a href="#cb42-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-374"><a href="#cb42-374" aria-hidden="true" tabindex="-1"></a>kom_pred3  <span class="sc">%&gt;%</span> </span>
-<span id="cb42-375"><a href="#cb42-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-376"><a href="#cb42-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
-<span id="cb42-377"><a href="#cb42-377" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-378"><a href="#cb42-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span>
-<span id="cb42-379"><a href="#cb42-379" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb42-380"><a href="#cb42-380" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-381"><a href="#cb42-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-382"><a href="#cb42-382" aria-hidden="true" tabindex="-1"></a>Sammenlignet med $r^2$ på trainingdata, 'r summary(full_mod)\$r.squared', er dette ikke så værst. Litt dårligere tilpassning må man regne med.</span>
+<span id="cb42-371"><a href="#cb42-371" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb42-372"><a href="#cb42-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-375"><a href="#cb42-375" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-376"><a href="#cb42-376" aria-hidden="true" tabindex="-1"></a>kom_pred3  <span class="sc">%&gt;%</span> </span>
+<span id="cb42-377"><a href="#cb42-377" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">residual_total =</span> voldskriminalitet <span class="sc">-</span> <span class="fu">mean</span>(voldskriminalitet)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-378"><a href="#cb42-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">SSres =</span> <span class="fu">sum</span>(residual<span class="sc">^</span><span class="dv">2</span>), </span>
+<span id="cb42-379"><a href="#cb42-379" aria-hidden="true" tabindex="-1"></a>            <span class="at">SStot =</span> <span class="fu">sum</span>(residual_total<span class="sc">^</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-380"><a href="#cb42-380" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r_squared =</span> <span class="dv">1</span> <span class="sc">-</span> (SSres<span class="sc">/</span>SStot))</span>
+<span id="cb42-381"><a href="#cb42-381" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-382"><a href="#cb42-382" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-383"><a href="#cb42-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-384"><a href="#cb42-384" aria-hidden="true" tabindex="-1"></a>RMSE regnes ut slik:</span>
+<span id="cb42-384"><a href="#cb42-384" aria-hidden="true" tabindex="-1"></a>Sammenlignet med $r^2$ på trainingdata, 'r summary(full_mod)\$r.squared', er dette ikke så værst. Litt dårligere tilpassning må man regne med.</span>
 <span id="cb42-385"><a href="#cb42-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-388"><a href="#cb42-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb42-389"><a href="#cb42-389" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="sc">%&gt;%</span> </span>
-<span id="cb42-390"><a href="#cb42-390" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-391"><a href="#cb42-391" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span>
-<span id="cb42-392"><a href="#cb42-392" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb42-393"><a href="#cb42-393" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb42-394"><a href="#cb42-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-395"><a href="#cb42-395" aria-hidden="true" tabindex="-1"></a>Det er altså slik at en enklere modell kan passe til *nye* data langt bedre enn en veldig komplisert modell. Grunnen er overfitting: modellen fanger opp vel så mye tilfeldig støy som det underliggende mønsteret. Støyen vil jo være annerledes i de nye dataene.</span>
+<span id="cb42-386"><a href="#cb42-386" aria-hidden="true" tabindex="-1"></a>RMSE regnes ut slik:</span>
+<span id="cb42-387"><a href="#cb42-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-390"><a href="#cb42-390" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb42-391"><a href="#cb42-391" aria-hidden="true" tabindex="-1"></a>kom_pred3 <span class="sc">%&gt;%</span> </span>
+<span id="cb42-392"><a href="#cb42-392" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sq.resid =</span> residual<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-393"><a href="#cb42-393" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>(sq.resid)))</span>
+<span id="cb42-394"><a href="#cb42-394" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-395"><a href="#cb42-395" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb42-396"><a href="#cb42-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-397"><a href="#cb42-397" aria-hidden="true" tabindex="-1"></a><span class="fu">### Oppsummerende kommentar</span></span>
+<span id="cb42-397"><a href="#cb42-397" aria-hidden="true" tabindex="-1"></a>Det er altså slik at en enklere modell kan passe til *nye* data langt bedre enn en veldig komplisert modell. Grunnen er overfitting: modellen fanger opp vel så mye tilfeldig støy som det underliggende mønsteret. Støyen vil jo være annerledes i de nye dataene.</span>
 <span id="cb42-398"><a href="#cb42-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-399"><a href="#cb42-399" aria-hidden="true" tabindex="-1"></a>Dette gjelder generelt: mer komplisert regresjonsmodell vil gi tilsynelatende bedre tilpassning til data enten man måler med $r^2$ eller RMSE. Man kan riktignok bruke mål på tilpassning som justerer for antall parametre etc (f.eks. justert $r^2$, AIC eller BIC), som kanskje kan bedre dette noe, men det vil ofte lede til overfitting likevel.</span>
+<span id="cb42-399"><a href="#cb42-399" aria-hidden="true" tabindex="-1"></a><span class="fu">### Oppsummerende kommentar</span></span>
 <span id="cb42-400"><a href="#cb42-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-401"><a href="#cb42-401" aria-hidden="true" tabindex="-1"></a>Det er derfor veldig viktig å teste modellen mot *nye* data. I praksis testing-dataene man lagde til å begynne med.</span>
+<span id="cb42-401"><a href="#cb42-401" aria-hidden="true" tabindex="-1"></a>Dette gjelder generelt: mer komplisert regresjonsmodell vil gi tilsynelatende bedre tilpassning til data enten man måler med $r^2$ eller RMSE. Man kan riktignok bruke mål på tilpassning som justerer for antall parametre etc (f.eks. justert $r^2$, AIC eller BIC), som kanskje kan bedre dette noe, men det vil ofte lede til overfitting likevel.</span>
 <span id="cb42-402"><a href="#cb42-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-403"><a href="#cb42-403" aria-hidden="true" tabindex="-1"></a>I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstret ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte.</span>
+<span id="cb42-403"><a href="#cb42-403" aria-hidden="true" tabindex="-1"></a>Det er derfor veldig viktig å teste modellen mot *nye* data. I praksis testing-dataene man lagde til å begynne med.</span>
 <span id="cb42-404"><a href="#cb42-404" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-405"><a href="#cb42-405" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb42-405"><a href="#cb42-405" aria-hidden="true" tabindex="-1"></a>I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstret ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte. </span>
 <span id="cb42-406"><a href="#cb42-406" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-407"><a href="#cb42-407" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-rep}</span>
-<span id="cb42-408"><a href="#cb42-408" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
-<span id="cb42-409"><a href="#cb42-409" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb42-410"><a href="#cb42-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-411"><a href="#cb42-411" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-eksplisitt}</span>
-<span id="cb42-412"><a href="#cb42-412" aria-hidden="true" tabindex="-1"></a>Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</span>
+<span id="cb42-407"><a href="#cb42-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-408"><a href="#cb42-408" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb42-409"><a href="#cb42-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-410"><a href="#cb42-410" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-rep}</span>
+<span id="cb42-411"><a href="#cb42-411" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb42-412"><a href="#cb42-412" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb42-413"><a href="#cb42-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-414"><a href="#cb42-414" aria-hidden="true" tabindex="-1"></a>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</span>
-<span id="cb42-415"><a href="#cb42-415" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-414"><a href="#cb42-414" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-eksplisitt}</span>
+<span id="cb42-415"><a href="#cb42-415" aria-hidden="true" tabindex="-1"></a>Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</span>
 <span id="cb42-416"><a href="#cb42-416" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-417"><a href="#cb42-417" aria-hidden="true" tabindex="-1"></a>::: {#exr-split}</span>
-<span id="cb42-418"><a href="#cb42-418" aria-hidden="true" tabindex="-1"></a>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</span>
-<span id="cb42-419"><a href="#cb42-419" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb42-420"><a href="#cb42-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-421"><a href="#cb42-421" aria-hidden="true" tabindex="-1"></a>::: {#exr-sepaa}</span>
-<span id="cb42-422"><a href="#cb42-422" aria-hidden="true" tabindex="-1"></a>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</span>
+<span id="cb42-417"><a href="#cb42-417" aria-hidden="true" tabindex="-1"></a>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</span>
+<span id="cb42-418"><a href="#cb42-418" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-419"><a href="#cb42-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-420"><a href="#cb42-420" aria-hidden="true" tabindex="-1"></a>::: {#exr-split}</span>
+<span id="cb42-421"><a href="#cb42-421" aria-hidden="true" tabindex="-1"></a>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</span>
+<span id="cb42-422"><a href="#cb42-422" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb42-423"><a href="#cb42-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-424"><a href="#cb42-424" aria-hidden="true" tabindex="-1"></a>a)  Bruk <span class="in">`glimpse()`</span> og <span class="in">`skim()`</span> til å få oversikt over innholdet i datasettet</span>
-<span id="cb42-425"><a href="#cb42-425" aria-hidden="true" tabindex="-1"></a>b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</span>
-<span id="cb42-426"><a href="#cb42-426" aria-hidden="true" tabindex="-1"></a>c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</span>
-<span id="cb42-427"><a href="#cb42-427" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb42-428"><a href="#cb42-428" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-429"><a href="#cb42-429" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-train}</span>
-<span id="cb42-430"><a href="#cb42-430" aria-hidden="true" tabindex="-1"></a>Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er $r^2$ og RMSE.</span>
+<span id="cb42-424"><a href="#cb42-424" aria-hidden="true" tabindex="-1"></a>::: {#exr-sepaa}</span>
+<span id="cb42-425"><a href="#cb42-425" aria-hidden="true" tabindex="-1"></a>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</span>
+<span id="cb42-426"><a href="#cb42-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-427"><a href="#cb42-427" aria-hidden="true" tabindex="-1"></a>a)  Bruk <span class="in">`glimpse()`</span> og <span class="in">`skim()`</span> til å få oversikt over innholdet i datasettet</span>
+<span id="cb42-428"><a href="#cb42-428" aria-hidden="true" tabindex="-1"></a>b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</span>
+<span id="cb42-429"><a href="#cb42-429" aria-hidden="true" tabindex="-1"></a>c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</span>
+<span id="cb42-430"><a href="#cb42-430" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb42-431"><a href="#cb42-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-432"><a href="#cb42-432" aria-hidden="true" tabindex="-1"></a>a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell</span>
-<span id="cb42-433"><a href="#cb42-433" aria-hidden="true" tabindex="-1"></a>b)  Estimer en ny modell med alle variable i datasettet</span>
-<span id="cb42-434"><a href="#cb42-434" aria-hidden="true" tabindex="-1"></a>c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</span>
-<span id="cb42-435"><a href="#cb42-435" aria-hidden="true" tabindex="-1"></a>d)  Gjør et automatisk modellsøk</span>
-<span id="cb42-436"><a href="#cb42-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-437"><a href="#cb42-437" aria-hidden="true" tabindex="-1"></a>Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</span>
-<span id="cb42-438"><a href="#cb42-438" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-432"><a href="#cb42-432" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-train}</span>
+<span id="cb42-433"><a href="#cb42-433" aria-hidden="true" tabindex="-1"></a>Estimer flere lineær regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere lineære regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikker er $r^2$ og RMSE.</span>
+<span id="cb42-434"><a href="#cb42-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-435"><a href="#cb42-435" aria-hidden="true" tabindex="-1"></a>a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell</span>
+<span id="cb42-436"><a href="#cb42-436" aria-hidden="true" tabindex="-1"></a>b)  Estimer en ny modell med alle variable i datasettet</span>
+<span id="cb42-437"><a href="#cb42-437" aria-hidden="true" tabindex="-1"></a>c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</span>
+<span id="cb42-438"><a href="#cb42-438" aria-hidden="true" tabindex="-1"></a>d)  Gjør et automatisk modellsøk</span>
 <span id="cb42-439"><a href="#cb42-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-440"><a href="#cb42-440" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-test}</span>
-<span id="cb42-441"><a href="#cb42-441" aria-hidden="true" tabindex="-1"></a>I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut $r^2$ og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger:</span>
+<span id="cb42-440"><a href="#cb42-440" aria-hidden="true" tabindex="-1"></a>Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</span>
+<span id="cb42-441"><a href="#cb42-441" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb42-442"><a href="#cb42-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-443"><a href="#cb42-443" aria-hidden="true" tabindex="-1"></a>a)  Prediker utfallet på testing-datasettet</span>
-<span id="cb42-444"><a href="#cb42-444" aria-hidden="true" tabindex="-1"></a>b)  Regn ut $r^2$ og RMSE</span>
-<span id="cb42-445"><a href="#cb42-445" aria-hidden="true" tabindex="-1"></a>c)  Hvor stor er *endringen* i $r^2$ og RMSE fra resultatene når du brukte training-datasettet?</span>
-<span id="cb42-446"><a href="#cb42-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-447"><a href="#cb42-447" aria-hidden="true" tabindex="-1"></a>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i $r^2$ og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</span>
-<span id="cb42-448"><a href="#cb42-448" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb42-443"><a href="#cb42-443" aria-hidden="true" tabindex="-1"></a>::: {#exr-ols-test}</span>
+<span id="cb42-444"><a href="#cb42-444" aria-hidden="true" tabindex="-1"></a>I forrige oppgave brukte du testing-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut $r^2$ og RMSE for disse dataene. For hver modell i forrige oppgave, gjør som følger:</span>
+<span id="cb42-445"><a href="#cb42-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-446"><a href="#cb42-446" aria-hidden="true" tabindex="-1"></a>a)  Prediker utfallet på testing-datasettet</span>
+<span id="cb42-447"><a href="#cb42-447" aria-hidden="true" tabindex="-1"></a>b)  Regn ut $r^2$ og RMSE</span>
+<span id="cb42-448"><a href="#cb42-448" aria-hidden="true" tabindex="-1"></a>c)  Hvor stor er *endringen* i $r^2$ og RMSE fra resultatene når du brukte training-datasettet?</span>
+<span id="cb42-449"><a href="#cb42-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-450"><a href="#cb42-450" aria-hidden="true" tabindex="-1"></a>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i $r^2$ og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</span>
+<span id="cb42-451"><a href="#cb42-451" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

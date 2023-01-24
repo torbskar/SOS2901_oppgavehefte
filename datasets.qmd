@@ -311,8 +311,9 @@ oes %>%
 ## Voters
 
 Data er hentet fra [2016 Views of the Electorate Research Survey](https://www.voterstudygroup.org/data) gjennomført av Voter study group.
+Full variabelliste er lastet opp i Canvas, der det står 
 
-Aktuell problemstilling er å predikere hvilke velgere som støtter Clinton. En slik klassifisering kan brukes til f.eks. å målrette budskap. En relatert problemstilling er å klustre velgerne for å finne segmenter
+Aktuell problemstilling er å predikere hvilke velgere som støtter Clinton. En slik klassifisering kan brukes til f.eks. å målrette budskap. En relatert problemstilling er å klustre velgerne for å finne segmenter. 
 
 ```{r voters}
 voters <- read.csv("data/voters.csv")
