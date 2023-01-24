@@ -19,7 +19,7 @@ Lag en egen mappe for dette kurset og lag følgende undermapper:
 * Output 
 * Dokumenter
 
-Du kan også lage andre undermapper hvis du vil. Det vil være begrenset behov for å eksportere output, men det er selvsagt mulig. Lag
+Du kan også lage andre undermapper hvis du vil. Det vil være begrenset behov for å eksportere output, men det er selvsagt mulig. 
 
 
 ## Litt begrepsbruk 
