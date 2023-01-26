@@ -143,3 +143,29 @@ Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresj
 ::: {#exr-fair-nyedata}
 Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.  
 :::
+
+
+
+
+## Refleksjonsoppgaver
+
+::: {#exr-fair-ref1}
+Studien til @caspi2017 bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende: 
+
+* Hva slags informasjon synes du *mangler* for å vurdere treffsikkerheten på prediksjonsmodellen? 
+* Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder? 
+* Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater? 
+* Er det behov for å vurdere "fairness" grundigere her? 
+:::
+
+
+::: {#exr-fair-ref2}
+Studien til @berk2016a bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende: 
+
+* Synes du at forholdstallet 1 til 10 for falske  positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da? 
+* Er det grunn til å tro at man bør undersøke "fairness" grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for? 
+
+:::
+
+
+

@@ -8,6 +8,33 @@
 library(caret)
 ```
 
+Dere har noe ulik bakgrunn med R og vil antakeligvis synes forskjellige ting er vanskelig. Her er noen grunnleggende ting for databehandling i R og med lenker der dere kan finne ut mer. 
+
+For de av dere som har brukt R en del tidligere kan det hende at det kan være vel så nyttig å se på noen *cheatsheets* som gir ganske god oversikt. De er nok nyttigst for de som kan en god del fra før, riktignok. Noen slike finnes på [Posit sine hjemmesider](https://posit.co/resources/cheatsheets/), men også [DataCamp har noen fine](https://www.datacamp.com/cheat-sheet/category/r-programming) og de kan lastes ned i pdf-format slik at du har dem lett tilgjengelig. Her er noen som kan være mest nyttige: 
+
+* [Grunnleggende R](https://www.datacamp.com/cheat-sheet/getting-started-r)
+* [Datahåndtering med dplyr](https://posit.co/wp-content/uploads/2022/10/data-transformation-1.pdf)
+* [Grafikk med ggplot](https://posit.co/wp-content/uploads/2022/10/data-visualization-1.pdf)
+
+Det finnes i det hele tatt voldsomt mange ressurser på nettet for å lære R. Dere skal ikke trenge veldig mye av dette, men noen ganger må man slå opp. Et vanlig nettsøk kan være en bra start. 
+
+
+
+
+## Hjelp-filer og dokumentasjon
+Alle funksjoner i R har en hjelp-fil som inneholder syntax, forklaring av argumentene, noen detaljer (ved behov), og eksempler. For å få tilgang til denne setter du et spørsmålstegn foran funksjonsnavnet slik: 
+
+```{r}
+#| eval: false
+#| code-fold: false
+?confusionMatrix
+
+```
+
+Hjelpfilene kan være vanskelige å forstå hvordan fungerer. Det er ikke alltid selvforklarende, for å si det forsiktig. Men det viktige er at du ser hvilke argumenter som hører til funksjonen og hva de betyr. Ofte er det like greit å gå til eksemplene nederst på siden. 
+
+
+
 
 ## Rstudio projects 
 Det anbefales sterkt å lage en mappestruktur egnet for *Rstudio projects*. Hensikten med dette er å ha en hensiktsmessig og ryddig mappestruktur for alt arbeidet ditt. Dette er forklart nærmere i [@r4ds], se kapittelet om [workflow](https://r4ds.had.co.nz/workflow-projects.html) og særlig [avsnittet om projects](https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects). 
@@ -94,7 +121,14 @@ OBS! Vend deg til å alltid bruke set.seed når du jobber i dette kurset, for du
 ## Prediksjon med `predict()`
 Dere skal bruke funksjonen `predict()` ganske mye. Den tar et objekt fra en eller annen modell og predikerer fra denne. Merk at den bruker det objektet dere har lagret resultatene i, ser hva slags modell det er, og predikerer i henhold til det. 
 
-I utgangspunktet bruker den det samme datasettet som modellen ble estimert med. Men kan også predikere på nye data. Da må argumentet `newdata = ...` angis. Det vil typisk være testing-datasettet eller helt nye observasjoner der du ikke vet utfallet. Det nye datasettet må alle de variablene som vari det opprinnelige datasettet for at det skal funke. 
+I utgangspunktet bruker den det samme datasettet som modellen ble estimert med. Men kan også predikere på nye data. Da må argumentet `newdata = ...` angis. Det vil typisk være testing-datasettet eller helt nye observasjoner der du ikke vet utfallet. 
+
+Det nye datasettet må alle de variablene som var i det opprinnelige datasettet for at det skal funke. For kategoriske variable vil det også kunne oppstå et problem hvis *testing-data* inneholdere andre kategorier enn det var i *training-data*. I slike tilfeller vil man ikke kunne predikere for disse observasjonene, men du vil få prediksjoner for øvrige observasjoner som før. 
+
+Man kan predikere forskjellige ting. Det kan være en kontinuerlig verdi, en sannsynlighet eller noe annet. Det kommer an på hva slags modell du estimerte i utgangspunktet. For eksempel vil lineær regresjon kun predikere forventet verdi på den skalaen $y$-variabel er på. Men for logistisk regresjon kan det predikeres på logit-skala, mens for å få en sannsynlighet må du angi `type = response`. For random forest vil vi primært bruke en kategorisk utfallsvariabel, og setter da også `type = response` eller evt `type = class` (som gir det samme), men det går også an å be om `votes` eller `prob.` 
+
+Til hver type modell finnes det en egen predict-funksjon, og når man bruker `predict()` så finner den riktig funksjon basert på modelltype. Så hvis du slår opp i hjelp-filen for predict med `?predict` så står det nesten ingenting. Derimot kan du slå opp i `?predict.lm` for lineær regresjon, `?predict.glm` for logistisk regresjon, og tilsvarende `?predict.randomForest`, `?predict.xgb.Booster` osv. I utgangspunktet skal du ikke trenge å slå opp disse, men hvis noe går helt galt kan det hende 
+
 
 
 ## Bruke *formula* for utfallsvariable og prediktorer 
@@ -163,18 +197,5 @@ En rekke modeller har noen standard funksjoner for å plotte. Funksjonen `plot()
 I en del eksempler her brukes `ggplot()`. Dette er for avansert grafikk og er det som brukes i standard statistikkurs på bachelornivå på SV-fakultetet (på alle fag, tror jeg). Det er en viktig grunn til at det brukes her også. For en del visualisering av tre-baserte metoder er det vesentlig lettere å bruke spesialiserte funksjoner via `plot()`. Men for all del: `ggplot()` kan lage disse figurene også, det bare krever mer arbeid enn vi prioriterer her. 
 
 Du kan lære mer om `ggplot()` i R4DS [@r4ds] i kapittelet om [visualisering](https://r4ds.had.co.nz/data-visualisation.html).
-
-
-## Hjelp-filer og dokumentasjon
-Alle funksjoner i R har en hjelp-fil som inneholder syntax, forklaring av argumentene, noen detaljer (ved behov), og eksempler. For å få tilgang til denne setter du et spørsmålstegn foran funksjonsnavnet slik: 
-
-```{r}
-#| eval: false
-#| code-fold: false
-?confusionMatrix
-
-```
-
-Hjelpfilene kan være vanskelige å forstå hvordan fungerer. Det er ikke alltid selvforklarende, for å si det forsiktig. Men det viktige er at du ser hvilke argumenter som hører til funksjonen og hva de betyr. 
 
 

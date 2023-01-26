@@ -83,6 +83,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -249,6 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#mer-confusion-matrix" id="toc-mer-confusion-matrix" class="nav-link" data-scroll-target="#mer-confusion-matrix"><span class="toc-section-number">4.2</span>  Mer confusion matrix</a></li>
   <li><a href="#mål-på-fairness" id="toc-mål-på-fairness" class="nav-link" data-scroll-target="#mål-på-fairness"><span class="toc-section-number">4.3</span>  Mål på fairness</a></li>
   <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">4.4</span>  Oppgaver</a></li>
+  <li><a href="#refleksjonsoppgaver" id="toc-refleksjonsoppgaver" class="nav-link" data-scroll-target="#refleksjonsoppgaver"><span class="toc-section-number">4.5</span>  Refleksjonsoppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -1012,10 +1032,37 @@ Prediction  No Yes
 <div id="exr-fair-nyedata" class="theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 4.5 </strong></span>Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på “fairness” igjen. Gjør tilsvarende som over.</p>
 </div>
+</section>
+<section id="refleksjonsoppgaver" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="refleksjonsoppgaver"><span class="header-section-number">4.5</span> Refleksjonsoppgaver</h2>
+<div id="exr-fair-ref1" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.6 </strong></span>Studien til <span class="citation" data-cites="caspi2017">Caspi et al. (<a href="references.html#ref-caspi2017" role="doc-biblioref">2017</a>)</span> bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende:</p>
+<ul>
+<li>Hva slags informasjon synes du <em>mangler</em> for å vurdere treffsikkerheten på prediksjonsmodellen?</li>
+<li>Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder?</li>
+<li>Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater?</li>
+<li>Er det behov for å vurdere “fairness” grundigere her?</li>
+</ul>
+</div>
+<div id="exr-fair-ref2" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4.7 </strong></span>Studien til <span class="citation" data-cites="berk2016a">Berk (<a href="references.html#ref-berk2016a" role="doc-biblioref">2016</a>)</span> bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende:</p>
+<ul>
+<li>Synes du at forholdstallet 1 til 10 for falske positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da?</li>
+<li>Er det grunn til å tro at man bør undersøke “fairness” grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for?</li>
+</ul>
+</div>
 
 
 <!-- -->
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-berk2016a" class="csl-entry" role="doc-biblioentry">
+Berk, Richard. 2016. <em>Statistical Learning from a Regression Perspective</em>. USA: Springer.
+</div>
+<div id="ref-caspi2017" class="csl-entry" role="doc-biblioentry">
+Caspi, Avshalom, Renate M. Houts, Daniel W. Belsky, Honalee Harrington, Sean Hogan, Sandhya Ramrakha, Richie Poulton, and Terrie E. Moffitt. 2017. <span>“Childhood Forecasting of a Small Segment of the Population with Large Economic Burden.”</span> <em>Nature Human Behavior</em> 1 (5): 223–40. https://doi.org/<a href="https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005">https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1360,6 +1407,31 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-nyedata}</span>
 <span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.  </span>
 <span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a><span class="fu">## Refleksjonsoppgaver</span></span>
+<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref1}</span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a>Studien til @caspi2017 bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende: </span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags informasjon synes du *mangler* for å vurdere treffsikkerheten på prediksjonsmodellen? </span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder? </span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater? </span>
+<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det behov for å vurdere "fairness" grundigere her? </span>
+<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref2}</span>
+<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a>Studien til @berk2016a bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende: </span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Synes du at forholdstallet 1 til 10 for falske  positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da? </span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det grunn til å tro at man bør undersøke "fairness" grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for? </span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

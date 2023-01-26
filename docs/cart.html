@@ -587,21 +587,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> default    no yes                                                                                                                                                                                                                               
-      no [1.00 .00] when amount is 3361 to  3914 &amp; age &lt;  26                                                                                                                                                                                     
-      no  [.91 .09] when amount &lt;  1382          &amp; age &gt;=       49                                                                                                                                                                               
-      no  [.83 .17] when amount is 1382 to  3914 &amp; age &gt;=       26                                                                                                                                                                               
-      no  [.75 .25] when amount &lt;  1382          &amp; age is 26 to 49                                                               &amp; purpose is   business or education or furniture/appliances &amp; housing is           own                         
-      no  [.73 .27] when amount &lt;  1382          &amp; age is 26 to 49                                                               &amp; purpose is                      car or car0 or renovations &amp; housing is           own &amp; percent_of_income &lt;  4
-      no  [.71 .29] when amount &gt;=          3914                   &amp; employment_duration is            4 - 7 years or unemployed                                                                                                                 
-      no  [.65 .35] when amount is 3914 to 11307 &amp; age is 27 to 50 &amp; employment_duration is &lt; 1 year or &gt; 7 years or 1 - 4 years                                                                                                                 
-      no  [.62 .38] when amount &lt;  3361          &amp; age &lt;  26                                                                     &amp; purpose is business or furniture/appliances or renovations                                                    
-     yes  [.38 .62] when amount &lt;  1382          &amp; age is 26 to 49                                                               &amp; purpose is                      car or car0 or renovations &amp; housing is           own &amp; percent_of_income &gt;= 4
-     yes  [.33 .67] when amount &lt;  3361          &amp; age &lt;  26                                                                     &amp; purpose is                                car or education                                                    
-     yes  [.32 .68] when amount is 3914 to 11307 &amp; age &lt;  27       &amp; employment_duration is &lt; 1 year or &gt; 7 years or 1 - 4 years                                                                                                                 
-     yes  [.29 .71] when amount &lt;  1382          &amp; age is 26 to 49                                                                                                                            &amp; housing is other or rent                         
-     yes  [.20 .80] when amount is 3914 to 11307 &amp; age &gt;=       50 &amp; employment_duration is &lt; 1 year or &gt; 7 years or 1 - 4 years                                                                                                                 
-     yes  [.09 .91] when amount &gt;=         11307                   &amp; employment_duration is &lt; 1 year or &gt; 7 years or 1 - 4 years                                                                                                                 </code></pre>
+<pre><code> default   no yes                                          
+      no [.75 .25] when amount &lt;  6323                     
+      no [.69 .31] when amount is 7028 to 10842 &amp; age &gt;= 27
+     yes [.37 .63] when amount is 6323 to  7028 &amp; age &gt;= 27
+     yes [.25 .75] when amount is 6323 to 10842 &amp; age &lt;  27
+     yes [.23 .77] when amount &gt;=         10842            </code></pre>
 </div>
 </div>
 <p>Vi kan så skrive ut confusion matrix.</p>
@@ -614,8 +605,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>           
 rpart_class  no yes
-        no  467 143
-        yes  30  72</code></pre>
+        no  480 167
+        yes  15  38</code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -626,26 +617,26 @@ rpart_class  no yes
 
           Reference
 Prediction  no yes
-       no  467 143
-       yes  30  72
+       no  480 167
+       yes  15  38
                                           
-               Accuracy : 0.757           
-                 95% CI : (0.7238, 0.7881)
-    No Information Rate : 0.698           
-    P-Value [Acc &gt; NIR] : 0.0002786       
+               Accuracy : 0.74            
+                 95% CI : (0.7058, 0.7721)
+    No Information Rate : 0.7071          
+    P-Value [Acc &gt; NIR] : 0.02977         
                                           
-                  Kappa : 0.3226          
+                  Kappa : 0.1981          
                                           
- Mcnemar's Test P-Value : &lt; 2.2e-16       
+ Mcnemar's Test P-Value : &lt; 2e-16         
                                           
-            Sensitivity : 0.9396          
-            Specificity : 0.3349          
-         Pos Pred Value : 0.7656          
-         Neg Pred Value : 0.7059          
-             Prevalence : 0.6980          
-         Detection Rate : 0.6559          
-   Detection Prevalence : 0.8567          
-      Balanced Accuracy : 0.6373          
+            Sensitivity : 0.9697          
+            Specificity : 0.1854          
+         Pos Pred Value : 0.7419          
+         Neg Pred Value : 0.7170          
+             Prevalence : 0.7071          
+         Detection Rate : 0.6857          
+   Detection Prevalence : 0.9243          
+      Balanced Accuracy : 0.5775          
                                           
        'Positive' Class : no              
                                           </code></pre>
@@ -662,26 +653,26 @@ Prediction  no yes
 
           Reference
 Prediction  no yes
-       no  178  61
-       yes  25  24
+       no  190  90
+       yes  15   5
                                           
-               Accuracy : 0.7014          
-                 95% CI : (0.6449, 0.7537)
-    No Information Rate : 0.7049          
-    P-Value [Acc &gt; NIR] : 0.5801312       
+               Accuracy : 0.65            
+                 95% CI : (0.5931, 0.7039)
+    No Information Rate : 0.6833          
+    P-Value [Acc &gt; NIR] : 0.9029          
                                           
-                  Kappa : 0.1815          
+                  Kappa : -0.0261         
                                           
- Mcnemar's Test P-Value : 0.0001606       
+ Mcnemar's Test P-Value : 5.136e-13       
                                           
-            Sensitivity : 0.8768          
-            Specificity : 0.2824          
-         Pos Pred Value : 0.7448          
-         Neg Pred Value : 0.4898          
-             Prevalence : 0.7049          
-         Detection Rate : 0.6181          
-   Detection Prevalence : 0.8299          
-      Balanced Accuracy : 0.5796          
+            Sensitivity : 0.92683         
+            Specificity : 0.05263         
+         Pos Pred Value : 0.67857         
+         Neg Pred Value : 0.25000         
+             Prevalence : 0.68333         
+         Detection Rate : 0.63333         
+   Detection Prevalence : 0.93333         
+      Balanced Accuracy : 0.48973         
                                           
        'Positive' Class : no              
                                           </code></pre>
