@@ -266,9 +266,15 @@ div.csl-indent {
   <ul>
   <li><a href="#hva-slags-rettferdighet" id="toc-hva-slags-rettferdighet" class="nav-link active" data-scroll-target="#hva-slags-rettferdighet"><span class="toc-section-number">4.1</span>  Hva slags rettferdighet</a></li>
   <li><a href="#mer-confusion-matrix" id="toc-mer-confusion-matrix" class="nav-link" data-scroll-target="#mer-confusion-matrix"><span class="toc-section-number">4.2</span>  Mer confusion matrix</a></li>
-  <li><a href="#mål-på-fairness" id="toc-mål-på-fairness" class="nav-link" data-scroll-target="#mål-på-fairness"><span class="toc-section-number">4.3</span>  Mål på fairness</a></li>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">4.4</span>  Oppgaver</a></li>
-  <li><a href="#refleksjonsoppgaver" id="toc-refleksjonsoppgaver" class="nav-link" data-scroll-target="#refleksjonsoppgaver"><span class="toc-section-number">4.5</span>  Refleksjonsoppgaver</a></li>
+  <li><a href="#mål-på-fairness" id="toc-mål-på-fairness" class="nav-link" data-scroll-target="#mål-på-fairness"><span class="toc-section-number">4.3</span>  Mål på fairness</a>
+  <ul class="collapse">
+  <li><a href="#predictive-rate-parity" id="toc-predictive-rate-parity" class="nav-link" data-scroll-target="#predictive-rate-parity"><span class="toc-section-number">4.3.1</span>  Predictive rate parity</a></li>
+  <li><a href="#equalized-odds" id="toc-equalized-odds" class="nav-link" data-scroll-target="#equalized-odds"><span class="toc-section-number">4.3.2</span>  Equalized odds</a></li>
+  <li><a href="#false-positive-rate-parity" id="toc-false-positive-rate-parity" class="nav-link" data-scroll-target="#false-positive-rate-parity"><span class="toc-section-number">4.3.3</span>  False positive rate parity</a></li>
+  </ul></li>
+  <li><a href="#litt-oppsummerende" id="toc-litt-oppsummerende" class="nav-link" data-scroll-target="#litt-oppsummerende"><span class="toc-section-number">4.4</span>  Litt oppsummerende</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">4.5</span>  Oppgaver</a></li>
+  <li><a href="#refleksjonsoppgaver" id="toc-refleksjonsoppgaver" class="nav-link" data-scroll-target="#refleksjonsoppgaver"><span class="toc-section-number">4.6</span>  Refleksjonsoppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -302,7 +308,7 @@ div.csl-indent {
 <div class="cell">
 
 </div>
-<p>Det kan være nyttig å gi allerede nå begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer <em>tune</em> modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.</p>
+<p>Det kan være nyttig å allerede såpass tidlig i kurset begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer <em>tune</em> modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.</p>
 <section id="hva-slags-rettferdighet" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="hva-slags-rettferdighet"><span class="header-section-number">4.1</span> Hva slags rettferdighet</h2>
 <p>I denne settingen kan rettferdighet kommer i betraktning på flere måter, herunder følgende:</p>
@@ -318,6 +324,8 @@ div.csl-indent {
 </section>
 <section id="mer-confusion-matrix" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="mer-confusion-matrix"><span class="header-section-number">4.2</span> Mer confusion matrix</h2>
+<p>Et utgangspunkt er det vi kaller confusion matrix. Det er rett og slett en krysstabell der vi sammenholder predikert og observert utfall. Å lage en slik tabell avhenger ikke av metoden vi bruker, bare at vi kan sammenlignet prediksjon med faktisk utfall.</p>
+<p>Vi bruker eksempelet fra forrige kapittel med logistisk regresjon.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -393,6 +401,7 @@ AIC: 708.66
 Number of Fisher Scoring iterations: 15</code></pre>
 </div>
 </div>
+<p>Så kan vi gjøre en prediksjon på testing-datasettet og lagre resultatet i et nytt objekt. Vi gjør en klassifisering ved å bestemme en cut-off på f.eks. en sannsynligheten over 50%.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -401,6 +410,7 @@ Number of Fisher Scoring iterations: 15</code></pre>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">attrition_class =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&lt;</span> .<span class="dv">5</span>, <span class="st">"No"</span>, <span class="st">"Yes"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>Så kan vi lage confusion matrix som følger. Vi bruker funksjonen <code>confusionMatrix()</code> for at diverse mål skal blir regnet ut automatisk for oss, men du kan godt regne ut dette for hånd også (hvis du gidder).</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -438,20 +448,27 @@ Prediction  No Yes
                                           </code></pre>
 </div>
 </div>
+<p>Hvorvidt dette er “rettferdig” eller ikke kommer jo an på hva man skal gjøre med denne prediksjonen. Så det er jo en første vurdering. Synes man feilratene er ok? Er evt. konsekvensene av å ikke gjøre noe ok?</p>
+<p>I dette eksempelet er positive predictive value 0.38 som altså er andelen av de som er predikert som positive som er rett. Det betyr at hvis vi setter i verk tiltak mot alle som er predikert positive, så vil 0.62 være bortkastet. På den annen side, vil 0.68 av de som faktisk er positive fanges opp (sensitivity).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 </section>
 <section id="mål-på-fairness" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="mål-på-fairness"><span class="header-section-number">4.3</span> Mål på fairness</h2>
+<section id="predictive-rate-parity" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="predictive-rate-parity"><span class="header-section-number">4.3.1</span> Predictive rate parity</h3>
 <p>Ovenfor så vi blant annet at “positive predicted value” , altså andelen sanne positive av alle predikerte positive, er 0.382.</p>
 <p>Men det er ulike typer jobber i denne bedriften. Her er fordelingen for test-datasettet:</p>
 <div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>#StandWithUkraine</code></pre>
+</div>
 <div class="cell-output-display">
 
-<div id="lxflodjiau" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="flodjiauip" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-:where(#lxflodjiau) .gt_table {
+:where(#flodjiauip) .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -476,7 +493,7 @@ Prediction  No Yes
   border-left-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_heading {
+:where(#flodjiauip) .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -488,12 +505,12 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_caption {
+:where(#flodjiauip) .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-:where(#lxflodjiau) .gt_title {
+:where(#flodjiauip) .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -505,7 +522,7 @@ Prediction  No Yes
   border-bottom-width: 0;
 }
 
-:where(#lxflodjiau) .gt_subtitle {
+:where(#flodjiauip) .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -517,13 +534,13 @@ Prediction  No Yes
   border-top-width: 0;
 }
 
-:where(#lxflodjiau) .gt_bottom_border {
+:where(#flodjiauip) .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_col_headings {
+:where(#flodjiauip) .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -538,7 +555,7 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_col_heading {
+:where(#flodjiauip) .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -558,7 +575,7 @@ Prediction  No Yes
   overflow-x: hidden;
 }
 
-:where(#lxflodjiau) .gt_column_spanner_outer {
+:where(#flodjiauip) .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -570,15 +587,15 @@ Prediction  No Yes
   padding-right: 4px;
 }
 
-:where(#lxflodjiau) .gt_column_spanner_outer:first-child {
+:where(#flodjiauip) .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-:where(#lxflodjiau) .gt_column_spanner_outer:last-child {
+:where(#flodjiauip) .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-:where(#lxflodjiau) .gt_column_spanner {
+:where(#flodjiauip) .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -590,7 +607,7 @@ Prediction  No Yes
   width: 100%;
 }
 
-:where(#lxflodjiau) .gt_group_heading {
+:where(#flodjiauip) .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -616,7 +633,7 @@ Prediction  No Yes
   text-align: left;
 }
 
-:where(#lxflodjiau) .gt_empty_group_heading {
+:where(#flodjiauip) .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -631,15 +648,15 @@ Prediction  No Yes
   vertical-align: middle;
 }
 
-:where(#lxflodjiau) .gt_from_md > :first-child {
+:where(#flodjiauip) .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-:where(#lxflodjiau) .gt_from_md > :last-child {
+:where(#flodjiauip) .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-:where(#lxflodjiau) .gt_row {
+:where(#flodjiauip) .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -658,7 +675,7 @@ Prediction  No Yes
   overflow-x: hidden;
 }
 
-:where(#lxflodjiau) .gt_stub {
+:where(#flodjiauip) .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -671,7 +688,7 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#lxflodjiau) .gt_stub_row_group {
+:where(#flodjiauip) .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -685,11 +702,11 @@ Prediction  No Yes
   vertical-align: top;
 }
 
-:where(#lxflodjiau) .gt_row_group_first td {
+:where(#flodjiauip) .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-:where(#lxflodjiau) .gt_summary_row {
+:where(#flodjiauip) .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -699,16 +716,16 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#lxflodjiau) .gt_first_summary_row {
+:where(#flodjiauip) .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_first_summary_row.thick {
+:where(#flodjiauip) .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-:where(#lxflodjiau) .gt_last_summary_row {
+:where(#flodjiauip) .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -718,7 +735,7 @@ Prediction  No Yes
   border-bottom-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_grand_summary_row {
+:where(#flodjiauip) .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -728,7 +745,7 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#lxflodjiau) .gt_first_grand_summary_row {
+:where(#flodjiauip) .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -738,11 +755,11 @@ Prediction  No Yes
   border-top-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_striped {
+:where(#flodjiauip) .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-:where(#lxflodjiau) .gt_table_body {
+:where(#flodjiauip) .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -751,7 +768,7 @@ Prediction  No Yes
   border-bottom-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_footnotes {
+:where(#flodjiauip) .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -765,7 +782,7 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_footnote {
+:where(#flodjiauip) .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -774,7 +791,7 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#lxflodjiau) .gt_sourcenotes {
+:where(#flodjiauip) .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -788,7 +805,7 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#lxflodjiau) .gt_sourcenote {
+:where(#flodjiauip) .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -796,64 +813,64 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#lxflodjiau) .gt_left {
+:where(#flodjiauip) .gt_left {
   text-align: left;
 }
 
-:where(#lxflodjiau) .gt_center {
+:where(#flodjiauip) .gt_center {
   text-align: center;
 }
 
-:where(#lxflodjiau) .gt_right {
+:where(#flodjiauip) .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-:where(#lxflodjiau) .gt_font_normal {
+:where(#flodjiauip) .gt_font_normal {
   font-weight: normal;
 }
 
-:where(#lxflodjiau) .gt_font_bold {
+:where(#flodjiauip) .gt_font_bold {
   font-weight: bold;
 }
 
-:where(#lxflodjiau) .gt_font_italic {
+:where(#flodjiauip) .gt_font_italic {
   font-style: italic;
 }
 
-:where(#lxflodjiau) .gt_super {
+:where(#flodjiauip) .gt_super {
   font-size: 65%;
 }
 
-:where(#lxflodjiau) .gt_footnote_marks {
+:where(#flodjiauip) .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-:where(#lxflodjiau) .gt_asterisk {
+:where(#flodjiauip) .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-:where(#lxflodjiau) .gt_indent_1 {
+:where(#flodjiauip) .gt_indent_1 {
   text-indent: 5px;
 }
 
-:where(#lxflodjiau) .gt_indent_2 {
+:where(#flodjiauip) .gt_indent_2 {
   text-indent: 10px;
 }
 
-:where(#lxflodjiau) .gt_indent_3 {
+:where(#flodjiauip) .gt_indent_3 {
   text-indent: 15px;
 }
 
-:where(#lxflodjiau) .gt_indent_4 {
+:where(#flodjiauip) .gt_indent_4 {
   text-indent: 20px;
 }
 
-:where(#lxflodjiau) .gt_indent_5 {
+:where(#flodjiauip) .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -862,46 +879,57 @@ Prediction  No Yes
   <thead class="gt_col_headings">
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 368<sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>Overall</strong>, N = 368<sup class="gt_footnote_marks">1</sup></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>No</strong>, N = 300<sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>No</strong>, N = 300<sup class="gt_footnote_marks">1</sup></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Yes</strong>, N = 68<sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>Yes</strong>, N = 68<sup class="gt_footnote_marks">1</sup></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
     <tr><td headers="label" class="gt_row gt_left">JobRole</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
 <td headers="stat_1" class="gt_row gt_center"></td>
 <td headers="stat_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Healthcare Representative</td>
-<td headers="stat_1" class="gt_row gt_center">31 (10%)</td>
-<td headers="stat_2" class="gt_row gt_center">1 (1.5%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">32 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">31 (97%)</td>
+<td headers="stat_2" class="gt_row gt_center">1 (3.1%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Human Resources</td>
-<td headers="stat_1" class="gt_row gt_center">11 (3.7%)</td>
-<td headers="stat_2" class="gt_row gt_center">3 (4.4%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">14 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">11 (79%)</td>
+<td headers="stat_2" class="gt_row gt_center">3 (21%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Laboratory Technician</td>
-<td headers="stat_1" class="gt_row gt_center">47 (16%)</td>
-<td headers="stat_2" class="gt_row gt_center">17 (25%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">64 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">47 (73%)</td>
+<td headers="stat_2" class="gt_row gt_center">17 (27%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Manager</td>
-<td headers="stat_1" class="gt_row gt_center">24 (8.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">3 (4.4%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">27 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">24 (89%)</td>
+<td headers="stat_2" class="gt_row gt_center">3 (11%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Manufacturing Director</td>
-<td headers="stat_1" class="gt_row gt_center">29 (9.7%)</td>
-<td headers="stat_2" class="gt_row gt_center">3 (4.4%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">32 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">29 (91%)</td>
+<td headers="stat_2" class="gt_row gt_center">3 (9.4%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Research Director</td>
-<td headers="stat_1" class="gt_row gt_center">17 (5.7%)</td>
-<td headers="stat_2" class="gt_row gt_center">1 (1.5%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">18 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">17 (94%)</td>
+<td headers="stat_2" class="gt_row gt_center">1 (5.6%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Research Scientist</td>
-<td headers="stat_1" class="gt_row gt_center">59 (20%)</td>
-<td headers="stat_2" class="gt_row gt_center">18 (26%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">77 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">59 (77%)</td>
+<td headers="stat_2" class="gt_row gt_center">18 (23%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sales Executive</td>
-<td headers="stat_1" class="gt_row gt_center">70 (23%)</td>
-<td headers="stat_2" class="gt_row gt_center">14 (21%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">84 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">70 (83%)</td>
+<td headers="stat_2" class="gt_row gt_center">14 (17%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sales Representative</td>
-<td headers="stat_1" class="gt_row gt_center">12 (4.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">8 (12%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">20 (100%)</td>
+<td headers="stat_1" class="gt_row gt_center">12 (60%)</td>
+<td headers="stat_2" class="gt_row gt_center">8 (40%)</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
     <tr>
-      <td class="gt_footnote" colspan="3"><sup class="gt_footnote_marks">1</sup> n (%)</td>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> n (%)</td>
     </tr>
   </tfoot>
 </table>
@@ -912,17 +940,17 @@ Prediction  No Yes
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>labTech <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>))</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>others <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( <span class="sc">!</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>) ))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>cm1 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(labTech<span class="sc">$</span>Attrition, labTech<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>cm2 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(others<span class="sc">$</span>Attrition, others<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>cm1 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>labTech <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>others <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( <span class="sc">!</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>) ))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>cm1 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(labTech<span class="sc">$</span>Attrition, labTech<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>cm2 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(others<span class="sc">$</span>Attrition, others<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>cm1 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
@@ -955,7 +983,7 @@ Prediction No Yes
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cm2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cm2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
@@ -994,21 +1022,92 @@ Prediction  No Yes
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_rate_parity</span>(<span class="at">data =</span> attrition_test,</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_rate_parity</span>(<span class="at">data =</span> attrition_test,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stdout">
+<pre><code>$Metric
+                       Laboratory Technician Healthcare Representative
+Precision                          0.4666667                  1.000000
+Predictive Rate Parity             1.0000000                  2.142857
+Group size                        64.0000000                 32.000000
+                       Human Resources Manager Manufacturing Director
+Precision                           NA      NA                     NA
+Predictive Rate Parity              NA      NA                     NA
+Group size                          14      27                     32
+                       Research Director Research Scientist Sales Executive
+Precision                             NA           1.000000       0.8181818
+Predictive Rate Parity                NA           2.142857       1.7532468
+Group size                            18          77.000000      84.0000000
+                       Sales Representative
+Precision                          0.600000
+Predictive Rate Parity             1.285714
+Group size                        20.000000
+
+$Metric_plot</code></pre>
+</div>
 <div class="cell-output-display">
 <p><img src="intro_fairness_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Nå er det vesentig større forskjeller. Utvilsomt er grunnen at gruppen av ‘andre’ var sammensatt av veldig ulike grupper som var veldig forskjellig innbyrdes, men som jevnet hverandre ut i snitt. Noen av disse gruppene var dessuten små.</p>
+<p>Man kan mene ulikt om slikt, men det er i hvert fall ikke likt på tvers av grupper.</p>
+<p>Men hvilke konsekvenser har dette? Treffsikkerheten er da lavere for laboratorie-teknikkerne enn for de andre gruppene. Ikke sikkert det er så nøye.</p>
+<p>Men la oss si at man bestemmer seg for å gi en solid lønnsforhøyelse (eller andre goder) til de man tror er i fare for å bytte jobb. Da vil bedriften bruke unødig mye midler på lab-teknikkerne (dvs. relativt mange falske positive) relativt til andre grupper .</p>
+<p>Men man kunne også tenke seg et negativt tiltak: de som er predikert å ville slutte vil <em>ikke</em> få lønnsforhøyelse eller andre goder. Hvis vurderingen er at de vil slutte uansett, så er det bortkastede ressurser. Flere blant lab-teknikerne ville da urettmessig få avslag.</p>
+<p>Ok. Det ville uansett være en lite klok arbeidsgiver som baserer seg kun på dette. Det finnes bedre måter å beholde arbeidstakerne sine på. Men man kan tenke seg andre situasjoner der konsekvensene er tydeligere: Hva om det var en automatisert sjekk av kredittverdighet for å få boliglån? Eller kanskje opptak til et lederprogram? Eller risikovurdering for prøveløslatelse fra fengsel?</p>
 </section>
-<section id="oppgaver" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">4.4</span> Oppgaver</h2>
+<section id="equalized-odds" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="equalized-odds"><span class="header-section-number">4.3.2</span> Equalized odds</h3>
+<p>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter.</p>
+<p>(I følgende kode er det lagt på [[2]] på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den dele av koden er ikke viktig).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">equal_odds</span>(<span class="at">data =</span> attrition_test,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="intro_fairness_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="false-positive-rate-parity" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="false-positive-rate-parity"><span class="header-section-number">4.3.3</span> False positive rate parity</h3>
+<p>Er falske positive rate i ulike grupper lik?</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fpr_parity</span>(<span class="at">data =</span> attrition_test,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="intro_fairness_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="litt-oppsummerende" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="litt-oppsummerende"><span class="header-section-number">4.4</span> Litt oppsummerende</h2>
+<p>Den R-pakken vi bruker her har en hel rekke ulike mål innebygget. Se en oversikt på <a href="https://cran.r-project.org/web/packages/fairness/vignettes/fairness.html">pakkens <em>vignette</em></a>.</p>
+<p>Hvilket mål som er viktigst er det derimot ikke noe klart svar på. Det kommer an på hva man har tenkt til å bruke prediksjonen til, hvilke konsekvenser tiltaket har, og hvilke konsekvenser det har å ikke gjøre noe. Disse konsekvensene kan vurderes forskjellig for personer etter om det er riktig eller feil prediksjon.</p>
+<p>Det du må ta stilling til er egentlig hvor viktig du synes likebehandling er! Ofte er jo det åpenbart veldig viktig.</p>
+<p>Så bør det nevnes at noen ganger ville man gjort noe uansett. Altså gjort de samme tiltakene basert på skjønn eller andre typer vurderinger. Det vil også ha feilrater og forskjeller mellom undergrupper i slike tilfeller, selv om man ikke har et oppsett som gir testing-data å estimere dette på. Det betyr at du ikke bare må ta stilling til om algoritmen er “fair” eller ikke, men også om den er mer eller mindre “fair” enn den alternative fremgangsmåten.</p>
+</section>
+<section id="oppgaver" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">4.5</span> Oppgaver</h2>
 <div id="exr-fair-rep" class="theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 4.1 </strong></span>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
 </div>
@@ -1033,8 +1132,8 @@ Prediction  No Yes
 <p><span class="theorem-title"><strong>Exercise 4.5 </strong></span>Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på “fairness” igjen. Gjør tilsvarende som over.</p>
 </div>
 </section>
-<section id="refleksjonsoppgaver" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="refleksjonsoppgaver"><span class="header-section-number">4.5</span> Refleksjonsoppgaver</h2>
+<section id="refleksjonsoppgaver" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="refleksjonsoppgaver"><span class="header-section-number">4.6</span> Refleksjonsoppgaver</h2>
 <div id="exr-fair-ref1" class="theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 4.6 </strong></span>Studien til <span class="citation" data-cites="caspi2017">Caspi et al. (<a href="references.html#ref-caspi2017" role="doc-biblioref">2017</a>)</span> bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende:</p>
 <ul>
@@ -1063,6 +1162,12 @@ Berk, Richard A., Susan B. Sorenson, and Geoffrey Barnes. 2016. <span>“Forecas
 Caspi, Avshalom, Renate M. Houts, Daniel W. Belsky, Honalee Harrington, Sean Hogan, Sandhya Ramrakha, Richie Poulton, and Terrie E. Moffitt. 2017. <span>“Childhood Forecasting of a Small Segment of the Population with Large Economic Burden.”</span> <em>Nature Human Behavior</em> 1 (5): 223–40. https://doi.org/<a href="https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005">https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005</a>.
 </div>
 </div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>For akkurat dette kurset er ikke disse tekniske begrepene som sensitivity, specificity osv sentrale. (Emneansvarlig går surr i disse selv). Men det forventes at du skal kunne formulere det på tilsvarende måte som her. Men du må huske <em>accuracy</em>, som er den enkleste.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -1262,176 +1367,245 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># En lett introduksjon til fairness</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker:</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># Datahåndtering, grafikk og glimpse()</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># Funksjonen confusionMatrix()</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairness)    <span class="co"># Beregne mål på fairness</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>attrition <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/attrition.rds"</span>)</span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">426</span>)</span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>attrition_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(attrition)</span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(attrition_split) </span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(attrition_split) </span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>Det kan være nyttig å gi allerede nå begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.</span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hva slags rettferdighet</span></span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>I denne settingen kan rettferdighet kommer i betraktning på flere måter, herunder følgende:</span>
-<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak</span>
-<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad *dataene* algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering</span>
-<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av *asymetriske feilrater*</span>
-<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad forrige punkt er avpasset mot hvilke *tiltak* man så setter i verk</span>
-<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen</span>
-<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>Det er nok av ting å tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Hvis datakvaliteten er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene kan i prinsippet motarbeides, så er det vel i praksis slik at en skjevhet kommer sjelden alene?</span>
-<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter med det. Deretter skal vi se på mål på skjevheter over undergrupper. Prinsippet er relativt enkelt, uten at vurderingene blir enkle av den grunn.</span>
-<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mer confusion matrix</span></span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>est_multlogit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Attrition <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
-<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_multlogit)</span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
-<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">newdata =</span> testing, <span class="at">type =</span> <span class="st">"response"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">attrition_class =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&lt;</span> .<span class="dv">5</span>, <span class="st">"No"</span>, <span class="st">"Yes"</span>)))</span>
-<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(attrition_test<span class="sc">$</span>Attrition, attrition_test<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>cm</span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mål på fairness</span></span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>Ovenfor så vi blant annet at "positive predicted value" , altså andelen sanne positive av alle predikerte positive, er <span class="in">`r round(cm$byClass[3], digits = 3)`</span>.</span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>Men det er ulike typer jobber i denne bedriften. Her er fordelingen for test-datasettet:</span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>gtsummary<span class="sc">::</span><span class="fu">tbl_summary</span>(attrition_test, <span class="at">include =</span> JobRole, <span class="at">by =</span> Attrition)</span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>For illustrasjonens skyld kan vi da dele inn datamaterialet i to deler: lab-teknikkere og resten. For hver gruppe kan vi så lage en confusion matrix og undersøke verdiene.</span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>labTech <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
-<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>))</span>
-<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>others <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
-<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( <span class="sc">!</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>) ))</span>
-<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a>cm1 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(labTech<span class="sc">$</span>Attrition, labTech<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
-<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>cm2 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(others<span class="sc">$</span>Attrition, others<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
-<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>cm1 </span>
-<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>cm2</span>
-<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>Positive predicted value for lab-teknikker er <span class="in">`r round(cm1$byClass[3], digits = 3)`</span> og for resten <span class="in">`r round(cm2$byClass[3], digits = 3)`</span>.</span>
-<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a>Forholdstallet mellom disse er <span class="in">`r cm2$byClass[3]/cm1$byClass[3]`</span>, alså nesten likt. Slik sett kan vi si at modellen er rettferdig på dette målet ved at disse to gruppene er like.</span>
-<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>Men hvis du sjekker output fra confusionMatrix ovenfor, så er jo ikke alle tallene like. Så det kommer an på hvilke mål du sammenligner.</span>
-<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>Pakken *fairness* gjør en tilsvarende beregning for deg og kan gi resultatet grafisk. Her er sammenligning av positive predicted value gjort for alle grupper av jobber:</span>
-<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_rate_parity</span>(<span class="at">data =</span> attrition_test,</span>
-<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
-<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
-<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
-<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
-<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]]</span>
-<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a>Nå er det vesentig større forskjeller. Utvilsomt er grunnen at gruppen av 'andre' var sammensatt av veldig ulike grupper som var veldig forskjellig innbyrdes, men som jevnet hverandre ut i snitt. Noen av disse gruppene var dessuten små.</span>
-<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
-<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-rep}</span>
-<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-fler}</span>
-<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.</span>
-<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-vurd}</span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:</span>
-<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Er det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en "fair" modell?</span>
-<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Hvilke mål på "fairness" vil du si er viktigst i dette eksempelet? Hvorfor?</span>
-<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-enkel}</span>
-<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder: </span>
-<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Ble accuracy bedre eller verre? </span>
-<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Ble resultatet mer "fair"?</span>
-<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-nyedata}</span>
-<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.  </span>
-<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a><span class="fu">## Refleksjonsoppgaver</span></span>
-<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref1}</span>
-<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a>Studien til @caspi2017 bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende: </span>
-<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags informasjon synes du *mangler* for å vurdere treffsikkerheten på prediksjonsmodellen? </span>
-<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder? </span>
-<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater? </span>
-<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det behov for å vurdere "fairness" grundigere her? </span>
-<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref2}</span>
-<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a>Studien til @berk2016b bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende: </span>
-<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Synes du at forholdstallet 1 til 10 for falske  positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da? </span>
-<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det grunn til å tro at man bør undersøke "fairness" grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for? </span>
-<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># En lett introduksjon til fairness</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker:</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># Datahåndtering, grafikk og glimpse()</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># Funksjonen confusionMatrix()</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairness)    <span class="co"># Beregne mål på fairness</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>attrition <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/attrition.rds"</span>)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">426</span>)</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>attrition_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(attrition)</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(attrition_split) </span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(attrition_split) </span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>Det kan være nyttig å allerede såpass tidlig i kurset begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hva slags rettferdighet</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>I denne settingen kan rettferdighet kommer i betraktning på flere måter, herunder følgende:</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad *dataene* algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av *asymetriske feilrater*</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad forrige punkt er avpasset mot hvilke *tiltak* man så setter i verk</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>Det er nok av ting å tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Hvis datakvaliteten er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene kan i prinsippet motarbeides, så er det vel i praksis slik at en skjevhet kommer sjelden alene?</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter med det. Deretter skal vi se på mål på skjevheter over undergrupper. Prinsippet er relativt enkelt, uten at vurderingene blir enkle av den grunn.</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mer confusion matrix</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>Et utgangspunkt er det vi kaller confusion matrix. Det er rett og slett en krysstabell der vi sammenholder predikert og observert utfall. Å lage en slik tabell avhenger ikke av metoden vi bruker, bare at vi kan sammenlignet prediksjon med faktisk utfall. </span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>Vi bruker eksempelet fra forrige kapittel med logistisk regresjon. </span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>est_multlogit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Attrition <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_multlogit)</span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>Så kan vi gjøre en prediksjon på testing-datasettet og lagre resultatet i et nytt objekt. Vi gjør en klassifisering ved å bestemme en cut-off på f.eks. en sannsynligheten over 50%.</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">newdata =</span> testing, <span class="at">type =</span> <span class="st">"response"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">attrition_class =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&lt;</span> .<span class="dv">5</span>, <span class="st">"No"</span>, <span class="st">"Yes"</span>)))</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>Så kan vi lage confusion matrix som følger. Vi bruker funksjonen <span class="in">`confusionMatrix()`</span> for at diverse mål skal blir regnet ut automatisk for oss, men du kan godt regne ut dette for hånd også (hvis du gidder). </span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(attrition_test<span class="sc">$</span>Attrition, attrition_test<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a>cm</span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a>Hvorvidt dette er "rettferdig" eller ikke kommer jo an på hva man skal gjøre med denne prediksjonen. Så det er jo en første vurdering. Synes man feilratene er ok? Er evt. konsekvensene av å ikke gjøre noe ok? </span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a>I dette eksempelet er positive predictive value <span class="in">`r round(cm$byClass[3], 2)`</span> som altså er andelen av de som er predikert som positive som er rett. Det betyr at hvis vi setter i verk tiltak mot alle som er predikert positive, så vil <span class="in">`r round(1-cm$byClass[3], 2)`</span> være bortkastet. På den annen side, vil <span class="in">`r round(cm$byClass[1], 2)`</span> av de som faktisk er positive fanges opp (sensitivity).^<span class="co">[</span><span class="ot">For akkurat dette kurset er ikke disse tekniske begrepene som sensitivity, specificity osv sentrale. (Emneansvarlig går surr i disse selv). Men det forventes at du skal kunne formulere det på tilsvarende måte som her. Men du må huske *accuracy*, som er den enkleste.</span><span class="co">]</span></span>
+<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mål på fairness</span></span>
+<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a><span class="fu">### Predictive rate parity</span></span>
+<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a>Ovenfor så vi blant annet at "positive predicted value" , altså andelen sanne positive av alle predikerte positive, er <span class="in">`r round(cm$byClass[3], digits = 3)`</span>. </span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a>Men det er ulike typer jobber i denne bedriften. Her er fordelingen for test-datasettet:</span>
+<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-104"><a href="#cb16-104" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(attrition_test, <span class="at">include =</span> JobRole, <span class="at">by =</span> Attrition, <span class="at">percent =</span> <span class="st">"row"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-105"><a href="#cb16-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>()</span>
+<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-108"><a href="#cb16-108" aria-hidden="true" tabindex="-1"></a>For illustrasjonens skyld kan vi da dele inn datamaterialet i to deler: lab-teknikkere og resten. For hver gruppe kan vi så lage en confusion matrix og undersøke verdiene.</span>
+<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a>labTech <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>))</span>
+<span id="cb16-117"><a href="#cb16-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a>others <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
+<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( <span class="sc">!</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>) ))</span>
+<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a>cm1 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(labTech<span class="sc">$</span>Attrition, labTech<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
+<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-123"><a href="#cb16-123" aria-hidden="true" tabindex="-1"></a>cm2 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(others<span class="sc">$</span>Attrition, others<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
+<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a>cm1 </span>
+<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a>cm2</span>
+<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a>Positive predicted value for lab-teknikker er <span class="in">`r round(cm1$byClass[3], digits = 3)`</span> og for resten <span class="in">`r round(cm2$byClass[3], digits = 3)`</span>.</span>
+<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a>Forholdstallet mellom disse er <span class="in">`r cm2$byClass[3]/cm1$byClass[3]`</span>, alså nesten likt. Slik sett kan vi si at modellen er rettferdig på dette målet ved at disse to gruppene er like.</span>
+<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a>Men hvis du sjekker output fra confusionMatrix ovenfor, så er jo ikke alle tallene like. Så det kommer an på hvilke mål du sammenligner.</span>
+<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a>Pakken *fairness* gjør en tilsvarende beregning for deg og kan gi resultatet grafisk. Her er sammenligning av positive predicted value gjort for alle grupper av jobber:</span>
+<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_rate_parity</span>(<span class="at">data =</span> attrition_test,</span>
+<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
+<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
+<span id="cb16-144"><a href="#cb16-144" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb16-145"><a href="#cb16-145" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
+<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb16-147"><a href="#cb16-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-148"><a href="#cb16-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-149"><a href="#cb16-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-150"><a href="#cb16-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-151"><a href="#cb16-151" aria-hidden="true" tabindex="-1"></a>Nå er det vesentig større forskjeller. Utvilsomt er grunnen at gruppen av 'andre' var sammensatt av veldig ulike grupper som var veldig forskjellig innbyrdes, men som jevnet hverandre ut i snitt. Noen av disse gruppene var dessuten små.</span>
+<span id="cb16-152"><a href="#cb16-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a>Man kan mene ulikt om slikt, men det er i hvert fall ikke likt på tvers av grupper. </span>
+<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a>Men hvilke konsekvenser har dette? Treffsikkerheten er da lavere for laboratorie-teknikkerne enn for de andre gruppene. Ikke sikkert det er så nøye. </span>
+<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a>Men la oss si at man bestemmer seg for å gi en solid lønnsforhøyelse (eller andre goder) til de man tror er i fare for å bytte jobb. Da vil bedriften bruke unødig mye midler på lab-teknikkerne (dvs. relativt mange falske positive) relativt til andre grupper . </span>
+<span id="cb16-158"><a href="#cb16-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-159"><a href="#cb16-159" aria-hidden="true" tabindex="-1"></a>Men man kunne også tenke seg et negativt tiltak: de som er predikert å ville slutte vil *ikke* få lønnsforhøyelse eller andre goder. Hvis vurderingen er at de vil slutte uansett, så er det bortkastede ressurser. Flere blant lab-teknikerne ville da urettmessig få avslag. </span>
+<span id="cb16-160"><a href="#cb16-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-161"><a href="#cb16-161" aria-hidden="true" tabindex="-1"></a>Ok. Det ville uansett være en lite klok arbeidsgiver som baserer seg kun på dette. Det finnes bedre måter å beholde arbeidstakerne sine på. Men man kan tenke seg andre situasjoner der konsekvensene er tydeligere: Hva om det var en automatisert sjekk av kredittverdighet for å få boliglån? Eller kanskje opptak til et lederprogram? Eller risikovurdering for prøveløslatelse fra fengsel? </span>
+<span id="cb16-162"><a href="#cb16-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-163"><a href="#cb16-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-164"><a href="#cb16-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Equalized odds</span></span>
+<span id="cb16-165"><a href="#cb16-165" aria-hidden="true" tabindex="-1"></a>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. </span>
+<span id="cb16-166"><a href="#cb16-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-167"><a href="#cb16-167" aria-hidden="true" tabindex="-1"></a>(I følgende kode er det lagt på [<span class="co">[</span><span class="ot">2</span><span class="co">]</span>] på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den dele av koden er ikke viktig). </span>
+<span id="cb16-168"><a href="#cb16-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-171"><a href="#cb16-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-172"><a href="#cb16-172" aria-hidden="true" tabindex="-1"></a><span class="fu">equal_odds</span>(<span class="at">data =</span> attrition_test,</span>
+<span id="cb16-173"><a href="#cb16-173" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
+<span id="cb16-174"><a href="#cb16-174" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
+<span id="cb16-175"><a href="#cb16-175" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb16-176"><a href="#cb16-176" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
+<span id="cb16-177"><a href="#cb16-177" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span>
+<span id="cb16-178"><a href="#cb16-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-179"><a href="#cb16-179" aria-hidden="true" tabindex="-1"></a><span class="fu">### False positive rate parity</span></span>
+<span id="cb16-180"><a href="#cb16-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-181"><a href="#cb16-181" aria-hidden="true" tabindex="-1"></a>Er falske positive rate i ulike grupper lik? </span>
+<span id="cb16-182"><a href="#cb16-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-185"><a href="#cb16-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-186"><a href="#cb16-186" aria-hidden="true" tabindex="-1"></a><span class="fu">fpr_parity</span>(<span class="at">data =</span> attrition_test,</span>
+<span id="cb16-187"><a href="#cb16-187" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
+<span id="cb16-188"><a href="#cb16-188" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
+<span id="cb16-189"><a href="#cb16-189" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb16-190"><a href="#cb16-190" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
+<span id="cb16-191"><a href="#cb16-191" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span>
+<span id="cb16-192"><a href="#cb16-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-193"><a href="#cb16-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-194"><a href="#cb16-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-195"><a href="#cb16-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## Litt oppsummerende</span></span>
+<span id="cb16-196"><a href="#cb16-196" aria-hidden="true" tabindex="-1"></a>Den R-pakken vi bruker her har en hel rekke ulike mål innebygget. Se en oversikt på <span class="co">[</span><span class="ot">pakkens *vignette*</span><span class="co">](https://cran.r-project.org/web/packages/fairness/vignettes/fairness.html)</span>.</span>
+<span id="cb16-197"><a href="#cb16-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-198"><a href="#cb16-198" aria-hidden="true" tabindex="-1"></a>Hvilket mål som er viktigst er det derimot ikke noe klart svar på. Det kommer an på hva man har tenkt til å bruke prediksjonen til, hvilke konsekvenser tiltaket har, og hvilke konsekvenser det har å ikke gjøre noe. Disse konsekvensene kan vurderes forskjellig for personer etter om det er riktig eller feil prediksjon. </span>
+<span id="cb16-199"><a href="#cb16-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-200"><a href="#cb16-200" aria-hidden="true" tabindex="-1"></a>Det du må ta stilling til er egentlig hvor viktig du synes likebehandling er! Ofte er jo det åpenbart veldig viktig. </span>
+<span id="cb16-201"><a href="#cb16-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-202"><a href="#cb16-202" aria-hidden="true" tabindex="-1"></a>Så bør det nevnes at noen ganger ville man gjort noe uansett. Altså gjort de samme tiltakene basert på skjønn eller andre typer vurderinger. Det vil også ha feilrater og forskjeller mellom undergrupper i slike tilfeller, selv om man ikke har et oppsett som gir testing-data å estimere dette på. Det betyr at du ikke bare må ta stilling til om algoritmen er "fair" eller ikke, men også om den er mer eller mindre "fair" enn den alternative fremgangsmåten. </span>
+<span id="cb16-203"><a href="#cb16-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-204"><a href="#cb16-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-205"><a href="#cb16-205" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb16-206"><a href="#cb16-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-207"><a href="#cb16-207" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-rep}</span>
+<span id="cb16-208"><a href="#cb16-208" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb16-209"><a href="#cb16-209" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-210"><a href="#cb16-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-211"><a href="#cb16-211" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-fler}</span>
+<span id="cb16-212"><a href="#cb16-212" aria-hidden="true" tabindex="-1"></a>Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.</span>
+<span id="cb16-213"><a href="#cb16-213" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-214"><a href="#cb16-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-215"><a href="#cb16-215" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-vurd}</span>
+<span id="cb16-216"><a href="#cb16-216" aria-hidden="true" tabindex="-1"></a>Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:</span>
+<span id="cb16-217"><a href="#cb16-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-218"><a href="#cb16-218" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Er det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en "fair" modell?</span>
+<span id="cb16-219"><a href="#cb16-219" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Hvilke mål på "fairness" vil du si er viktigst i dette eksempelet? Hvorfor?</span>
+<span id="cb16-220"><a href="#cb16-220" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-221"><a href="#cb16-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-222"><a href="#cb16-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-223"><a href="#cb16-223" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-enkel}</span>
+<span id="cb16-224"><a href="#cb16-224" aria-hidden="true" tabindex="-1"></a>Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder: </span>
+<span id="cb16-225"><a href="#cb16-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-226"><a href="#cb16-226" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Ble accuracy bedre eller verre? </span>
+<span id="cb16-227"><a href="#cb16-227" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Ble resultatet mer "fair"?</span>
+<span id="cb16-228"><a href="#cb16-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-229"><a href="#cb16-229" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-230"><a href="#cb16-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-231"><a href="#cb16-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-232"><a href="#cb16-232" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-nyedata}</span>
+<span id="cb16-233"><a href="#cb16-233" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.  </span>
+<span id="cb16-234"><a href="#cb16-234" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-235"><a href="#cb16-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-236"><a href="#cb16-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-237"><a href="#cb16-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-238"><a href="#cb16-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-239"><a href="#cb16-239" aria-hidden="true" tabindex="-1"></a><span class="fu">## Refleksjonsoppgaver</span></span>
+<span id="cb16-240"><a href="#cb16-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-241"><a href="#cb16-241" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref1}</span>
+<span id="cb16-242"><a href="#cb16-242" aria-hidden="true" tabindex="-1"></a>Studien til @caspi2017 bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende: </span>
+<span id="cb16-243"><a href="#cb16-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-244"><a href="#cb16-244" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags informasjon synes du *mangler* for å vurdere treffsikkerheten på prediksjonsmodellen? </span>
+<span id="cb16-245"><a href="#cb16-245" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder? </span>
+<span id="cb16-246"><a href="#cb16-246" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater? </span>
+<span id="cb16-247"><a href="#cb16-247" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det behov for å vurdere "fairness" grundigere her? </span>
+<span id="cb16-248"><a href="#cb16-248" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-249"><a href="#cb16-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-250"><a href="#cb16-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-251"><a href="#cb16-251" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref2}</span>
+<span id="cb16-252"><a href="#cb16-252" aria-hidden="true" tabindex="-1"></a>Studien til @berk2016b bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende: </span>
+<span id="cb16-253"><a href="#cb16-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-254"><a href="#cb16-254" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Synes du at forholdstallet 1 til 10 for falske  positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da? </span>
+<span id="cb16-255"><a href="#cb16-255" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det grunn til å tro at man bør undersøke "fairness" grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for? </span>
+<span id="cb16-256"><a href="#cb16-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-257"><a href="#cb16-257" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-258"><a href="#cb16-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-259"><a href="#cb16-259" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -27,7 +27,7 @@ training <- training(attrition_split)
 testing  <- testing(attrition_split) 
 ```
 
-Det kan være nyttig å gi allerede nå begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.
+Det kan være nyttig å allerede såpass tidlig i kurset begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.
 
 ## Hva slags rettferdighet
 
@@ -44,11 +44,15 @@ Det er nok av ting å tak i her, men vi skal her fokusere på det som kan tallfe
 Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter med det. Deretter skal vi se på mål på skjevheter over undergrupper. Prinsippet er relativt enkelt, uten at vurderingene blir enkle av den grunn.
 
 ## Mer confusion matrix
+Et utgangspunkt er det vi kaller confusion matrix. Det er rett og slett en krysstabell der vi sammenholder predikert og observert utfall. Å lage en slik tabell avhenger ikke av metoden vi bruker, bare at vi kan sammenlignet prediksjon med faktisk utfall. 
+
+Vi bruker eksempelet fra forrige kapittel med logistisk regresjon. 
 
 ```{r}
 est_multlogit <- glm(Attrition ~ ., data = training, family = "binomial")
 summary(est_multlogit)
 ```
+Så kan vi gjøre en prediksjon på testing-datasettet og lagre resultatet i et nytt objekt. Vi gjør en klassifisering ved å bestemme en cut-off på f.eks. en sannsynligheten over 50%.
 
 ```{r}
 attrition_test <- testing %>% 
@@ -57,21 +61,36 @@ attrition_test <- testing %>%
 
 ```
 
+Så kan vi lage confusion matrix som følger. Vi bruker funksjonen `confusionMatrix()` for at diverse mål skal blir regnet ut automatisk for oss, men du kan godt regne ut dette for hånd også (hvis du gidder). 
+
 ```{r}
 cm <- confusionMatrix(attrition_test$Attrition, attrition_test$attrition_class, positive = "Yes")
 
 cm
+
+
 ```
+
+Hvorvidt dette er "rettferdig" eller ikke kommer jo an på hva man skal gjøre med denne prediksjonen. Så det er jo en første vurdering. Synes man feilratene er ok? Er evt. konsekvensene av å ikke gjøre noe ok? 
+
+I dette eksempelet er positive predictive value `r round(cm$byClass[3], 2)` som altså er andelen av de som er predikert som positive som er rett. Det betyr at hvis vi setter i verk tiltak mot alle som er predikert positive, så vil `r round(1-cm$byClass[3], 2)` være bortkastet. På den annen side, vil `r round(cm$byClass[1], 2)` av de som faktisk er positive fanges opp (sensitivity).^[For akkurat dette kurset er ikke disse tekniske begrepene som sensitivity, specificity osv sentrale. (Emneansvarlig går surr i disse selv). Men det forventes at du skal kunne formulere det på tilsvarende måte som her. Men du må huske *accuracy*, som er den enkleste.]
+
+
 
 ## Mål på fairness
 
-Ovenfor så vi blant annet at "positive predicted value" , altså andelen sanne positive av alle predikerte positive, er `r round(cm$byClass[3], digits = 3)`.
+
+### Predictive rate parity
+Ovenfor så vi blant annet at "positive predicted value" , altså andelen sanne positive av alle predikerte positive, er `r round(cm$byClass[3], digits = 3)`. 
 
 Men det er ulike typer jobber i denne bedriften. Her er fordelingen for test-datasettet:
 
 ```{r}
 #| echo: false
-gtsummary::tbl_summary(attrition_test, include = JobRole, by = Attrition)
+library(gtsummary)
+
+tbl_summary(attrition_test, include = JobRole, by = Attrition, percent = "row") %>% 
+  add_overall()
 ```
 
 For illustrasjonens skyld kan vi da dele inn datamaterialet i to deler: lab-teknikkere og resten. For hver gruppe kan vi så lage en confusion matrix og undersøke verdiene.
@@ -108,10 +127,60 @@ pred_rate_parity(data = attrition_test,
                  group = "JobRole", 
                  preds = "attrition_class", 
                  base = "Laboratory Technician"
-                 )[[2]]
+                 )
 ```
 
+
+
 Nå er det vesentig større forskjeller. Utvilsomt er grunnen at gruppen av 'andre' var sammensatt av veldig ulike grupper som var veldig forskjellig innbyrdes, men som jevnet hverandre ut i snitt. Noen av disse gruppene var dessuten små.
+
+Man kan mene ulikt om slikt, men det er i hvert fall ikke likt på tvers av grupper. 
+
+Men hvilke konsekvenser har dette? Treffsikkerheten er da lavere for laboratorie-teknikkerne enn for de andre gruppene. Ikke sikkert det er så nøye. 
+
+Men la oss si at man bestemmer seg for å gi en solid lønnsforhøyelse (eller andre goder) til de man tror er i fare for å bytte jobb. Da vil bedriften bruke unødig mye midler på lab-teknikkerne (dvs. relativt mange falske positive) relativt til andre grupper . 
+
+Men man kunne også tenke seg et negativt tiltak: de som er predikert å ville slutte vil *ikke* få lønnsforhøyelse eller andre goder. Hvis vurderingen er at de vil slutte uansett, så er det bortkastede ressurser. Flere blant lab-teknikerne ville da urettmessig få avslag. 
+
+Ok. Det ville uansett være en lite klok arbeidsgiver som baserer seg kun på dette. Det finnes bedre måter å beholde arbeidstakerne sine på. Men man kan tenke seg andre situasjoner der konsekvensene er tydeligere: Hva om det var en automatisert sjekk av kredittverdighet for å få boliglån? Eller kanskje opptak til et lederprogram? Eller risikovurdering for prøveløslatelse fra fengsel? 
+
+
+### Equalized odds
+En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. 
+
+(I følgende kode er det lagt på [[2]] på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den dele av koden er ikke viktig). 
+
+```{r}
+equal_odds(data = attrition_test,
+                 outcome = "Attrition", 
+                 group = "JobRole", 
+                 preds = "attrition_class", 
+                 base = "Laboratory Technician"
+                 )[[2]] 
+```
+### False positive rate parity
+
+Er falske positive rate i ulike grupper lik? 
+
+```{r}
+fpr_parity(data = attrition_test,
+                 outcome = "Attrition", 
+                 group = "JobRole", 
+                 preds = "attrition_class", 
+                 base = "Laboratory Technician"
+                 )[[2]] 
+```
+
+
+## Litt oppsummerende
+Den R-pakken vi bruker her har en hel rekke ulike mål innebygget. Se en oversikt på [pakkens *vignette*](https://cran.r-project.org/web/packages/fairness/vignettes/fairness.html).
+
+Hvilket mål som er viktigst er det derimot ikke noe klart svar på. Det kommer an på hva man har tenkt til å bruke prediksjonen til, hvilke konsekvenser tiltaket har, og hvilke konsekvenser det har å ikke gjøre noe. Disse konsekvensene kan vurderes forskjellig for personer etter om det er riktig eller feil prediksjon. 
+
+Det du må ta stilling til er egentlig hvor viktig du synes likebehandling er! Ofte er jo det åpenbart veldig viktig. 
+
+Så bør det nevnes at noen ganger ville man gjort noe uansett. Altså gjort de samme tiltakene basert på skjønn eller andre typer vurderinger. Det vil også ha feilrater og forskjeller mellom undergrupper i slike tilfeller, selv om man ikke har et oppsett som gir testing-data å estimere dette på. Det betyr at du ikke bare må ta stilling til om algoritmen er "fair" eller ikke, men også om den er mer eller mindre "fair" enn den alternative fremgangsmåten. 
+
 
 ## Oppgaver
 
