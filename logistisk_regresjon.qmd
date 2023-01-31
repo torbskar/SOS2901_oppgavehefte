@@ -54,7 +54,6 @@ Del datasettet i to deler. Vi trekker tilfeldig 70% og legger dette i datasettet
 
 set.seed(426)
 attrition_split <- initial_split(attrition)
-
 training <- training(attrition_split) 
 testing  <- testing(attrition_split) 
 ```
@@ -368,14 +367,15 @@ Vi kan bestemme oss for at et rimelig cut-off er 50/50, altså med sannsynlighet
 attrition_test <- attrition_test %>% 
   mutate(attrition_class = as.factor(ifelse(prob < .5, "No", "Yes")))
 
-attrition_test %>% 
+tab <- attrition_test %>% 
   select(Attrition, attrition_class) %>% 
   table()
 
+tab
 ```
 
 
-Hvis du nå lurer på om det spiller noen rolle om du har observert eller predikert i rader/kollonner, så gjør det ikke det. Det er bare to variable krysset mot hverandre. I dette tilfellet er det altså 30 personer som er gjettet riktig at vil slutte, men bare halvparten av de som faktisk sluttet ble fanget opp (27 av 30). Det var 12 som ble feilaktig gjettet at ville slutte, men som altså ikke gjorde det. 
+Hvis du nå lurer på om det spiller noen rolle om du har observert eller predikert i rader/kollonner, så gjør det ikke det. Det er bare to variable krysset mot hverandre. I dette tilfellet er det altså `r tab[2,2]` personer som er gjettet riktig at vil slutte, men bare `r tab[2,2]` av `r sum(tab[2,])` av de som faktisk sluttet ble fanget opp. Det var `r sum(tab[1,2])` som ble feilaktig gjettet at ville slutte, men som altså ikke gjorde det. 
 
 
 
