@@ -30,11 +30,11 @@ skim(credit)
 Vi splitter først datasettet i to deler: en til training og en til testing. 
 
 ```{r}
-grense <- 0.7
-lottery <- runif(n = nrow(credit))
+set.seed(42)
+training_init <- initial_split(credit)
 
-training <- filter(credit, lottery < grense)
-testing  <- filter(credit, lottery >= grense)
+training <- training(training_init)
+testing  <- testing(training_init)
 
 ```
 

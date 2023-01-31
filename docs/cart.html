@@ -561,11 +561,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>grense <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lottery <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="fu">nrow</span>(credit))</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>training_init <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(credit)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">filter</span>(credit, lottery <span class="sc">&lt;</span> grense)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">filter</span>(credit, lottery <span class="sc">&gt;=</span> grense)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(training_init)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(training_init)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Vi starter med å inkludere noen få variable som gir en oversiktlig illustrasjon. Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere <code>method = "class"</code>. Hvis ikke vil <code>rpart()</code> gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet.</p>
@@ -587,9 +587,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code> default   no yes                      
-      no [.72 .28] when amount &lt;  10664
-     yes [.22 .78] when amount &gt;= 10664</code></pre>
+<pre><code> default   no yes                                                                                                                                             
+      no [.86 .14] when housing is other or rent &amp; amount &lt;  2492 &amp; age &gt;=       34 &amp; percent_of_income &gt;= 3 &amp; purpose is  car or car0 or furniture/appliances
+      no [.76 .24] when housing is           own &amp; amount &lt;  8963                                                                                             
+      no [.74 .26] when housing is other or rent                                    &amp; percent_of_income &lt;  3                                                  
+      no [.71 .29] when housing is other or rent &amp; amount &gt;= 2492 &amp; age is 34 to 39 &amp; percent_of_income &gt;= 3 &amp; purpose is  car or car0 or furniture/appliances
+      no [.67 .33] when housing is           own &amp; amount &gt;= 8963 &amp; age &gt;=       30                                                                           
+      no [.62 .38] when housing is other or rent &amp; amount &lt;  2094 &amp; age &lt;  34       &amp; percent_of_income &gt;= 3 &amp; purpose is                 furniture/appliances
+     yes [.37 .63] when housing is other or rent &amp; amount &gt;= 2492 &amp; age &gt;=       39 &amp; percent_of_income &gt;= 3 &amp; purpose is  car or car0 or furniture/appliances
+     yes [.35 .65] when housing is other or rent &amp; amount &gt;= 2094 &amp; age &lt;  34       &amp; percent_of_income &gt;= 3 &amp; purpose is                 furniture/appliances
+     yes [.28 .72] when housing is other or rent                                    &amp; percent_of_income &gt;= 3 &amp; purpose is business or education or renovations
+     yes [.25 .75] when housing is other or rent                  &amp; age &lt;  34       &amp; percent_of_income &gt;= 3 &amp; purpose is                                  car
+     yes [.18 .82] when housing is           own &amp; amount &gt;= 8963 &amp; age &lt;  30                                                                                 </code></pre>
 </div>
 </div>
 <p>Vi kan så skrive ut confusion matrix.</p>
@@ -602,8 +611,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>           
 rpart_class  no yes
-        no  495 188
-        yes   5  18</code></pre>
+        no  502 160
+        yes  26  62</code></pre>
 </div>
 <details>
 <summary>Code</summary>
@@ -614,26 +623,26 @@ rpart_class  no yes
 
           Reference
 Prediction  no yes
-       no  495 188
-       yes   5  18
+       no  502 160
+       yes  26  62
                                           
-               Accuracy : 0.7266          
-                 95% CI : (0.6921, 0.7592)
-    No Information Rate : 0.7082          
-    P-Value [Acc &gt; NIR] : 0.1502          
+               Accuracy : 0.752           
+                 95% CI : (0.7195, 0.7825)
+    No Information Rate : 0.704           
+    P-Value [Acc &gt; NIR] : 0.001974        
                                           
-                  Kappa : 0.1047          
+                  Kappa : 0.2788          
                                           
- Mcnemar's Test P-Value : &lt;2e-16          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
                                           
-            Sensitivity : 0.99000         
-            Specificity : 0.08738         
-         Pos Pred Value : 0.72474         
-         Neg Pred Value : 0.78261         
-             Prevalence : 0.70822         
-         Detection Rate : 0.70113         
-   Detection Prevalence : 0.96742         
-      Balanced Accuracy : 0.53869         
+            Sensitivity : 0.9508          
+            Specificity : 0.2793          
+         Pos Pred Value : 0.7583          
+         Neg Pred Value : 0.7045          
+             Prevalence : 0.7040          
+         Detection Rate : 0.6693          
+   Detection Prevalence : 0.8827          
+      Balanced Accuracy : 0.6150          
                                           
        'Positive' Class : no              
                                           </code></pre>
@@ -650,26 +659,26 @@ Prediction  no yes
 
           Reference
 Prediction  no yes
-       no  194  90
-       yes   6   4
+       no  157  63
+       yes  15  15
                                           
-               Accuracy : 0.6735          
-                 95% CI : (0.6166, 0.7268)
-    No Information Rate : 0.6803          
-    P-Value [Acc &gt; NIR] : 0.6253          
+               Accuracy : 0.688           
+                 95% CI : (0.6266, 0.7449)
+    No Information Rate : 0.688           
+    P-Value [Acc &gt; NIR] : 0.5306          
                                           
-                  Kappa : 0.0164          
+                  Kappa : 0.1263          
                                           
- Mcnemar's Test P-Value : &lt;2e-16          
+ Mcnemar's Test P-Value : 1.028e-07       
                                           
-            Sensitivity : 0.97000         
-            Specificity : 0.04255         
-         Pos Pred Value : 0.68310         
-         Neg Pred Value : 0.40000         
-             Prevalence : 0.68027         
-         Detection Rate : 0.65986         
-   Detection Prevalence : 0.96599         
-      Balanced Accuracy : 0.50628         
+            Sensitivity : 0.9128          
+            Specificity : 0.1923          
+         Pos Pred Value : 0.7136          
+         Neg Pred Value : 0.5000          
+             Prevalence : 0.6880          
+         Detection Rate : 0.6280          
+   Detection Prevalence : 0.8800          
+      Balanced Accuracy : 0.5525          
                                           
        'Positive' Class : no              
                                           </code></pre>
@@ -944,11 +953,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>Vi splitter først datasettet i to deler: en til training og en til testing. </span>
 <span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>grense <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>lottery <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="fu">nrow</span>(credit))</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>training_init <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(credit)</span>
 <span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">filter</span>(credit, lottery <span class="sc">&lt;</span> grense)</span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">filter</span>(credit, lottery <span class="sc">&gt;=</span> grense)</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(training_init)</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(training_init)</span>
 <span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a></span>
