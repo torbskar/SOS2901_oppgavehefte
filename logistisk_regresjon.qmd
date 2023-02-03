@@ -385,7 +385,7 @@ For funksjonen `table()` spiller det en rolle hvilken rekkefølge variablene ang
 Fra pakken 'caret' er det en funksjon for confusion matrix som regner ut masse greier for oss. (Vi skal bare bruke akkurat den funksjonen fra 'caret'). 
 
 **NB!** *Koden nedenfor er korrigert 03.02.2023!*
-Merk at `confusionMatrix()` kan angis på to måter: 
+Merk at `confusionMatrix()` kan angis på to måter, velg den andre for minst fare for feil: 
 
 #### Angi hver vektor for seg
 Enten angi to vektorer hver for seg, der rekkefølgen er viktig.
