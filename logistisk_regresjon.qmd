@@ -368,26 +368,41 @@ attrition_test <- attrition_test %>%
   mutate(attrition_class = as.factor(ifelse(prob < .5, "No", "Yes")))
 
 tab <- attrition_test %>% 
-  select(Attrition, attrition_class) %>% 
+  select(attrition_class, Attrition) %>% 
   table()
 
 tab
 ```
 
 
-Hvis du nå lurer på om det spiller noen rolle om du har observert eller predikert i rader/kollonner, så gjør det ikke det. Det er bare to variable krysset mot hverandre. I dette tilfellet er det altså `r tab[2,2]` personer som er gjettet riktig at vil slutte, men bare `r tab[2,2]` av `r sum(tab[2,])` av de som faktisk sluttet ble fanget opp. Det var `r sum(tab[1,2])` som ble feilaktig gjettet at ville slutte, men som altså ikke gjorde det. 
+Hvis du nå lurer på om det spiller noen rolle om du har observert eller predikert i rader/kollonner, så gjør det ikke det. Det er bare to variable krysset mot hverandre. I dette tilfellet er det altså `r tab[2,2]` personer som er gjettet riktig at vil slutte, men bare `r tab[2,2]` av `r sum(tab[,2])` av de som faktisk sluttet ble fanget opp. Det var `r tab[1,2]` som ble feilaktig gjettet at ville slutte, men som altså ikke gjorde det. 
+
+For funksjonen `table()` spiller det en rolle hvilken rekkefølge variablene angis i `select()` rett før. Den først angitte gir radene og den andre kolonnene. Bytt om, så får du se.^[`table()` kan forsåvidt også brukes ved å ani hver vektor direkte. Rekkefølgen har samme betydning da]  
 
 
 
 ### Confusion matrix
 Fra pakken 'caret' er det en funksjon for confusion matrix som regner ut masse greier for oss. (Vi skal bare bruke akkurat den funksjonen fra 'caret'). 
 
+**NB!** *Koden nedenfor er korrigert 03.02.2023!*
+Merk at `confusionMatrix()` kan angis på to måter: 
 
+#### Angi hver vektor for seg
+Enten angi to vektorer hver for seg, der rekkefølgen er viktig.
+For sikkerhetsskyld kan du angi `reference = ...` for observert utfall, så regner den riktig.  
 
 ```{r}
-
-confusionMatrix(attrition_test$Attrition, attrition_test$attrition_class, positive = "Yes")
+confusionMatrix(reference = attrition_test$Attrition, attrition_test$attrition_class, positive = "Yes")
 ```
+
+
+#### Angi tabell
+Angi krysstabellen som gjort over, med observert i kolonner og predikert i rader. Dette er kanskje det ryddigste. 
+
+```{r}
+confusionMatrix(tab, positive = "Yes")
+```
+
 
 
 ## Hvor feil kan man ta? 
