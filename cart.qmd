@@ -1,6 +1,6 @@
 # Klassifikasjonstrær
 
-I dette kapittelt skal vi bruke følgende pakker: 
+I dette kapittelt skal vi bruke følgende pakker:
 
 ```{r}
 #| eval: true
@@ -16,10 +16,9 @@ library(rpart.plot) # funksjon for å plotte CART
 library(caret)      # inneholder funksjon for confusion matrix 
 ```
 
-
-
 Vi skal her bruke datasettet **credit** fra Canvas. Dataene er en banks kundehistorikk for kreditt for 1000 kunder. Variabelen *default*[^cart-1] er «yes» hvis tilbakebetaling som avtalt og «no» hvis ikke. Dette er utfallsvariabelen. Øvrige variable er rimelig selvforklarende etter variabelnavn. Målet er å lage et system for hvilke nye kunder som skal få innvilget kreditt.
 
+[^cart-1]: Begrepet "default" på engelsk kan bety å ikke holde en forpliktelse, men i software kan det bety forhåndsvalg. Dette kan være forvirrende akkurat her. Du kan godt endre variabelnavnet hvis du vil.
 
 ```{r}
 credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE) 
@@ -27,7 +26,7 @@ credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE)
 skim(credit)
 ```
 
-Vi splitter først datasettet i to deler: en til training og en til testing. 
+Vi splitter først datasettet i to deler: en til training og en til testing.
 
 ```{r}
 set.seed(42)
@@ -38,45 +37,164 @@ testing  <- testing(training_init)
 
 ```
 
-
-
-
-[^cart-1]: Begrepet "default" på engelsk kan bety å ikke holde en forpliktelse, men i software kan det bety forhåndsvalg. Dette kan være forvirrende akkurat her. Du kan godt endre variabelnavnet hvis du vil.
-
-
-Vi starter med å inkludere noen få variable som gir en oversiktlig illustrasjon. Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere `method = "class"`. Hvis ikke vil `rpart()` gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet. 
-
+Vi starter med å inkludere noen få variable som gir en oversiktlig illustrasjon. Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere `method = "class"`. Hvis ikke vil `rpart()` gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet.
 
 ```{r}
 credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
                      data=training, method="class")
+
+```
+
+Resultatet kan fremstilles grafisk med funksjonen `rpart.plot()` slik:
+
+```{r}
 rpart.plot(credit_tree)
 
 ```
 
-Vi kan også få printet ut disse som tall i en tabell. 
+Vi kan også få printet ut resultatet som tall i en tabell.[^cart-2]
+
+[^cart-2]: Argumentet `extra = 4` brukes for klassifikasjonstrær for å få andel i hver gruppe per node.
 
 ```{r}
 rpart.rules(credit_tree, extra=4)  
 ```
 
-Vi kan så skrive ut confusion matrix. 
-
+Da kan vi sammenligne prediksjoner med observert utfall for trainingdataene på tilsvarende måte som før. I `predict()` må det angis `type = "class"` for å spesifisere at det skal være klassifikasjon. Hvis ikke får man en slags sannsynlighet.
 
 ```{r}
-rpart_class <- predict(credit_tree, type="class")
-table(rpart_class, training$default)
-confusionMatrix(rpart_class, training$default)
+training_pred <- training %>% 
+  mutate(default_pred = predict(credit_tree,  type="class"))
 
 ```
 
+Vi kan så skrive ut confusion matrix.
 
 ```{r}
-rpart_test <- predict(credit_tree, newdata=testing, type="class")
-confusionMatrix(rpart_test, testing$default)
+tab <- training_pred %>% 
+  select(default_pred, default) %>% 
+  table()
+tab
 
 ```
 
+Så kan vi få regnet ut alle de standardmålene slik vi har gjort før:
+
+```{r}
+confusionMatrix(tab)
+
+```
+
+Men ovenfor har vi altså brukt training-data. Når man er fornøyd med modellen er derimot testing-data som gir indikasjon på hvor godt modellen fungerer.
+
+```{r}
+testing_pred <- testing %>% 
+  mutate(default_pred = predict(credit_tree, newdata=testing, type="class"))
+
+tab <- testing_pred %>% 
+  select(default_pred, default) %>% 
+  table()
+tab
+
+confusionMatrix(tab)
+
+```
+
+## Tuning/pruning med `rpart.control()`
+
+Vi har vært inne på tidligere at vi kan styre hvordan algoritmen fungerer. Det er noen parametres om styrer prosessen, og disse kan vi justere. Her tar vi for oss de viktiste, men det finnes flere.
+
+Kort fortalt styrer disse parametrene hvor komplekse trærne kan bli. Husk nå fra tidligere kapittel: mer kompleks modell gir bedre tilpassning til trainingdata - men kan gi dårligere tilpassning til testingdata. Målet er altså å finne en slags balansert kompleksitet. Med klassifikasjonstrær påvirker vi dette mer direkte enn ved regresjonsmodeller.
+
+Nå er arbeidsflyten slik at man skrur litt på disse parametrene, sjekker resultatet og justerer på nytt og sjekker... osv. Da er det viktig at bruker trainingdata! Ikke bruke testingdata før du er rimelig fornøyd med resultatet. Først da bruker du testingdata.
+
+### Bruk av `minsplit = ...`
+
+Parameteren `minsplit` kontrollerer det miste antallet observasjoner som kan være i en node for at en ny split skal testes. Hvis det blir for få observasjoner i en node, så stopper splitten der. Forvalget for denne parameteren er 20, så hvis f.eks. en node har 19 observasjoner, så stopper forgreningen der.
+
+### Bruk av `minbucket = ...`
+
+Parameterne `minbucket = ...` styrer hvor mange observasjoner det minst må være i den siste noden. Forvalget er en 1/3 av `minsplit`, altså 7 hvis man ikke har endret på `minsplit`. Hvis man endrer `minsplit`, så endres `minbucket` også automatisk. Men du kan altså også styre `minbucket` direkte også.
+
+Dette ligner på hva `minsplit` gjør, men mens `minsplit` kan godt splitte en node med 20 i to grupper med 1 og 19, så vil `minbucket` ikke tillate en ny split med mindre den ene gruppen har minst 7.
+
+### Bruk av `maxdepth = ...`
+
+Parameteren `maxdepth` setter rett og slett en grense for hvor mange splitter det kan gjøres i hver forgrening.
+
+### Bruk av `cp = ...`
+
+`cp` er complexity parameter som setter et krav på hvor mye hver split skal bidra til modellens tilpassning til data.
+
+## Asymetriske kostnader med loss matrix med `cost = ...` 
+
+Loss matrix er forklart nøyere hos [@berk2016a] og krever litt innsats å venne hodet til å forstå. Utgangspunktet er følgende matrise for om observasjoner er klassifisert rett eller feil.
+
+$$
+loss = \begin{bmatrix}
+               TN & FN \\
+               FP & TP 
+        \end{bmatrix}
+$$
+
+Hver posisjon i matrisen kan gis et tall. Forvalget i `rpart()` er å vekte alle disse utfallene likt og da ser matrisen slik ut: 
+$$
+loss = \begin{bmatrix}
+               0 & 0 \\
+               0 & 0 
+        \end{bmatrix}
+$$
+Tallene angir vekter i følgende rekkefølge i øverste rad: sanne negative, falske negative, og i nederste rad: falske positive og sanne positive. Altså som angitt over. 
+
+
+Vi setter alltid vektingen av sanne positive og sanne negative til 0. Det er feilene som evt. skal vektes. Første steg er dermed å velge hvordan man vil vekte utfallet. La oss si at vi ønsker å angi at falske positive skal veie tyngre enn falske negative, med en faktor på 4 kan det gjøres ved å spesifisere matrisen som følger: 
+
+$$
+loss = \begin{bmatrix}
+               0 & 1 \\
+               4 & 0 
+        \end{bmatrix}
+$$
+
+I R gjør vi dette ved å lage en matrise. Rekken med tall angis fra øvre venstre hjørne og mot høye, og så samme fra nedre venstre hjørne. Matrisen lagres i et eget objekt, som jeg her har kalt for *lossm*.
+
+```{r}
+lossm <- matrix(c(0, 4, 1, 0), ncol=2)
+lossm
+```
+
+Nå kan loss matrisen angis i `rpart()` som et element under `parms = ...`. 
+
+```{r}
+rpart_loss <- rpart(default ~ . , 
+                  data = training, 
+                  parms=list(loss = lossm),
+                  method = "class")
+```
+
+Da kan man se på resultatet igjen på samme måte som før. 
+
+```{r}
+rpart.plot(rpart_loss)
+```
+
+## Fairness omigjen
+Nå er jo algoritmen endret, så confusion matrix er også endret. Da vil nødvendigvis mål på fairness ha endret seg også. Dette bør sjekkes, og evt gå tilbake og justere modellen igjen på ulike måter og sjekke igjen. 
+
+
+## Tester justert modell med testingdata
+Så er ringen sluttet: Nå du tror du har endet opp med en god algoritme, så er det på tide å sjekke mot testingdata. Da får du så en mer realistisk forståelse av hvordan resultatene vil slå ut for *nye* data. 
+
+```{r}
+testing_pred <- testing %>% 
+  mutate(default_pred = predict(rpart_loss, newdata=testing, type="class"))
+
+tab <- testing_pred %>% 
+  select(default_pred, default) %>% 
+  table()
+confusionMatrix(tab)
+
+```
 
 
 
@@ -84,12 +202,11 @@ confusionMatrix(rpart_test, testing$default)
 ## Oppgaver
 
 ::: {#exr-}
-Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth. 
+Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth.
 :::
 
+<div>
 
-
-::: {#exr-}
 Bruk datasettet credit til å predikere kredittverdighet for nye kunder.
 
 a)  Spesifiser en formel med et fåtall variable og lag et klassifikasjonstre.
@@ -98,19 +215,21 @@ c)  Bruk predict() til å klassifisere.
 d)  Lag en confusion matrix med table()
 e)  Gi en vurdering av resultatet.
     1)  Si noe om forholdet mellom resultat for training og testing datasett.
-    1)  Er cost-ratio ok fra bankens perspektiv?
-    2)  Er cost-ratio ok fra kundens perspektiv?
-    3)  Andre hensyn som bør spille inn her?
-:::
+    2)  Er cost-ratio ok fra bankens perspektiv?
+    3)  Er cost-ratio ok fra kundens perspektiv?
+    4)  Andre hensyn som bør spille inn her?
 
+</div>
 
-::: {#exr-}
-Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.  
-Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.  
-:::
+<div>
 
+Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.\
+Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.
 
+</div>
 
-::: {#exr-}
-Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.  
-:::
+<div>
+
+Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.
+
+</div>

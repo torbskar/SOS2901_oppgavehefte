@@ -83,6 +83,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -124,6 +143,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -245,7 +265,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link active" data-scroll-target="#oppgaver"><span class="toc-section-number">5.1</span>  Oppgaver</a></li>
+  <li><a href="#tuningpruning-med-rpart.control" id="toc-tuningpruning-med-rpart.control" class="nav-link active" data-scroll-target="#tuningpruning-med-rpart.control"><span class="toc-section-number">5.1</span>  Tuning/pruning med <code>rpart.control()</code></a>
+  <ul class="collapse">
+  <li><a href="#bruk-av-minsplit-..." id="toc-bruk-av-minsplit-..." class="nav-link" data-scroll-target="#bruk-av-minsplit-..."><span class="toc-section-number">5.1.1</span>  Bruk av <code>minsplit = ...</code></a></li>
+  <li><a href="#bruk-av-minbucket-..." id="toc-bruk-av-minbucket-..." class="nav-link" data-scroll-target="#bruk-av-minbucket-..."><span class="toc-section-number">5.1.2</span>  Bruk av <code>minbucket = ...</code></a></li>
+  <li><a href="#bruk-av-maxdepth-..." id="toc-bruk-av-maxdepth-..." class="nav-link" data-scroll-target="#bruk-av-maxdepth-..."><span class="toc-section-number">5.1.3</span>  Bruk av <code>maxdepth = ...</code></a></li>
+  <li><a href="#bruk-av-cp-..." id="toc-bruk-av-cp-..." class="nav-link" data-scroll-target="#bruk-av-cp-..."><span class="toc-section-number">5.1.4</span>  Bruk av <code>cp = ...</code></a></li>
+  </ul></li>
+  <li><a href="#asymetriske-kostnader-med-loss-matrix-med-cost-..." id="toc-asymetriske-kostnader-med-loss-matrix-med-cost-..." class="nav-link" data-scroll-target="#asymetriske-kostnader-med-loss-matrix-med-cost-..."><span class="toc-section-number">5.2</span>  Asymetriske kostnader med loss matrix med <code>cost = ...</code></a></li>
+  <li><a href="#fairness-omigjen" id="toc-fairness-omigjen" class="nav-link" data-scroll-target="#fairness-omigjen"><span class="toc-section-number">5.3</span>  Fairness omigjen</a></li>
+  <li><a href="#tester-justert-modell-med-testingdata" id="toc-tester-justert-modell-med-testingdata" class="nav-link" data-scroll-target="#tester-justert-modell-med-testingdata"><span class="toc-section-number">5.4</span>  Tester justert modell med testingdata</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">5.5</span>  Oppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -573,18 +603,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>credit_tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(default <span class="sc">~</span> age <span class="sc">+</span> amount <span class="sc">+</span> percent_of_income <span class="sc">+</span> purpose <span class="sc">+</span> employment_duration <span class="sc">+</span> housing, </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data=</span>training, <span class="at">method=</span><span class="st">"class"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(credit_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data=</span>training, <span class="at">method=</span><span class="st">"class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output-display">
-<p><img src="cart_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<p>Vi kan også få printet ut disse som tall i en tabell.</p>
+<p>Resultatet kan fremstilles grafisk med funksjonen <code>rpart.plot()</code> slik:</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(credit_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="cart_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Vi kan også få printet ut resultatet som tall i en tabell.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> default   no yes                                                                                                                                             
@@ -601,30 +637,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
      yes [.18 .82] when housing is           own &amp; amount &gt;= 8963 &amp; age &lt;  30                                                                                 </code></pre>
 </div>
 </div>
+<p>Da kan vi sammenligne prediksjoner med observert utfall for trainingdataene på tilsvarende måte som før. I <code>predict()</code> må det angis <code>type = "class"</code> for å spesifisere at det skal være klassifikasjon. Hvis ikke får man en slags sannsynlighet.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>training_pred <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(credit_tree,  <span class="at">type=</span><span class="st">"class"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 <p>Vi kan så skrive ut confusion matrix.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rpart_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(credit_tree, <span class="at">type=</span><span class="st">"class"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rpart_class, training<span class="sc">$</span>default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> training_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>           
-rpart_class  no yes
-        no  502 160
-        yes  26  62</code></pre>
+<pre><code>            default
+default_pred  no yes
+         no  502 160
+         yes  26  62</code></pre>
 </div>
+</div>
+<p>Så kan vi få regnet ut alle de standardmålene slik vi har gjort før:</p>
+<div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(rpart_class, training<span class="sc">$</span>default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
-          Reference
-Prediction  no yes
-       no  502 160
-       yes  26  62
+            default
+default_pred  no yes
+         no  502 160
+         yes  26  62
                                           
                Accuracy : 0.752           
                  95% CI : (0.7195, 0.7825)
@@ -648,19 +697,35 @@ Prediction  no yes
                                           </code></pre>
 </div>
 </div>
+<p>Men ovenfor har vi altså brukt training-data. Når man er fornøyd med modellen er derimot testing-data som gir indikasjon på hvor godt modellen fungerer.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rpart_test <span class="ot">&lt;-</span> <span class="fu">predict</span>(credit_tree, <span class="at">newdata=</span>testing, <span class="at">type=</span><span class="st">"class"</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(rpart_test, testing<span class="sc">$</span>default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>testing_pred <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(credit_tree, <span class="at">newdata=</span>testing, <span class="at">type=</span><span class="st">"class"</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> testing_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>            default
+default_pred  no yes
+         no  157  63
+         yes  15  15</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
-          Reference
-Prediction  no yes
-       no  157  63
-       yes  15  15
+            default
+default_pred  no yes
+         no  157  63
+         yes  15  15
                                           
                Accuracy : 0.688           
                  95% CI : (0.6266, 0.7449)
@@ -684,13 +749,141 @@ Prediction  no yes
                                           </code></pre>
 </div>
 </div>
-<section id="oppgaver" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">5.1</span> Oppgaver</h2>
+<section id="tuningpruning-med-rpart.control" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="tuningpruning-med-rpart.control"><span class="header-section-number">5.1</span> Tuning/pruning med <code>rpart.control()</code></h2>
+<p>Vi har vært inne på tidligere at vi kan styre hvordan algoritmen fungerer. Det er noen parametres om styrer prosessen, og disse kan vi justere. Her tar vi for oss de viktiste, men det finnes flere.</p>
+<p>Kort fortalt styrer disse parametrene hvor komplekse trærne kan bli. Husk nå fra tidligere kapittel: mer kompleks modell gir bedre tilpassning til trainingdata - men kan gi dårligere tilpassning til testingdata. Målet er altså å finne en slags balansert kompleksitet. Med klassifikasjonstrær påvirker vi dette mer direkte enn ved regresjonsmodeller.</p>
+<p>Nå er arbeidsflyten slik at man skrur litt på disse parametrene, sjekker resultatet og justerer på nytt og sjekker… osv. Da er det viktig at bruker trainingdata! Ikke bruke testingdata før du er rimelig fornøyd med resultatet. Først da bruker du testingdata.</p>
+<section id="bruk-av-minsplit-..." class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="bruk-av-minsplit-..."><span class="header-section-number">5.1.1</span> Bruk av <code>minsplit = ...</code></h3>
+<p>Parameteren <code>minsplit</code> kontrollerer det miste antallet observasjoner som kan være i en node for at en ny split skal testes. Hvis det blir for få observasjoner i en node, så stopper splitten der. Forvalget for denne parameteren er 20, så hvis f.eks. en node har 19 observasjoner, så stopper forgreningen der.</p>
+</section>
+<section id="bruk-av-minbucket-..." class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="bruk-av-minbucket-..."><span class="header-section-number">5.1.2</span> Bruk av <code>minbucket = ...</code></h3>
+<p>Parameterne <code>minbucket = ...</code> styrer hvor mange observasjoner det minst må være i den siste noden. Forvalget er en 1/3 av <code>minsplit</code>, altså 7 hvis man ikke har endret på <code>minsplit</code>. Hvis man endrer <code>minsplit</code>, så endres <code>minbucket</code> også automatisk. Men du kan altså også styre <code>minbucket</code> direkte også.</p>
+<p>Dette ligner på hva <code>minsplit</code> gjør, men mens <code>minsplit</code> kan godt splitte en node med 20 i to grupper med 1 og 19, så vil <code>minbucket</code> ikke tillate en ny split med mindre den ene gruppen har minst 7.</p>
+</section>
+<section id="bruk-av-maxdepth-..." class="level3" data-number="5.1.3">
+<h3 data-number="5.1.3" class="anchored" data-anchor-id="bruk-av-maxdepth-..."><span class="header-section-number">5.1.3</span> Bruk av <code>maxdepth = ...</code></h3>
+<p>Parameteren <code>maxdepth</code> setter rett og slett en grense for hvor mange splitter det kan gjøres i hver forgrening.</p>
+</section>
+<section id="bruk-av-cp-..." class="level3" data-number="5.1.4">
+<h3 data-number="5.1.4" class="anchored" data-anchor-id="bruk-av-cp-..."><span class="header-section-number">5.1.4</span> Bruk av <code>cp = ...</code></h3>
+<p><code>cp</code> er complexity parameter som setter et krav på hvor mye hver split skal bidra til modellens tilpassning til data.</p>
+</section>
+</section>
+<section id="asymetriske-kostnader-med-loss-matrix-med-cost-..." class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="asymetriske-kostnader-med-loss-matrix-med-cost-..."><span class="header-section-number">5.2</span> Asymetriske kostnader med loss matrix med <code>cost = ...</code></h2>
+<p>Loss matrix er forklart nøyere hos <span class="citation" data-cites="berk2016a">(<a href="references.html#ref-berk2016a" role="doc-biblioref">Berk 2016</a>)</span> og krever litt innsats å venne hodet til å forstå. Utgangspunktet er følgende matrise for om observasjoner er klassifisert rett eller feil.</p>
+<p><span class="math display">\[
+loss = \begin{bmatrix}
+               TN &amp; FN \\
+               FP &amp; TP
+        \end{bmatrix}
+\]</span></p>
+<p>Hver posisjon i matrisen kan gis et tall. Forvalget i <code>rpart()</code> er å vekte alle disse utfallene likt og da ser matrisen slik ut: <span class="math display">\[
+loss = \begin{bmatrix}
+               0 &amp; 0 \\
+               0 &amp; 0
+        \end{bmatrix}
+\]</span> Tallene angir vekter i følgende rekkefølge i øverste rad: sanne negative, falske negative, og i nederste rad: falske positive og sanne positive. Altså som angitt over.</p>
+<p>Vi setter alltid vektingen av sanne positive og sanne negative til 0. Det er feilene som evt. skal vektes. Første steg er dermed å velge hvordan man vil vekte utfallet. La oss si at vi ønsker å angi at falske positive skal veie tyngre enn falske negative, med en faktor på 4 kan det gjøres ved å spesifisere matrisen som følger:</p>
+<p><span class="math display">\[
+loss = \begin{bmatrix}
+               0 &amp; 1 \\
+               4 &amp; 0
+        \end{bmatrix}
+\]</span></p>
+<p>I R gjør vi dette ved å lage en matrise. Rekken med tall angis fra øvre venstre hjørne og mot høye, og så samme fra nedre venstre hjørne. Matrisen lagres i et eget objekt, som jeg her har kalt for <em>lossm</em>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>lossm <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>lossm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]    0    1
+[2,]    4    0</code></pre>
+</div>
+</div>
+<p>Nå kan loss matrisen angis i <code>rpart()</code> som et element under <code>parms = ...</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rpart_loss <span class="ot">&lt;-</span> <span class="fu">rpart</span>(default <span class="sc">~</span> . , </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> training, </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">parms=</span><span class="fu">list</span>(<span class="at">loss =</span> lossm),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">"class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Da kan man se på resultatet igjen på samme måte som før.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(rpart_loss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="cart_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="fairness-omigjen" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="fairness-omigjen"><span class="header-section-number">5.3</span> Fairness omigjen</h2>
+<p>Nå er jo algoritmen endret, så confusion matrix er også endret. Da vil nødvendigvis mål på fairness ha endret seg også. Dette bør sjekkes, og evt gå tilbake og justere modellen igjen på ulike måter og sjekke igjen.</p>
+</section>
+<section id="tester-justert-modell-med-testingdata" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="tester-justert-modell-med-testingdata"><span class="header-section-number">5.4</span> Tester justert modell med testingdata</h2>
+<p>Så er ringen sluttet: Nå du tror du har endet opp med en god algoritme, så er det på tide å sjekke mot testingdata. Da får du så en mer realistisk forståelse av hvordan resultatene vil slå ut for <em>nye</em> data.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>testing_pred <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(rpart_loss, <span class="at">newdata=</span>testing, <span class="at">type=</span><span class="st">"class"</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> testing_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            default
+default_pred no yes
+         no  77  13
+         yes 95  65
+                                          
+               Accuracy : 0.568           
+                 95% CI : (0.5041, 0.6303)
+    No Information Rate : 0.688           
+    P-Value [Acc &gt; NIR] : 1               
+                                          
+                  Kappa : 0.2183          
+                                          
+ Mcnemar's Test P-Value : 6.48e-15        
+                                          
+            Sensitivity : 0.4477          
+            Specificity : 0.8333          
+         Pos Pred Value : 0.8556          
+         Neg Pred Value : 0.4063          
+             Prevalence : 0.6880          
+         Detection Rate : 0.3080          
+   Detection Prevalence : 0.3600          
+      Balanced Accuracy : 0.6405          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="oppgaver" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">5.5</span> Oppgaver</h2>
 <div id="exr-" class="theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 5.1 </strong></span>Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth.</p>
 </div>
-<div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5.2 </strong></span>Bruk datasettet credit til å predikere kredittverdighet for nye kunder.</p>
+<div>
+<p>Bruk datasettet credit til å predikere kredittverdighet for nye kunder.</p>
 <ol type="a">
 <li>Spesifiser en formel med et fåtall variable og lag et klassifikasjonstre.</li>
 <li>Plot med rpart.plot()</li>
@@ -705,22 +898,28 @@ Prediction  no yes
 </ol></li>
 </ol>
 </div>
-<div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5.3 </strong></span>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.<br>
+<div>
+<p>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.<br>
 Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.</p>
 </div>
-<div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5.4 </strong></span>Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.</p>
+<div>
+<p>Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.</p>
 </div>
 
 
 <!-- -->
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-berk2016a" class="csl-entry" role="doc-biblioentry">
+Berk, Richard. 2016. <em>Statistical Learning from a Regression Perspective</em>. USA: Springer.
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn1"><p>Begrepet “default” på engelsk kan bety å ikke holde en forpliktelse, men i software kan det bety forhåndsvalg. Dette kan være forvirrende akkurat her. Du kan godt endre variabelnavnet hvis du vil.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Argumentet <code>extra = 4</code> brukes for klassifikasjonstrær for å få andel i hver gruppe per node.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -921,122 +1120,241 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Klassifikasjonstrær</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker: </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)      <span class="co"># funksjoner for CART </span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot) <span class="co"># funksjon for å plotte CART </span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)      <span class="co"># inneholder funksjon for confusion matrix </span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>Vi skal her bruke datasettet **credit** fra Canvas. Dataene er en banks kundehistorikk for kreditt for 1000 kunder. Variabelen *default*<span class="ot">[^cart-1]</span> er «yes» hvis tilbakebetaling som avtalt og «no» hvis ikke. Dette er utfallsvariabelen. Øvrige variable er rimelig selvforklarende etter variabelnavn. Målet er å lage et system for hvilke nye kunder som skal få innvilget kreditt.</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>credit <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/credit.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(credit)</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>Vi splitter først datasettet i to deler: en til training og en til testing. </span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>training_init <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(credit)</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(training_init)</span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(training_init)</span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a><span class="ot">[^cart-1]: </span>Begrepet "default" på engelsk kan bety å ikke holde en forpliktelse, men i software kan det bety forhåndsvalg. Dette kan være forvirrende akkurat her. Du kan godt endre variabelnavnet hvis du vil.</span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>Vi starter med å inkludere noen få variable som gir en oversiktlig illustrasjon. Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere <span class="in">`method = "class"`</span>. Hvis ikke vil <span class="in">`rpart()`</span> gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet. </span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>credit_tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(default <span class="sc">~</span> age <span class="sc">+</span> amount <span class="sc">+</span> percent_of_income <span class="sc">+</span> purpose <span class="sc">+</span> employment_duration <span class="sc">+</span> housing, </span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data=</span>training, <span class="at">method=</span><span class="st">"class"</span>)</span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(credit_tree)</span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>Vi kan også få printet ut disse som tall i en tabell. </span>
-<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span>
-<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>Vi kan så skrive ut confusion matrix. </span>
-<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>rpart_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(credit_tree, <span class="at">type=</span><span class="st">"class"</span>)</span>
-<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rpart_class, training<span class="sc">$</span>default)</span>
-<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(rpart_class, training<span class="sc">$</span>default)</span>
-<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-88"><a href="#cb13-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a>rpart_test <span class="ot">&lt;-</span> <span class="fu">predict</span>(credit_tree, <span class="at">newdata=</span>testing, <span class="at">type=</span><span class="st">"class"</span>)</span>
-<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(rpart_test, testing<span class="sc">$</span>default)</span>
-<span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-94"><a href="#cb13-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
-<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a>Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth. </span>
-<span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-103"><a href="#cb13-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-104"><a href="#cb13-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-105"><a href="#cb13-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-106"><a href="#cb13-106" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb13-107"><a href="#cb13-107" aria-hidden="true" tabindex="-1"></a>Bruk datasettet credit til å predikere kredittverdighet for nye kunder.</span>
-<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-109"><a href="#cb13-109" aria-hidden="true" tabindex="-1"></a>a)  Spesifiser en formel med et fåtall variable og lag et klassifikasjonstre.</span>
-<span id="cb13-110"><a href="#cb13-110" aria-hidden="true" tabindex="-1"></a>b)  Plot med rpart.plot()</span>
-<span id="cb13-111"><a href="#cb13-111" aria-hidden="true" tabindex="-1"></a>c)  Bruk predict() til å klassifisere.</span>
-<span id="cb13-112"><a href="#cb13-112" aria-hidden="true" tabindex="-1"></a>d)  Lag en confusion matrix med table()</span>
-<span id="cb13-113"><a href="#cb13-113" aria-hidden="true" tabindex="-1"></a>e)  Gi en vurdering av resultatet.</span>
-<span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a>    1)  Si noe om forholdet mellom resultat for training og testing datasett.</span>
-<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a>    1)  Er cost-ratio ok fra bankens perspektiv?</span>
-<span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a>    2)  Er cost-ratio ok fra kundens perspektiv?</span>
-<span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a>    3)  Andre hensyn som bør spille inn her?</span>
-<span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-119"><a href="#cb13-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-120"><a href="#cb13-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-121"><a href="#cb13-121" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb13-122"><a href="#cb13-122" aria-hidden="true" tabindex="-1"></a>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.  </span>
-<span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a>Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.  </span>
-<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-128"><a href="#cb13-128" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb13-129"><a href="#cb13-129" aria-hidden="true" tabindex="-1"></a>Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.  </span>
-<span id="cb13-130"><a href="#cb13-130" aria-hidden="true" tabindex="-1"></a>:::</span>
+<div class="sourceCode" id="cb23" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Klassifikasjonstrær</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker:</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)      <span class="co"># funksjoner for CART </span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot) <span class="co"># funksjon for å plotte CART </span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)      <span class="co"># inneholder funksjon for confusion matrix </span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>Vi skal her bruke datasettet **credit** fra Canvas. Dataene er en banks kundehistorikk for kreditt for 1000 kunder. Variabelen *default*<span class="ot">[^cart-1]</span> er «yes» hvis tilbakebetaling som avtalt og «no» hvis ikke. Dette er utfallsvariabelen. Øvrige variable er rimelig selvforklarende etter variabelnavn. Målet er å lage et system for hvilke nye kunder som skal få innvilget kreditt.</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="ot">[^cart-1]: </span>Begrepet "default" på engelsk kan bety å ikke holde en forpliktelse, men i software kan det bety forhåndsvalg. Dette kan være forvirrende akkurat her. Du kan godt endre variabelnavnet hvis du vil.</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>credit <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/credit.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(credit)</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>Vi splitter først datasettet i to deler: en til training og en til testing.</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>training_init <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(credit)</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(training_init)</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(training_init)</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>Vi starter med å inkludere noen få variable som gir en oversiktlig illustrasjon. Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere <span class="in">`method = "class"`</span>. Hvis ikke vil <span class="in">`rpart()`</span> gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet.</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>credit_tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(default <span class="sc">~</span> age <span class="sc">+</span> amount <span class="sc">+</span> percent_of_income <span class="sc">+</span> purpose <span class="sc">+</span> employment_duration <span class="sc">+</span> housing, </span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data=</span>training, <span class="at">method=</span><span class="st">"class"</span>)</span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>Resultatet kan fremstilles grafisk med funksjonen <span class="in">`rpart.plot()`</span> slik:</span>
+<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(credit_tree)</span>
+<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a>Vi kan også få printet ut resultatet som tall i en tabell.<span class="ot">[^cart-2]</span></span>
+<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a><span class="ot">[^cart-2]: </span>Argumentet <span class="in">`extra = 4`</span> brukes for klassifikasjonstrær for å få andel i hver gruppe per node.</span>
+<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-71"><a href="#cb23-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.rules</span>(credit_tree, <span class="at">extra=</span><span class="dv">4</span>)  </span>
+<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-74"><a href="#cb23-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-75"><a href="#cb23-75" aria-hidden="true" tabindex="-1"></a>Da kan vi sammenligne prediksjoner med observert utfall for trainingdataene på tilsvarende måte som før. I <span class="in">`predict()`</span> må det angis <span class="in">`type = "class"`</span> for å spesifisere at det skal være klassifikasjon. Hvis ikke får man en slags sannsynlighet.</span>
+<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a>training_pred <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
+<span id="cb23-81"><a href="#cb23-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(credit_tree,  <span class="at">type=</span><span class="st">"class"</span>))</span>
+<span id="cb23-82"><a href="#cb23-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-83"><a href="#cb23-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-84"><a href="#cb23-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-85"><a href="#cb23-85" aria-hidden="true" tabindex="-1"></a>Vi kan så skrive ut confusion matrix.</span>
+<span id="cb23-86"><a href="#cb23-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-89"><a href="#cb23-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-90"><a href="#cb23-90" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> training_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb23-91"><a href="#cb23-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-92"><a href="#cb23-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb23-93"><a href="#cb23-93" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb23-94"><a href="#cb23-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-95"><a href="#cb23-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-96"><a href="#cb23-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-97"><a href="#cb23-97" aria-hidden="true" tabindex="-1"></a>Så kan vi få regnet ut alle de standardmålene slik vi har gjort før:</span>
+<span id="cb23-98"><a href="#cb23-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-101"><a href="#cb23-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-102"><a href="#cb23-102" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span>
+<span id="cb23-103"><a href="#cb23-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-104"><a href="#cb23-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-105"><a href="#cb23-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-106"><a href="#cb23-106" aria-hidden="true" tabindex="-1"></a>Men ovenfor har vi altså brukt training-data. Når man er fornøyd med modellen er derimot testing-data som gir indikasjon på hvor godt modellen fungerer.</span>
+<span id="cb23-107"><a href="#cb23-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-110"><a href="#cb23-110" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-111"><a href="#cb23-111" aria-hidden="true" tabindex="-1"></a>testing_pred <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
+<span id="cb23-112"><a href="#cb23-112" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(credit_tree, <span class="at">newdata=</span>testing, <span class="at">type=</span><span class="st">"class"</span>))</span>
+<span id="cb23-113"><a href="#cb23-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-114"><a href="#cb23-114" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> testing_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb23-115"><a href="#cb23-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-116"><a href="#cb23-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb23-117"><a href="#cb23-117" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb23-118"><a href="#cb23-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-119"><a href="#cb23-119" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span>
+<span id="cb23-120"><a href="#cb23-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-121"><a href="#cb23-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-122"><a href="#cb23-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-123"><a href="#cb23-123" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tuning/pruning med `rpart.control()`</span></span>
+<span id="cb23-124"><a href="#cb23-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-125"><a href="#cb23-125" aria-hidden="true" tabindex="-1"></a>Vi har vært inne på tidligere at vi kan styre hvordan algoritmen fungerer. Det er noen parametres om styrer prosessen, og disse kan vi justere. Her tar vi for oss de viktiste, men det finnes flere.</span>
+<span id="cb23-126"><a href="#cb23-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-127"><a href="#cb23-127" aria-hidden="true" tabindex="-1"></a>Kort fortalt styrer disse parametrene hvor komplekse trærne kan bli. Husk nå fra tidligere kapittel: mer kompleks modell gir bedre tilpassning til trainingdata - men kan gi dårligere tilpassning til testingdata. Målet er altså å finne en slags balansert kompleksitet. Med klassifikasjonstrær påvirker vi dette mer direkte enn ved regresjonsmodeller.</span>
+<span id="cb23-128"><a href="#cb23-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-129"><a href="#cb23-129" aria-hidden="true" tabindex="-1"></a>Nå er arbeidsflyten slik at man skrur litt på disse parametrene, sjekker resultatet og justerer på nytt og sjekker... osv. Da er det viktig at bruker trainingdata! Ikke bruke testingdata før du er rimelig fornøyd med resultatet. Først da bruker du testingdata.</span>
+<span id="cb23-130"><a href="#cb23-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-131"><a href="#cb23-131" aria-hidden="true" tabindex="-1"></a><span class="fu">### Bruk av `minsplit = ...`</span></span>
+<span id="cb23-132"><a href="#cb23-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-133"><a href="#cb23-133" aria-hidden="true" tabindex="-1"></a>Parameteren <span class="in">`minsplit`</span> kontrollerer det miste antallet observasjoner som kan være i en node for at en ny split skal testes. Hvis det blir for få observasjoner i en node, så stopper splitten der. Forvalget for denne parameteren er 20, så hvis f.eks. en node har 19 observasjoner, så stopper forgreningen der.</span>
+<span id="cb23-134"><a href="#cb23-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-135"><a href="#cb23-135" aria-hidden="true" tabindex="-1"></a><span class="fu">### Bruk av `minbucket = ...`</span></span>
+<span id="cb23-136"><a href="#cb23-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-137"><a href="#cb23-137" aria-hidden="true" tabindex="-1"></a>Parameterne <span class="in">`minbucket = ...`</span> styrer hvor mange observasjoner det minst må være i den siste noden. Forvalget er en 1/3 av <span class="in">`minsplit`</span>, altså 7 hvis man ikke har endret på <span class="in">`minsplit`</span>. Hvis man endrer <span class="in">`minsplit`</span>, så endres <span class="in">`minbucket`</span> også automatisk. Men du kan altså også styre <span class="in">`minbucket`</span> direkte også.</span>
+<span id="cb23-138"><a href="#cb23-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-139"><a href="#cb23-139" aria-hidden="true" tabindex="-1"></a>Dette ligner på hva <span class="in">`minsplit`</span> gjør, men mens <span class="in">`minsplit`</span> kan godt splitte en node med 20 i to grupper med 1 og 19, så vil <span class="in">`minbucket`</span> ikke tillate en ny split med mindre den ene gruppen har minst 7.</span>
+<span id="cb23-140"><a href="#cb23-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-141"><a href="#cb23-141" aria-hidden="true" tabindex="-1"></a><span class="fu">### Bruk av `maxdepth = ...`</span></span>
+<span id="cb23-142"><a href="#cb23-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-143"><a href="#cb23-143" aria-hidden="true" tabindex="-1"></a>Parameteren <span class="in">`maxdepth`</span> setter rett og slett en grense for hvor mange splitter det kan gjøres i hver forgrening.</span>
+<span id="cb23-144"><a href="#cb23-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-145"><a href="#cb23-145" aria-hidden="true" tabindex="-1"></a><span class="fu">### Bruk av `cp = ...`</span></span>
+<span id="cb23-146"><a href="#cb23-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-147"><a href="#cb23-147" aria-hidden="true" tabindex="-1"></a><span class="in">`cp`</span> er complexity parameter som setter et krav på hvor mye hver split skal bidra til modellens tilpassning til data.</span>
+<span id="cb23-148"><a href="#cb23-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-149"><a href="#cb23-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## Asymetriske kostnader med loss matrix med `cost = ...` </span></span>
+<span id="cb23-150"><a href="#cb23-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-151"><a href="#cb23-151" aria-hidden="true" tabindex="-1"></a>Loss matrix er forklart nøyere hos <span class="co">[</span><span class="ot">@berk2016a</span><span class="co">]</span> og krever litt innsats å venne hodet til å forstå. Utgangspunktet er følgende matrise for om observasjoner er klassifisert rett eller feil.</span>
+<span id="cb23-152"><a href="#cb23-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-153"><a href="#cb23-153" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb23-154"><a href="#cb23-154" aria-hidden="true" tabindex="-1"></a>loss = \begin{bmatrix}</span>
+<span id="cb23-155"><a href="#cb23-155" aria-hidden="true" tabindex="-1"></a>               TN &amp; FN <span class="sc">\\</span></span>
+<span id="cb23-156"><a href="#cb23-156" aria-hidden="true" tabindex="-1"></a>               FP &amp; TP </span>
+<span id="cb23-157"><a href="#cb23-157" aria-hidden="true" tabindex="-1"></a>        \end{bmatrix}</span>
+<span id="cb23-158"><a href="#cb23-158" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb23-159"><a href="#cb23-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-160"><a href="#cb23-160" aria-hidden="true" tabindex="-1"></a>Hver posisjon i matrisen kan gis et tall. Forvalget i <span class="in">`rpart()`</span> er å vekte alle disse utfallene likt og da ser matrisen slik ut: </span>
+<span id="cb23-161"><a href="#cb23-161" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb23-162"><a href="#cb23-162" aria-hidden="true" tabindex="-1"></a>loss = \begin{bmatrix}</span>
+<span id="cb23-163"><a href="#cb23-163" aria-hidden="true" tabindex="-1"></a>               0 &amp; 0 <span class="sc">\\</span></span>
+<span id="cb23-164"><a href="#cb23-164" aria-hidden="true" tabindex="-1"></a>               0 &amp; 0 </span>
+<span id="cb23-165"><a href="#cb23-165" aria-hidden="true" tabindex="-1"></a>        \end{bmatrix}</span>
+<span id="cb23-166"><a href="#cb23-166" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb23-167"><a href="#cb23-167" aria-hidden="true" tabindex="-1"></a>Tallene angir vekter i følgende rekkefølge i øverste rad: sanne negative, falske negative, og i nederste rad: falske positive og sanne positive. Altså som angitt over. </span>
+<span id="cb23-168"><a href="#cb23-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-169"><a href="#cb23-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-170"><a href="#cb23-170" aria-hidden="true" tabindex="-1"></a>Vi setter alltid vektingen av sanne positive og sanne negative til 0. Det er feilene som evt. skal vektes. Første steg er dermed å velge hvordan man vil vekte utfallet. La oss si at vi ønsker å angi at falske positive skal veie tyngre enn falske negative, med en faktor på 4 kan det gjøres ved å spesifisere matrisen som følger: </span>
+<span id="cb23-171"><a href="#cb23-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-172"><a href="#cb23-172" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb23-173"><a href="#cb23-173" aria-hidden="true" tabindex="-1"></a>loss = \begin{bmatrix}</span>
+<span id="cb23-174"><a href="#cb23-174" aria-hidden="true" tabindex="-1"></a>               0 &amp; 1 <span class="sc">\\</span></span>
+<span id="cb23-175"><a href="#cb23-175" aria-hidden="true" tabindex="-1"></a>               4 &amp; 0 </span>
+<span id="cb23-176"><a href="#cb23-176" aria-hidden="true" tabindex="-1"></a>        \end{bmatrix}</span>
+<span id="cb23-177"><a href="#cb23-177" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb23-178"><a href="#cb23-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-179"><a href="#cb23-179" aria-hidden="true" tabindex="-1"></a>I R gjør vi dette ved å lage en matrise. Rekken med tall angis fra øvre venstre hjørne og mot høye, og så samme fra nedre venstre hjørne. Matrisen lagres i et eget objekt, som jeg her har kalt for *lossm*.</span>
+<span id="cb23-180"><a href="#cb23-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-183"><a href="#cb23-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-184"><a href="#cb23-184" aria-hidden="true" tabindex="-1"></a>lossm <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb23-185"><a href="#cb23-185" aria-hidden="true" tabindex="-1"></a>lossm</span>
+<span id="cb23-186"><a href="#cb23-186" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-187"><a href="#cb23-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-188"><a href="#cb23-188" aria-hidden="true" tabindex="-1"></a>Nå kan loss matrisen angis i <span class="in">`rpart()`</span> som et element under <span class="in">`parms = ...`</span>. </span>
+<span id="cb23-189"><a href="#cb23-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-192"><a href="#cb23-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-193"><a href="#cb23-193" aria-hidden="true" tabindex="-1"></a>rpart_loss <span class="ot">&lt;-</span> <span class="fu">rpart</span>(default <span class="sc">~</span> . , </span>
+<span id="cb23-194"><a href="#cb23-194" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> training, </span>
+<span id="cb23-195"><a href="#cb23-195" aria-hidden="true" tabindex="-1"></a>                  <span class="at">parms=</span><span class="fu">list</span>(<span class="at">loss =</span> lossm),</span>
+<span id="cb23-196"><a href="#cb23-196" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">"class"</span>)</span>
+<span id="cb23-197"><a href="#cb23-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-198"><a href="#cb23-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-199"><a href="#cb23-199" aria-hidden="true" tabindex="-1"></a>Da kan man se på resultatet igjen på samme måte som før. </span>
+<span id="cb23-200"><a href="#cb23-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-203"><a href="#cb23-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-204"><a href="#cb23-204" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(rpart_loss)</span>
+<span id="cb23-205"><a href="#cb23-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-206"><a href="#cb23-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-207"><a href="#cb23-207" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fairness omigjen</span></span>
+<span id="cb23-208"><a href="#cb23-208" aria-hidden="true" tabindex="-1"></a>Nå er jo algoritmen endret, så confusion matrix er også endret. Da vil nødvendigvis mål på fairness ha endret seg også. Dette bør sjekkes, og evt gå tilbake og justere modellen igjen på ulike måter og sjekke igjen. </span>
+<span id="cb23-209"><a href="#cb23-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-210"><a href="#cb23-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-211"><a href="#cb23-211" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tester justert modell med testingdata</span></span>
+<span id="cb23-212"><a href="#cb23-212" aria-hidden="true" tabindex="-1"></a>Så er ringen sluttet: Nå du tror du har endet opp med en god algoritme, så er det på tide å sjekke mot testingdata. Da får du så en mer realistisk forståelse av hvordan resultatene vil slå ut for *nye* data. </span>
+<span id="cb23-213"><a href="#cb23-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-216"><a href="#cb23-216" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb23-217"><a href="#cb23-217" aria-hidden="true" tabindex="-1"></a>testing_pred <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
+<span id="cb23-218"><a href="#cb23-218" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(rpart_loss, <span class="at">newdata=</span>testing, <span class="at">type=</span><span class="st">"class"</span>))</span>
+<span id="cb23-219"><a href="#cb23-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-220"><a href="#cb23-220" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> testing_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb23-221"><a href="#cb23-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-222"><a href="#cb23-222" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb23-223"><a href="#cb23-223" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span>
+<span id="cb23-224"><a href="#cb23-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-225"><a href="#cb23-225" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb23-226"><a href="#cb23-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-227"><a href="#cb23-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-228"><a href="#cb23-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-229"><a href="#cb23-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-230"><a href="#cb23-230" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb23-231"><a href="#cb23-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-232"><a href="#cb23-232" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb23-233"><a href="#cb23-233" aria-hidden="true" tabindex="-1"></a>Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth.</span>
+<span id="cb23-234"><a href="#cb23-234" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb23-235"><a href="#cb23-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-236"><a href="#cb23-236" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div&gt;</span></span>
+<span id="cb23-237"><a href="#cb23-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-238"><a href="#cb23-238" aria-hidden="true" tabindex="-1"></a>Bruk datasettet credit til å predikere kredittverdighet for nye kunder.</span>
+<span id="cb23-239"><a href="#cb23-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-240"><a href="#cb23-240" aria-hidden="true" tabindex="-1"></a>a)  Spesifiser en formel med et fåtall variable og lag et klassifikasjonstre.</span>
+<span id="cb23-241"><a href="#cb23-241" aria-hidden="true" tabindex="-1"></a>b)  Plot med rpart.plot()</span>
+<span id="cb23-242"><a href="#cb23-242" aria-hidden="true" tabindex="-1"></a>c)  Bruk predict() til å klassifisere.</span>
+<span id="cb23-243"><a href="#cb23-243" aria-hidden="true" tabindex="-1"></a>d)  Lag en confusion matrix med table()</span>
+<span id="cb23-244"><a href="#cb23-244" aria-hidden="true" tabindex="-1"></a>e)  Gi en vurdering av resultatet.</span>
+<span id="cb23-245"><a href="#cb23-245" aria-hidden="true" tabindex="-1"></a>    1)  Si noe om forholdet mellom resultat for training og testing datasett.</span>
+<span id="cb23-246"><a href="#cb23-246" aria-hidden="true" tabindex="-1"></a>    2)  Er cost-ratio ok fra bankens perspektiv?</span>
+<span id="cb23-247"><a href="#cb23-247" aria-hidden="true" tabindex="-1"></a>    3)  Er cost-ratio ok fra kundens perspektiv?</span>
+<span id="cb23-248"><a href="#cb23-248" aria-hidden="true" tabindex="-1"></a>    4)  Andre hensyn som bør spille inn her?</span>
+<span id="cb23-249"><a href="#cb23-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-250"><a href="#cb23-250" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb23-251"><a href="#cb23-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-252"><a href="#cb23-252" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div&gt;</span></span>
+<span id="cb23-253"><a href="#cb23-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-254"><a href="#cb23-254" aria-hidden="true" tabindex="-1"></a>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.\</span>
+<span id="cb23-255"><a href="#cb23-255" aria-hidden="true" tabindex="-1"></a>Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.</span>
+<span id="cb23-256"><a href="#cb23-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-257"><a href="#cb23-257" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb23-258"><a href="#cb23-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-259"><a href="#cb23-259" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div&gt;</span></span>
+<span id="cb23-260"><a href="#cb23-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-261"><a href="#cb23-261" aria-hidden="true" tabindex="-1"></a>Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.</span>
+<span id="cb23-262"><a href="#cb23-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-263"><a href="#cb23-263" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
