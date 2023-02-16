@@ -100,7 +100,7 @@ confusionMatrix(tab)
 
 ```
 
-## Tuning/pruning med `rpart.control()`
+## Tuning/pruning 
 
 Vi har vært inne på tidligere at vi kan styre hvordan algoritmen fungerer. Det er noen parametres om styrer prosessen, og disse kan vi justere. Her tar vi for oss de viktiste, men det finnes flere.
 
@@ -112,19 +112,102 @@ Nå er arbeidsflyten slik at man skrur litt på disse parametrene, sjekker resul
 
 Parameteren `minsplit` kontrollerer det miste antallet observasjoner som kan være i en node for at en ny split skal testes. Hvis det blir for få observasjoner i en node, så stopper splitten der. Forvalget for denne parameteren er 20, så hvis f.eks. en node har 19 observasjoner, så stopper forgreningen der.
 
+Her er et eksempel for å illustrere. Ved å sette `minsplit = 50`, som en god del høyere enn forvalget på 20, vil man få et mindre komplekst tre. 
+
+```{r}
+credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
+                     data=training, method="class", minsplit = 50)
+
+rpart.plot(credit_tree)
+
+```
+
+
+
+
+
 ### Bruk av `minbucket = ...`
 
 Parameterne `minbucket = ...` styrer hvor mange observasjoner det minst må være i den siste noden. Forvalget er en 1/3 av `minsplit`, altså 7 hvis man ikke har endret på `minsplit`. Hvis man endrer `minsplit`, så endres `minbucket` også automatisk. Men du kan altså også styre `minbucket` direkte også.
 
 Dette ligner på hva `minsplit` gjør, men mens `minsplit` kan godt splitte en node med 20 i to grupper med 1 og 19, så vil `minbucket` ikke tillate en ny split med mindre den ene gruppen har minst 7.
 
+Her er et eksempel der det er satt `minbucket = 15`. Det skaper et mindre komplekst tre, og et lavere tall ville kunne gi et mer komplekst tre. Men det er andre valg som også spiller inn (forvalgte sådan) slik at du ikke nødvendigvis får et veldig mye mer komplisert tre ved å angi en lav verdi. 
+
+```{r}
+credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
+                     data=training, method="class", minbucket = 15)
+
+rpart.plot(credit_tree)
+
+```
+
+
+
 ### Bruk av `maxdepth = ...`
 
-Parameteren `maxdepth` setter rett og slett en grense for hvor mange splitter det kan gjøres i hver forgrening.
+Parameteren `maxdepth` setter rett og slett en grense for hvor mange splitter det kan gjøres i hver forgrening. Her er et eksempel der dybden på treet settes til maks 4 og treet får da altså ingen flere forgreininger etter det. 
+
+
+```{r}
+credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
+                     data=training, method="class", maxdepth = 4)
+
+rpart.plot(credit_tree)
+
+```
+
+
 
 ### Bruk av `cp = ...`
 
-`cp` er complexity parameter som setter et krav på hvor mye hver split skal bidra til modellens tilpassning til data.
+`cp` er complexity parameter som setter et krav på hvor mye hver split skal bidra til modellens tilpassning til data. Hvis en enkelt split ikke bidrar med mer enn dette, så stopper det der. Her angir du et tall mellom 0 og 1, der 0 er å tillate mest mulig split. Forvalget er 0.01. Her er et eksempel med tillate mest mulig compleksitet, så setter `cp` til et veldig lavt tall slik at denne restriksjonen blir tilnærmet borte. 
+
+
+```{r}
+#| warning: false
+#| error: false
+credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
+                     data=training, method="class", cp = .00001)
+
+rpart.plot(credit_tree)
+
+```
+
+
+### Sette delene sammen
+Du kan så kombinere disse parametrene. Eller: du kan faktisk ikke unngå å kombinere dem, for alle har forvalgte verdier. Det betyr at hvis du ikke justerer på dem, så bruker du jo de forvalgte. Forskjellen er bare om du har tatt et eksplisitt valg eller overlater det hele til softwaren. Når det er sagt er jo de forvalgte verdiene ikke helt dumme. 
+
+Du har sett at `cp` kan gi veldig komplekse trær, og du må være innstilt på at dette skaper overfitting. Det kan være at klassifikasjonstreet ditt i stor grad fanger opp støy, så et for lavt `cp` er neppe lurt. Men du kan f.eks. sette `cp` lavt og justere med de andre parametrene. Du har nå altså en del verktøy tilgjengelig for å styre resultatet. Altså i tillegg til å velge hvilke variable du tar med i modellen i utgangspunktet. 
+
+Her er et eksempel der alle ovennevnte parametere er angitt. Merk at dette ikke nødvendigvis er et spesielt godt tre, men er for illustrasjonens skyld. Du kan selv prøve deg frem og se hvordan resultatet endres når du justerer de enkelte parametrene. 
+
+
+```{r}
+#| warning: false
+#| error: false
+credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
+                     data=training, method="class", 
+                     cp = .005, minbucket = 5, minsplit = 10, maxdepth = 7)
+
+rpart.plot(credit_tree)
+
+```
+
+
+### Pruning 
+En relatert teknikk er å beskjære treet basert på `cp`. Altså, når du har bygget et tre som du tenker er for komplekst, så kan du beskjære grenene slik at de minst viktige grenene kuttes. Algoritmen starter da nederst og kutter steg for steg til et mindre komplekst tre.^[For vanlig lineær regresjon gjorde vi noe tilsvarende: automatisk seleksjon av variable etter hvor viktige de var for tilpassningen. Dette er en tilsvarende type logikk.] Funksjonen `prune()` gjør jobben, og du må angi et tidligere bygget tre som første argument og deretter en angitt verdi for `cp`. 
+
+Her er et eksempel der forrige tre beskjæres med en høyere verdi for `cp`. 
+
+```{r}
+pruned_credit_tree <- prune(credit_tree, cp = .015)
+rpart.plot(pruned_credit_tree)
+
+```
+
+Men altså: det er ikke meningen at man skal rote rundt på måfå med disse justeringene! Det vil nok være lurt å starte med forvalgte verdier, sjekke resultatet og så se om man ønsker justere noe. Det kan være for å bedre "accuracy" eller et annet mål basert på confusion matrix. 
+
 
 ## Asymetriske kostnader med loss matrix med `cost = ...` 
 

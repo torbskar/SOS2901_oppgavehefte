@@ -21,8 +21,16 @@ library(caret)       # for general model fitting og confusionMatrix()
 <!-- #  Kilde: https://www.statology.org/bagging-in-r/ -->
 
 # Introduksjon til bagging
+Merk at [@berk2016a] gjør et poeng av at med *bagging* gjør vi et større steg vekk fra mer vanlige statistiske prosedyrer. Regresjon og klassifikasjonstrær (og det meste annet vi er mer vant med) gir *ett* sett av resultater. Med bagging får vi en hel haug av resultater. Prinsippet er rett og slett at man trekker et tilfeldig utvalg av dataene, bygger et klassifikasjonstre og gjør klassifikasjonen. Så gjentar man dette med et nytt tilfeldig utvalg fra det opprinnelige datasettet.^[Dette er altså det vi ofte kaller tilfeldig utvalg *med* tilbakelegging.] Så gjentar man dette mange ganger.^[Bagging ligner altså veldig på det vi i vanlig statistikk kaller for bootstrapping. Men i bootstrapping er ofte formålet å korrigere standardfeilene eller noe slikt og ikke så mye punktestimatet. Skjønt, det går an å bruke bagging på regresjonsmodeller også, og da tror jeg forskjellen mot bootstrapping er mest semantisk.] 
+
+Hver observasjon i det opprinnelige datasettet har da blitt klassifisert mange ganger, men ikke nødvendigvis likt i hvert tre. (Enkle klassifikasjonstrær er nemlig litt ustabile greier). Hvis man har gjort prosedyren 100 ganger, så vil hver observasjon bli klassifisert 100 ganger - en gang i hvert tre. For prediksjon på trainingdata brukes rett og slett en opptelling over alle trærne for hver observasjon. Når [@berk2016a] snakker om "votes", så er dette som menes: hvert tre har en stemme og så stemmes det over hva som blir utfallet for den enkelte. 
+
+Dette betyr at antall trær kan ha noe å si. Forvalget for funksjonen `bagging()` er 25. Det er en god start, men flere trær gir jo mer stabile resultater. 
+
+Husk at klassifikasjonstrær er litt ustabile greier, og små tilfeldige variasjoner kan påvirke en enkelt split. Ved å bruke bagging jevnes de tilfeldige feilene ut slik at man totalt sett skal få et mer stabilt resultat. Altså: at faren for overfitting reduseres. Hvor mange trær som trengs er litt verre å si noe om. 
 
 
+## Empirisk eksempel: Mer credit scores
 
 ```{r}
 #| warning: false
@@ -32,41 +40,38 @@ credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE)
 
 ```
 
+Funksjonen `bagging()` har tilsvarende oppbygning som tidligere modeller, dvs. utfallsvariabelen angis først, deretter `~` etterfugte av prediktorer, så angis hvilket datasett som brukes. Så kan man legge til ytterligere spesifikasjoner etter det, her er et eksempel der det angis å gjøre 100 tilfeldige utvalg (dvs antall trær) med `nbagg = 100`. 
+
+
+```{r}
+
+baggedtree <- bagging(default ~ . , data = credit, nbagg = 100)
+
+```
+
+## Tolkning som prediksjon
+En mulig ulempe med bagging er at vi ikke får noe tolkbar output. Det finnes ingen summary-funksjon slik som for regresjon og selv om man forsåvidt kan plotte hvert enkelt klassifikasjonstre, så gir det lite mening å plotte 100 slike trær. Det hjelper lite på tolkbarheten, for å si det forsiktig. Ikke bruk `summary()` på objektet du har lagret resultatene fra bagging i. Det blir bare tull. 
+
+
+Vi er nå på vei inn i litt "black-box" metoder: Det er ingen direkte tolkbare parametre eller noe slikt. Men det er fremdeles egentlig ganske enkle metoder, basert på trær, så intuitivt er det mulig å se at man kan finne ut av hva som skjer selv om det er litt arbeidskrevende. ^[Det finnes imidlertid metoder for dette, som gjerne kalles *variable importance* og *partial dependence*. Dette er derimot ikke direkte innebygget i funksjonen for bagging som vi bruker her. Det er mulig å gjøre med bruk av noen andre R-pakker, men vi lar det ligge foreløpig. Derimot kommer vi tilbake til dette i kapittelet om random forest. Bagging er også en byggekloss i random forest, så er det blir helt tilsvarende.] 
+
+Det er lettere å tolke resultatet som prediksjon. På samme måte som i tidligere metoder vi har sett på kan vi bruke `predict()`. Denne funksjonen kjenner igjen type objekt det predikeres ut fra og bruker da riktig prosedyre. 
 
 
 
 
+
+## Out-of-bag data (OOB)
+Bagging kan brukes på training data og testing data som vi har gjort før. Men en ulempe med dette er jo at man får et litt mindre datasett å tilpasse modellene med. Merk at bagging i utgangspunktet baserer seg på å trekke et tilfeldig *utvalg* fra de opprinnelige dataene. Så for hvert tre er det en del trær som ikke blir brukt til å bygge treet. Altså har vi et testing-datasett umiddelbart tilgjengelig! Altså: hvis man bruker 70% av dataene til å bygge hvert enkelt tre, så har man også 30% testingdata tilgjengelig for å gjøre klassifiseringen på det enkelte treet. Dette testing-datasettet kalles *out-of-bag* (OOB) data, men er altså i prinsippet det samme som et testingdatasett. For hvert enkelt tre er det da mulig å bare bruke OOB for prediksjonen. Så hvis bagging-algoritmen bruker 50% av data til å bygge treet, så vil 50% brukes til klassifikasjonen. Hvis det er 100 trær, så vil alle observasjonene bli brukt til klassifikasjon i omtrent 50 av dem. Dette er da OOB-estimatet og har da altså en innebygget training/testing splitting av data. Dette resultatet vil altså være en god indikasjon på resultatet på helt *nye* data. 
+
+Når man bruker `predict()` vil forvalget være å bruke OOB hvis `newdata = ` ikke er spesifisert. Er det derimot spesifisert nye data, så brukes alle observasjonene. 
 
 
 
 
 
 ## Oppgaver
-::: {#exr-}
-Bruk bagging til å forbedre prediksjonene. Bruk samme formel, men bygg 150 trær. 
-:::
 
-
-::: {.solution}
-
-
-```{r}
-fmla <- default ~ age + amount + percent_of_income + purpose + employment_duration + housing 
-
-fmla
-
-set.seed(1)
-bag <- bagging(
-  formula = fmla,
-  data = credit,
-  nbagg = 150,   
-  coob = TRUE,
-  control = rpart.control(minsplit = 2, cp = 0)
-)
-bag
-```
-
-:::
 
 
 
