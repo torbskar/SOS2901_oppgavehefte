@@ -31,6 +31,7 @@ Husk at klassifikasjonstrær er litt ustabile greier, og små tilfeldige variasj
 
 
 ## Empirisk eksempel: Mer credit scores
+Vi bruker credit-dataene igjen. Man kan med fordel dele inn i training og testing datasett som før. Men litt nedenfor introduseres også ideen med "out-of-bag data" som på en måte gjør en slik split internt i funksjonen. Vi kommer altså tilbake til dette. 
 
 ```{r}
 #| warning: false
@@ -44,7 +45,7 @@ Funksjonen `bagging()` har tilsvarende oppbygning som tidligere modeller, dvs. u
 
 
 ```{r}
-
+set.seed(42)
 baggedtree <- bagging(default ~ . , data = credit, nbagg = 100)
 
 ```
@@ -59,19 +60,103 @@ Det er lettere å tolke resultatet som prediksjon. På samme måte som i tidlige
 
 
 
+```{r}
+credit_pred <- credit %>% 
+  mutate(default_pred = predict(baggedtree), type="class")
+
+```
+
+```{r}
+tab <- credit_pred %>% 
+  select(default_pred, default) %>% 
+  table()
+confusionMatrix(tab)
+```
+
+
+
 
 
 ## Out-of-bag data (OOB)
 Bagging kan brukes på training data og testing data som vi har gjort før. Men en ulempe med dette er jo at man får et litt mindre datasett å tilpasse modellene med. Merk at bagging i utgangspunktet baserer seg på å trekke et tilfeldig *utvalg* fra de opprinnelige dataene. Så for hvert tre er det en del trær som ikke blir brukt til å bygge treet. Altså har vi et testing-datasett umiddelbart tilgjengelig! Altså: hvis man bruker 70% av dataene til å bygge hvert enkelt tre, så har man også 30% testingdata tilgjengelig for å gjøre klassifiseringen på det enkelte treet. Dette testing-datasettet kalles *out-of-bag* (OOB) data, men er altså i prinsippet det samme som et testingdatasett. For hvert enkelt tre er det da mulig å bare bruke OOB for prediksjonen. Så hvis bagging-algoritmen bruker 50% av data til å bygge treet, så vil 50% brukes til klassifikasjonen. Hvis det er 100 trær, så vil alle observasjonene bli brukt til klassifikasjon i omtrent 50 av dem. Dette er da OOB-estimatet og har da altså en innebygget training/testing splitting av data. Dette resultatet vil altså være en god indikasjon på resultatet på helt *nye* data. 
 
-Når man bruker `predict()` vil forvalget være å bruke OOB hvis `newdata = ` ikke er spesifisert. Er det derimot spesifisert nye data, så brukes alle observasjonene. 
+Forvalget i `bagging()` er imidlertid å *ikke* bruke OOB. For å gjøre dette legges det til argumentet `coob = TRUE' og man får utregnet klassifikasjonsfeilen i output. 
+
+
+```{r}
+set.seed(42)
+baggedtree_oob <- bagging(default ~ . , data = credit, nbagg = 100, coob = TRUE)
+
+
+```
+
+Når man deretter bruker `predict()` vil forvalget være å bruke OOB hvis `newdata = ` ikke er spesifisert. Er det derimot spesifisert nye data, så brukes alle observasjonene for hvert tre. 
 
 
 
+```{r}
+
+credit_pred <- credit %>% 
+  mutate(default_pred = predict(baggedtree_oob), type="class")
+
+
+```
+
+```{r}
+tab <- credit_pred %>% 
+  select(default_pred, default) %>% 
+  table()
+confusionMatrix(tab)
+```
+
+
+## Mer tuning
+Man kan si at bagging består av to deler: 1) en grunnleggende klassifikasjonsteknikk (noen ganger omtalt som "base learner"), og 2) en bootstrapping med gjentatte estimeringer på utvalg av data. I tillegg kommer valget om å bruke OOB eller ikke. 
+
+Forvalget i `bagging()` er å bruke klassifikasjonstrær med `rpart()`. Det er altså vanlige klassifikasjonstrær av akkurat samme type som i forrige kapittel som bygges. Det betyr også at tuning som kan gjøres med bruk av `rpart()` også kan gjøres med `bagging()`. Dette gjøres ved å legge til argumentet `control = rpart.control()` og så oppgis ønskede tuning parametre innefor den parentesen. Her er et eksempel med å angi maks dybde på treet og complexity parameter.  
+
+
+```{r}
+
+set.seed(42)
+baggedtree_oob <- bagging(default ~ . , data = credit, 
+                          nbagg = 500, coob = TRUE, 
+                          control = rpart.control(maxdepth = 6, cp = 0.0001))
+
+```
+
+
+```{r}
+
+credit_pred <- credit %>% 
+  mutate(default_pred = predict(baggedtree_oob), type="class")
+
+tab <- credit_pred %>% 
+  select(default_pred, default) %>% 
+  table()
+confusionMatrix(tab)
+```
+
+Merk imidlertid at loss matrix ser ikke ut til å kunne brukes i funksjonen `bagging()`. 
+
+Det viktige poenget akkurat nå er egentlig ikke all tuning som er mulig å gjøre i bagging, men at det er bygget på en annen underliggende algoritme. Vi bruker i praksis ikke bagging noe særlig alene, men derimot er random forest en variant av bagging med litt ekstra saker. Slik sett er bagging å regne som en byggesten til random forest sammen med klassifikasjonstrær. Så derfor skal vi ikke bruke så mye tid på bagging, men gå raskt videre til random forest. 
 
 
 ## Oppgaver
 
+::: {#exr-}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
+:::
 
+
+::: {#exr-}
+Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave. 
+Gjør en prediksjon med bruk av bagging. Prøv deg litt frem med å justere på tuningparametrene, f.eks. `cp` og `maxdepth`.
+:::
+
+
+::: {#exr-}
+Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB? 
+:::
 
 

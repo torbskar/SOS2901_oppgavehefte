@@ -269,7 +269,8 @@ div.csl-indent {
   <li><a href="#empirisk-eksempel-mer-credit-scores" id="toc-empirisk-eksempel-mer-credit-scores" class="nav-link" data-scroll-target="#empirisk-eksempel-mer-credit-scores"><span class="toc-section-number">7.1</span>  Empirisk eksempel: Mer credit scores</a></li>
   <li><a href="#tolkning-som-prediksjon" id="toc-tolkning-som-prediksjon" class="nav-link" data-scroll-target="#tolkning-som-prediksjon"><span class="toc-section-number">7.2</span>  Tolkning som prediksjon</a></li>
   <li><a href="#out-of-bag-data-oob" id="toc-out-of-bag-data-oob" class="nav-link" data-scroll-target="#out-of-bag-data-oob"><span class="toc-section-number">7.3</span>  Out-of-bag data (OOB)</a></li>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">7.4</span>  Oppgaver</a></li>
+  <li><a href="#mer-tuning" id="toc-mer-tuning" class="nav-link" data-scroll-target="#mer-tuning"><span class="toc-section-number">7.4</span>  Mer tuning</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">7.5</span>  Oppgaver</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -313,6 +314,7 @@ div.csl-indent {
 <p>Husk at klassifikasjonstrær er litt ustabile greier, og små tilfeldige variasjoner kan påvirke en enkelt split. Ved å bruke bagging jevnes de tilfeldige feilene ut slik at man totalt sett skal få et mer stabilt resultat. Altså: at faren for overfitting reduseres. Hvor mange trær som trengs er litt verre å si noe om.</p>
 <section id="empirisk-eksempel-mer-credit-scores" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="empirisk-eksempel-mer-credit-scores"><span class="header-section-number">7.1</span> Empirisk eksempel: Mer credit scores</h2>
+<p>Vi bruker credit-dataene igjen. Man kan med fordel dele inn i training og testing datasett som før. Men litt nedenfor introduseres også ideen med “out-of-bag data” som på en måte gjør en slik split internt i funksjonen. Vi kommer altså tilbake til dette.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -323,7 +325,8 @@ div.csl-indent {
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>baggedtree <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, <span class="at">nbagg =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>baggedtree <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, <span class="at">nbagg =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -332,14 +335,178 @@ div.csl-indent {
 <p>En mulig ulempe med bagging er at vi ikke får noe tolkbar output. Det finnes ingen summary-funksjon slik som for regresjon og selv om man forsåvidt kan plotte hvert enkelt klassifikasjonstre, så gir det lite mening å plotte 100 slike trær. Det hjelper lite på tolkbarheten, for å si det forsiktig. Ikke bruk <code>summary()</code> på objektet du har lagret resultatene fra bagging i. Det blir bare tull.</p>
 <p>Vi er nå på vei inn i litt “black-box” metoder: Det er ingen direkte tolkbare parametre eller noe slikt. Men det er fremdeles egentlig ganske enkle metoder, basert på trær, så intuitivt er det mulig å se at man kan finne ut av hva som skjer selv om det er litt arbeidskrevende. <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <p>Det er lettere å tolke resultatet som prediksjon. På samme måte som i tidligere metoder vi har sett på kan vi bruke <code>predict()</code>. Denne funksjonen kjenner igjen type objekt det predikeres ut fra og bruker da riktig prosedyre.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>credit_pred <span class="ot">&lt;-</span> credit <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(baggedtree), <span class="at">type=</span><span class="st">"class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> credit_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            default
+default_pred  no yes
+         no  610 147
+         yes  90 153
+                                          
+               Accuracy : 0.763           
+                 95% CI : (0.7354, 0.7891)
+    No Information Rate : 0.7             
+    P-Value [Acc &gt; NIR] : 5.274e-06       
+                                          
+                  Kappa : 0.4033          
+                                          
+ Mcnemar's Test P-Value : 0.0002752       
+                                          
+            Sensitivity : 0.8714          
+            Specificity : 0.5100          
+         Pos Pred Value : 0.8058          
+         Neg Pred Value : 0.6296          
+             Prevalence : 0.7000          
+         Detection Rate : 0.6100          
+   Detection Prevalence : 0.7570          
+      Balanced Accuracy : 0.6907          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+</div>
 </section>
 <section id="out-of-bag-data-oob" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="out-of-bag-data-oob"><span class="header-section-number">7.3</span> Out-of-bag data (OOB)</h2>
 <p>Bagging kan brukes på training data og testing data som vi har gjort før. Men en ulempe med dette er jo at man får et litt mindre datasett å tilpasse modellene med. Merk at bagging i utgangspunktet baserer seg på å trekke et tilfeldig <em>utvalg</em> fra de opprinnelige dataene. Så for hvert tre er det en del trær som ikke blir brukt til å bygge treet. Altså har vi et testing-datasett umiddelbart tilgjengelig! Altså: hvis man bruker 70% av dataene til å bygge hvert enkelt tre, så har man også 30% testingdata tilgjengelig for å gjøre klassifiseringen på det enkelte treet. Dette testing-datasettet kalles <em>out-of-bag</em> (OOB) data, men er altså i prinsippet det samme som et testingdatasett. For hvert enkelt tre er det da mulig å bare bruke OOB for prediksjonen. Så hvis bagging-algoritmen bruker 50% av data til å bygge treet, så vil 50% brukes til klassifikasjonen. Hvis det er 100 trær, så vil alle observasjonene bli brukt til klassifikasjon i omtrent 50 av dem. Dette er da OOB-estimatet og har da altså en innebygget training/testing splitting av data. Dette resultatet vil altså være en god indikasjon på resultatet på helt <em>nye</em> data.</p>
-<p>Når man bruker <code>predict()</code> vil forvalget være å bruke OOB hvis <code>newdata =</code> ikke er spesifisert. Er det derimot spesifisert nye data, så brukes alle observasjonene.</p>
+<p>Forvalget i <code>bagging()</code> er imidlertid å <em>ikke</em> bruke OOB. For å gjøre dette legges det til argumentet `coob = TRUE’ og man får utregnet klassifikasjonsfeilen i output.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>baggedtree_oob <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, <span class="at">nbagg =</span> <span class="dv">100</span>, <span class="at">coob =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Når man deretter bruker <code>predict()</code> vil forvalget være å bruke OOB hvis <code>newdata =</code> ikke er spesifisert. Er det derimot spesifisert nye data, så brukes alle observasjonene for hvert tre.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>credit_pred <span class="ot">&lt;-</span> credit <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(baggedtree_oob), <span class="at">type=</span><span class="st">"class"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> credit_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            default
+default_pred  no yes
+         no  610 146
+         yes  90 154
+                                        
+               Accuracy : 0.764         
+                 95% CI : (0.7364, 0.79)
+    No Information Rate : 0.7           
+    P-Value [Acc &gt; NIR] : 3.767e-06     
+                                        
+                  Kappa : 0.4064        
+                                        
+ Mcnemar's Test P-Value : 0.0003433     
+                                        
+            Sensitivity : 0.8714        
+            Specificity : 0.5133        
+         Pos Pred Value : 0.8069        
+         Neg Pred Value : 0.6311        
+             Prevalence : 0.7000        
+         Detection Rate : 0.6100        
+   Detection Prevalence : 0.7560        
+      Balanced Accuracy : 0.6924        
+                                        
+       'Positive' Class : no            
+                                        </code></pre>
+</div>
+</div>
 </section>
-<section id="oppgaver" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">7.4</span> Oppgaver</h2>
+<section id="mer-tuning" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="mer-tuning"><span class="header-section-number">7.4</span> Mer tuning</h2>
+<p>Man kan si at bagging består av to deler: 1) en grunnleggende klassifikasjonsteknikk (noen ganger omtalt som “base learner”), og 2) en bootstrapping med gjentatte estimeringer på utvalg av data. I tillegg kommer valget om å bruke OOB eller ikke.</p>
+<p>Forvalget i <code>bagging()</code> er å bruke klassifikasjonstrær med <code>rpart()</code>. Det er altså vanlige klassifikasjonstrær av akkurat samme type som i forrige kapittel som bygges. Det betyr også at tuning som kan gjøres med bruk av <code>rpart()</code> også kan gjøres med <code>bagging()</code>. Dette gjøres ved å legge til argumentet <code>control = rpart.control()</code> og så oppgis ønskede tuning parametre innefor den parentesen. Her er et eksempel med å angi maks dybde på treet og complexity parameter.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>baggedtree_oob <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nbagg =</span> <span class="dv">500</span>, <span class="at">coob =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">maxdepth =</span> <span class="dv">6</span>, <span class="at">cp =</span> <span class="fl">0.0001</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>credit_pred <span class="ot">&lt;-</span> credit <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(baggedtree_oob), <span class="at">type=</span><span class="st">"class"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> credit_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            default
+default_pred  no yes
+         no  639 185
+         yes  61 115
+                                          
+               Accuracy : 0.754           
+                 95% CI : (0.7261, 0.7804)
+    No Information Rate : 0.7             
+    P-Value [Acc &gt; NIR] : 8.596e-05       
+                                          
+                  Kappa : 0.3359          
+                                          
+ Mcnemar's Test P-Value : 4.427e-15       
+                                          
+            Sensitivity : 0.9129          
+            Specificity : 0.3833          
+         Pos Pred Value : 0.7755          
+         Neg Pred Value : 0.6534          
+             Prevalence : 0.7000          
+         Detection Rate : 0.6390          
+   Detection Prevalence : 0.8240          
+      Balanced Accuracy : 0.6481          
+                                          
+       'Positive' Class : no              
+                                          </code></pre>
+</div>
+</div>
+<p>Merk imidlertid at loss matrix ser ikke ut til å kunne brukes i funksjonen <code>bagging()</code>.</p>
+<p>Det viktige poenget akkurat nå er egentlig ikke all tuning som er mulig å gjøre i bagging, men at det er bygget på en annen underliggende algoritme. Vi bruker i praksis ikke bagging noe særlig alene, men derimot er random forest en variant av bagging med litt ekstra saker. Slik sett er bagging å regne som en byggesten til random forest sammen med klassifikasjonstrær. Så derfor skal vi ikke bruke så mye tid på bagging, men gå raskt videre til random forest.</p>
+</section>
+<section id="oppgaver" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">7.5</span> Oppgaver</h2>
+<div id="exr-" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.1 </strong></span>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+</div>
+<div id="exr-" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.2 </strong></span>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave. Gjør en prediksjon med bruk av bagging. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <code>cp</code> og <code>maxdepth</code>.</p>
+</div>
+<div id="exr-" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.3 </strong></span>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?</p>
+</div>
 
 
 <!-- -->
@@ -557,81 +724,164 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Bagging </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker: </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)       <span class="co"># for fitting decision trees</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ipred)       <span class="co"># for fitting bagged decision trees</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)       <span class="co"># for calculating variable importance</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># for general model fitting og confusionMatrix()</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- #  Kilde: https://www.statology.org/bagging-in-r/ --&gt;</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduksjon til bagging</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>Merk at <span class="co">[</span><span class="ot">@berk2016a</span><span class="co">]</span> gjør et poeng av at med *bagging* gjør vi et større steg vekk fra mer vanlige statistiske prosedyrer. Regresjon og klassifikasjonstrær (og det meste annet vi er mer vant med) gir *ett* sett av resultater. Med bagging får vi en hel haug av resultater. Prinsippet er rett og slett at man trekker et tilfeldig utvalg av dataene, bygger et klassifikasjonstre og gjør klassifikasjonen. Så gjentar man dette med et nytt tilfeldig utvalg fra det opprinnelige datasettet.^[Dette er altså det vi ofte kaller tilfeldig utvalg *med* tilbakelegging.] Så gjentar man dette mange ganger.^<span class="co">[</span><span class="ot">Bagging ligner altså veldig på det vi i vanlig statistikk kaller for bootstrapping. Men i bootstrapping er ofte formålet å korrigere standardfeilene eller noe slikt og ikke så mye punktestimatet. Skjønt, det går an å bruke bagging på regresjonsmodeller også, og da tror jeg forskjellen mot bootstrapping er mest semantisk.</span><span class="co">]</span> </span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>Hver observasjon i det opprinnelige datasettet har da blitt klassifisert mange ganger, men ikke nødvendigvis likt i hvert tre. (Enkle klassifikasjonstrær er nemlig litt ustabile greier). Hvis man har gjort prosedyren 100 ganger, så vil hver observasjon bli klassifisert 100 ganger - en gang i hvert tre. For prediksjon på trainingdata brukes rett og slett en opptelling over alle trærne for hver observasjon. Når <span class="co">[</span><span class="ot">@berk2016a</span><span class="co">]</span> snakker om "votes", så er dette som menes: hvert tre har en stemme og så stemmes det over hva som blir utfallet for den enkelte. </span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>Dette betyr at antall trær kan ha noe å si. Forvalget for funksjonen <span class="in">`bagging()`</span> er 25. Det er en god start, men flere trær gir jo mer stabile resultater. </span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>Husk at klassifikasjonstrær er litt ustabile greier, og små tilfeldige variasjoner kan påvirke en enkelt split. Ved å bruke bagging jevnes de tilfeldige feilene ut slik at man totalt sett skal få et mer stabilt resultat. Altså: at faren for overfitting reduseres. Hvor mange trær som trengs er litt verre å si noe om. </span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirisk eksempel: Mer credit scores</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>credit <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/credit.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>Funksjonen <span class="in">`bagging()`</span> har tilsvarende oppbygning som tidligere modeller, dvs. utfallsvariabelen angis først, deretter <span class="in">`~`</span> etterfugte av prediktorer, så angis hvilket datasett som brukes. Så kan man legge til ytterligere spesifikasjoner etter det, her er et eksempel der det angis å gjøre 100 tilfeldige utvalg (dvs antall trær) med <span class="in">`nbagg = 100`</span>. </span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>baggedtree <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, <span class="at">nbagg =</span> <span class="dv">100</span>)</span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tolkning som prediksjon</span></span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>En mulig ulempe med bagging er at vi ikke får noe tolkbar output. Det finnes ingen summary-funksjon slik som for regresjon og selv om man forsåvidt kan plotte hvert enkelt klassifikasjonstre, så gir det lite mening å plotte 100 slike trær. Det hjelper lite på tolkbarheten, for å si det forsiktig. Ikke bruk <span class="in">`summary()`</span> på objektet du har lagret resultatene fra bagging i. Det blir bare tull. </span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>Vi er nå på vei inn i litt "black-box" metoder: Det er ingen direkte tolkbare parametre eller noe slikt. Men det er fremdeles egentlig ganske enkle metoder, basert på trær, så intuitivt er det mulig å se at man kan finne ut av hva som skjer selv om det er litt arbeidskrevende. ^<span class="co">[</span><span class="ot">Det finnes imidlertid metoder for dette, som gjerne kalles *variable importance* og *partial dependence*. Dette er derimot ikke direkte innebygget i funksjonen for bagging som vi bruker her. Det er mulig å gjøre med bruk av noen andre R-pakker, men vi lar det ligge foreløpig. Derimot kommer vi tilbake til dette i kapittelet om random forest. Bagging er også en byggekloss i random forest, så er det blir helt tilsvarende.</span><span class="co">]</span> </span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>Det er lettere å tolke resultatet som prediksjon. På samme måte som i tidligere metoder vi har sett på kan vi bruke <span class="in">`predict()`</span>. Denne funksjonen kjenner igjen type objekt det predikeres ut fra og bruker da riktig prosedyre. </span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Out-of-bag data (OOB)</span></span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>Bagging kan brukes på training data og testing data som vi har gjort før. Men en ulempe med dette er jo at man får et litt mindre datasett å tilpasse modellene med. Merk at bagging i utgangspunktet baserer seg på å trekke et tilfeldig *utvalg* fra de opprinnelige dataene. Så for hvert tre er det en del trær som ikke blir brukt til å bygge treet. Altså har vi et testing-datasett umiddelbart tilgjengelig! Altså: hvis man bruker 70% av dataene til å bygge hvert enkelt tre, så har man også 30% testingdata tilgjengelig for å gjøre klassifiseringen på det enkelte treet. Dette testing-datasettet kalles *out-of-bag* (OOB) data, men er altså i prinsippet det samme som et testingdatasett. For hvert enkelt tre er det da mulig å bare bruke OOB for prediksjonen. Så hvis bagging-algoritmen bruker 50% av data til å bygge treet, så vil 50% brukes til klassifikasjonen. Hvis det er 100 trær, så vil alle observasjonene bli brukt til klassifikasjon i omtrent 50 av dem. Dette er da OOB-estimatet og har da altså en innebygget training/testing splitting av data. Dette resultatet vil altså være en god indikasjon på resultatet på helt *nye* data. </span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>Når man bruker <span class="in">`predict()`</span> vil forvalget være å bruke OOB hvis <span class="in">`newdata = `</span> ikke er spesifisert. Er det derimot spesifisert nye data, så brukes alle observasjonene. </span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Bagging </span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>I dette kapittelt skal vi bruke følgende pakker: </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># datahåndtering, grafikk og glimpse()</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)       <span class="co"># funksjonen skim() for å se på data</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)     <span class="co"># for å dele data i training og testing</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)       <span class="co"># for fitting decision trees</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ipred)       <span class="co"># for fitting bagged decision trees</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)       <span class="co"># for calculating variable importance</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># for general model fitting og confusionMatrix()</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- #  Kilde: https://www.statology.org/bagging-in-r/ --&gt;</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduksjon til bagging</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>Merk at <span class="co">[</span><span class="ot">@berk2016a</span><span class="co">]</span> gjør et poeng av at med *bagging* gjør vi et større steg vekk fra mer vanlige statistiske prosedyrer. Regresjon og klassifikasjonstrær (og det meste annet vi er mer vant med) gir *ett* sett av resultater. Med bagging får vi en hel haug av resultater. Prinsippet er rett og slett at man trekker et tilfeldig utvalg av dataene, bygger et klassifikasjonstre og gjør klassifikasjonen. Så gjentar man dette med et nytt tilfeldig utvalg fra det opprinnelige datasettet.^[Dette er altså det vi ofte kaller tilfeldig utvalg *med* tilbakelegging.] Så gjentar man dette mange ganger.^<span class="co">[</span><span class="ot">Bagging ligner altså veldig på det vi i vanlig statistikk kaller for bootstrapping. Men i bootstrapping er ofte formålet å korrigere standardfeilene eller noe slikt og ikke så mye punktestimatet. Skjønt, det går an å bruke bagging på regresjonsmodeller også, og da tror jeg forskjellen mot bootstrapping er mest semantisk.</span><span class="co">]</span> </span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>Hver observasjon i det opprinnelige datasettet har da blitt klassifisert mange ganger, men ikke nødvendigvis likt i hvert tre. (Enkle klassifikasjonstrær er nemlig litt ustabile greier). Hvis man har gjort prosedyren 100 ganger, så vil hver observasjon bli klassifisert 100 ganger - en gang i hvert tre. For prediksjon på trainingdata brukes rett og slett en opptelling over alle trærne for hver observasjon. Når <span class="co">[</span><span class="ot">@berk2016a</span><span class="co">]</span> snakker om "votes", så er dette som menes: hvert tre har en stemme og så stemmes det over hva som blir utfallet for den enkelte. </span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>Dette betyr at antall trær kan ha noe å si. Forvalget for funksjonen <span class="in">`bagging()`</span> er 25. Det er en god start, men flere trær gir jo mer stabile resultater. </span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>Husk at klassifikasjonstrær er litt ustabile greier, og små tilfeldige variasjoner kan påvirke en enkelt split. Ved å bruke bagging jevnes de tilfeldige feilene ut slik at man totalt sett skal få et mer stabilt resultat. Altså: at faren for overfitting reduseres. Hvor mange trær som trengs er litt verre å si noe om. </span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Empirisk eksempel: Mer credit scores</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>Vi bruker credit-dataene igjen. Man kan med fordel dele inn i training og testing datasett som før. Men litt nedenfor introduseres også ideen med "out-of-bag data" som på en måte gjør en slik split internt i funksjonen. Vi kommer altså tilbake til dette. </span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>credit <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/credit.csv"</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>Funksjonen <span class="in">`bagging()`</span> har tilsvarende oppbygning som tidligere modeller, dvs. utfallsvariabelen angis først, deretter <span class="in">`~`</span> etterfugte av prediktorer, så angis hvilket datasett som brukes. Så kan man legge til ytterligere spesifikasjoner etter det, her er et eksempel der det angis å gjøre 100 tilfeldige utvalg (dvs antall trær) med <span class="in">`nbagg = 100`</span>. </span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>baggedtree <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, <span class="at">nbagg =</span> <span class="dv">100</span>)</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tolkning som prediksjon</span></span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>En mulig ulempe med bagging er at vi ikke får noe tolkbar output. Det finnes ingen summary-funksjon slik som for regresjon og selv om man forsåvidt kan plotte hvert enkelt klassifikasjonstre, så gir det lite mening å plotte 100 slike trær. Det hjelper lite på tolkbarheten, for å si det forsiktig. Ikke bruk <span class="in">`summary()`</span> på objektet du har lagret resultatene fra bagging i. Det blir bare tull. </span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>Vi er nå på vei inn i litt "black-box" metoder: Det er ingen direkte tolkbare parametre eller noe slikt. Men det er fremdeles egentlig ganske enkle metoder, basert på trær, så intuitivt er det mulig å se at man kan finne ut av hva som skjer selv om det er litt arbeidskrevende. ^<span class="co">[</span><span class="ot">Det finnes imidlertid metoder for dette, som gjerne kalles *variable importance* og *partial dependence*. Dette er derimot ikke direkte innebygget i funksjonen for bagging som vi bruker her. Det er mulig å gjøre med bruk av noen andre R-pakker, men vi lar det ligge foreløpig. Derimot kommer vi tilbake til dette i kapittelet om random forest. Bagging er også en byggekloss i random forest, så er det blir helt tilsvarende.</span><span class="co">]</span> </span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>Det er lettere å tolke resultatet som prediksjon. På samme måte som i tidligere metoder vi har sett på kan vi bruke <span class="in">`predict()`</span>. Denne funksjonen kjenner igjen type objekt det predikeres ut fra og bruker da riktig prosedyre. </span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>credit_pred <span class="ot">&lt;-</span> credit <span class="sc">%&gt;%</span> </span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(baggedtree), <span class="at">type=</span><span class="st">"class"</span>)</span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> credit_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span>
+<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## Out-of-bag data (OOB)</span></span>
+<span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a>Bagging kan brukes på training data og testing data som vi har gjort før. Men en ulempe med dette er jo at man får et litt mindre datasett å tilpasse modellene med. Merk at bagging i utgangspunktet baserer seg på å trekke et tilfeldig *utvalg* fra de opprinnelige dataene. Så for hvert tre er det en del trær som ikke blir brukt til å bygge treet. Altså har vi et testing-datasett umiddelbart tilgjengelig! Altså: hvis man bruker 70% av dataene til å bygge hvert enkelt tre, så har man også 30% testingdata tilgjengelig for å gjøre klassifiseringen på det enkelte treet. Dette testing-datasettet kalles *out-of-bag* (OOB) data, men er altså i prinsippet det samme som et testingdatasett. For hvert enkelt tre er det da mulig å bare bruke OOB for prediksjonen. Så hvis bagging-algoritmen bruker 50% av data til å bygge treet, så vil 50% brukes til klassifikasjonen. Hvis det er 100 trær, så vil alle observasjonene bli brukt til klassifikasjon i omtrent 50 av dem. Dette er da OOB-estimatet og har da altså en innebygget training/testing splitting av data. Dette resultatet vil altså være en god indikasjon på resultatet på helt *nye* data. </span>
+<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a>Forvalget i <span class="in">`bagging()`</span> er imidlertid å *ikke* bruke OOB. For å gjøre dette legges det til argumentet `coob = TRUE' og man får utregnet klassifikasjonsfeilen i output. </span>
+<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a>baggedtree_oob <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, <span class="at">nbagg =</span> <span class="dv">100</span>, <span class="at">coob =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a>Når man deretter bruker <span class="in">`predict()`</span> vil forvalget være å bruke OOB hvis <span class="in">`newdata = `</span> ikke er spesifisert. Er det derimot spesifisert nye data, så brukes alle observasjonene for hvert tre. </span>
+<span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-108"><a href="#cb14-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>credit_pred <span class="ot">&lt;-</span> credit <span class="sc">%&gt;%</span> </span>
+<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(baggedtree_oob), <span class="at">type=</span><span class="st">"class"</span>)</span>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> credit_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span>
+<span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mer tuning</span></span>
+<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a>Man kan si at bagging består av to deler: 1) en grunnleggende klassifikasjonsteknikk (noen ganger omtalt som "base learner"), og 2) en bootstrapping med gjentatte estimeringer på utvalg av data. I tillegg kommer valget om å bruke OOB eller ikke. </span>
+<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>Forvalget i <span class="in">`bagging()`</span> er å bruke klassifikasjonstrær med <span class="in">`rpart()`</span>. Det er altså vanlige klassifikasjonstrær av akkurat samme type som i forrige kapittel som bygges. Det betyr også at tuning som kan gjøres med bruk av <span class="in">`rpart()`</span> også kan gjøres med <span class="in">`bagging()`</span>. Dette gjøres ved å legge til argumentet <span class="in">`control = rpart.control()`</span> og så oppgis ønskede tuning parametre innefor den parentesen. Her er et eksempel med å angi maks dybde på treet og complexity parameter.  </span>
+<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a>baggedtree_oob <span class="ot">&lt;-</span> <span class="fu">bagging</span>(default <span class="sc">~</span> . , <span class="at">data =</span> credit, </span>
+<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>                          <span class="at">nbagg =</span> <span class="dv">500</span>, <span class="at">coob =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a>                          <span class="at">control =</span> <span class="fu">rpart.control</span>(<span class="at">maxdepth =</span> <span class="dv">6</span>, <span class="at">cp =</span> <span class="fl">0.0001</span>))</span>
+<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>credit_pred <span class="ot">&lt;-</span> credit <span class="sc">%&gt;%</span> </span>
+<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">default_pred =</span> <span class="fu">predict</span>(baggedtree_oob), <span class="at">type=</span><span class="st">"class"</span>)</span>
+<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> credit_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(default_pred, default) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>()</span>
+<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab)</span>
+<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a>Merk imidlertid at loss matrix ser ikke ut til å kunne brukes i funksjonen <span class="in">`bagging()`</span>. </span>
+<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>Det viktige poenget akkurat nå er egentlig ikke all tuning som er mulig å gjøre i bagging, men at det er bygget på en annen underliggende algoritme. Vi bruker i praksis ikke bagging noe særlig alene, men derimot er random forest en variant av bagging med litt ekstra saker. Slik sett er bagging å regne som en byggesten til random forest sammen med klassifikasjonstrær. Så derfor skal vi ikke bruke så mye tid på bagging, men gå raskt videre til random forest. </span>
+<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave. </span>
+<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a>Gjør en prediksjon med bruk av bagging. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <span class="in">`cp`</span> og <span class="in">`maxdepth`</span>.</span>
+<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB? </span>
+<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
