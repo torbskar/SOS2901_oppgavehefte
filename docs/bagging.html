@@ -217,7 +217,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -502,10 +502,20 @@ default_pred  no yes
 <p><span class="theorem-title"><strong>Exercise 7.1 </strong></span>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.2 </strong></span>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave. Gjør en prediksjon med bruk av bagging. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <code>cp</code> og <code>maxdepth</code>.</p>
+<p><span class="theorem-title"><strong>Exercise 7.2 </strong></span>Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk <code>set.seed()</code> slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter. (Forskjellen er ikke nødvendigvis veldig stor, så ikke bli forvirret hvis så ikke skjer).</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.3 </strong></span>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?</p>
+<p><span class="theorem-title"><strong>Exercise 7.3 </strong></span>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave.</p>
+<p>For dette datasettet: synes du feilratene er akseptable? I hvilken grad</p>
+</div>
+<div id="exr-" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.4 </strong></span>Gjør en prediksjon med bruk av bagging og vurder confusion matrix i henhold til hva du vurderte i forrige oppgave. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <code>cp</code> og <code>maxdepth</code>.</p>
+</div>
+<div id="exr-" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.5 </strong></span>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?</p>
+</div>
+<div id="exr-" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.6 </strong></span>Gi en vurdering basert på noen fairnessmål. Er det skjevheter her og hvordan vil du vurdere disse?</p>
 </div>
 
 
@@ -871,17 +881,30 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
 <span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave. </span>
-<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a>Gjør en prediksjon med bruk av bagging. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <span class="in">`cp`</span> og <span class="in">`maxdepth`</span>.</span>
-<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk <span class="in">`set.seed()`</span> slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter. (Forskjellen er ikke nødvendigvis veldig stor, så ikke bli forvirret hvis så ikke skjer). </span>
+<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave. </span>
 <span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB? </span>
+<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a>For dette datasettet: synes du feilratene er akseptable? I hvilken grad </span>
+<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a>Gjør en prediksjon med bruk av bagging og vurder confusion matrix i henhold til hva du vurderte i forrige oppgave. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <span class="in">`cp`</span> og <span class="in">`maxdepth`</span>.</span>
+<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>::: </span>
+<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB? </span>
+<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-188"><a href="#cb14-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-189"><a href="#cb14-189" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a>Gi en vurdering basert på noen fairnessmål. Er det skjevheter her og hvordan vil du vurdere disse? </span>
+<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

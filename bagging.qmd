@@ -148,15 +148,28 @@ Det viktige poenget akkurat nå er egentlig ikke all tuning som er mulig å gjø
 Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
 :::
 
+::: {#exr-}
+Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk `set.seed()` slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter. (Forskjellen er ikke nødvendigvis veldig stor, så ikke bli forvirret hvis så ikke skjer). 
+:::
 
 ::: {#exr-}
 Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave. 
-Gjør en prediksjon med bruk av bagging. Prøv deg litt frem med å justere på tuningparametrene, f.eks. `cp` og `maxdepth`.
+
+For dette datasettet: synes du feilratene er akseptable? I hvilken grad 
+
 :::
+
+::: {#exr-}
+Gjør en prediksjon med bruk av bagging og vurder confusion matrix i henhold til hva du vurderte i forrige oppgave. Prøv deg litt frem med å justere på tuningparametrene, f.eks. `cp` og `maxdepth`.
+::: 
 
 
 ::: {#exr-}
 Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB? 
 :::
 
+
+::: {#exr-}
+Gi en vurdering basert på noen fairnessmål. Er det skjevheter her og hvordan vil du vurdere disse? 
+:::
 

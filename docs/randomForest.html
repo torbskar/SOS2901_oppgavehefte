@@ -198,7 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></a>
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -496,7 +496,9 @@ Confusion matrix:
 </section>
 <section id="tuning-av-random-forest" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="tuning-av-random-forest"><span class="header-section-number">7.2</span> Tuning av random forest</h2>
-<p>Det som faktisk endrer resultatene en god del er sampling prosedyren, altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget. Men ved å bruke argumentet <code>sampsize = ...</code> kan vi angi en annen andel. Hvis vi angir to tall er det <em>antallet</em> som trekkes fra hver kategori i utfallsvariabelen. Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori. I disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall.</p>
+<p>Random forest er altså en ganske stor samling av klassifikasjonstrær. For hvert enkelt tre er det parametre som kan justeres slik som angitt i tidligere kapittel. Man kan altså styre kompleksiteten av trærene.</p>
+<p>Det går forsåvidt også legge til loss matrix, men det er mer vanlig å justeres sampling skjemaet i baggingen: altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget til å bygge hvert tre. Men ved å bruke argumentet <code>sampsize = ...</code> kan vi angi en annen andel. Hvis vi angir to tall er det <em>antallet</em> som trekkes fra hver kategori i utfallsvariabelen.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori.</p>
+<p>I akkurat disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall.</p>
 <p>Hensikten med å gjøre dette er at hvis det er et mindretall som har tilbakefall, så blir hvert tre bygget med mer informasjon om ikke-residivistene enn residivistene. Hvis vi vekter opp residivistene, så får disse større inflytelse på hvert tre. Dermed vil dette også påvirke resultatet. Det er imidlertid vanskelig å vite helt sikkert hvordan det vil slå ut, så man må prøve seg litt frem. Noen ganger vil man veie gruppene likt, andre ganger ulikt. Her er et eksempel der de veies likt:</p>
 <div class="cell">
 <details>
@@ -622,6 +624,7 @@ Prediction    0    1
 <hr>
 <ol>
 <li id="fn1"><p>I norsk straffelov var det et skille mellom forseelse og forbrytelse frem til 2015, og dette skillet finnes ikke lengre i norsk straffelov. Men med “forseelse” menes det jo i denne sammenheng de mindre alvorlige lovbruddene.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Hvis det er flere enn to utfallskategorier må det angis like mange tall.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -818,7 +821,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./fairness.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -951,88 +954,90 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb26-151"><a href="#cb26-151" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-152"><a href="#cb26-152" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-153"><a href="#cb26-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-154"><a href="#cb26-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-155"><a href="#cb26-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-156"><a href="#cb26-156" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tuning av random forest</span></span>
-<span id="cb26-157"><a href="#cb26-157" aria-hidden="true" tabindex="-1"></a>Det som faktisk endrer resultatene en god del er sampling prosedyren, altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget. Men ved å bruke argumentet <span class="in">`sampsize = ...`</span> kan vi angi en annen andel. Hvis vi angir to tall er det *antallet* som trekkes fra hver kategori i utfallsvariabelen. Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori. I disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall. </span>
+<span id="cb26-154"><a href="#cb26-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tuning av random forest</span></span>
+<span id="cb26-155"><a href="#cb26-155" aria-hidden="true" tabindex="-1"></a>Random forest er altså en ganske stor samling av klassifikasjonstrær. For hvert enkelt tre er det parametre som kan justeres slik som angitt i tidligere kapittel. Man kan altså styre kompleksiteten av trærene. </span>
+<span id="cb26-156"><a href="#cb26-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-157"><a href="#cb26-157" aria-hidden="true" tabindex="-1"></a>Det går forsåvidt også legge til loss matrix, men det er mer vanlig å justeres sampling skjemaet i baggingen: altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget til å bygge hvert tre. Men ved å bruke argumentet <span class="in">`sampsize = ...`</span> kan vi angi en annen andel. Hvis vi angir to tall er det *antallet* som trekkes fra hver kategori i utfallsvariabelen.^<span class="co">[</span><span class="ot">Hvis det er flere enn to utfallskategorier må det angis like mange tall.</span><span class="co">]</span> Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori. </span>
 <span id="cb26-158"><a href="#cb26-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-159"><a href="#cb26-159" aria-hidden="true" tabindex="-1"></a>Hensikten med å gjøre dette er at hvis det er et mindretall som har tilbakefall, så blir hvert tre bygget med mer informasjon om ikke-residivistene enn residivistene. Hvis vi vekter opp residivistene, så får disse større inflytelse på hvert tre. Dermed vil dette også påvirke resultatet. Det er imidlertid vanskelig å vite helt sikkert hvordan det vil slå ut, så man må prøve seg litt frem. Noen ganger vil man veie gruppene likt, andre ganger ulikt. Her er et eksempel der de veies likt:</span>
+<span id="cb26-159"><a href="#cb26-159" aria-hidden="true" tabindex="-1"></a>I akkurat disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall. </span>
 <span id="cb26-160"><a href="#cb26-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-163"><a href="#cb26-163" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb26-164"><a href="#cb26-164" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
-<span id="cb26-165"><a href="#cb26-165" aria-hidden="true" tabindex="-1"></a>rf3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . , </span>
-<span id="cb26-166"><a href="#cb26-166" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1900</span>),</span>
-<span id="cb26-167"><a href="#cb26-167" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> compas)</span>
-<span id="cb26-168"><a href="#cb26-168" aria-hidden="true" tabindex="-1"></a>rf3</span>
-<span id="cb26-169"><a href="#cb26-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-170"><a href="#cb26-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-161"><a href="#cb26-161" aria-hidden="true" tabindex="-1"></a>Hensikten med å gjøre dette er at hvis det er et mindretall som har tilbakefall, så blir hvert tre bygget med mer informasjon om ikke-residivistene enn residivistene. Hvis vi vekter opp residivistene, så får disse større inflytelse på hvert tre. Dermed vil dette også påvirke resultatet. Det er imidlertid vanskelig å vite helt sikkert hvordan det vil slå ut, så man må prøve seg litt frem. Noen ganger vil man veie gruppene likt, andre ganger ulikt. Her er et eksempel der de veies likt:</span>
+<span id="cb26-162"><a href="#cb26-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-165"><a href="#cb26-165" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb26-166"><a href="#cb26-166" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
+<span id="cb26-167"><a href="#cb26-167" aria-hidden="true" tabindex="-1"></a>rf3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . , </span>
+<span id="cb26-168"><a href="#cb26-168" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1900</span>),</span>
+<span id="cb26-169"><a href="#cb26-169" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> compas)</span>
+<span id="cb26-170"><a href="#cb26-170" aria-hidden="true" tabindex="-1"></a>rf3</span>
 <span id="cb26-171"><a href="#cb26-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-172"><a href="#cb26-172" aria-hidden="true" tabindex="-1"></a>Her er et eksempel der de veies ulikt:</span>
+<span id="cb26-172"><a href="#cb26-172" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb26-173"><a href="#cb26-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-176"><a href="#cb26-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb26-177"><a href="#cb26-177" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
-<span id="cb26-178"><a href="#cb26-178" aria-hidden="true" tabindex="-1"></a>rf3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . , </span>
-<span id="cb26-179"><a href="#cb26-179" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1900</span>),</span>
-<span id="cb26-180"><a href="#cb26-180" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas)</span>
-<span id="cb26-181"><a href="#cb26-181" aria-hidden="true" tabindex="-1"></a>rf3</span>
-<span id="cb26-182"><a href="#cb26-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-183"><a href="#cb26-183" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-174"><a href="#cb26-174" aria-hidden="true" tabindex="-1"></a>Her er et eksempel der de veies ulikt:</span>
+<span id="cb26-175"><a href="#cb26-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-178"><a href="#cb26-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb26-179"><a href="#cb26-179" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
+<span id="cb26-180"><a href="#cb26-180" aria-hidden="true" tabindex="-1"></a>rf3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . , </span>
+<span id="cb26-181"><a href="#cb26-181" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1900</span>),</span>
+<span id="cb26-182"><a href="#cb26-182" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas)</span>
+<span id="cb26-183"><a href="#cb26-183" aria-hidden="true" tabindex="-1"></a>rf3</span>
 <span id="cb26-184"><a href="#cb26-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-185"><a href="#cb26-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-186"><a href="#cb26-186" aria-hidden="true" tabindex="-1"></a>Det viktige nå er at feilratene for falske positive og falske negative blir vesentlig forskjellig! Det betyr at ved hvordan vi estimerer modellen kan vi legge sterke føringer på resultatet. Vi bør derfor ta stilling til *på forhånd* hvilke feilrater vi er villig til å akseptere - og hvorvidt de to typer feil er like ille eller ikke. Det er dette Berk (2016) kaller *asymetriske kostnader* og må vurderes i henhold til konsekvenser av hva prediksjonen skal brukes til. </span>
+<span id="cb26-185"><a href="#cb26-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-186"><a href="#cb26-186" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-187"><a href="#cb26-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-188"><a href="#cb26-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-189"><a href="#cb26-189" aria-hidden="true" tabindex="-1"></a>Predikere for nye data: </span>
+<span id="cb26-188"><a href="#cb26-188" aria-hidden="true" tabindex="-1"></a>Det viktige nå er at feilratene for falske positive og falske negative blir vesentlig forskjellig! Det betyr at ved hvordan vi estimerer modellen kan vi legge sterke føringer på resultatet. Vi bør derfor ta stilling til *på forhånd* hvilke feilrater vi er villig til å akseptere - og hvorvidt de to typer feil er like ille eller ikke. Det er dette Berk (2016) kaller *asymetriske kostnader* og må vurderes i henhold til konsekvenser av hva prediksjonen skal brukes til. </span>
+<span id="cb26-189"><a href="#cb26-189" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-190"><a href="#cb26-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-193"><a href="#cb26-193" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb26-194"><a href="#cb26-194" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb26-195"><a href="#cb26-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf, <span class="at">newdata=</span>compas))</span>
-<span id="cb26-196"><a href="#cb26-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb26-197"><a href="#cb26-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-198"><a href="#cb26-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-199"><a href="#cb26-199" aria-hidden="true" tabindex="-1"></a>Confusion matrix: </span>
+<span id="cb26-191"><a href="#cb26-191" aria-hidden="true" tabindex="-1"></a>Predikere for nye data: </span>
+<span id="cb26-192"><a href="#cb26-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-195"><a href="#cb26-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb26-196"><a href="#cb26-196" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
+<span id="cb26-197"><a href="#cb26-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf, <span class="at">newdata=</span>compas))</span>
+<span id="cb26-198"><a href="#cb26-198" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-199"><a href="#cb26-199" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-200"><a href="#cb26-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-203"><a href="#cb26-203" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb26-204"><a href="#cb26-204" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_p<span class="sc">$</span>pred_rf, compas_p<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span>
-<span id="cb26-205"><a href="#cb26-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb26-206"><a href="#cb26-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-207"><a href="#cb26-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-201"><a href="#cb26-201" aria-hidden="true" tabindex="-1"></a>Confusion matrix: </span>
+<span id="cb26-202"><a href="#cb26-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-205"><a href="#cb26-205" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb26-206"><a href="#cb26-206" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_p<span class="sc">$</span>pred_rf, compas_p<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span>
+<span id="cb26-207"><a href="#cb26-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb26-208"><a href="#cb26-208" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-209"><a href="#cb26-209" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-210"><a href="#cb26-210" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-211"><a href="#cb26-211" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-212"><a href="#cb26-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-213"><a href="#cb26-213" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
-<span id="cb26-214"><a href="#cb26-214" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb26-215"><a href="#cb26-215" aria-hidden="true" tabindex="-1"></a>Bruk datasettet credit som i forrige oppgave. </span>
-<span id="cb26-216"><a href="#cb26-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-217"><a href="#cb26-217" aria-hidden="true" tabindex="-1"></a>a) Bruk random forest til å gjøre en tilsvarende klassifisering som du gjorde med </span>
-<span id="cb26-218"><a href="#cb26-218" aria-hidden="true" tabindex="-1"></a>klassifikasjonstre. Bruk default instillinger i randomForest().</span>
-<span id="cb26-219"><a href="#cb26-219" aria-hidden="true" tabindex="-1"></a>a) Bruk predict() til å klassifisere</span>
-<span id="cb26-220"><a href="#cb26-220" aria-hidden="true" tabindex="-1"></a>a) Lag en confusion matrix med table() og gjenta med confusionMatrix()</span>
-<span id="cb26-221"><a href="#cb26-221" aria-hidden="true" tabindex="-1"></a>a) Gjør en vurdering av resultatet og sammenlign med resultat fra klassifikasjonstre</span>
-<span id="cb26-222"><a href="#cb26-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-223"><a href="#cb26-223" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb26-213"><a href="#cb26-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-214"><a href="#cb26-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-215"><a href="#cb26-215" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb26-216"><a href="#cb26-216" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb26-217"><a href="#cb26-217" aria-hidden="true" tabindex="-1"></a>Bruk datasettet credit som i forrige oppgave. </span>
+<span id="cb26-218"><a href="#cb26-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-219"><a href="#cb26-219" aria-hidden="true" tabindex="-1"></a>a) Bruk random forest til å gjøre en tilsvarende klassifisering som du gjorde med </span>
+<span id="cb26-220"><a href="#cb26-220" aria-hidden="true" tabindex="-1"></a>klassifikasjonstre. Bruk default instillinger i randomForest().</span>
+<span id="cb26-221"><a href="#cb26-221" aria-hidden="true" tabindex="-1"></a>a) Bruk predict() til å klassifisere</span>
+<span id="cb26-222"><a href="#cb26-222" aria-hidden="true" tabindex="-1"></a>a) Lag en confusion matrix med table() og gjenta med confusionMatrix()</span>
+<span id="cb26-223"><a href="#cb26-223" aria-hidden="true" tabindex="-1"></a>a) Gjør en vurdering av resultatet og sammenlign med resultat fra klassifikasjonstre</span>
 <span id="cb26-224"><a href="#cb26-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-225"><a href="#cb26-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-225"><a href="#cb26-225" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb26-226"><a href="#cb26-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-227"><a href="#cb26-227" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb26-228"><a href="#cb26-228" aria-hidden="true" tabindex="-1"></a>Gjenta oppgave 1, men se om du kan justere modellen til et mer tilfredsstillende resultat. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette. Bruk parameterne sampsize, mtry og ntree. </span>
-<span id="cb26-229"><a href="#cb26-229" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb26-230"><a href="#cb26-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-231"><a href="#cb26-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-232"><a href="#cb26-232" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb26-233"><a href="#cb26-233" aria-hidden="true" tabindex="-1"></a>Tolk random forest</span>
-<span id="cb26-234"><a href="#cb26-234" aria-hidden="true" tabindex="-1"></a>a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning. </span>
-<span id="cb26-235"><a href="#cb26-235" aria-hidden="true" tabindex="-1"></a>a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial </span>
-<span id="cb26-236"><a href="#cb26-236" aria-hidden="true" tabindex="-1"></a>dependence plot. </span>
-<span id="cb26-237"><a href="#cb26-237" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb26-238"><a href="#cb26-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-239"><a href="#cb26-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-240"><a href="#cb26-240" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb26-241"><a href="#cb26-241" aria-hidden="true" tabindex="-1"></a>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen. </span>
-<span id="cb26-242"><a href="#cb26-242" aria-hidden="true" tabindex="-1"></a>Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave. Hvis du virkelig vil at begge skal få lån kan du kanskje justere modellen? Legge til/fjerne variable fra formelen og justere tuning parametrene. Prøv deg frem.  </span>
-<span id="cb26-243"><a href="#cb26-243" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb26-227"><a href="#cb26-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-228"><a href="#cb26-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-229"><a href="#cb26-229" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb26-230"><a href="#cb26-230" aria-hidden="true" tabindex="-1"></a>Gjenta oppgave 1, men se om du kan justere modellen til et mer tilfredsstillende resultat. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette. Bruk parameterne sampsize, mtry og ntree. </span>
+<span id="cb26-231"><a href="#cb26-231" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb26-232"><a href="#cb26-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-233"><a href="#cb26-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-234"><a href="#cb26-234" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb26-235"><a href="#cb26-235" aria-hidden="true" tabindex="-1"></a>Tolk random forest</span>
+<span id="cb26-236"><a href="#cb26-236" aria-hidden="true" tabindex="-1"></a>a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning. </span>
+<span id="cb26-237"><a href="#cb26-237" aria-hidden="true" tabindex="-1"></a>a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial </span>
+<span id="cb26-238"><a href="#cb26-238" aria-hidden="true" tabindex="-1"></a>dependence plot. </span>
+<span id="cb26-239"><a href="#cb26-239" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb26-240"><a href="#cb26-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-241"><a href="#cb26-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-242"><a href="#cb26-242" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb26-243"><a href="#cb26-243" aria-hidden="true" tabindex="-1"></a>Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen. </span>
+<span id="cb26-244"><a href="#cb26-244" aria-hidden="true" tabindex="-1"></a>Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave. Hvis du virkelig vil at begge skal få lån kan du kanskje justere modellen? Legge til/fjerne variable fra formelen og justere tuning parametrene. Prøv deg frem.  </span>
+<span id="cb26-245"><a href="#cb26-245" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

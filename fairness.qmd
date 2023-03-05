@@ -1,7 +1,8 @@
-# Fairness 
+# Fairness og tuning
 
 
 ## Introduksjon til fairness
+Det blir litt repetisjon her nå. Det grunnleggende med fairness har vi vært innom før, men nå gjør vi det i kontekst av random forest. En ting er å avdekke bias og urettferdighet, en annen ting er å gjøre noe med det! 
 
 
 
@@ -115,7 +116,8 @@ acc$Metric_plot
 
 
 
-## Tuning til mer fairness
+## Fairness og tuning med stratifisering
+
 
 
 

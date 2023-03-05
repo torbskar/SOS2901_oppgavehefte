@@ -127,10 +127,12 @@ partialPlot(rf, pred.data = compas,
 
 
 
-
-
 ## Tuning av random forest
-Det som faktisk endrer resultatene en god del er sampling prosedyren, altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget. Men ved å bruke argumentet `sampsize = ...` kan vi angi en annen andel. Hvis vi angir to tall er det *antallet* som trekkes fra hver kategori i utfallsvariabelen. Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori. I disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall. 
+Random forest er altså en ganske stor samling av klassifikasjonstrær. For hvert enkelt tre er det parametre som kan justeres slik som angitt i tidligere kapittel. Man kan altså styre kompleksiteten av trærene. 
+
+Det går forsåvidt også legge til loss matrix, men det er mer vanlig å justeres sampling skjemaet i baggingen: altså hvor mange observasjoner som trekkes til å bygge hvert tre. I utgangspunktet trekkes 70% av hele utvalget til å bygge hvert tre. Men ved å bruke argumentet `sampsize = ...` kan vi angi en annen andel. Hvis vi angir to tall er det *antallet* som trekkes fra hver kategori i utfallsvariabelen.^[Hvis det er flere enn to utfallskategorier må det angis like mange tall.] Vi kan altså angi hvor mange som trekkes av de med og uten tilbakefall, men disse tallene bør ikke settes større enn 70% av hver kategori. 
+
+I akkurat disse dataene er det 2809 med tilbakefall og 3364 uten tilbakefall. Vi kan da velge å trekke maks 1900 fra gruppen med tilbakefall. 
 
 Hensikten med å gjøre dette er at hvis det er et mindretall som har tilbakefall, så blir hvert tre bygget med mer informasjon om ikke-residivistene enn residivistene. Hvis vi vekter opp residivistene, så får disse større inflytelse på hvert tre. Dermed vil dette også påvirke resultatet. Det er imidlertid vanskelig å vite helt sikkert hvordan det vil slå ut, så man må prøve seg litt frem. Noen ganger vil man veie gruppene likt, andre ganger ulikt. Her er et eksempel der de veies likt:
 
