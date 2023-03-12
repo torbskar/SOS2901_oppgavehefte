@@ -28,6 +28,10 @@ library(caret)
 
 Random forest bruker klassifikasjonstrær og bagging som byggestener. I prinsippet er det "bagged trees", men i stedet for å bagge samme type trær, så gjøres det en endring i hvert tre: I hver split i hvert enkelt tre trekkes det bare et fåtall variable for å bestemme hver split. Det brukes med andre ord *mindre* informasjon i hvert enkelt tre! Man skulle intuitivt tro at dette vil gi dårligere prediksjon, og det stemmer forsåvidt i hvert enkelt tre. Men på den annen side lages det mange trær og det er det aggregerte resultatet som blir prediksjonen. På samme måte som i bagging, så avgjøres klassifikasjonen ved majoritetsstemme over alle trærne. 
 
+Husk nå at random forest er en variant av bagging, så det som i forrige kapittel ble sagt om OOB gjelder også her. Med andre ord: det training og testing datasett benyttes internt i algoritmen. Slik sett trenger man ikke splitte datasettet i forkant. Resultatene og feilratene er beregnet med OOB-dataene. I utgangspunktet trenger man altså ikke å splitte datasettet. 
+
+Men: Det går an å bruke gjøre en split likevel. Da er det mer å regne som et *valideringsdatasett*. Hvis man tuner modellen og sjekker OOB-resultatene, så står man i fare for å overfitte mot OOB (tilsvarende testing-data).^[Jeg har forstått det slik at de lærde strides noe om dette.] Med andre ord: Det kan være en god ide å splitte dataene først likevel og se på endelige resultater mot dette datasettet. Fremgangsmåten blir da akkurat det samme som i tidligere kapitler. I eksempelet nedenfor gjøres det uten å splitte. Men du kan gjøre med split, og det vil antakeligvis bli en liten forskjell.
+
 
 ## Eksempel
 
@@ -40,7 +44,9 @@ glimpse(compas)
 ```
 
 
-Estimerer random forest med alle variable
+
+
+Estimerer random forest med alle variable.
 
 ```{r}
 set.seed(4356)
@@ -58,7 +64,7 @@ plot(rf)
 ```
 
 
-Predikerer på samme datasett
+Prediksjon fungerer på tilsvarende måte som vi har gjort tidligere. For å predikerer på samme datasett bruker du bare `predict()`. 
 
 ```{r}
 compas_p <- compas %>% 
@@ -69,13 +75,13 @@ Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
 
 
 ```{r}
-table(compas_p$pred_rf, compas_p$Two_yr_Recidivism) 
+tab <- table(compas_p$pred_rf, compas_p$Two_yr_Recidivism) 
+tab
 ```
 
 Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
 ```{r}
-confusionMatrix(compas_p$pred_rf,
-                compas_p$Two_yr_Recidivism, positive="1")
+confusionMatrix(tab, positive="1")
 ```
 
 
@@ -179,16 +185,22 @@ compas_p <- compas %>%
 Confusion matrix: 
 
 ```{r}
-confusionMatrix(compas_p$pred_rf, compas_p$Two_yr_Recidivism, positive="1")
+tab <- compas_p %>% 
+  select(pred_rf, Two_yr_Recidivism) %>% 
+  table()
+
+confusionMatrix(tab, positive="1")
 ```
 
 
 
 
+# Oppgaver
+::: {#exr-}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men gjør én endring: split datasettet først i testing og training. 
+:::
 
 
-
-## Oppgaver
 ::: {#exr-}
 Bruk datasettet credit som i forrige oppgave. 
 

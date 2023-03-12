@@ -270,8 +270,8 @@ div.csl-indent {
   <li><a href="#tolkning-som-prediksjon" id="toc-tolkning-som-prediksjon" class="nav-link" data-scroll-target="#tolkning-som-prediksjon"><span class="toc-section-number">7.2</span>  Tolkning som prediksjon</a></li>
   <li><a href="#out-of-bag-data-oob" id="toc-out-of-bag-data-oob" class="nav-link" data-scroll-target="#out-of-bag-data-oob"><span class="toc-section-number">7.3</span>  Out-of-bag data (OOB)</a></li>
   <li><a href="#mer-tuning" id="toc-mer-tuning" class="nav-link" data-scroll-target="#mer-tuning"><span class="toc-section-number">7.4</span>  Mer tuning</a></li>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">7.5</span>  Oppgaver</a></li>
   </ul></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">8</span>  Oppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -496,26 +496,27 @@ default_pred  no yes
 <p>Merk imidlertid at loss matrix ser ikke ut til å kunne brukes i funksjonen <code>bagging()</code>.</p>
 <p>Det viktige poenget akkurat nå er egentlig ikke all tuning som er mulig å gjøre i bagging, men at det er bygget på en annen underliggende algoritme. Vi bruker i praksis ikke bagging noe særlig alene, men derimot er random forest en variant av bagging med litt ekstra saker. Slik sett er bagging å regne som en byggesten til random forest sammen med klassifikasjonstrær. Så derfor skal vi ikke bruke så mye tid på bagging, men gå raskt videre til random forest.</p>
 </section>
-<section id="oppgaver" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="oppgaver"><span class="header-section-number">7.5</span> Oppgaver</h2>
+</section>
+<section id="oppgaver" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Oppgaver</h1>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.1 </strong></span>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+<p><span class="theorem-title"><strong>Exercise 8.1 </strong></span>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.2 </strong></span>Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk <code>set.seed()</code> slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter. (Forskjellen er ikke nødvendigvis veldig stor, så ikke bli forvirret hvis så ikke skjer).</p>
+<p><span class="theorem-title"><strong>Exercise 8.2 </strong></span>Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk <code>set.seed()</code> slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter. (Forskjellen er ikke nødvendigvis veldig stor, så ikke bli forvirret hvis så ikke skjer).</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.3 </strong></span>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave.</p>
+<p><span class="theorem-title"><strong>Exercise 8.3 </strong></span>Velg et nytt datasettet og formuler hva en prediksjonsmodell kan kunne brukes til, tilsvarende som du har gjort i tidligere oppgave.</p>
 <p>For dette datasettet: synes du feilratene er akseptable? I hvilken grad</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.4 </strong></span>Gjør en prediksjon med bruk av bagging og vurder confusion matrix i henhold til hva du vurderte i forrige oppgave. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <code>cp</code> og <code>maxdepth</code>.</p>
+<p><span class="theorem-title"><strong>Exercise 8.4 </strong></span>Gjør en prediksjon med bruk av bagging og vurder confusion matrix i henhold til hva du vurderte i forrige oppgave. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <code>cp</code> og <code>maxdepth</code>.</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.5 </strong></span>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?</p>
+<p><span class="theorem-title"><strong>Exercise 8.5 </strong></span>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?</p>
 </div>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7.6 </strong></span>Gi en vurdering basert på noen fairnessmål. Er det skjevheter her og hvordan vil du vurdere disse?</p>
+<p><span class="theorem-title"><strong>Exercise 8.6 </strong></span>Gi en vurdering basert på noen fairnessmål. Er det skjevheter her og hvordan vil du vurdere disse?</p>
 </div>
 
 
@@ -526,7 +527,6 @@ default_pred  no yes
 Berk, Richard. 2016. <em>Statistical Learning from a Regression Perspective</em>. USA: Springer.
 </div>
 </div>
-</section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
@@ -875,7 +875,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>Det viktige poenget akkurat nå er egentlig ikke all tuning som er mulig å gjøre i bagging, men at det er bygget på en annen underliggende algoritme. Vi bruker i praksis ikke bagging noe særlig alene, men derimot er random forest en variant av bagging med litt ekstra saker. Slik sett er bagging å regne som en byggesten til random forest sammen med klassifikasjonstrær. Så derfor skal vi ikke bruke så mye tid på bagging, men gå raskt videre til random forest. </span>
 <span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oppgaver</span></span>
+<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a><span class="fu"># Oppgaver</span></span>
 <span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
 <span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
