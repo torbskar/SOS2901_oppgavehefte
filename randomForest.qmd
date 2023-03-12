@@ -1,5 +1,12 @@
 # Random forest
 
+
+```{r}
+#| echo: false
+#| message: false
+library(downloadthis)
+```
+
 I dette kapittelt skal vi bruke følgende pakker: 
 
 ```{r}
@@ -14,6 +21,7 @@ library(rsample)     # for å dele data i training og testing
 library(fairmodels)
 library(randomForest)
 library(caret)
+
 
 ```
 
@@ -202,8 +210,7 @@ Gjenta oppgave 1, men se om du kan justere modellen til et mer tilfredsstillende
 ::: {#exr-}
 Tolk random forest
 a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning. 
-a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial 
-dependence plot. 
+a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial dependence plot. 
 :::
 
 
@@ -212,3 +219,21 @@ Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og K
 Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave. Hvis du virkelig vil at begge skal få lån kan du kanskje justere modellen? Legge til/fjerne variable fra formelen og justere tuning parametrene. Prøv deg frem.  
 :::
 
+::: {.content-hidden when-format="pdf"}
+
+```{r}
+#| echo: false
+credit_kunder <- read.csv("data/credit_kunder.csv") %>% 
+  select(-X)
+
+credit_kunder %>%
+  download_this(
+    output_name = "credit kunder dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+:::
