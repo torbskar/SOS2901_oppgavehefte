@@ -109,20 +109,180 @@ acc$Metric_plot
 
 
 
+## Fairness: tuning med stratifisering
 
-## Flere mål på fairness
+Vi har lært litt om grunnleggende tuning. For å justere feilratene er den mest effektive måten i random forest å endre hvordan samplingen skjer ved `sampsize`.^[Dette er ikke eneste måten å tune på, men det vi dekker her. Det finnes andre funksjoner for random forest som inneholder mer funksjonalitet for tuning.] Dette hjelper imidlertid ikke nødvendigvis mot *bias*, altså ulike feilrater for undergrupper. Det vil jo være nyttig om man kunne gjøre noe med slike skjevheter! Heldigvis kan vi det, men det er ikke så lett som man skulle håpe. 
+
+Det viktige punktet å huske på er at random forest trekker tilfeldige utvalg for hvert tre og parameteren `sampsize` justerer hvor mange observasjoner som trekkes. Vi kan nå justere algoritmen til å gjøre en *stratifisert* trekning. Med andre ord: det gjøres en tilfeldig trekning innenfor subgrupper. Ovenfor har vi altså sett at modellen ikke er helt rettferdig med hensyn på kjønn. La oss fikse det! 
+
+Først må vi lage en vektor for å stratifisere etter. Dette bør være variabelen for kjønn *kombinert med* utfallsvariabelen. Da får vi fire kategorier: menn med og uten tilbakefall, og kvinner med og uten tilbakefall. Så kan vi bruke sampsize til å angi hvor mange som skal trekkes fra hver av disse fire gruppene.  
+
+Her er en kode for å lage en slik stratifiseringsvektor. Pussig nok skal denne vektoren ikke legges inn som en del av datasett, men i et eget objekt. I koden nedenfor bruker vi `mutate()` for å lage en ny variabel og `paste0()` for å "lime sammen" de to variabelene. Til sist bruker `pull()` for å trekke ut kun den variabelen i en egen vektor.^[For de av dere som kan en del R fra før: `select()` ville gjort noe tilsvarende, men da ville objektet være en data.frame med én variabel fremfor en vektor. Forskjellen er minimal, men `randomForest()` vil ha det på denne måten.] Koden nedenfor gir også en tabell med antall observasjoner i hver kategori av denne vektoren. 
+
+```{r}
+strat <- compas %>% 
+  mutate(strat = paste0(Sex, Two_yr_Recidivism)) %>% 
+  pull(strat)
+
+table(strat)
+```
+
+Merk at denne vektoren har verdiene som er en kombinasjon av de opprinnelige variablene. Når vi nå angir tall i `sampsize()` så er det i denne samme rekkefølgen. Her blir det altså: 
+
+1) Kvinner uten tilbakefall 
+1) Kvinner med tilbakefall
+1) Menn uten tilbakefall
+1) Menn med tilbakefall 
+
+Merk da at tallene som angis for `sampsize` ikke kan være høyere enn antallet i hver gruppe, og helst ikke høyere enn ca 70% av dette. 
+
+Her er kode for random forest med stratifisert utvalg og angitte verdier av sampsize: 
+
+```{r}
+set.seed(45)
+rf <- randomForest(Two_yr_Recidivism ~ .,
+                   data = compas,
+                   strata = strat, 
+                   sampsize = c(215, 290, 1500, 1500), 
+                   ntree=800)
+
+#rf
+```
 
 
 
+```{r}
+compas_p <- compas %>% 
+  mutate(pred_rf = predict(rf))  
+
+acc <- acc_parity(data = compas_p, 
+                  outcome      = 'Two_yr_Recidivism', 
+                  group        = 'Sex',
+                  preds        = 'pred_rf', 
+                  base         = 'Female')
+acc[[2]]
+```
 
 
-## Fairness og tuning med stratifisering
+Magisk! Plutselig har vi endret en modell med innebygde kjønnsforskjeller til en kjønnsnøytral modell. I hvert fall på akkurat dette målet, da. Man bør jo også sjekke andre relevante mål på fairness.  
+
+Nå lurer du helt sikkert på hvordan du skal velge verdier for `sampsize` i et slikt tilfelle. Det litt skuffende svaret er at du må prøve deg litt frem. Men det hjelper å vite hvilket tall som betyr hva. I dette eksempelet sikres det at det trekkes omtrent like mange kvinner med og uten tilbakefall, og tilsvarende for menn. Så er det justert litt for å oversample kvinner med tilbakefall. Men for å være ærlig: jeg testet en god del varianter her før jeg fikk det resultatet jeg ville ha. 
+
+
+### Hva andre subgrupper? 
+Så er spørsmålet om den balansering vi nå har gjort slår ut på andre grupper også. 
+
+
+```{r}
+acc <- acc_parity(data = compas_p, 
+                  outcome      = 'Two_yr_Recidivism', 
+                  group        = 'Ethnicity',
+                  preds        = 'pred_rf', 
+                  base         = 'Caucasian')
+acc[[2]]
+```
+
+Det er lov å bli litt skuffa nå. Dette ble jo ikke like pent balansert som for kjønn. Men det er jo ikke så rart, egentlig. Det er jo ikke gjort noe for å balansere på etnisitet. 
+
+En første mulighet er å gjøre en vurdering på om kjønnsbalanse eller etnisitet er viktigst. Kanskje man heller skulle fokusere på etnisitet? Det vil antakeligvis ikke være noen dum ide. 
+
+En annen mulighet er å stratifisere på begge variable samtidig. La oss undersøke muligheten ved å lage en tilsvarende stratifiserings-vektor og se på frekvensfordelingen. 
+
+```{r}
+strat <- compas %>% 
+  mutate(strat = paste0(Sex, Ethnicity, Two_yr_Recidivism)) %>% 
+  pull(strat)
+
+table(strat)
+```
+
+Problemet nå er jo at noen grupper er veldig, veldig små. Å stratifiser på disse vil ikke fungere rett og slett. Det er som i annen statistikk: Estimere på veldig små grupper innebærer at det blir bare støy og tilfeldigheter i estimatene. 
+
+
+```{r}
+strat <- compas %>% 
+  mutate(caucasian = ifelse(Ethnicity == "Caucasian", "Caucasian", "Other")) %>% 
+  mutate(strat = paste0(Sex, caucasian, Two_yr_Recidivism)) %>% 
+  pull(strat)
+
+table(strat)
+```
+
+
+La oss prøve med dette. 
+
+```{r}
+set.seed(45)
+rf <- randomForest(Two_yr_Recidivism ~ .,
+                   data = compas,
+                   strata = strat, 
+                   sampsize = c(120, 120, 
+                                200, 200, 
+                                400, 400, 
+                                900, 900), 
+                   ntree=800)
+
+#rf
+```
 
 
 
+```{r}
+compas_p <- compas %>% 
+  mutate(pred_rf = predict(rf))  
+
+acc <- acc_parity(data = compas_p, 
+                  outcome      = 'Two_yr_Recidivism', 
+                  group        = 'Sex',
+                  preds        = 'pred_rf', 
+                  base         = 'Female')
+acc[[2]]
+```
 
 
+```{r}
+acc <- acc_parity(data = compas_p, 
+                  outcome      = 'Two_yr_Recidivism', 
+                  group        = 'Ethnicity',
+                  preds        = 'pred_rf', 
+                  base         = 'Caucasian')
+acc[[2]]
+```
 
+Her ble det i hvert fall annerledes, men ikke helt likt nå heller. Nå kan man drive på en stund å justere og se hva man får til. Hvis man har et veldig stort datasett (som vi ikke har her) så kan man i teorien justere for flere ulike egenskaper samtidig og i større detalj. Man er rett og slett litt begrenset av dataene. 
+
+Problemet er selvsagt at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper du ikke har data for som det senere vil vise seg er urettferdig. Det kan f.eks. slå ut svært skjevt for type nabolag, sosioøkonomisk status, religiøs tilhørighet, lengde på håret - eller hva som helst annet. Man trenger data for å sjekke, men også data for å bygge algoritmen. 
+
+Jeg tror konklusjonen er at man justere for noe, men ikke alt. Men med nok data kan man justere for *mer* - men fremdeles ikke alt. I tillegg er som regel ikke justeringer gratis. Kanskje blir presisjonen i modellen totalt sett dårligere? 
+
+Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du f.eks. ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for - og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett være umulige valg. Men hva er så alternativet? Det er jo heller ikke sikkert er bedre på noen av disse parametrene. 
 
 
 ## Oppgaver
+
+
+::: {#exr-}
+Gå gjennom eksempelet over og sjekk at det fungerer og at du skjønner hvert steg. 
+:::
+
+
+::: {#exr-}
+Velg deg et annet datasett og gjør tilsvarende analyse. Det er viktig at du nå gjør en vurdering av hvilke undergrupper du synes er viktigst å motvirke urettferdighet for. Her bør du ta hensyn også til hva slags tiltak og konsekvenser det er snakk om! Skriv ned dine vurderinger om dette som begrunnelse for hvordan du vil motvirke urettferdighet i modellen. 
+
+a) Vurder hvilke konsekvenser prediksjonen kan få, med henblikk på et tenkt praktisk tiltak. Hvilke feilrater vil du akseptere? Ta et valg. 
+a) Estimer modellen som tidligere, lag en confusion matrix og vurder resultatet. Juster modellen til du er fornøyd med resultatet. 
+a) Vurder hvilken undergruppe du synes det er viktigst at ikke blir biased. 
+a) Hvilket mål på fairness synes du er viktigst i akkurat dette tilfellet? Velg ett mål, begrunn det valget og sjekk. 
+a) Estimer modellen på nytt med stratifisert utvalg og justert `sampsize`. Prøv deg frem til du får et akseptabelt mål på fairness. 
+a) Sjekk confusion matrix og sammenlign med den første modellen. Modellen ble kanskje mer rettferdig, men gikk f.eks. accuracy ned eller endrede feilrater? Eller litt flåsete sagt: Var det verd å få en mer rettferdig modell?
+a) Sjekk nå det samme målet på fairness med to andre undergrupper. Ble det like bra?  
+
+:::
+
+
+::: {#exr-}
+Velg et annet datasett og gjør tilsvarende øvelse. 
+:::
+
+
+
