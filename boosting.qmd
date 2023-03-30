@@ -12,8 +12,8 @@ library(tidyverse)   # datahåndtering, grafikk og glimpse()
 library(rsample)     # for å dele data i training og testing
 library(gbm)         # Funksjoner for boosting 
 library(caret)       # For funksjonen confusionMatrix()
-library(fairness)
-library(gtsummary)
+library(fairness)    # For fairnessmetrics 
+library(gtsummary)   # For å lage litt penere tabeller
 ```
 
 
