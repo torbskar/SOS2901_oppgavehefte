@@ -1,0 +1,413 @@
+# Boosting
+
+I dette kapittelt skal vi bruke følgende pakker: 
+
+```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
+library(gbm)         # Funksjoner for boosting 
+library(caret)       # For funksjonen confusionMatrix()
+```
+
+
+Det er flere typer boosting-algoritmer. Vi skal først se på adaptive boosting fordi det er den enkleste (og eldste) varianten. Strengt tatt er det nok ikke adaboost som er i mest praktisk bruk, men er mer en pedagogisk introduksjon. 
+Deretter ser vi på stochastic gradient boosting fordi andre boosting-algoritmer er varianter av denne. 
+
+<!-- # Kilde: https://towardsdatascience.com/how-to-select-between-boosting-algorithm-e8d1b15924f7 -->
+<!-- # http://uc-r.github.io/gbm_regression -->
+
+Vi bruker credit-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi den funksjonen vi skal bruke krever nummerisk utfallsvariabel. 
+
+```{r}
+credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE) %>% 
+  mutate(default_num = ifelse(default == "yes", 1, 0)) %>% 
+  select(-default) %>% 
+  na.omit()
+
+```
+
+Vi lager en split som tidligere
+
+```{r}
+set.seed(42)
+training_init <- initial_split(credit)
+
+training <- training(training_init)
+testing  <- testing(training_init)
+
+```
+
+
+
+## Adaptive boosting - Adaboost
+Forklaringen av adaboost i Berk (2016) er litt kryptisk på tross av forsøk på forenklet forklaring. Det er en forbindelse til klassifikasjonstrær her, men det bygges ikke et fullt tre. For hver runde av algoritmen gjøres det bare én splitt før vektingen oppdateres. Hvert ledd her omtales gjerne som en "weak classifier", og med det menes det at en slik enkel split rimeligvis ikke gir en god klassifisering av seg selv. Det er i mengden av oppdateringer at prediksjonen blir bedre.
+
+Adaptive boosting har et enkelt prinsipp: Først gjøres den beste splitten av data, observasjonene vektes på nytt, og så gjøres en ny splitt. Feilklassifikasjonene fra forrige steg vektes dermed tyngre i neste runde. 
+
+Så fortsetter den slik til vi ikke får noen vesentlig forbedring. Man må imidlertid angi et stoppunkt da den ikke stopper av seg selv. Forvalget i `gbm()` er 100, som typisk er veldig lavt og man kan godt sette det vesentlig høyere. Start gjerne med 1000 eller flere tusen. 
+
+Utgangspunktet er klassifikasjonstrær. Mens bagging trekker uavhengige trær, så bygger boosting trærne sekvensielt utfra residualene i det forrige treet. Se \@berk2016 s. 260 for en nærmere forklaring. Det er tre steg: 
+
+1) Starter med at hver observasjon har samme vekter i en klassifisering
+1) Feilratene for klassifiseringen regnes ut og en vekten for hver observasjon justeres
+1) Gjør det hele omigjen ned utgangspunkt i de nye vektene
+
+
+
+```{r}
+gbm.fit <- gbm(
+  formula = default_num ~ .,
+  distribution = "adaboost",
+  data = training,
+  n.trees = 1000,
+  n.minobsinnode = 1,
+  interaction.depth = 1,
+  shrinkage = 1
+  )  
+```
+
+
+
+```{r}
+?gbm.perf
+gbm.perf(gbm.fit, oobag.curve = T, method = "OOB", overlay = T)
+```
+
+
+```{r}
+df <- summary(gbm.fit, plotit = T)
+
+
+
+ggplot(df, aes(x = reorder(var, rel.inf), y = rel.inf)) +
+  geom_col()+
+  ylab("Relative influence")+
+  xlab("")+
+  coord_flip()
+
+```
+
+
+
+### Asymetriske kostnader
+Igjen har vi vurderingen om hvorvidt ulike typer feil er like kostbare. Vi bruker et tilsvarende triks som i random forest der de to typene utfall ble vektet forskjellig i hvordan de ble samplet. I boosting er det ikke noe sampling, men vi kan legge til en vekt for hver observasjon slik at utfallene vektes forskjellig. 
+
+Det er verd å påpeke at vektene ikke oppdateres underveis. Funksjonen `gbm` er en grunnleggende funksjon for boosting med noe begrenset funksjonalitet. Det finnes et større rammeverk for maskinlæring i R som kalles `tidymodels` som er mer avansert.^[Rammeverket i pakken `caret` gjør også dette, men vil gradvis fases ut til fordel for `tidymodels`.] 
+
+```{r}
+glimpse(training)
+
+wts <- training %>% 
+  mutate(wts = ifelse(default_num == 1, 1, 3)) %>%   # se s. 277 i Berk 
+  pull(wts)
+
+
+gbm.fit <- gbm(
+  formula = as_factor(default_num) ~ .,
+  distribution = "adaboost",
+  data = training,
+  weights = wts, 
+  n.trees = 1000,
+  n.minobsinnode = 1,
+  interaction.depth = 3,
+  shrinkage = 0.001
+  )  
+```
+
+I koden for å lage vekter ovenfor lager man en ny variabel så man får like mange vekter som det er observasjoner. I eksempelet vektes det 1 mot 3. Vektene lagres så i en separat vektor `wts` ved å trekke ut kun den ny variabelen med `pull()`.  
+
+
+```{r}
+gbm.perf(gbm.fit, oobag.curve = T, method = "OOB", overlay = T)
+```
+
+
+## Tolkbarhet 
+Som i random forest kan vi undersøke hvilke variable som er mest betydningsfulle i prediksjonen. I utgangspunktet gir `summary()` mot et gbm-objekt et plot, men dette er stygt og kan være vanskelig å lese skikkelig. Men det kan lages et bedre plot med `ggplot()` som følger. 
+
+```{r}
+df <- summary(gbm.fit, plotit = T)
+
+ggplot(df, aes(x = reorder(var, rel.inf), y = rel.inf)) +
+  geom_col()+
+  ylab("Relative influence")+
+  xlab("")+
+  coord_flip()
+
+```
+
+Merk at resultatet fra `summary()` her returnerer en data.frame som kan plottes direkte med `ggplot`. Eneste mystiske som skjer er at `x` er angitt som sortert etter verdier på `y`-variabelen. Så er plottet snudd om med `coord_flip` til slutt. 
+
+
+
+## Stochastic gradient boosting 
+Gradient boosting for klassifisering bruker ikke vekter på samme måte som adaboost, men bruker residualene. For et binomisk utfall (to kategorier kodet 0 eller 1) er residualen, $r_i$, er definert som 
+
+$$ r_i = y_i - \frac{1}{e^{-f(x_i)}} $$
+Litt forenklet kan vi si at dette er det observert utfallet minus det predikerte utfallet fra logistisk regresjon. "Gradienten" er da $f(x)$. 
+
+Gradient boosting fungerer med flere andre fordelinger, men hvis vi begrenser oss til klassifikasjon kan vi angi `distribution = "bernoulli"`. Merk at for `gbm` må utfallsvariabelen være numerisk, ikke factor. 
+
+```{r}
+set.seed(542)
+gradientboost <- gbm(formula = default_num ~ .,
+                 data = training,
+                 distribution = "bernoulli",
+                 n.trees = 4000,
+                 interaction.depth = 3,
+                 n.minobsinnode = 1,
+                 shrinkage = 0.001,
+                 bag.fraction = 0.5)
+
+```
+
+Merk angir argumentet `bag.fraction = 0.5` i modellen (som forøvrig også er forvalget, så man behøver ikke skrive det, egentlig). I hver split brukes altså halve utvalget til å bestemme neste split slik at andre halvdel er out-of-bag data. Hvis dette argumentet settes til 1 brukes hele datasettet i hver split. 
+
+Standard plot av gis ved `gbm.perf()` som nedenfor, og viser forbedring for hver iterasjon. Ytterligere forbedring stopper opp ved nærmere 2500 iterasjoner, markert ved den vertikale blå linjen. 
+
+```{r}
+#| message: false
+#| error: false
+gbm.perf(gradientboost, oobag.curve = TRUE, method = "OOB", overlay = F)
+
+```
+
+Denne estimeringen kan justeres ved å endre tuningparametrene. 
+
+* `n.trees` er antall iterasjoner, dvs. antall klassifikasjonstrær. Forvalget er 100, som er åpenbart altfor lavt, så sett noen tusen. 
+* `interaction.depth` er antall split i hvert tre. Forvalget er 1, men Berk sier at 1-3 er ok. 
+* `n.minobsinnode` er minste antall observasjoner i siste node. Forvalg er 1, men Berk anslår at 5-15 fungerer bra. (Hvis modellen har bare en split er det ikke sikkert dette er så viktig)
+* `shrinkage` er hvor store skritt langs gradienten som testes i hver iterasjon, og dette skal være lavt. Forvalget er 0.001. Kostnaden er at det tar lengre tid enn ved et høyere tall (opp til 10 kan testes). 
+* `bag.fraction` er hvor stor andel av data som brukes i hver iterasjon. Dette hjelper for å redusere overfitting. Forvalget er 0.5, som innebærer at andre del av data kan fungere som OOB. Merk at Berk understreker at OOB bare kan brukes til å vurdere tilpassingen slik som i figuren over. 
+
+
+## Prediksjon og confusion matrix 
+Vi gjør prediksjon på tilsvarende måte som før, men det er et par viktige detaljer. Forvalget for `predict()` for gbm-objekter er $f(x)$ som her er på log odds skalaen, men hvis vi setter `type = "response"` så får vi ut en sannsynlighet (dvs. et tall mellom 0 og 1). Da kan vi klassifisere etter hvilken gruppe som er mest sannsynlig, dvs. hvis høyere enn 0.5
+
+
+```{r}
+#| message: false
+#| warning: false
+credit_p <- training %>% 
+  mutate(pred = predict(gradientboost, type = "response"), 
+         p_klass = ifelse(pred > 0.5, 1, 0))
+
+```
+
+Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
+
+```{r}
+tab <- table(credit_p$p_klass, training$default_num) 
+tab
+```
+
+Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
+```{r}
+confusionMatrix(tab, positive="1")
+```
+
+
+
+## Asymetriske kostnader 
+Vi har det vanlige problemet med å vurdere om falske positive og falske negative er like problematisk. Igjen er det slik at den vurderingen krever en vurdering av utfallet man ønsker gjøre noe med og konsekvensene av tiltaket som skal iverksettes. For credit-dataene kan det jo være at noen ikke vurderes som kredittverdige.^[Det er forresten også en implisitt vurdering her om hvem sitt problem dette er: banken behøver ikke synes det er problematisk å si nei til et boliglån, mens det fra samfunnets synsvinkel kan være uheldig at noen grupper sperres ute av boligmarkedet. Hvem som er "stakeholder" her er også et poeng, som vi lar ligge i denne sammenheng.] 
+
+For å håndtere asymetriske kostnader kan vi vekte utfallene forskjellig og angi denne vekten i prosedyren. Argumentet `weights = ...` tar en vektor med verdier (ét tall for hver observasjon i dataene) og skal ikke være en del av datasettet. 
+
+Her er et eksempel der falske positive tillegges 3 ganger så mye vekt som falske negative.  
+
+
+```{r}
+wts <- training %>% 
+  mutate(wts = ifelse(default_num == 1, 1, 3)) %>%   # se begrunnelse s. 277 i Berk 
+  pull(wts)
+
+set.seed(542)
+gradboost2 <- gbm(formula = default_num ~ .,
+                 data = training,
+                 weights = wts, 
+                 distribution = "bernoulli",
+                 n.trees = 4000,
+                 interaction.depth = 3,
+                 n.minobsinnode = 1,
+                 shrinkage = 0.001,
+                 bag.fraction = 0.5)
+
+
+```
+
+
+Så kan vi gjøre prediksjon og confusion matrix på nytt. 
+
+
+```{r}
+#| message: false
+#| warning: false
+credit_p <- training %>% 
+  mutate(pred = predict(gradboost2, type = "response"), 
+         p_klass = ifelse(pred > 0.5, 1, 0))
+
+```
+
+Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
+
+```{r}
+tab <- table(credit_p$p_klass, training$default_num) 
+tab
+```
+
+Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
+```{r}
+confusionMatrix(tab, positive="1")
+```
+
+
+
+## Hva med bias og fairness? 
+Det er heller ingenting nytt når det gjelder om prediksjonen kan slå ut skjevt for ulike grupper. Selvfølgelig kan det skje, og det bør jo undersøkes. Vi kan bruke akkurat de samme funksjonene som før. 
+
+
+```{r}
+library(fairmodels)
+summary(credit_p$age)
+acc <- acc_parity(data = credit_p, 
+                  outcome      = 'default_num', 
+                  group        = 'age',
+                  preds        = 'p_klass', 
+                  group_breaks = c(19, 30, 75),
+                  base = "(19,30]")
+acc[[2]]
+#acc[[1]]
+
+```
+
+
+
+
+Vi har allerede sett at vi kan justere algoritmen ved å vekte utfallet forskjellig. Vi kan også justere slik at vi også vekter opp undergrupper. Igjen er det ikke helt åpenbart hvordan det vil slå ut å vekte en gruppe opp eller ned, så det må vi sjekke. 
+
+Her er en kode for å lage vekter og legger den vekten inn i `gbm`. Tanken i koden her er å først angi vektingen for kostnader og undergrupper hver for seg, og så legge disse til per person i datasettet. 
+
+```{r}
+# Define asymmetric costs
+fp_cost <- 2
+fn_cost <- 1
+
+# Define subgroup weights
+subgroup1_weight <- 2.5
+subgroup2_weight <- 1
+subgroup3_weight <- 0.5
+
+#tidy-versjon: 
+wts <- training %>%  
+  mutate(wts0 = ifelse(default_num == 0, fp_cost, fn_cost)) %>% 
+  mutate(wts1 = case_when(
+    age <= 30 ~ wts0*subgroup1_weight,
+    #age > 25 & age <= 40 ~ wts0*subgroup2_weight,
+    age > 30 ~ wts0*subgroup3_weight,
+    TRUE ~ wts0)) %>% 
+  pull(wts1)
+
+library(gtsummary)
+df <- data.frame(default = training$default_num, 
+                 wts = factor(wts), 
+                 agegr = cut(training$age, c(18, 30, 80)))
+df %>%  
+ tbl_strata(
+    strata = agegr,
+    ~.x %>%
+      tbl_summary(
+        by = default, 
+        #type = everything()~"categorical", 
+        statistic = all_categorical() ~ "{n}"
+      )
+  )
+```
+
+
+
+```{r}
+set.seed(542)
+gradboost3 <- gbm(formula = default_num ~ .,
+                 data = training,
+                 weights = wts, 
+                 distribution = "bernoulli",
+                 n.trees = 4000,
+                 interaction.depth = 3,
+                 n.minobsinnode = 1,
+                 shrinkage = 0.001,
+                 bag.fraction = 0.5)
+
+```
+
+
+
+```{r}
+#| message: false
+#| warning: false
+credit_p <- training %>% 
+  mutate(pred = predict(gradboost3, type = "response"), 
+         p_klass = ifelse(pred > 0.5, 1, 0))
+
+```
+
+Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
+
+```{r}
+
+tab <- table(credit_p$p_klass, training$default_num) 
+tab
+```
+
+Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
+```{r}
+confusionMatrix(tab, positive="1")
+```
+
+
+
+```{r}
+acc <- acc_parity(data = credit_p, 
+                  outcome      = 'default_num', 
+                  group        = 'age',
+                  preds        = 'p_klass', 
+                  group_breaks = c(19, 25, 40, 75))
+acc[[2]]
+
+```
+
+
+
+
+```{r}
+#| message: false
+#| warning: false
+credit_p <- training %>% 
+  mutate(pred = predict(gradboost2, type = "response"), 
+         p_klass = ifelse(pred > 0.5, 1, 0))
+
+```
+
+Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
+
+```{r}
+tab <- table(credit_p$p_klass, training$default_num) 
+tab
+```
+
+Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
+```{r}
+confusionMatrix(tab, positive="1")
+```
+
+
+## Oppgaver
+
+
+
+
