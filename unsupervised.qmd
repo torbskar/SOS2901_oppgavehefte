@@ -231,6 +231,120 @@ Det er verd å merke seg at startpunktet (altså de tre tilfeldige punktene) kan
 
 
 
+
+
+## Hierarkisk klustering 
+
+
+::: {#exr-}
+Last ned filen krim2016.RData fra Canvas. 
+Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt 
+kriminalitet per 1000 innbyggere i kommuner i 2016. 
+
+a) Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de 
+andre? Spiller det noen rolle hvilken type distance du setter? 
+a) Hvilke kommuner er de de klusterne som skiller seg ut? 
+a) Hva kjennetegner lovbruddsbildet i de ulike klustrene? Kan du tenke deg noen grunner til at akkurat disse stikker seg ut?
+ 
+:::
+
+
+::: {.solution}
+Leser inn data om inntektsutvikling for ulike yrker fra 2001 til 2016
+
+Dataene er i "bred" format. Det er slik vi vil ha det for clusteranalyse, men dårlig for å lage en graf.
+
+::: {.content-hidden when-format="pdf"}
+
+
+
+```{r}
+#| echo: false
+#| warning: false
+library(downloadthis)
+load("../data/oes.RData")
+
+gathered_oes <- gather(data = df_oes, 
+                       key = year, 
+                       value = mean_salary, 
+                       -occupation)
+
+gathered_oes %>%
+  download_this(
+    output_name = "oes dataset",
+    output_extension = ".rds",
+    button_label = "Download data as rds",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+
+:::
+
+
+
+```{r}
+# load("../data/oes.RData")
+# 
+# gathered_oes <- gather(data = df_oes, 
+#                        key = year, 
+#                        value = mean_salary, 
+#                        -occupation)
+```
+
+
+
+
+
+```{r}
+ggplot(gathered_oes, aes(x=as.numeric(year), y=mean_salary, col = occupation))+
+  geom_line()
+
+
+dist_oes <- dist(df_oes[,-1], method = "euclidian") # calculate distances 
+
+hc_oes <- hclust(dist_oes, method = "single")  # minste avstand
+
+hc_oes <- hclust(dist_oes, method = "complete") # lengste avstand
+
+hc_oes <- hclust(dist_oes, method = "average") #gjennomsnittlig avstand
+
+par(mar=c(10,4,2,2))  # Endre marginer for base-plot
+
+dend_oes <- as.dendrogram(hc_oes) #Create a dendrogram object
+dend_colored <- color_branches(dend_oes, h = 100000)
+plot(dend_colored)
+
+# Illustrer mulige cutoff - legger linjer oppå eksisterende plot
+abline(h=100000, col="red", lwd=1.5)  # Viser cut ved h=100000
+abline(h=10000, col="red", lwd=1.5)   # Viser cut ved h=10000
+
+
+# Henter ut cluster ved valgt h
+cluster <- cutree(hc_oes, h=100000)
+#cluster <- cutree(hc_oes, k=3)
+table(cluster)
+
+
+# Legger til vektoren cluster til opprinnelige data
+hclust_oes <- mutate(df_oes, cluster = cluster)
+
+head(hclust_oes)
+
+# vrenger dataene "nedover" for å plotte
+gathered_oes <- gather(data = hclust_oes,    # datasett
+                       key = year,           # navn på ny variabel, verdier hentes fra gamle variabelnavn
+                       value = mean_salary,  # navn på ny variabel med gamle variabelverdier
+                       -occupation, -cluster) # variable som skal beholdes / grupperes etter
+ggplot(gathered_oes, aes(x = year, y = mean_salary, color = factor(cluster), group = occupation)) + 
+  geom_line()
+
+```
+
+
+
 ::: {#exr-}
 Gjenta analysen over med k-means clustering. Hvor mange klustre bør det være? Får du samme 
 resultat?
@@ -292,118 +406,6 @@ ggplot(gathered_kmoes, aes(x = year, y = mean_salary, color = factor(cluster), g
 
 
 :::
-
-
-
-## Hierarkisk klustering 
-
-
-::: {#exr-}
-Last ned filen krim2016.RData fra Canvas. 
-Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt 
-kriminalitet per 1000 innbyggere i kommuner i 2016. 
-
-a) Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de 
-andre? Spiller det noen rolle hvilken type distance du setter? 
-a) Hvilke kommuner er de de klusterne som skiller seg ut? 
-a) Hva kjennetegner lovbruddsbildet i de ulike klustrene? Kan du tenke deg noen grunner til at akkurat disse stikker seg ut?
- 
-:::
-
-
-::: {.solution}
-Leser inn data om inntektsutvikling for ulike yrker fra 2001 til 2016
-
-Dataene er i "bred" format. Det er slik vi vil ha det for clusteranalyse, men dårlig for å lage en graf.
-
-::: {.content-hidden when-format="pdf"}
-
-
-
-```{r}
-#| echo: false
-#| warning: false
-library(downloadthis)
-load("../data/oes.RData")
-
-gathered_oes <- gather(data = df_oes, 
-                       key = year, 
-                       value = mean_salary, 
-                       -occupation)
-
-gathered_oes %>%
-  download_this(
-    output_name = "oes dataset",
-    output_extension = ".rds",
-    button_label = "Download data as rds",
-    button_type = "default",
-    has_icon = TRUE,
-    icon = "fa fa-save"
-  )
-
-```
-
-:::
-
-
-
-```{r}
-load("../data/oes.RData")
-
-gathered_oes <- gather(data = df_oes, 
-                       key = year, 
-                       value = mean_salary, 
-                       -occupation)
-```
-
-
-
-
-
-```{r}
-ggplot(gathered_oes, aes(x=as.numeric(year), y=mean_salary, col = occupation))+
-  geom_line()
-
-
-dist_oes <- dist(df_oes[,-1], method = "euclidian") # calculate distances 
-
-hc_oes <- hclust(dist_oes, method = "single")  # minste avstand
-
-hc_oes <- hclust(dist_oes, method = "complete") # lengste avstand
-
-hc_oes <- hclust(dist_oes, method = "average") #gjennomsnittlig avstand
-
-par(mar=c(10,4,2,2))  # Endre marginer for base-plot
-
-dend_oes <- as.dendrogram(hc_oes) #Create a dendrogram object
-dend_colored <- color_branches(dend_oes, h = 100000)
-plot(dend_colored)
-
-# Illustrer mulige cutoff - legger linjer oppå eksisterende plot
-abline(h=100000, col="red", lwd=1.5)  # Viser cut ved h=100000
-abline(h=10000, col="red", lwd=1.5)   # Viser cut ved h=10000
-
-
-# Henter ut cluster ved valgt h
-cluster <- cutree(hc_oes, h=100000)
-#cluster <- cutree(hc_oes, k=3)
-table(cluster)
-
-
-# Legger til vektoren cluster til opprinnelige data
-hclust_oes <- mutate(df_oes, cluster = cluster)
-
-head(hclust_oes)
-
-# vrenger dataene "nedover" for å plotte
-gathered_oes <- gather(data = hclust_oes,    # datasett
-                       key = year,           # navn på ny variabel, verdier hentes fra gamle variabelnavn
-                       value = mean_salary,  # navn på ny variabel med gamle variabelverdier
-                       -occupation, -cluster) # variable som skal beholdes / grupperes etter
-ggplot(gathered_oes, aes(x = year, y = mean_salary, color = factor(cluster), group = occupation)) + 
-  geom_line()
-
-```
 
 
 
