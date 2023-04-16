@@ -30,7 +30,7 @@ Det er to vanlige formål med disse teknikkene:
 Formål 2) er litt kryptisk, men f.eks. en bedrift kan ha nytte av å dele inn kundemassen i ulike segmenter og rette seg inn mot disse på en systematisk måte.^[OBS! Det spiller ingen rolle om disse gruppene er reelle som gruppe eller ikke. At de oppfører seg rimelig likt holder til formålet.] 
 
 For formål 3) gjelder hvis man har veldig mange variable som er korrelerte, men hver for seg ikke er særlig sterke prediktorer. Vanlige prediksjonsmodeller vil ikke alltid være så effektive i slike situasjoner. Forenklede variable som klustre eller principal components kan da fungere bedre. 
-
+En liten advarsel: man ser litt for ofte at denne typen resultater tolkes litt spekulativt i den forstand at klustre eller principal components tillegges en substansiell betydning. Det hender folk sier at de har "identifisert" underliggende klustre eller dimensjoner etc.^[Av høflighetsgrunner er referanser til eksempler utelatt. Men det er ikke vanskelig å finne. Eksemplene er heller ikke avgrenset til akkurat disse metodene, men gjelder også en rekke andre teknikker med tilsvarende formål.] Men altså: klustermetoder lager klustre. Så teknikken lager klustre uansett, og det er ingen magisk innsikt her utover det. Men det kan være nyttig det, altså! 
 
 
 
@@ -229,6 +229,54 @@ Det er verd å merke seg at startpunktet (altså de tre tilfeldige punktene) kan
 
 
 
+### K-means med `kmeans()` 
+
+Heldigvis er det en funksjon som fikser hele saken for oss. Funksjonen `kmeans()` trenger primært tre imput: de dataene som skal klustres, antall klustere, og antall tilfeldige startverdier. Antall klustre må vi altså bestemme selv. 
+
+Her er en kode som først kjører kmeans-algoritmen. I det objektet som kommer ut er det en vektor som heter `...$cluster` som er selve klassifiseringen. Denne kan vi legge inn som en ny variabel i datasettet. Merk at rekkefølgen på observasjonene og output-objektet er den samme, så det blir riktig å bare legge til vektoren som en ny variabel. Dernest kan vi plotte resultatet. 
+
+```{r}
+km_df <- kmeans(df, centers = 3, nstart=20)
+
+df_p <- df %>% 
+  mutate(cluster = km_df$cluster)
+
+
+ggplot(df_p, aes(x=x, y = y, col = factor(cluster), shape = factor(cluster))) +
+  geom_point()
+
+
+```
+
+Dette ble selvfølgelig likt som i den trinnvise prosedyren vist ovenfor. Det kan være greit å være klar over at navnet på hvert kluster (1, 2 eller 3) er tilfeldig og du kan få en annen rekkefølge på navnene en annen gang. Det spiller ingen rolle, men er lett å bli forvirret av. 
+
+
+### Hvor mange klustre trenger man? 
+Tja. Hvis du har en god tanke om hvor mange klustre du trenger, så er jo saken grei. Da bruker du disse. Hvis du derimot ikke vet - og det er det vanlige - så kan du gå for det antallet som best oppsummerer dataene. Men hva er så det? Et mål er summen av avstandene til sentrum innenfor hver kluster. Omtales gjerne som "within total sum of squares". Den løsningen (dvs. antall klustre) som gir lavest kvadratsummer er da den som er "best". 
+
+I praksis betyr det at man tilpasser modellen flere ganger, med trinnvis flere klustre. Så kan man sammenligne "within total sum of squares". 
+
+Den etterfølgende koden gjør dette. Den er litt krøkete, dessverre da den innebærer å skrive en loop.^[Det er sikkert greit for de av dere som har lært en god del R tidligere. Ikke like greit for dere andre. ] Her er i hvert fall full kode. 
+
+```{r}
+wss <- 0
+# For 1 to 15 cluster centers
+for (i in 1:5) {
+  km.out <- kmeans(df, centers = i, nstart=20)
+  # Save total within sum of squares to wss variable
+  wss[i] <- km.out$tot.withinss
+}
+
+# Plot total within sum of squares vs. number of clusters
+plot(1:5, wss, type = "b", 
+     xlab = "Number of Clusters", 
+     ylab = "Within groups sum of squares")
+# Marker "albuen" med en linje i plottet 
+abline(v=3, col="red")
+
+```
+
+Kvadratsummen reduseres for antall klustre. Intuitivt er jo det rimelig: jo flere klustre - jo kortere er avstanden til et kluster-sentrum. Men merk at trenden flater ganske tydelig ut etter 3 klustre. Altså: forbedringen i tilpassning er minimal. Et slikt plot kalles "elbow method" eller "scree plot". Beste modell er der hvor kurven får en "albue", eller med andre ord: der reduksjonen avtar. Det er ikke alltid det er lett å bedømme, men her er det ikke en egentlig fasit. Det finnes ingen fasit hvis man ikke fra før av vet at det finnes et gitt antall klustre. 
 
 
 
@@ -494,5 +542,8 @@ glimpse(kommune_scale)
 ### Multippel korrespondanseanalyse
 PCA har egentlig som forutsetning av variablene er kontinuerlige, og det er litt trøblete å bruke det på kategoriske variable. Men ofte har vi kategoriske variable. 
 
-En variant av PCA for kategoriske variable er korrespondanseanalyse, som i teorien altså skal være bedre enn PCA. I praksis er det imidlertid ikke nødvendigvis veldig stor forskjell (REF), så det er neppe stor skade skjedd hvis man bruker PCA likevel. 
+En variant av PCA for kategoriske variable er korrespondanseanalyse, som i teorien altså skal være bedre enn PCA. I praksis er det imidlertid ikke nødvendigvis veldig stor forskjell, så det er neppe stor skade skjedd hvis man bruker PCA likevel. 
+
+
+
 
