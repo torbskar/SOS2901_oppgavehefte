@@ -279,13 +279,16 @@ abline(v=3, col="red")
 Kvadratsummen reduseres for antall klustre. Intuitivt er jo det rimelig: jo flere klustre - jo kortere er avstanden til et kluster-sentrum. Men merk at trenden flater ganske tydelig ut etter 3 klustre. Altså: forbedringen i tilpassning er minimal. Et slikt plot kalles "elbow method" eller "scree plot". Beste modell er der hvor kurven får en "albue", eller med andre ord: der reduksjonen avtar. Det er ikke alltid det er lett å bedømme, men her er det ikke en egentlig fasit. Det finnes ingen fasit hvis man ikke fra før av vet at det finnes et gitt antall klustre. 
 
 
+### Longitudinelle data
+Det er nok vanligst å klustre ulike variable. Men hvis variablene innholder verdier for ulike tidsenheter (f.eks. per år), så kan vi også analysere tidstrender på denne måten. Antall variable som klustres kan være flerdimensjonalt. Ovenfor er det brukt bare to variable, men normale er jo at det er langt flere dimensjoner samtidig. 
+
 
 
 ## Hierarkisk klustering 
 
 
 ::: {#exr-}
-Last ned filen krim2016.RData fra Canvas. 
+Last ned filen med kommunedata fra Canvas. 
 Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt 
 kriminalitet per 1000 innbyggere i kommuner i 2016. 
 

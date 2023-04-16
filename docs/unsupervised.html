@@ -250,6 +250,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#k-means-med-kmeans" id="toc-k-means-med-kmeans" class="nav-link" data-scroll-target="#k-means-med-kmeans"><span class="toc-section-number">10.1.1</span>  K-means med <code>kmeans()</code></a></li>
   <li><a href="#hvor-mange-klustre-trenger-man" id="toc-hvor-mange-klustre-trenger-man" class="nav-link" data-scroll-target="#hvor-mange-klustre-trenger-man"><span class="toc-section-number">10.1.2</span>  Hvor mange klustre trenger man?</a></li>
+  <li><a href="#longitudinelle-data" id="toc-longitudinelle-data" class="nav-link" data-scroll-target="#longitudinelle-data"><span class="toc-section-number">10.1.3</span>  Longitudinelle data</a></li>
   </ul></li>
   <li><a href="#hierarkisk-klustering" id="toc-hierarkisk-klustering" class="nav-link" data-scroll-target="#hierarkisk-klustering"><span class="toc-section-number">10.2</span>  Hierarkisk klustering</a></li>
   <li><a href="#datareduksjon-med-principal-component-analysis-pca" id="toc-datareduksjon-med-principal-component-analysis-pca" class="nav-link" data-scroll-target="#datareduksjon-med-principal-component-analysis-pca"><span class="toc-section-number">10.3</span>  Datareduksjon med principal component analysis (PCA)</a>
@@ -397,11 +398,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Kvadratsummen reduseres for antall klustre. Intuitivt er jo det rimelig: jo flere klustre - jo kortere er avstanden til et kluster-sentrum. Men merk at trenden flater ganske tydelig ut etter 3 klustre. Altså: forbedringen i tilpassning er minimal. Et slikt plot kalles “elbow method” eller “scree plot”. Beste modell er der hvor kurven får en “albue”, eller med andre ord: der reduksjonen avtar. Det er ikke alltid det er lett å bedømme, men her er det ikke en egentlig fasit. Det finnes ingen fasit hvis man ikke fra før av vet at det finnes et gitt antall klustre.</p>
 </section>
+<section id="longitudinelle-data" class="level3" data-number="10.1.3">
+<h3 data-number="10.1.3" class="anchored" data-anchor-id="longitudinelle-data"><span class="header-section-number">10.1.3</span> Longitudinelle data</h3>
+<p>Det er nok vanligst å klustre ulike variable. Men hvis variablene innholder verdier for ulike tidsenheter (f.eks. per år), så kan vi også analysere tidstrender på denne måten. Antall variable som klustres kan være flerdimensjonalt. Ovenfor er det brukt bare to variable, men normale er jo at det er langt flere dimensjoner samtidig.</p>
+</section>
 </section>
 <section id="hierarkisk-klustering" class="level2" data-number="10.2">
 <h2 data-number="10.2" class="anchored" data-anchor-id="hierarkisk-klustering"><span class="header-section-number">10.2</span> Hierarkisk klustering</h2>
 <div id="exr-" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 10.1 </strong></span>Last ned filen krim2016.RData fra Canvas. Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt kriminalitet per 1000 innbyggere i kommuner i 2016.</p>
+<p><span class="theorem-title"><strong>Exercise 10.1 </strong></span>Last ned filen med kommunedata fra Canvas. Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt kriminalitet per 1000 innbyggere i kommuner i 2016.</p>
 <ol type="a">
 <li>Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de andre? Spiller det noen rolle hvilken type distance du setter?</li>
 <li>Hvilke kommuner er de de klusterne som skiller seg ut?</li>
@@ -1226,271 +1231,274 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb34-297"><a href="#cb34-297" aria-hidden="true" tabindex="-1"></a>Kvadratsummen reduseres for antall klustre. Intuitivt er jo det rimelig: jo flere klustre - jo kortere er avstanden til et kluster-sentrum. Men merk at trenden flater ganske tydelig ut etter 3 klustre. Altså: forbedringen i tilpassning er minimal. Et slikt plot kalles "elbow method" eller "scree plot". Beste modell er der hvor kurven får en "albue", eller med andre ord: der reduksjonen avtar. Det er ikke alltid det er lett å bedømme, men her er det ikke en egentlig fasit. Det finnes ingen fasit hvis man ikke fra før av vet at det finnes et gitt antall klustre. </span>
 <span id="cb34-298"><a href="#cb34-298" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-299"><a href="#cb34-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-300"><a href="#cb34-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-301"><a href="#cb34-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-302"><a href="#cb34-302" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hierarkisk klustering </span></span>
+<span id="cb34-300"><a href="#cb34-300" aria-hidden="true" tabindex="-1"></a><span class="fu">### Longitudinelle data</span></span>
+<span id="cb34-301"><a href="#cb34-301" aria-hidden="true" tabindex="-1"></a>Det er nok vanligst å klustre ulike variable. Men hvis variablene innholder verdier for ulike tidsenheter (f.eks. per år), så kan vi også analysere tidstrender på denne måten. Antall variable som klustres kan være flerdimensjonalt. Ovenfor er det brukt bare to variable, men normale er jo at det er langt flere dimensjoner samtidig. </span>
+<span id="cb34-302"><a href="#cb34-302" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-303"><a href="#cb34-303" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-304"><a href="#cb34-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-305"><a href="#cb34-305" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb34-306"><a href="#cb34-306" aria-hidden="true" tabindex="-1"></a>Last ned filen krim2016.RData fra Canvas. </span>
-<span id="cb34-307"><a href="#cb34-307" aria-hidden="true" tabindex="-1"></a>Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt </span>
-<span id="cb34-308"><a href="#cb34-308" aria-hidden="true" tabindex="-1"></a>kriminalitet per 1000 innbyggere i kommuner i 2016. </span>
-<span id="cb34-309"><a href="#cb34-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-310"><a href="#cb34-310" aria-hidden="true" tabindex="-1"></a>a) Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de </span>
-<span id="cb34-311"><a href="#cb34-311" aria-hidden="true" tabindex="-1"></a>andre? Spiller det noen rolle hvilken type distance du setter? </span>
-<span id="cb34-312"><a href="#cb34-312" aria-hidden="true" tabindex="-1"></a>a) Hvilke kommuner er de de klusterne som skiller seg ut? </span>
-<span id="cb34-313"><a href="#cb34-313" aria-hidden="true" tabindex="-1"></a>a) Hva kjennetegner lovbruddsbildet i de ulike klustrene? Kan du tenke deg noen grunner til at akkurat disse stikker seg ut?</span>
-<span id="cb34-314"><a href="#cb34-314" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb34-315"><a href="#cb34-315" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-316"><a href="#cb34-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-317"><a href="#cb34-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-318"><a href="#cb34-318" aria-hidden="true" tabindex="-1"></a>::: {.solution}</span>
-<span id="cb34-319"><a href="#cb34-319" aria-hidden="true" tabindex="-1"></a>Leser inn data om inntektsutvikling for ulike yrker fra 2001 til 2016</span>
+<span id="cb34-305"><a href="#cb34-305" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hierarkisk klustering </span></span>
+<span id="cb34-306"><a href="#cb34-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-307"><a href="#cb34-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-308"><a href="#cb34-308" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb34-309"><a href="#cb34-309" aria-hidden="true" tabindex="-1"></a>Last ned filen med kommunedata fra Canvas. </span>
+<span id="cb34-310"><a href="#cb34-310" aria-hidden="true" tabindex="-1"></a>Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt </span>
+<span id="cb34-311"><a href="#cb34-311" aria-hidden="true" tabindex="-1"></a>kriminalitet per 1000 innbyggere i kommuner i 2016. </span>
+<span id="cb34-312"><a href="#cb34-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-313"><a href="#cb34-313" aria-hidden="true" tabindex="-1"></a>a) Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de </span>
+<span id="cb34-314"><a href="#cb34-314" aria-hidden="true" tabindex="-1"></a>andre? Spiller det noen rolle hvilken type distance du setter? </span>
+<span id="cb34-315"><a href="#cb34-315" aria-hidden="true" tabindex="-1"></a>a) Hvilke kommuner er de de klusterne som skiller seg ut? </span>
+<span id="cb34-316"><a href="#cb34-316" aria-hidden="true" tabindex="-1"></a>a) Hva kjennetegner lovbruddsbildet i de ulike klustrene? Kan du tenke deg noen grunner til at akkurat disse stikker seg ut?</span>
+<span id="cb34-317"><a href="#cb34-317" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb34-318"><a href="#cb34-318" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-319"><a href="#cb34-319" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-320"><a href="#cb34-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-321"><a href="#cb34-321" aria-hidden="true" tabindex="-1"></a>Dataene er i "bred" format. Det er slik vi vil ha det for clusteranalyse, men dårlig for å lage en graf.</span>
-<span id="cb34-322"><a href="#cb34-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-323"><a href="#cb34-323" aria-hidden="true" tabindex="-1"></a>::: {.content-hidden when-format="pdf"}</span>
-<span id="cb34-324"><a href="#cb34-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-321"><a href="#cb34-321" aria-hidden="true" tabindex="-1"></a>::: {.solution}</span>
+<span id="cb34-322"><a href="#cb34-322" aria-hidden="true" tabindex="-1"></a>Leser inn data om inntektsutvikling for ulike yrker fra 2001 til 2016</span>
+<span id="cb34-323"><a href="#cb34-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-324"><a href="#cb34-324" aria-hidden="true" tabindex="-1"></a>Dataene er i "bred" format. Det er slik vi vil ha det for clusteranalyse, men dårlig for å lage en graf.</span>
 <span id="cb34-325"><a href="#cb34-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-326"><a href="#cb34-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-329"><a href="#cb34-329" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-330"><a href="#cb34-330" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb34-331"><a href="#cb34-331" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb34-332"><a href="#cb34-332" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(downloadthis)</span>
-<span id="cb34-333"><a href="#cb34-333" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/oes.RData"</span>)</span>
-<span id="cb34-334"><a href="#cb34-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-335"><a href="#cb34-335" aria-hidden="true" tabindex="-1"></a>gathered_oes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> df_oes, </span>
-<span id="cb34-336"><a href="#cb34-336" aria-hidden="true" tabindex="-1"></a>                       <span class="at">key =</span> year, </span>
-<span id="cb34-337"><a href="#cb34-337" aria-hidden="true" tabindex="-1"></a>                       <span class="at">value =</span> mean_salary, </span>
-<span id="cb34-338"><a href="#cb34-338" aria-hidden="true" tabindex="-1"></a>                       <span class="sc">-</span>occupation)</span>
-<span id="cb34-339"><a href="#cb34-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-340"><a href="#cb34-340" aria-hidden="true" tabindex="-1"></a>gathered_oes <span class="sc">%&gt;%</span></span>
-<span id="cb34-341"><a href="#cb34-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download_this</span>(</span>
-<span id="cb34-342"><a href="#cb34-342" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_name =</span> <span class="st">"oes dataset"</span>,</span>
-<span id="cb34-343"><a href="#cb34-343" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_extension =</span> <span class="st">".rds"</span>,</span>
-<span id="cb34-344"><a href="#cb34-344" aria-hidden="true" tabindex="-1"></a>    <span class="at">button_label =</span> <span class="st">"Download data as rds"</span>,</span>
-<span id="cb34-345"><a href="#cb34-345" aria-hidden="true" tabindex="-1"></a>    <span class="at">button_type =</span> <span class="st">"default"</span>,</span>
-<span id="cb34-346"><a href="#cb34-346" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_icon =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb34-347"><a href="#cb34-347" aria-hidden="true" tabindex="-1"></a>    <span class="at">icon =</span> <span class="st">"fa fa-save"</span></span>
-<span id="cb34-348"><a href="#cb34-348" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb34-349"><a href="#cb34-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-350"><a href="#cb34-350" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-351"><a href="#cb34-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-352"><a href="#cb34-352" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-353"><a href="#cb34-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-326"><a href="#cb34-326" aria-hidden="true" tabindex="-1"></a>::: {.content-hidden when-format="pdf"}</span>
+<span id="cb34-327"><a href="#cb34-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-328"><a href="#cb34-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-329"><a href="#cb34-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-332"><a href="#cb34-332" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-333"><a href="#cb34-333" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb34-334"><a href="#cb34-334" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb34-335"><a href="#cb34-335" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(downloadthis)</span>
+<span id="cb34-336"><a href="#cb34-336" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"../data/oes.RData"</span>)</span>
+<span id="cb34-337"><a href="#cb34-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-338"><a href="#cb34-338" aria-hidden="true" tabindex="-1"></a>gathered_oes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> df_oes, </span>
+<span id="cb34-339"><a href="#cb34-339" aria-hidden="true" tabindex="-1"></a>                       <span class="at">key =</span> year, </span>
+<span id="cb34-340"><a href="#cb34-340" aria-hidden="true" tabindex="-1"></a>                       <span class="at">value =</span> mean_salary, </span>
+<span id="cb34-341"><a href="#cb34-341" aria-hidden="true" tabindex="-1"></a>                       <span class="sc">-</span>occupation)</span>
+<span id="cb34-342"><a href="#cb34-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-343"><a href="#cb34-343" aria-hidden="true" tabindex="-1"></a>gathered_oes <span class="sc">%&gt;%</span></span>
+<span id="cb34-344"><a href="#cb34-344" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download_this</span>(</span>
+<span id="cb34-345"><a href="#cb34-345" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_name =</span> <span class="st">"oes dataset"</span>,</span>
+<span id="cb34-346"><a href="#cb34-346" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_extension =</span> <span class="st">".rds"</span>,</span>
+<span id="cb34-347"><a href="#cb34-347" aria-hidden="true" tabindex="-1"></a>    <span class="at">button_label =</span> <span class="st">"Download data as rds"</span>,</span>
+<span id="cb34-348"><a href="#cb34-348" aria-hidden="true" tabindex="-1"></a>    <span class="at">button_type =</span> <span class="st">"default"</span>,</span>
+<span id="cb34-349"><a href="#cb34-349" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_icon =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb34-350"><a href="#cb34-350" aria-hidden="true" tabindex="-1"></a>    <span class="at">icon =</span> <span class="st">"fa fa-save"</span></span>
+<span id="cb34-351"><a href="#cb34-351" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb34-352"><a href="#cb34-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-353"><a href="#cb34-353" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-354"><a href="#cb34-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-355"><a href="#cb34-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-358"><a href="#cb34-358" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-359"><a href="#cb34-359" aria-hidden="true" tabindex="-1"></a><span class="co"># load("../data/oes.RData")</span></span>
-<span id="cb34-360"><a href="#cb34-360" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb34-361"><a href="#cb34-361" aria-hidden="true" tabindex="-1"></a><span class="co"># gathered_oes &lt;- gather(data = df_oes, </span></span>
-<span id="cb34-362"><a href="#cb34-362" aria-hidden="true" tabindex="-1"></a><span class="co">#                        key = year, </span></span>
-<span id="cb34-363"><a href="#cb34-363" aria-hidden="true" tabindex="-1"></a><span class="co">#                        value = mean_salary, </span></span>
-<span id="cb34-364"><a href="#cb34-364" aria-hidden="true" tabindex="-1"></a><span class="co">#                        -occupation)</span></span>
-<span id="cb34-365"><a href="#cb34-365" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-366"><a href="#cb34-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-367"><a href="#cb34-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-368"><a href="#cb34-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-355"><a href="#cb34-355" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-356"><a href="#cb34-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-357"><a href="#cb34-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-358"><a href="#cb34-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-361"><a href="#cb34-361" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-362"><a href="#cb34-362" aria-hidden="true" tabindex="-1"></a><span class="co"># load("../data/oes.RData")</span></span>
+<span id="cb34-363"><a href="#cb34-363" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb34-364"><a href="#cb34-364" aria-hidden="true" tabindex="-1"></a><span class="co"># gathered_oes &lt;- gather(data = df_oes, </span></span>
+<span id="cb34-365"><a href="#cb34-365" aria-hidden="true" tabindex="-1"></a><span class="co">#                        key = year, </span></span>
+<span id="cb34-366"><a href="#cb34-366" aria-hidden="true" tabindex="-1"></a><span class="co">#                        value = mean_salary, </span></span>
+<span id="cb34-367"><a href="#cb34-367" aria-hidden="true" tabindex="-1"></a><span class="co">#                        -occupation)</span></span>
+<span id="cb34-368"><a href="#cb34-368" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-369"><a href="#cb34-369" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-370"><a href="#cb34-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-373"><a href="#cb34-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-374"><a href="#cb34-374" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_oes, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">as.numeric</span>(year), <span class="at">y=</span>mean_salary, <span class="at">col =</span> occupation))<span class="sc">+</span></span>
-<span id="cb34-375"><a href="#cb34-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
-<span id="cb34-376"><a href="#cb34-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-377"><a href="#cb34-377" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-378"><a href="#cb34-378" aria-hidden="true" tabindex="-1"></a>dist_oes <span class="ot">&lt;-</span> <span class="fu">dist</span>(df_oes[,<span class="sc">-</span><span class="dv">1</span>], <span class="at">method =</span> <span class="st">"euclidian"</span>) <span class="co"># calculate distances </span></span>
+<span id="cb34-371"><a href="#cb34-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-372"><a href="#cb34-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-373"><a href="#cb34-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-376"><a href="#cb34-376" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-377"><a href="#cb34-377" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_oes, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">as.numeric</span>(year), <span class="at">y=</span>mean_salary, <span class="at">col =</span> occupation))<span class="sc">+</span></span>
+<span id="cb34-378"><a href="#cb34-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
 <span id="cb34-379"><a href="#cb34-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-380"><a href="#cb34-380" aria-hidden="true" tabindex="-1"></a>hc_oes <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_oes, <span class="at">method =</span> <span class="st">"single"</span>)  <span class="co"># minste avstand</span></span>
-<span id="cb34-381"><a href="#cb34-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-382"><a href="#cb34-382" aria-hidden="true" tabindex="-1"></a>hc_oes <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_oes, <span class="at">method =</span> <span class="st">"complete"</span>) <span class="co"># lengste avstand</span></span>
-<span id="cb34-383"><a href="#cb34-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-384"><a href="#cb34-384" aria-hidden="true" tabindex="-1"></a>hc_oes <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_oes, <span class="at">method =</span> <span class="st">"average"</span>) <span class="co">#gjennomsnittlig avstand</span></span>
-<span id="cb34-385"><a href="#cb34-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-386"><a href="#cb34-386" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>))  <span class="co"># Endre marginer for base-plot</span></span>
-<span id="cb34-387"><a href="#cb34-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-388"><a href="#cb34-388" aria-hidden="true" tabindex="-1"></a>dend_oes <span class="ot">&lt;-</span> <span class="fu">as.dendrogram</span>(hc_oes) <span class="co">#Create a dendrogram object</span></span>
-<span id="cb34-389"><a href="#cb34-389" aria-hidden="true" tabindex="-1"></a>dend_colored <span class="ot">&lt;-</span> <span class="fu">color_branches</span>(dend_oes, <span class="at">h =</span> <span class="dv">100000</span>)</span>
-<span id="cb34-390"><a href="#cb34-390" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dend_colored)</span>
-<span id="cb34-391"><a href="#cb34-391" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-392"><a href="#cb34-392" aria-hidden="true" tabindex="-1"></a><span class="co"># Illustrer mulige cutoff - legger linjer oppå eksisterende plot</span></span>
-<span id="cb34-393"><a href="#cb34-393" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">100000</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)  <span class="co"># Viser cut ved h=100000</span></span>
-<span id="cb34-394"><a href="#cb34-394" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">10000</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)   <span class="co"># Viser cut ved h=10000</span></span>
-<span id="cb34-395"><a href="#cb34-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-396"><a href="#cb34-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-397"><a href="#cb34-397" aria-hidden="true" tabindex="-1"></a><span class="co"># Henter ut cluster ved valgt h</span></span>
-<span id="cb34-398"><a href="#cb34-398" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">cutree</span>(hc_oes, <span class="at">h=</span><span class="dv">100000</span>)</span>
-<span id="cb34-399"><a href="#cb34-399" aria-hidden="true" tabindex="-1"></a><span class="co">#cluster &lt;- cutree(hc_oes, k=3)</span></span>
-<span id="cb34-400"><a href="#cb34-400" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cluster)</span>
-<span id="cb34-401"><a href="#cb34-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-402"><a href="#cb34-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-403"><a href="#cb34-403" aria-hidden="true" tabindex="-1"></a><span class="co"># Legger til vektoren cluster til opprinnelige data</span></span>
-<span id="cb34-404"><a href="#cb34-404" aria-hidden="true" tabindex="-1"></a>hclust_oes <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_oes, <span class="at">cluster =</span> cluster)</span>
+<span id="cb34-380"><a href="#cb34-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-381"><a href="#cb34-381" aria-hidden="true" tabindex="-1"></a>dist_oes <span class="ot">&lt;-</span> <span class="fu">dist</span>(df_oes[,<span class="sc">-</span><span class="dv">1</span>], <span class="at">method =</span> <span class="st">"euclidian"</span>) <span class="co"># calculate distances </span></span>
+<span id="cb34-382"><a href="#cb34-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-383"><a href="#cb34-383" aria-hidden="true" tabindex="-1"></a>hc_oes <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_oes, <span class="at">method =</span> <span class="st">"single"</span>)  <span class="co"># minste avstand</span></span>
+<span id="cb34-384"><a href="#cb34-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-385"><a href="#cb34-385" aria-hidden="true" tabindex="-1"></a>hc_oes <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_oes, <span class="at">method =</span> <span class="st">"complete"</span>) <span class="co"># lengste avstand</span></span>
+<span id="cb34-386"><a href="#cb34-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-387"><a href="#cb34-387" aria-hidden="true" tabindex="-1"></a>hc_oes <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_oes, <span class="at">method =</span> <span class="st">"average"</span>) <span class="co">#gjennomsnittlig avstand</span></span>
+<span id="cb34-388"><a href="#cb34-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-389"><a href="#cb34-389" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>))  <span class="co"># Endre marginer for base-plot</span></span>
+<span id="cb34-390"><a href="#cb34-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-391"><a href="#cb34-391" aria-hidden="true" tabindex="-1"></a>dend_oes <span class="ot">&lt;-</span> <span class="fu">as.dendrogram</span>(hc_oes) <span class="co">#Create a dendrogram object</span></span>
+<span id="cb34-392"><a href="#cb34-392" aria-hidden="true" tabindex="-1"></a>dend_colored <span class="ot">&lt;-</span> <span class="fu">color_branches</span>(dend_oes, <span class="at">h =</span> <span class="dv">100000</span>)</span>
+<span id="cb34-393"><a href="#cb34-393" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dend_colored)</span>
+<span id="cb34-394"><a href="#cb34-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-395"><a href="#cb34-395" aria-hidden="true" tabindex="-1"></a><span class="co"># Illustrer mulige cutoff - legger linjer oppå eksisterende plot</span></span>
+<span id="cb34-396"><a href="#cb34-396" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">100000</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)  <span class="co"># Viser cut ved h=100000</span></span>
+<span id="cb34-397"><a href="#cb34-397" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span><span class="dv">10000</span>, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)   <span class="co"># Viser cut ved h=10000</span></span>
+<span id="cb34-398"><a href="#cb34-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-399"><a href="#cb34-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-400"><a href="#cb34-400" aria-hidden="true" tabindex="-1"></a><span class="co"># Henter ut cluster ved valgt h</span></span>
+<span id="cb34-401"><a href="#cb34-401" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">cutree</span>(hc_oes, <span class="at">h=</span><span class="dv">100000</span>)</span>
+<span id="cb34-402"><a href="#cb34-402" aria-hidden="true" tabindex="-1"></a><span class="co">#cluster &lt;- cutree(hc_oes, k=3)</span></span>
+<span id="cb34-403"><a href="#cb34-403" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cluster)</span>
+<span id="cb34-404"><a href="#cb34-404" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-405"><a href="#cb34-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-406"><a href="#cb34-406" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hclust_oes)</span>
-<span id="cb34-407"><a href="#cb34-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-408"><a href="#cb34-408" aria-hidden="true" tabindex="-1"></a><span class="co"># vrenger dataene "nedover" for å plotte</span></span>
-<span id="cb34-409"><a href="#cb34-409" aria-hidden="true" tabindex="-1"></a>gathered_oes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> hclust_oes,    <span class="co"># datasett</span></span>
-<span id="cb34-410"><a href="#cb34-410" aria-hidden="true" tabindex="-1"></a>                       <span class="at">key =</span> year,           <span class="co"># navn på ny variabel, verdier hentes fra gamle variabelnavn</span></span>
-<span id="cb34-411"><a href="#cb34-411" aria-hidden="true" tabindex="-1"></a>                       <span class="at">value =</span> mean_salary,  <span class="co"># navn på ny variabel med gamle variabelverdier</span></span>
-<span id="cb34-412"><a href="#cb34-412" aria-hidden="true" tabindex="-1"></a>                       <span class="sc">-</span>occupation, <span class="sc">-</span>cluster) <span class="co"># variable som skal beholdes / grupperes etter</span></span>
-<span id="cb34-413"><a href="#cb34-413" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_oes, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mean_salary, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> occupation)) <span class="sc">+</span> </span>
-<span id="cb34-414"><a href="#cb34-414" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
-<span id="cb34-415"><a href="#cb34-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-416"><a href="#cb34-416" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-417"><a href="#cb34-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-406"><a href="#cb34-406" aria-hidden="true" tabindex="-1"></a><span class="co"># Legger til vektoren cluster til opprinnelige data</span></span>
+<span id="cb34-407"><a href="#cb34-407" aria-hidden="true" tabindex="-1"></a>hclust_oes <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_oes, <span class="at">cluster =</span> cluster)</span>
+<span id="cb34-408"><a href="#cb34-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-409"><a href="#cb34-409" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hclust_oes)</span>
+<span id="cb34-410"><a href="#cb34-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-411"><a href="#cb34-411" aria-hidden="true" tabindex="-1"></a><span class="co"># vrenger dataene "nedover" for å plotte</span></span>
+<span id="cb34-412"><a href="#cb34-412" aria-hidden="true" tabindex="-1"></a>gathered_oes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> hclust_oes,    <span class="co"># datasett</span></span>
+<span id="cb34-413"><a href="#cb34-413" aria-hidden="true" tabindex="-1"></a>                       <span class="at">key =</span> year,           <span class="co"># navn på ny variabel, verdier hentes fra gamle variabelnavn</span></span>
+<span id="cb34-414"><a href="#cb34-414" aria-hidden="true" tabindex="-1"></a>                       <span class="at">value =</span> mean_salary,  <span class="co"># navn på ny variabel med gamle variabelverdier</span></span>
+<span id="cb34-415"><a href="#cb34-415" aria-hidden="true" tabindex="-1"></a>                       <span class="sc">-</span>occupation, <span class="sc">-</span>cluster) <span class="co"># variable som skal beholdes / grupperes etter</span></span>
+<span id="cb34-416"><a href="#cb34-416" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_oes, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mean_salary, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> occupation)) <span class="sc">+</span> </span>
+<span id="cb34-417"><a href="#cb34-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
 <span id="cb34-418"><a href="#cb34-418" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-419"><a href="#cb34-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-420"><a href="#cb34-420" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
-<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a>Gjenta analysen over med k-means clustering. Hvor mange klustre bør det være? Får du samme </span>
-<span id="cb34-422"><a href="#cb34-422" aria-hidden="true" tabindex="-1"></a>resultat?</span>
-<span id="cb34-423"><a href="#cb34-423" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb34-424"><a href="#cb34-424" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-425"><a href="#cb34-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-426"><a href="#cb34-426" aria-hidden="true" tabindex="-1"></a>::: {.solution}</span>
+<span id="cb34-419"><a href="#cb34-419" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-420"><a href="#cb34-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-421"><a href="#cb34-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-422"><a href="#cb34-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-423"><a href="#cb34-423" aria-hidden="true" tabindex="-1"></a>::: {#exr-}</span>
+<span id="cb34-424"><a href="#cb34-424" aria-hidden="true" tabindex="-1"></a>Gjenta analysen over med k-means clustering. Hvor mange klustre bør det være? Får du samme </span>
+<span id="cb34-425"><a href="#cb34-425" aria-hidden="true" tabindex="-1"></a>resultat?</span>
+<span id="cb34-426"><a href="#cb34-426" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb34-427"><a href="#cb34-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-430"><a href="#cb34-430" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-431"><a href="#cb34-431" aria-hidden="true" tabindex="-1"></a><span class="do">## K-means clustering med samme data </span></span>
-<span id="cb34-432"><a href="#cb34-432" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-433"><a href="#cb34-433" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksempel ved å sette antall kluster til 3</span></span>
-<span id="cb34-434"><a href="#cb34-434" aria-hidden="true" tabindex="-1"></a><span class="co"># I dette tilfellet bør vi få samme resultat</span></span>
-<span id="cb34-435"><a href="#cb34-435" aria-hidden="true" tabindex="-1"></a>km_oes <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(dist_oes, <span class="at">centers =</span> <span class="dv">3</span>)</span>
-<span id="cb34-436"><a href="#cb34-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-437"><a href="#cb34-437" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(km_oes<span class="sc">$</span>cluster)</span>
-<span id="cb34-438"><a href="#cb34-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-439"><a href="#cb34-439" aria-hidden="true" tabindex="-1"></a>kmclust_oes <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_oes, <span class="at">cluster=</span>km_oes<span class="sc">$</span>cluster)</span>
-<span id="cb34-440"><a href="#cb34-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-441"><a href="#cb34-441" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotter</span></span>
-<span id="cb34-442"><a href="#cb34-442" aria-hidden="true" tabindex="-1"></a>gathered_kmoes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> kmclust_oes,    <span class="co"># datasett</span></span>
-<span id="cb34-443"><a href="#cb34-443" aria-hidden="true" tabindex="-1"></a>                       <span class="at">key =</span> year,           <span class="co"># navn på ny variabel, verdier hentes fra gamle variabelnavn</span></span>
-<span id="cb34-444"><a href="#cb34-444" aria-hidden="true" tabindex="-1"></a>                       <span class="at">value =</span> mean_salary,  <span class="co"># navn på ny variabel med gamle variabelverdier</span></span>
-<span id="cb34-445"><a href="#cb34-445" aria-hidden="true" tabindex="-1"></a>                       <span class="sc">-</span>occupation, <span class="sc">-</span>cluster) <span class="co"># variable som skal beholdes / grupperes etter</span></span>
-<span id="cb34-446"><a href="#cb34-446" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_kmoes, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mean_salary, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> occupation)) <span class="sc">+</span> </span>
-<span id="cb34-447"><a href="#cb34-447" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
-<span id="cb34-448"><a href="#cb34-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-449"><a href="#cb34-449" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-450"><a href="#cb34-450" aria-hidden="true" tabindex="-1"></a><span class="do">### K-means clustering. Make a search</span></span>
-<span id="cb34-451"><a href="#cb34-451" aria-hidden="true" tabindex="-1"></a>wss <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb34-452"><a href="#cb34-452" aria-hidden="true" tabindex="-1"></a><span class="co"># For 1 to 15 cluster centers</span></span>
-<span id="cb34-453"><a href="#cb34-453" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
-<span id="cb34-454"><a href="#cb34-454" aria-hidden="true" tabindex="-1"></a>  km.out <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(dist_oes, <span class="at">centers =</span> i, <span class="at">nstart=</span><span class="dv">20</span>)</span>
-<span id="cb34-455"><a href="#cb34-455" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save total within sum of squares to wss variable</span></span>
-<span id="cb34-456"><a href="#cb34-456" aria-hidden="true" tabindex="-1"></a>  wss[i] <span class="ot">&lt;-</span> km.out<span class="sc">$</span>tot.withinss</span>
-<span id="cb34-457"><a href="#cb34-457" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-458"><a href="#cb34-458" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-459"><a href="#cb34-459" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot total within sum of squares vs. number of clusters</span></span>
-<span id="cb34-460"><a href="#cb34-460" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, wss, <span class="at">type =</span> <span class="st">"b"</span>, </span>
-<span id="cb34-461"><a href="#cb34-461" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Clusters"</span>, </span>
-<span id="cb34-462"><a href="#cb34-462" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Within groups sum of squares"</span>)</span>
-<span id="cb34-463"><a href="#cb34-463" aria-hidden="true" tabindex="-1"></a><span class="co"># Marker "albuen" med en linje i plottet </span></span>
-<span id="cb34-464"><a href="#cb34-464" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
-<span id="cb34-465"><a href="#cb34-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-466"><a href="#cb34-466" aria-hidden="true" tabindex="-1"></a>oes <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/oes.rds"</span>)</span>
-<span id="cb34-467"><a href="#cb34-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-468"><a href="#cb34-468" aria-hidden="true" tabindex="-1"></a><span class="do">## Create final clustering</span></span>
-<span id="cb34-469"><a href="#cb34-469" aria-hidden="true" tabindex="-1"></a>km_oes <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(oes, <span class="at">centers =</span> <span class="dv">2</span>, <span class="at">nstart=</span><span class="dv">20</span>)</span>
-<span id="cb34-470"><a href="#cb34-470" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(km_oes<span class="sc">$</span>cluster)</span>
-<span id="cb34-471"><a href="#cb34-471" aria-hidden="true" tabindex="-1"></a>kmclust_oes <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_oes, <span class="at">cluster=</span>km_oes<span class="sc">$</span>cluster)</span>
-<span id="cb34-472"><a href="#cb34-472" aria-hidden="true" tabindex="-1"></a>gathered_kmoes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> kmclust_oes,    <span class="co"># datasett</span></span>
-<span id="cb34-473"><a href="#cb34-473" aria-hidden="true" tabindex="-1"></a>                         <span class="at">key =</span> year,           <span class="co"># navn på ny variabel, verdier hentes fra gamle variabelnavn</span></span>
-<span id="cb34-474"><a href="#cb34-474" aria-hidden="true" tabindex="-1"></a>                         <span class="at">value =</span> mean_salary,  <span class="co"># navn på ny variabel med gamle variabelverdier</span></span>
-<span id="cb34-475"><a href="#cb34-475" aria-hidden="true" tabindex="-1"></a>                         <span class="sc">-</span>occupation, <span class="sc">-</span>cluster) <span class="co"># variable som skal beholdes / grupperes etter</span></span>
-<span id="cb34-476"><a href="#cb34-476" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_kmoes, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mean_salary, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> occupation)) <span class="sc">+</span> </span>
-<span id="cb34-477"><a href="#cb34-477" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
-<span id="cb34-478"><a href="#cb34-478" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-479"><a href="#cb34-479" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-480"><a href="#cb34-480" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-428"><a href="#cb34-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-429"><a href="#cb34-429" aria-hidden="true" tabindex="-1"></a>::: {.solution}</span>
+<span id="cb34-430"><a href="#cb34-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-433"><a href="#cb34-433" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-434"><a href="#cb34-434" aria-hidden="true" tabindex="-1"></a><span class="do">## K-means clustering med samme data </span></span>
+<span id="cb34-435"><a href="#cb34-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-436"><a href="#cb34-436" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksempel ved å sette antall kluster til 3</span></span>
+<span id="cb34-437"><a href="#cb34-437" aria-hidden="true" tabindex="-1"></a><span class="co"># I dette tilfellet bør vi få samme resultat</span></span>
+<span id="cb34-438"><a href="#cb34-438" aria-hidden="true" tabindex="-1"></a>km_oes <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(dist_oes, <span class="at">centers =</span> <span class="dv">3</span>)</span>
+<span id="cb34-439"><a href="#cb34-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-440"><a href="#cb34-440" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(km_oes<span class="sc">$</span>cluster)</span>
+<span id="cb34-441"><a href="#cb34-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-442"><a href="#cb34-442" aria-hidden="true" tabindex="-1"></a>kmclust_oes <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_oes, <span class="at">cluster=</span>km_oes<span class="sc">$</span>cluster)</span>
+<span id="cb34-443"><a href="#cb34-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-444"><a href="#cb34-444" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotter</span></span>
+<span id="cb34-445"><a href="#cb34-445" aria-hidden="true" tabindex="-1"></a>gathered_kmoes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> kmclust_oes,    <span class="co"># datasett</span></span>
+<span id="cb34-446"><a href="#cb34-446" aria-hidden="true" tabindex="-1"></a>                       <span class="at">key =</span> year,           <span class="co"># navn på ny variabel, verdier hentes fra gamle variabelnavn</span></span>
+<span id="cb34-447"><a href="#cb34-447" aria-hidden="true" tabindex="-1"></a>                       <span class="at">value =</span> mean_salary,  <span class="co"># navn på ny variabel med gamle variabelverdier</span></span>
+<span id="cb34-448"><a href="#cb34-448" aria-hidden="true" tabindex="-1"></a>                       <span class="sc">-</span>occupation, <span class="sc">-</span>cluster) <span class="co"># variable som skal beholdes / grupperes etter</span></span>
+<span id="cb34-449"><a href="#cb34-449" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_kmoes, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mean_salary, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> occupation)) <span class="sc">+</span> </span>
+<span id="cb34-450"><a href="#cb34-450" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
+<span id="cb34-451"><a href="#cb34-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-452"><a href="#cb34-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-453"><a href="#cb34-453" aria-hidden="true" tabindex="-1"></a><span class="do">### K-means clustering. Make a search</span></span>
+<span id="cb34-454"><a href="#cb34-454" aria-hidden="true" tabindex="-1"></a>wss <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb34-455"><a href="#cb34-455" aria-hidden="true" tabindex="-1"></a><span class="co"># For 1 to 15 cluster centers</span></span>
+<span id="cb34-456"><a href="#cb34-456" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb34-457"><a href="#cb34-457" aria-hidden="true" tabindex="-1"></a>  km.out <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(dist_oes, <span class="at">centers =</span> i, <span class="at">nstart=</span><span class="dv">20</span>)</span>
+<span id="cb34-458"><a href="#cb34-458" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save total within sum of squares to wss variable</span></span>
+<span id="cb34-459"><a href="#cb34-459" aria-hidden="true" tabindex="-1"></a>  wss[i] <span class="ot">&lt;-</span> km.out<span class="sc">$</span>tot.withinss</span>
+<span id="cb34-460"><a href="#cb34-460" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-461"><a href="#cb34-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-462"><a href="#cb34-462" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot total within sum of squares vs. number of clusters</span></span>
+<span id="cb34-463"><a href="#cb34-463" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, wss, <span class="at">type =</span> <span class="st">"b"</span>, </span>
+<span id="cb34-464"><a href="#cb34-464" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Number of Clusters"</span>, </span>
+<span id="cb34-465"><a href="#cb34-465" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Within groups sum of squares"</span>)</span>
+<span id="cb34-466"><a href="#cb34-466" aria-hidden="true" tabindex="-1"></a><span class="co"># Marker "albuen" med en linje i plottet </span></span>
+<span id="cb34-467"><a href="#cb34-467" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb34-468"><a href="#cb34-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-469"><a href="#cb34-469" aria-hidden="true" tabindex="-1"></a>oes <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/oes.rds"</span>)</span>
+<span id="cb34-470"><a href="#cb34-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-471"><a href="#cb34-471" aria-hidden="true" tabindex="-1"></a><span class="do">## Create final clustering</span></span>
+<span id="cb34-472"><a href="#cb34-472" aria-hidden="true" tabindex="-1"></a>km_oes <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(oes, <span class="at">centers =</span> <span class="dv">2</span>, <span class="at">nstart=</span><span class="dv">20</span>)</span>
+<span id="cb34-473"><a href="#cb34-473" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(km_oes<span class="sc">$</span>cluster)</span>
+<span id="cb34-474"><a href="#cb34-474" aria-hidden="true" tabindex="-1"></a>kmclust_oes <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_oes, <span class="at">cluster=</span>km_oes<span class="sc">$</span>cluster)</span>
+<span id="cb34-475"><a href="#cb34-475" aria-hidden="true" tabindex="-1"></a>gathered_kmoes <span class="ot">&lt;-</span> <span class="fu">gather</span>(<span class="at">data =</span> kmclust_oes,    <span class="co"># datasett</span></span>
+<span id="cb34-476"><a href="#cb34-476" aria-hidden="true" tabindex="-1"></a>                         <span class="at">key =</span> year,           <span class="co"># navn på ny variabel, verdier hentes fra gamle variabelnavn</span></span>
+<span id="cb34-477"><a href="#cb34-477" aria-hidden="true" tabindex="-1"></a>                         <span class="at">value =</span> mean_salary,  <span class="co"># navn på ny variabel med gamle variabelverdier</span></span>
+<span id="cb34-478"><a href="#cb34-478" aria-hidden="true" tabindex="-1"></a>                         <span class="sc">-</span>occupation, <span class="sc">-</span>cluster) <span class="co"># variable som skal beholdes / grupperes etter</span></span>
+<span id="cb34-479"><a href="#cb34-479" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gathered_kmoes, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> mean_salary, <span class="at">color =</span> <span class="fu">factor</span>(cluster), <span class="at">group =</span> occupation)) <span class="sc">+</span> </span>
+<span id="cb34-480"><a href="#cb34-480" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()</span>
 <span id="cb34-481"><a href="#cb34-481" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-482"><a href="#cb34-482" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-482"><a href="#cb34-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-483"><a href="#cb34-483" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-484"><a href="#cb34-484" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-485"><a href="#cb34-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-486"><a href="#cb34-486" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-485"><a href="#cb34-485" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb34-486"><a href="#cb34-486" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-487"><a href="#cb34-487" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-488"><a href="#cb34-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-489"><a href="#cb34-489" aria-hidden="true" tabindex="-1"></a><span class="fu">## Datareduksjon med principal component analysis (PCA)</span></span>
+<span id="cb34-489"><a href="#cb34-489" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb34-490"><a href="#cb34-490" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-491"><a href="#cb34-491" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-492"><a href="#cb34-492" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-493"><a href="#cb34-493" aria-hidden="true" tabindex="-1"></a>Vi starter med datasettet for kriminalitet i norske kommuner. </span>
+<span id="cb34-492"><a href="#cb34-492" aria-hidden="true" tabindex="-1"></a><span class="fu">## Datareduksjon med principal component analysis (PCA)</span></span>
+<span id="cb34-493"><a href="#cb34-493" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-494"><a href="#cb34-494" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-497"><a href="#cb34-497" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-498"><a href="#cb34-498" aria-hidden="true" tabindex="-1"></a>kommune <span class="ot">&lt;-</span> <span class="fu">readRDS</span>( <span class="st">"data/kommunedata.rds"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb34-499"><a href="#cb34-499" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="fu">max</span>(year)) <span class="sc">%&gt;%</span> </span>
-<span id="cb34-500"><a href="#cb34-500" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select(-c(1,3))</span></span>
-<span id="cb34-501"><a href="#cb34-501" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">2</span>, vinningskriminalitet<span class="sc">:</span>andre_lovbrudd) </span>
-<span id="cb34-502"><a href="#cb34-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-503"><a href="#cb34-503" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(kommune)</span>
-<span id="cb34-504"><a href="#cb34-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-495"><a href="#cb34-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-496"><a href="#cb34-496" aria-hidden="true" tabindex="-1"></a>Vi starter med datasettet for kriminalitet i norske kommuner. </span>
+<span id="cb34-497"><a href="#cb34-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-500"><a href="#cb34-500" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-501"><a href="#cb34-501" aria-hidden="true" tabindex="-1"></a>kommune <span class="ot">&lt;-</span> <span class="fu">readRDS</span>( <span class="st">"data/kommunedata.rds"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-502"><a href="#cb34-502" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="fu">max</span>(year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-503"><a href="#cb34-503" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select(-c(1,3))</span></span>
+<span id="cb34-504"><a href="#cb34-504" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">2</span>, vinningskriminalitet<span class="sc">:</span>andre_lovbrudd) </span>
 <span id="cb34-505"><a href="#cb34-505" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-506"><a href="#cb34-506" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-506"><a href="#cb34-506" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(kommune)</span>
 <span id="cb34-507"><a href="#cb34-507" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-508"><a href="#cb34-508" aria-hidden="true" tabindex="-1"></a>Så et lite triks som ikke er viktig for resultatet som sådan, men hjelper å holde orden på dataene. Vi er kjent med at kolonnene i et datasett har navn: altså variabelnavn. Men i R kan også *radene* ha navn. Det er ikke like vanlig å bruke til noe spesielt, men her er det nyttig å ta det med seg.  </span>
-<span id="cb34-509"><a href="#cb34-509" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-512"><a href="#cb34-512" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-513"><a href="#cb34-513" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(kommune) <span class="ot">&lt;-</span> kommune[,<span class="dv">1</span>]</span>
-<span id="cb34-514"><a href="#cb34-514" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-515"><a href="#cb34-515" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-516"><a href="#cb34-516" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-517"><a href="#cb34-517" aria-hidden="true" tabindex="-1"></a>Så kan vi kjøre en principal component analyse. Det er her viktig å sette <span class="in">`scale = TRUE`</span>. Dette gjør at dataene re-skaleres til en z-skår med gjennomsnitt 0 og standardavvik 1. Det skal veldig gode grunner for å gjøre noe annet, så gjør alltid dette.   </span>
-<span id="cb34-518"><a href="#cb34-518" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-521"><a href="#cb34-521" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-522"><a href="#cb34-522" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stats)</span>
-<span id="cb34-523"><a href="#cb34-523" aria-hidden="true" tabindex="-1"></a>pr_komm <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(kommune[,<span class="sc">-</span><span class="dv">1</span>], <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">center =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb34-524"><a href="#cb34-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-525"><a href="#cb34-525" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pr_komm)</span>
-<span id="cb34-526"><a href="#cb34-526" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(kommune<span class="sc">$</span>vinningskriminalitet)</span>
+<span id="cb34-508"><a href="#cb34-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-509"><a href="#cb34-509" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-510"><a href="#cb34-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-511"><a href="#cb34-511" aria-hidden="true" tabindex="-1"></a>Så et lite triks som ikke er viktig for resultatet som sådan, men hjelper å holde orden på dataene. Vi er kjent med at kolonnene i et datasett har navn: altså variabelnavn. Men i R kan også *radene* ha navn. Det er ikke like vanlig å bruke til noe spesielt, men her er det nyttig å ta det med seg.  </span>
+<span id="cb34-512"><a href="#cb34-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-515"><a href="#cb34-515" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-516"><a href="#cb34-516" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(kommune) <span class="ot">&lt;-</span> kommune[,<span class="dv">1</span>]</span>
+<span id="cb34-517"><a href="#cb34-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-518"><a href="#cb34-518" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-519"><a href="#cb34-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-520"><a href="#cb34-520" aria-hidden="true" tabindex="-1"></a>Så kan vi kjøre en principal component analyse. Det er her viktig å sette <span class="in">`scale = TRUE`</span>. Dette gjør at dataene re-skaleres til en z-skår med gjennomsnitt 0 og standardavvik 1. Det skal veldig gode grunner for å gjøre noe annet, så gjør alltid dette.   </span>
+<span id="cb34-521"><a href="#cb34-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-524"><a href="#cb34-524" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-525"><a href="#cb34-525" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stats)</span>
+<span id="cb34-526"><a href="#cb34-526" aria-hidden="true" tabindex="-1"></a>pr_komm <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(kommune[,<span class="sc">-</span><span class="dv">1</span>], <span class="at">scale =</span> <span class="cn">TRUE</span>, <span class="at">center =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb34-527"><a href="#cb34-527" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-528"><a href="#cb34-528" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-529"><a href="#cb34-529" aria-hidden="true" tabindex="-1"></a>pr_komm<span class="sc">$</span>center</span>
+<span id="cb34-528"><a href="#cb34-528" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pr_komm)</span>
+<span id="cb34-529"><a href="#cb34-529" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(kommune<span class="sc">$</span>vinningskriminalitet)</span>
 <span id="cb34-530"><a href="#cb34-530" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-531"><a href="#cb34-531" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-532"><a href="#cb34-532" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-535"><a href="#cb34-535" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-536"><a href="#cb34-536" aria-hidden="true" tabindex="-1"></a>pvar <span class="ot">&lt;-</span> pr_komm<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> </span>
-<span id="cb34-537"><a href="#cb34-537" aria-hidden="true" tabindex="-1"></a>pve <span class="ot">&lt;-</span> pvar<span class="sc">/</span><span class="fu">sum</span>(pvar)</span>
-<span id="cb34-538"><a href="#cb34-538" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-539"><a href="#cb34-539" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-540"><a href="#cb34-540" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, pve, )</span>
+<span id="cb34-531"><a href="#cb34-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-532"><a href="#cb34-532" aria-hidden="true" tabindex="-1"></a>pr_komm<span class="sc">$</span>center</span>
+<span id="cb34-533"><a href="#cb34-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-534"><a href="#cb34-534" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-535"><a href="#cb34-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-538"><a href="#cb34-538" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-539"><a href="#cb34-539" aria-hidden="true" tabindex="-1"></a>pvar <span class="ot">&lt;-</span> pr_komm<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> </span>
+<span id="cb34-540"><a href="#cb34-540" aria-hidden="true" tabindex="-1"></a>pve <span class="ot">&lt;-</span> pvar<span class="sc">/</span><span class="fu">sum</span>(pvar)</span>
 <span id="cb34-541"><a href="#cb34-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-542"><a href="#cb34-542" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">components =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(pve), <span class="at">prop_var_expl =</span> pve)</span>
-<span id="cb34-543"><a href="#cb34-543" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-544"><a href="#cb34-544" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dt, <span class="fu">aes</span>(<span class="at">x =</span> components, <span class="at">y =</span> prop_var_expl))<span class="sc">+</span> </span>
-<span id="cb34-545"><a href="#cb34-545" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
-<span id="cb34-546"><a href="#cb34-546" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
-<span id="cb34-547"><a href="#cb34-547" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb34-548"><a href="#cb34-548" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-549"><a href="#cb34-549" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-550"><a href="#cb34-550" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-542"><a href="#cb34-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-543"><a href="#cb34-543" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, pve, )</span>
+<span id="cb34-544"><a href="#cb34-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-545"><a href="#cb34-545" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">components =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(pve), <span class="at">prop_var_expl =</span> pve)</span>
+<span id="cb34-546"><a href="#cb34-546" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-547"><a href="#cb34-547" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dt, <span class="fu">aes</span>(<span class="at">x =</span> components, <span class="at">y =</span> prop_var_expl))<span class="sc">+</span> </span>
+<span id="cb34-548"><a href="#cb34-548" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb34-549"><a href="#cb34-549" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb34-550"><a href="#cb34-550" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb34-551"><a href="#cb34-551" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-552"><a href="#cb34-552" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-553"><a href="#cb34-553" aria-hidden="true" tabindex="-1"></a>Da kan resultatene vises grafisk som følger. </span>
+<span id="cb34-552"><a href="#cb34-552" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-553"><a href="#cb34-553" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-554"><a href="#cb34-554" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-557"><a href="#cb34-557" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-558"><a href="#cb34-558" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(pr_komm, <span class="at">cex =</span> .<span class="dv">3</span>)</span>
-<span id="cb34-559"><a href="#cb34-559" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-560"><a href="#cb34-560" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-561"><a href="#cb34-561" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-562"><a href="#cb34-562" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-565"><a href="#cb34-565" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-566"><a href="#cb34-566" aria-hidden="true" tabindex="-1"></a>kommune_scale <span class="ot">&lt;-</span> kommune <span class="sc">%&gt;%</span> </span>
-<span id="cb34-567"><a href="#cb34-567" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) </span>
-<span id="cb34-568"><a href="#cb34-568" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(kommune_scale)</span>
-<span id="cb34-569"><a href="#cb34-569" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-570"><a href="#cb34-570" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-571"><a href="#cb34-571" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-574"><a href="#cb34-574" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb34-575"><a href="#cb34-575" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb34-576"><a href="#cb34-576" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-577"><a href="#cb34-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-578"><a href="#cb34-578" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-555"><a href="#cb34-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-556"><a href="#cb34-556" aria-hidden="true" tabindex="-1"></a>Da kan resultatene vises grafisk som følger. </span>
+<span id="cb34-557"><a href="#cb34-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-560"><a href="#cb34-560" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-561"><a href="#cb34-561" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(pr_komm, <span class="at">cex =</span> .<span class="dv">3</span>)</span>
+<span id="cb34-562"><a href="#cb34-562" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-563"><a href="#cb34-563" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-564"><a href="#cb34-564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-565"><a href="#cb34-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-568"><a href="#cb34-568" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-569"><a href="#cb34-569" aria-hidden="true" tabindex="-1"></a>kommune_scale <span class="ot">&lt;-</span> kommune <span class="sc">%&gt;%</span> </span>
+<span id="cb34-570"><a href="#cb34-570" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), scale)) </span>
+<span id="cb34-571"><a href="#cb34-571" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(kommune_scale)</span>
+<span id="cb34-572"><a href="#cb34-572" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb34-573"><a href="#cb34-573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-574"><a href="#cb34-574" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-577"><a href="#cb34-577" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb34-578"><a href="#cb34-578" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb34-579"><a href="#cb34-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-580"><a href="#cb34-580" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multippel korrespondanseanalyse</span></span>
-<span id="cb34-581"><a href="#cb34-581" aria-hidden="true" tabindex="-1"></a>PCA har egentlig som forutsetning av variablene er kontinuerlige, og det er litt trøblete å bruke det på kategoriske variable. Men ofte har vi kategoriske variable. </span>
+<span id="cb34-580"><a href="#cb34-580" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-581"><a href="#cb34-581" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-582"><a href="#cb34-582" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-583"><a href="#cb34-583" aria-hidden="true" tabindex="-1"></a>En variant av PCA for kategoriske variable er korrespondanseanalyse, som i teorien altså skal være bedre enn PCA. I praksis er det imidlertid ikke nødvendigvis veldig stor forskjell, så det er neppe stor skade skjedd hvis man bruker PCA likevel. </span>
-<span id="cb34-584"><a href="#cb34-584" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-583"><a href="#cb34-583" aria-hidden="true" tabindex="-1"></a><span class="fu">### Multippel korrespondanseanalyse</span></span>
+<span id="cb34-584"><a href="#cb34-584" aria-hidden="true" tabindex="-1"></a>PCA har egentlig som forutsetning av variablene er kontinuerlige, og det er litt trøblete å bruke det på kategoriske variable. Men ofte har vi kategoriske variable. </span>
 <span id="cb34-585"><a href="#cb34-585" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-586"><a href="#cb34-586" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-586"><a href="#cb34-586" aria-hidden="true" tabindex="-1"></a>En variant av PCA for kategoriske variable er korrespondanseanalyse, som i teorien altså skal være bedre enn PCA. I praksis er det imidlertid ikke nødvendigvis veldig stor forskjell, så det er neppe stor skade skjedd hvis man bruker PCA likevel. </span>
+<span id="cb34-587"><a href="#cb34-587" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-588"><a href="#cb34-588" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-589"><a href="#cb34-589" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
