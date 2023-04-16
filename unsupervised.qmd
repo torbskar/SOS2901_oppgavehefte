@@ -19,94 +19,217 @@ library(directlabels)
 ```
 
 
+"Usupervised learning" er betegnelsen på en type teknikker der vi ikke har et spesifikt observerbart utfall. (Alle andre teknikker for prediksjon kaller vi derfor "supervised learning"). De teknikkene for unsupervised learning vi skal se på her er vanlige former for klustering og datareduksjon. 
+
+Det er to vanlige formål med disse teknikkene: 
+
+1) beskrive et stort og komplisert materiale ved å forenkle til noen færre kategorier 
+2) lete etter underliggende strukturer i data som ikke er direkte observerbart 
+3) pre-prosessering av data før man fortsetter med supervised learning
+
+Formål 2) er litt kryptisk, men f.eks. en bedrift kan ha nytte av å dele inn kundemassen i ulike segmenter og rette seg inn mot disse på en systematisk måte.^[OBS! Det spiller ingen rolle om disse gruppene er reelle som gruppe eller ikke. At de oppfører seg rimelig likt holder til formålet.] 
+
+For formål 3) gjelder hvis man har veldig mange variable som er korrelerte, men hver for seg ikke er særlig sterke prediktorer. Vanlige prediksjonsmodeller vil ikke alltid være så effektive i slike situasjoner. Forenklede variable som klustre eller principal components kan da fungere bedre. 
 
 
-## Hierarkisk klustering 
 
 
-::: {#exr-}
-Last ned filen krim2016.RData fra Canvas. 
-Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt 
-kriminalitet per 1000 innbyggere i kommuner i 2016. 
+## K-means klustering 
 
-a) Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de 
-andre? Spiller det noen rolle hvilken type distance du setter? 
-a) Hvilke kommuner er de de klusterne som skiller seg ut? 
-a) Hva kjennetegner lovbruddsbildet i de ulike klustrene? Kan du tenke deg noen grunner til at akkurat disse stikker seg ut?
- 
-:::
+Vi starter med et tenkt eksempel der det er to variable og tre klustre, men tilhørighet til kluster er ikke direkte observerbart (altså: det er ingen variable for kluster). 
 
+Her ser du de første seks observasjonene i datasettet:
 
-::: {.solution}
-Leser inn data om inntektsutvikling for ulike yrker fra 2001 til 2016
+```{r}
+#| echo: false
+#| warning: false
+library(tidyverse)
+n <- 100
 
-Dataene er i "bred" format. Det er slik vi vil ha det for clusteranalyse, men dårlig for å lage en graf.
+set.seed(70)
+x <- rnorm(n, sd=.5) + rbinom(n, 1, .4)*4
+y <- x + rnorm(n)+ ifelse(x<=2, rbinom(n, 1, .5)*6, 0)
+
+df <- data.frame(x = x, y = y)
+head(df)
+
+```
+Vi kan så plotte x og y i et scatterplot. I dette tilfellet ser vi tydelig at det er tre klynger av datapunkter. Ofte vil det ikke være så lett å se, men disse dataene er laget slik at det skal være lettere å se hvordan algoritmen fungerer. 
 
 
 ```{r}
-load("../data/oes.RData")
+#| echo: false
+#| warning: false
+grps <- 3
+set.seed(58)
+start <- df %>% 
+  mutate(ran = runif(dim(.)[1])) %>% 
+  arrange(ran) %>% 
+  slice(1:grps) %>% 
+  select(x, y)
 
-gathered_oes <- gather(data = df_oes, 
-                       key = year, 
-                       value = mean_salary, 
-                       -occupation)
+ggplot(df, aes(x=x, y = y)) +
+  geom_point(size = 2) +
+  scale_shape_manual(values=c(17, 18, 15))+
+  geom_point(data = start, col = "purple", shape = 19, size = 2)+
+  theme_minimal()+
+  theme(legend.position = "none")
+```
 
-ggplot(gathered_oes, aes(x=as.numeric(year), y=mean_salary, col = occupation))+
-  geom_line()
+I plottet er punktene nå lagt inn tre *tilfeldige* punkter som marker startpunktet for algoritmen. Disse punktene er *tilfeldig* valgt, og markerer et første steg som forsøksvis sentrum av tre klustre. Antall klustre må vi altså bestemme selv i forkant. 
+
+For hvert av øvrige datapunktene regnes det så avstanden til hvert av disse tre tilfeldige "klustrene". Hvert datapunkt klassifiseres så til det klusteret de er nærmest. 
+
+```{r}
+#| echo: false
+#| warning: false
+d <- data.frame(grp1 = sqrt( (x-start[1,]$x)^2 + (y-start[1,]$y)^2 ),
+                grp2 = sqrt( (x-start[2,]$x)^2 + (y-start[2,]$y)^2 ),
+                grp3 = sqrt( (x-start[3,]$x)^2 + (y-start[3,]$y)^2 )) 
+
+df1 <- cbind(df,  d) %>%
+  mutate(id = row_number()) %>%
+  group_by(id) %>%
+  rowwise() %>% 
+  mutate(min = min(c_across(grp1:grp3))) %>%
+  ungroup() %>% 
+  mutate(group = case_when(grp1 == min ~ 1,
+                           grp2 == min ~ 2,
+                           grp3 == min ~ 3)) %>% 
+  group_by(group) %>% 
+  select(x, y, id, group) %>% 
+  mutate(y_c = mean(y), x_c = mean(x))  
 
 
-dist_oes <- dist(df_oes[,-1], method = "euclidian") # calculate distances 
 
-hc_oes <- hclust(dist_oes, method = "single")  # minste avstand
+ggplot(df1, aes(x=x, y = y, col = factor(group), shape = factor(group))) +
+  geom_point(size = 2) +
+  scale_shape_manual(values=c(17, 18, 15))+
+  geom_point(aes(x=x_c, y = y_c), col = "purple", shape = 19, size = 2)+
+  theme_minimal()+
+  theme(legend.position = "none")
+```
 
-hc_oes <- hclust(dist_oes, method = "complete") # lengste avstand
-
-hc_oes <- hclust(dist_oes, method = "average") #gjennomsnittlig avstand
-
-par(mar=c(10,4,2,2))  # Endre marginer for base-plot
-
-dend_oes <- as.dendrogram(hc_oes) #Create a dendrogram object
-dend_colored <- color_branches(dend_oes, h = 100000)
-plot(dend_colored)
-
-# Illustrer mulige cutoff - legger linjer oppå eksisterende plot
-abline(h=100000, col="red", lwd=1.5)  # Viser cut ved h=100000
-abline(h=10000, col="red", lwd=1.5)   # Viser cut ved h=10000
+Etter at hvert datapunkt er klassifisert til det "klusteret" de er nærmest, kan det så regnes det ut midtpunktet for hvert kluster. Dette midtpunktet er så utgangspunktet for neste runde med klassifisering: avstanden fra alle datapunkter til midtpunktet regnes ut og ny klassifisering til det klusteret datapunktet er nærmest. 
 
 
-# Henter ut cluster ved valgt h
-cluster <- cutree(hc_oes, h=100000)
-#cluster <- cutree(hc_oes, k=3)
-table(cluster)
+```{r}
+#| echo: false
+#| warning: false
+start <- df1 %>%
+  group_by(group) %>% 
+  summarise(x = mean(x), y = mean(y)) %>% 
+  select(x, y) 
+
+d <- data.frame(grp1 = sqrt( (x-start[1,]$x)^2 + (y-start[1,]$y)^2 ),
+                grp2 = sqrt( (x-start[2,]$x)^2 + (y-start[2,]$y)^2 ),
+                grp3 = sqrt( (x-start[3,]$x)^2 + (y-start[3,]$y)^2 )) 
 
 
-# Legger til vektoren cluster til opprinnelige data
-hclust_oes <- mutate(df_oes, cluster = cluster)
+df2 <- cbind(df1[,1:2],  d) %>% 
+  mutate(group = df1$group) %>% 
+  mutate(id = row_number()) %>%
+  group_by(id) %>%  
+  rowwise() %>% 
+  mutate(min = min(c(grp1, grp2, grp3))) %>%
+  ungroup() %>% 
+  mutate(group = case_when(grp1 == min ~ 1,
+                           grp2 == min ~ 2,
+                           grp3 == min ~ 3)) %>% 
+  group_by(group) %>% 
+  mutate(y_c = mean(y), x_c = mean(x))
 
-head(hclust_oes)
+ggplot(df2, aes(x=x, y = y, col = factor(group))) +
+  geom_point(size = 2) +
+  scale_shape_manual(values=c(17, 18, 15))+
+  geom_point(aes(x=x_c, y = y_c), col = "purple", shape = 19, size = 2)+
+  theme_minimal()+
+  theme(legend.position = "none")
+```
 
-# vrenger dataene "nedover" for å plotte
-gathered_oes <- gather(data = hclust_oes,    # datasett
-                       key = year,           # navn på ny variabel, verdier hentes fra gamle variabelnavn
-                       value = mean_salary,  # navn på ny variabel med gamle variabelverdier
-                       -occupation, -cluster) # variable som skal beholdes / grupperes etter
-ggplot(gathered_oes, aes(x = year, y = mean_salary, color = factor(cluster), group = occupation)) + 
-  geom_line()
+Etter ny klassifisering, regnes det så ut et nytt midtpunkt og vi gjør det hele en gang til: regner ut avstanden og klassifiserer til nærmeste.  
+
+
+```{r}
+#| echo: false
+#| warning: false
+start <- df2 %>%
+  group_by(group) %>% 
+  summarise(x = mean(x), y = mean(y)) %>% 
+  select(x, y) 
+
+
+d <- data.frame(grp1 = sqrt( (x-start[1,]$x)^2 + (y-start[1,]$y)^2 ),
+                grp2 = sqrt( (x-start[2,]$x)^2 + (y-start[2,]$y)^2 ),
+                grp3 = sqrt( (x-start[3,]$x)^2 + (y-start[3,]$y)^2 )) 
+ 
+df3 <- cbind(df2[,1:2],  d) %>% 
+  mutate(group = df2$group) %>% 
+  mutate(id = row_number()) %>%
+  group_by(id) %>%  
+  rowwise() %>% 
+  mutate(min = min(c(grp1, grp2, grp3))) %>%
+  ungroup() %>% 
+  mutate(group = case_when(grp1 == min ~ 1,
+                           grp2 == min ~ 2,
+                           grp3 == min ~ 3)) %>% 
+  group_by(group) %>% 
+  mutate(y_c = mean(y), x_c = mean(x))
+
+ggplot(df3, aes(x=x, y = y, col = factor(group))) +
+  geom_point(size = 2) +
+  scale_shape_manual(values=c(17, 18, 15))+
+  geom_point(aes(x=x_c, y = y_c), col = "purple", shape = 19, size = 2)+
+  theme_minimal()+
+  theme(legend.position = "none")
+```
+
+Et nytt midtpunkt regnes ut og vi gjør det hele enda en gang.
+
+```{r}
+#| echo: false
+#| warning: false
+start <- df3 %>%
+  group_by(group) %>% 
+  summarise(x = mean(x), y = mean(y)) %>% 
+  select(x, y) 
+
+d <- data.frame(grp1 = sqrt( (x-start[1,]$x)^2 + (y-start[1,]$y)^2 ),
+                grp2 = sqrt( (x-start[2,]$x)^2 + (y-start[2,]$y)^2 ),
+                grp3 = sqrt( (x-start[3,]$x)^2 + (y-start[3,]$y)^2 )) 
+df4 <- cbind(df3[,1:2],  d) %>% 
+  mutate(group = df3$group) %>% 
+  mutate(id = row_number()) %>%
+  group_by(id) %>%  
+  rowwise() %>% 
+  mutate(min = min(c(grp1, grp2, grp3))) %>%
+  ungroup() %>% 
+  mutate(group = case_when(grp1 == min ~ 1,
+                           grp2 == min ~ 2,
+                           grp3 == min ~ 3)) %>% 
+  group_by(group) %>% 
+  mutate(y_c = mean(y), x_c = mean(x))
+
+
+ggplot(df4, aes(x=x, y = y, col = factor(group))) +
+  geom_point(size = 2) +
+  scale_shape_manual(values=c(17, 18, 15))+
+  geom_point(aes(x=x_c, y = y_c), col = "purple", shape = 19, size = 2)+
+  theme_minimal()+
+  theme(legend.position = "none")
 
 ```
 
+Merk nå at i siste runde var det ingen av punktene som byttet kluster. Da avsluttes algoritmen og alle punkter er klassifisert etter hvilket kluster de er mest lik de andre punktene. 
+
+I dette eksempelet er klusterne tydelig separert og det er forholdsvis lett å gjøre klassifiseringen. I andre tilfeller er det ikke nødvendigvis like greit, og det må langt flere iterasjoner til før det landes på en løsning. 
+
+Det er verd å merke seg at startpunktet (altså de tre tilfeldige punktene) kan ha betydning for løsningen. Det er derfor vanlig at software tester ut flere startverdier og velger den løsningen som passer best. 
 
 
 
 
 
-
-
-
-
-:::
-
-## K-means klustering 
 
 ::: {#exr-}
 Gjenta analysen over med k-means clustering. Hvor mange klustre bør det være? Får du samme 
@@ -172,7 +295,196 @@ ggplot(gathered_kmoes, aes(x = year, y = mean_salary, color = factor(cluster), g
 
 
 
+## Hierarkisk klustering 
+
+
+::: {#exr-}
+Last ned filen krim2016.RData fra Canvas. 
+Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt 
+kriminalitet per 1000 innbyggere i kommuner i 2016. 
+
+a) Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de 
+andre? Spiller det noen rolle hvilken type distance du setter? 
+a) Hvilke kommuner er de de klusterne som skiller seg ut? 
+a) Hva kjennetegner lovbruddsbildet i de ulike klustrene? Kan du tenke deg noen grunner til at akkurat disse stikker seg ut?
+ 
+:::
+
+
+::: {.solution}
+Leser inn data om inntektsutvikling for ulike yrker fra 2001 til 2016
+
+Dataene er i "bred" format. Det er slik vi vil ha det for clusteranalyse, men dårlig for å lage en graf.
+
+::: {.content-hidden when-format="pdf"}
+
+
+
+```{r}
+#| echo: false
+#| warning: false
+library(downloadthis)
+load("../data/oes.RData")
+
+gathered_oes <- gather(data = df_oes, 
+                       key = year, 
+                       value = mean_salary, 
+                       -occupation)
+
+gathered_oes %>%
+  download_this(
+    output_name = "oes dataset",
+    output_extension = ".rds",
+    button_label = "Download data as rds",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+
+:::
+
+
+
+```{r}
+load("../data/oes.RData")
+
+gathered_oes <- gather(data = df_oes, 
+                       key = year, 
+                       value = mean_salary, 
+                       -occupation)
+```
+
+
+
+
+
+```{r}
+ggplot(gathered_oes, aes(x=as.numeric(year), y=mean_salary, col = occupation))+
+  geom_line()
+
+
+dist_oes <- dist(df_oes[,-1], method = "euclidian") # calculate distances 
+
+hc_oes <- hclust(dist_oes, method = "single")  # minste avstand
+
+hc_oes <- hclust(dist_oes, method = "complete") # lengste avstand
+
+hc_oes <- hclust(dist_oes, method = "average") #gjennomsnittlig avstand
+
+par(mar=c(10,4,2,2))  # Endre marginer for base-plot
+
+dend_oes <- as.dendrogram(hc_oes) #Create a dendrogram object
+dend_colored <- color_branches(dend_oes, h = 100000)
+plot(dend_colored)
+
+# Illustrer mulige cutoff - legger linjer oppå eksisterende plot
+abline(h=100000, col="red", lwd=1.5)  # Viser cut ved h=100000
+abline(h=10000, col="red", lwd=1.5)   # Viser cut ved h=10000
+
+
+# Henter ut cluster ved valgt h
+cluster <- cutree(hc_oes, h=100000)
+#cluster <- cutree(hc_oes, k=3)
+table(cluster)
+
+
+# Legger til vektoren cluster til opprinnelige data
+hclust_oes <- mutate(df_oes, cluster = cluster)
+
+head(hclust_oes)
+
+# vrenger dataene "nedover" for å plotte
+gathered_oes <- gather(data = hclust_oes,    # datasett
+                       key = year,           # navn på ny variabel, verdier hentes fra gamle variabelnavn
+                       value = mean_salary,  # navn på ny variabel med gamle variabelverdier
+                       -occupation, -cluster) # variable som skal beholdes / grupperes etter
+ggplot(gathered_oes, aes(x = year, y = mean_salary, color = factor(cluster), group = occupation)) + 
+  geom_line()
+
+```
+
+
+
+:::
+
+
 ## Datareduksjon med principal component analysis (PCA)
+
+
+
+Vi starter med datasettet for kriminalitet i norske kommuner. 
+
+```{r}
+kommune <- readRDS( "data/kommunedata.rds") %>% 
+  filter(year == max(year)) %>% 
+  #select(-c(1,3))
+  select(2, vinningskriminalitet:andre_lovbrudd) 
+
+glimpse(kommune)
+
+
+```
+
+Så et lite triks som ikke er viktig for resultatet som sådan, men hjelper å holde orden på dataene. Vi er kjent med at kolonnene i et datasett har navn: altså variabelnavn. Men i R kan også *radene* ha navn. Det er ikke like vanlig å bruke til noe spesielt, men her er det nyttig å ta det med seg.  
+
+```{r}
+row.names(kommune) <- kommune[,1]
+
+```
+
+Så kan vi kjøre en principal component analyse. Det er her viktig å sette `scale = TRUE`. Dette gjør at dataene re-skaleres til en z-skår med gjennomsnitt 0 og standardavvik 1. Det skal veldig gode grunner for å gjøre noe annet, så gjør alltid dette.   
+
+```{r}
+library(stats)
+pr_komm <- prcomp(kommune[,-1], scale = TRUE, center = TRUE)
+
+summary(pr_komm)
+mean(kommune$vinningskriminalitet)
+
+
+pr_komm$center
+
+```
+
+```{r}
+pvar <- pr_komm$sdev^2 
+pve <- pvar/sum(pvar)
+
+
+plot(1:6, pve, )
+
+dt <- data.frame(components = 1:length(pve), prop_var_expl = pve)
+
+ggplot(dt, aes(x = components, y = prop_var_expl))+ 
+  geom_line()+
+  geom_point()
+ 
+
+```
+
+
+
+Da kan resultatene vises grafisk som følger. 
+
+```{r}
+biplot(pr_komm, cex = .3)
+```
+
+
+
+```{r}
+kommune_scale <- kommune %>% 
+  mutate(across(where(is.numeric), scale)) 
+glimpse(kommune_scale)
+```
+
+
+```{r}
+
+
+```
 
 
 

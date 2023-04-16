@@ -227,7 +227,6 @@ acc[[2]]
 ## Justere rettferdighet med vekting
 Vi har allerede sett at vi kan justere algoritmen for asymetriske kostnader ved å vekte utfallet forskjellig. Vi kan også justere slik at vi også vekter opp undergrupper. Igjen er det ikke helt åpenbart hvordan det vil slå ut å vekte en gruppe opp eller ned, så det må vi sjekke. 
 
-La oss først 
 
 Her er en kode for å lage vekter og legger den vekten inn i `gbm`. Tanken i koden her er å først angi vektingen for kostnader og undergrupper hver for seg, og så legge disse til per person i datasettet. 
 
