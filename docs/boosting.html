@@ -495,12 +495,12 @@ Residual Standard Error: 2.048e-06 </code></pre>
 <h2 data-number="9.4" class="anchored" data-anchor-id="asymetriske-kostnader"><span class="header-section-number">9.4</span> Asymetriske kostnader</h2>
 <p>Vi har det vanlige problemet med å vurdere om falske positive og falske negative er like problematisk. Igjen er det slik at den vurderingen krever en vurdering av utfallet man ønsker gjøre noe med og konsekvensene av tiltaket som skal iverksettes. For credit-dataene kan det jo være at noen ikke vurderes som kredittverdige.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>For å håndtere asymetriske kostnader kan vi vekte utfallene forskjellig og angi denne vekten i prosedyren. Argumentet <code>weights = ...</code> tar en vektor med verdier (ét tall for hver observasjon i dataene) og skal ikke være en del av datasettet.</p>
-<p>Her er et eksempel der falske positive tillegges 3 ganger så mye vekt som falske negative.</p>
+<p>Her er et eksempel der falske positive tillegges 2 ganger så mye vekt som falske negative.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>wts <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wts =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span>   <span class="co"># se begrunnelse s. 277 i Berk </span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wts =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span>   <span class="co"># se begrunnelse s. 274 i Berk </span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(wts)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">542</span>)</span>
@@ -2111,12 +2111,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb35-178"><a href="#cb35-178" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-179"><a href="#cb35-179" aria-hidden="true" tabindex="-1"></a>For å håndtere asymetriske kostnader kan vi vekte utfallene forskjellig og angi denne vekten i prosedyren. Argumentet <span class="in">`weights = ...`</span> tar en vektor med verdier (ét tall for hver observasjon i dataene) og skal ikke være en del av datasettet. </span>
 <span id="cb35-180"><a href="#cb35-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-181"><a href="#cb35-181" aria-hidden="true" tabindex="-1"></a>Her er et eksempel der falske positive tillegges 3 ganger så mye vekt som falske negative.  </span>
+<span id="cb35-181"><a href="#cb35-181" aria-hidden="true" tabindex="-1"></a>Her er et eksempel der falske positive tillegges 2 ganger så mye vekt som falske negative.  </span>
 <span id="cb35-182"><a href="#cb35-182" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-183"><a href="#cb35-183" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-186"><a href="#cb35-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb35-187"><a href="#cb35-187" aria-hidden="true" tabindex="-1"></a>wts <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
-<span id="cb35-188"><a href="#cb35-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wts =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span>   <span class="co"># se begrunnelse s. 277 i Berk </span></span>
+<span id="cb35-188"><a href="#cb35-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wts =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span>   <span class="co"># se begrunnelse s. 274 i Berk </span></span>
 <span id="cb35-189"><a href="#cb35-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(wts)</span>
 <span id="cb35-190"><a href="#cb35-190" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-191"><a href="#cb35-191" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">542</span>)</span>

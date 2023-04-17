@@ -158,12 +158,12 @@ Vi har det vanlige problemet med å vurdere om falske positive og falske negativ
 
 For å håndtere asymetriske kostnader kan vi vekte utfallene forskjellig og angi denne vekten i prosedyren. Argumentet `weights = ...` tar en vektor med verdier (ét tall for hver observasjon i dataene) og skal ikke være en del av datasettet. 
 
-Her er et eksempel der falske positive tillegges 3 ganger så mye vekt som falske negative.  
+Her er et eksempel der falske positive tillegges 2 ganger så mye vekt som falske negative.  
 
 
 ```{r}
 wts <- training %>% 
-  mutate(wts = ifelse(Two_yr_Recidivism == 1, 1, 2)) %>%   # se begrunnelse s. 277 i Berk 
+  mutate(wts = ifelse(Two_yr_Recidivism == 1, 1, 2)) %>%   # se begrunnelse s. 274 i Berk 
   pull(wts)
 
 set.seed(542)

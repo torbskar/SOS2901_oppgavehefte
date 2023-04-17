@@ -256,7 +256,7 @@ Tja. Hvis du har en god tanke om hvor mange klustre du trenger, så er jo saken 
 
 I praksis betyr det at man tilpasser modellen flere ganger, med trinnvis flere klustre. Så kan man sammenligne "within total sum of squares". 
 
-Den etterfølgende koden gjør dette. Den er litt krøkete, dessverre da den innebærer å skrive en loop.^[Det er sikkert greit for de av dere som har lært en god del R tidligere. Ikke like greit for dere andre. ] Her er i hvert fall full kode. 
+Den etterfølgende koden gjør dette. Den er litt krøkete, dessverre da den innebærer å skrive en loop.^[Det er muligens greit for de av dere som har lært en god del R tidligere. Ikke like greit for dere andre. ] Her er i hvert fall full kode. 
 
 ```{r}
 wss <- 0
