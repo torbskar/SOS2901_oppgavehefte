@@ -286,6 +286,8 @@ Det er nok vanligst å klustre ulike variable. Men hvis variablene innholder ver
 
 ## Hierarkisk klustering 
 
+**OBS!** *Som dere ser er ikke denne delen tilstrekkelig gjennomarbeidet i tide til at det er til veldig mye hjelp for dere før eksamen. Legg derfor vekt på k-means og PCA. Men ta en titt på pensumet likevel slik at dere kjenner litt til hva dette er.*
+
 
 ::: {#exr-}
 Last ned filen med kommunedata fra Canvas. 
