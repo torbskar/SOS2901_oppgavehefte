@@ -229,7 +229,25 @@ Det er verd å merke seg at startpunktet (altså de tre tilfeldige punktene) kan
 
 
 
+
 ### K-means med `kmeans()` 
+
+
+```{r}
+head(df)
+library(downloadthis)
+df %>%
+  download_this(
+    output_name = "df dataset",
+    output_extension = ".rds",
+    button_label = "Download data as rds",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+
+
 
 Heldigvis er det en funksjon som fikser hele saken for oss. Funksjonen `kmeans()` trenger primært tre imput: de dataene som skal klustres, antall klustere, og antall tilfeldige startverdier. Antall klustre må vi altså bestemme selv. 
 
