@@ -158,8 +158,9 @@ Vi har det vanlige problemet med å vurdere om falske positive og falske negativ
 
 For å håndtere asymetriske kostnader kan vi vekte utfallene forskjellig og angi denne vekten i prosedyren. Argumentet `weights = ...` tar en vektor med verdier (ét tall for hver observasjon i dataene) og skal ikke være en del av datasettet. 
 
-Her er et eksempel der falske positive tillegges 2 ganger så mye vekt som falske negative.  
+Her er et eksempel der positive tillegges 2 ganger så mye vekt som negative i modellen. Når utfallene vektes ulikt i modellen vil det dermed slå ut på feilratene slik at det blir ulikt forhold for falske postive og falske negative (se mer i Berk kap. 6.4 og eksempel s. 277). 
 
+Vær obs på at det er ikke så lett å vite helt hvordan slik vekting slår ut på resultatene. Det er ikke et 1-til-1 forhold mellom vekting og feilrater. Som i annen justering kan dette gå ut over accuracy og andre mål, så det er vanligvis en trade-off her. Du må derfor sjekke resultatene og så evt. gå tilbake og justere vektene hvis det ikke ble slik du ønsket. 
 
 ```{r}
 wts <- training %>% 
