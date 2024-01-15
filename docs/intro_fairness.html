@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,9 +17,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -46,48 +47,19 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -101,8 +73,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -139,7 +110,8 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -150,11 +122,16 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro_fairness.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -162,95 +139,110 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">SOS2901 Maskinlæring for samfunnsvitere</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduksjon</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduksjon</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./introduksjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduksjon til maskinlæring</span></a>
+  <a href="./introduksjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduksjon til maskinlæring</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></a>
+  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></a>
+  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></a>
+  <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./cart.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></a>
+  <a href="./cart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./bagging.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></a>
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bagging</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./randomForest.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></a>
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Random forest</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fairness.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></a>
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></a>
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></a>
+  <a href="./unsupervised.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Unsupervised learning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./datasets.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Datasett</span></a>
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Datasett</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./introduksjon_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Introduksjon til R</span></a>
+  <a href="./introduksjon_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Introduksjon til R</span></span></a>
   </div>
 </li>
       </ul>
@@ -258,23 +250,24 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#hva-slags-rettferdighet" id="toc-hva-slags-rettferdighet" class="nav-link active" data-scroll-target="#hva-slags-rettferdighet"><span class="toc-section-number">4.1</span>  Hva slags rettferdighet</a></li>
-  <li><a href="#mer-confusion-matrix" id="toc-mer-confusion-matrix" class="nav-link" data-scroll-target="#mer-confusion-matrix"><span class="toc-section-number">4.2</span>  Mer confusion matrix</a></li>
-  <li><a href="#mål-på-fairness" id="toc-mål-på-fairness" class="nav-link" data-scroll-target="#mål-på-fairness"><span class="toc-section-number">4.3</span>  Mål på fairness</a>
+  <li><a href="#hva-slags-rettferdighet" id="toc-hva-slags-rettferdighet" class="nav-link active" data-scroll-target="#hva-slags-rettferdighet"><span class="header-section-number">4.1</span> Hva slags rettferdighet</a></li>
+  <li><a href="#mer-confusion-matrix" id="toc-mer-confusion-matrix" class="nav-link" data-scroll-target="#mer-confusion-matrix"><span class="header-section-number">4.2</span> Mer confusion matrix</a></li>
+  <li><a href="#mål-på-fairness" id="toc-mål-på-fairness" class="nav-link" data-scroll-target="#mål-på-fairness"><span class="header-section-number">4.3</span> Mål på fairness</a>
   <ul class="collapse">
-  <li><a href="#predictive-rate-parity" id="toc-predictive-rate-parity" class="nav-link" data-scroll-target="#predictive-rate-parity"><span class="toc-section-number">4.3.1</span>  Predictive rate parity</a></li>
-  <li><a href="#equalized-odds" id="toc-equalized-odds" class="nav-link" data-scroll-target="#equalized-odds"><span class="toc-section-number">4.3.2</span>  Equalized odds</a></li>
-  <li><a href="#false-positive-rate-parity" id="toc-false-positive-rate-parity" class="nav-link" data-scroll-target="#false-positive-rate-parity"><span class="toc-section-number">4.3.3</span>  False positive rate parity</a></li>
+  <li><a href="#predictive-rate-parity" id="toc-predictive-rate-parity" class="nav-link" data-scroll-target="#predictive-rate-parity"><span class="header-section-number">4.3.1</span> Predictive rate parity</a></li>
+  <li><a href="#equalized-odds" id="toc-equalized-odds" class="nav-link" data-scroll-target="#equalized-odds"><span class="header-section-number">4.3.2</span> Equalized odds</a></li>
+  <li><a href="#false-positive-rate-parity" id="toc-false-positive-rate-parity" class="nav-link" data-scroll-target="#false-positive-rate-parity"><span class="header-section-number">4.3.3</span> False positive rate parity</a></li>
   </ul></li>
-  <li><a href="#litt-oppsummerende" id="toc-litt-oppsummerende" class="nav-link" data-scroll-target="#litt-oppsummerende"><span class="toc-section-number">4.4</span>  Litt oppsummerende</a></li>
-  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="toc-section-number">4.5</span>  Oppgaver</a></li>
-  <li><a href="#refleksjonsoppgaver" id="toc-refleksjonsoppgaver" class="nav-link" data-scroll-target="#refleksjonsoppgaver"><span class="toc-section-number">4.6</span>  Refleksjonsoppgaver</a></li>
+  <li><a href="#litt-oppsummerende" id="toc-litt-oppsummerende" class="nav-link" data-scroll-target="#litt-oppsummerende"><span class="header-section-number">4.4</span> Litt oppsummerende</a></li>
+  <li><a href="#oppgaver" id="toc-oppgaver" class="nav-link" data-scroll-target="#oppgaver"><span class="header-section-number">4.5</span> Oppgaver</a></li>
+  <li><a href="#refleksjonsoppgaver" id="toc-refleksjonsoppgaver" class="nav-link" data-scroll-target="#refleksjonsoppgaver"><span class="header-section-number">4.6</span> Refleksjonsoppgaver</a></li>
   </ul>
 </nav>
     </div>
@@ -283,7 +276,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -305,9 +298,6 @@ div.csl-indent {
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># Funksjonen confusionMatrix()</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairness)    <span class="co"># Beregne mål på fairness</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
-
-</div>
 <p>Det kan være nyttig å allerede såpass tidlig i kurset begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer <em>tune</em> modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.</p>
 <section id="hva-slags-rettferdighet" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="hva-slags-rettferdighet"><span class="header-section-number">4.1</span> Hva slags rettferdighet</h2>
@@ -327,11 +317,8 @@ div.csl-indent {
 <p>Et utgangspunkt er det vi kaller confusion matrix. Det er rett og slett en krysstabell der vi sammenholder predikert og observert utfall. Å lage en slik tabell avhenger ikke av metoden vi bruker, bare at vi kan sammenlignet prediksjon med faktisk utfall.</p>
 <p>Vi bruker eksempelet fra forrige kapittel med logistisk regresjon.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>est_multlogit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Attrition <span class="sc">~</span> ., <span class="at">data =</span> training, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_multlogit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -403,21 +390,15 @@ Number of Fisher Scoring iterations: 15</code></pre>
 </div>
 <p>Så kan vi gjøre en prediksjon på testing-datasettet og lagre resultatet i et nytt objekt. Vi gjør en klassifisering ved å bestemme en cut-off på f.eks. en sannsynligheten over 50%.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>attrition_test <span class="ot">&lt;-</span> testing <span class="sc">%&gt;%</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">predict</span>(est_multlogit, <span class="at">newdata =</span> testing, <span class="at">type =</span> <span class="st">"response"</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">attrition_class =</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(prob <span class="sc">&lt;</span> .<span class="dv">5</span>, <span class="st">"No"</span>, <span class="st">"Yes"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>Så kan vi lage confusion matrix som følger. Vi bruker funksjonen <code>confusionMatrix()</code> for at diverse mål skal blir regnet ut automatisk for oss, men du kan godt regne ut dette for hånd også (hvis du gidder).</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cm <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(attrition_test<span class="sc">$</span>Attrition, attrition_test<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>cm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -468,7 +449,7 @@ Prediction  No Yes
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-:where(#flodjiauip) .gt_table {
+#flodjiauip .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -493,7 +474,7 @@ Prediction  No Yes
   border-left-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_heading {
+#flodjiauip .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -505,12 +486,12 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_caption {
+#flodjiauip .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-:where(#flodjiauip) .gt_title {
+#flodjiauip .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -522,7 +503,7 @@ Prediction  No Yes
   border-bottom-width: 0;
 }
 
-:where(#flodjiauip) .gt_subtitle {
+#flodjiauip .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -534,13 +515,13 @@ Prediction  No Yes
   border-top-width: 0;
 }
 
-:where(#flodjiauip) .gt_bottom_border {
+#flodjiauip .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_col_headings {
+#flodjiauip .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -555,7 +536,7 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_col_heading {
+#flodjiauip .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -575,7 +556,7 @@ Prediction  No Yes
   overflow-x: hidden;
 }
 
-:where(#flodjiauip) .gt_column_spanner_outer {
+#flodjiauip .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -587,15 +568,15 @@ Prediction  No Yes
   padding-right: 4px;
 }
 
-:where(#flodjiauip) .gt_column_spanner_outer:first-child {
+#flodjiauip .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-:where(#flodjiauip) .gt_column_spanner_outer:last-child {
+#flodjiauip .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-:where(#flodjiauip) .gt_column_spanner {
+#flodjiauip .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -607,7 +588,7 @@ Prediction  No Yes
   width: 100%;
 }
 
-:where(#flodjiauip) .gt_group_heading {
+#flodjiauip .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -633,7 +614,7 @@ Prediction  No Yes
   text-align: left;
 }
 
-:where(#flodjiauip) .gt_empty_group_heading {
+#flodjiauip .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -648,15 +629,15 @@ Prediction  No Yes
   vertical-align: middle;
 }
 
-:where(#flodjiauip) .gt_from_md > :first-child {
+#flodjiauip .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-:where(#flodjiauip) .gt_from_md > :last-child {
+#flodjiauip .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-:where(#flodjiauip) .gt_row {
+#flodjiauip .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -675,7 +656,7 @@ Prediction  No Yes
   overflow-x: hidden;
 }
 
-:where(#flodjiauip) .gt_stub {
+#flodjiauip .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -688,7 +669,7 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#flodjiauip) .gt_stub_row_group {
+#flodjiauip .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -702,11 +683,11 @@ Prediction  No Yes
   vertical-align: top;
 }
 
-:where(#flodjiauip) .gt_row_group_first td {
+#flodjiauip .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-:where(#flodjiauip) .gt_summary_row {
+#flodjiauip .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -716,16 +697,16 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#flodjiauip) .gt_first_summary_row {
+#flodjiauip .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_first_summary_row.thick {
+#flodjiauip .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-:where(#flodjiauip) .gt_last_summary_row {
+#flodjiauip .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -735,7 +716,7 @@ Prediction  No Yes
   border-bottom-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_grand_summary_row {
+#flodjiauip .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -745,7 +726,7 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#flodjiauip) .gt_first_grand_summary_row {
+#flodjiauip .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -755,11 +736,11 @@ Prediction  No Yes
   border-top-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_striped {
+#flodjiauip .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-:where(#flodjiauip) .gt_table_body {
+#flodjiauip .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -768,7 +749,7 @@ Prediction  No Yes
   border-bottom-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_footnotes {
+#flodjiauip .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -782,7 +763,7 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_footnote {
+#flodjiauip .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -791,7 +772,7 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#flodjiauip) .gt_sourcenotes {
+#flodjiauip .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -805,7 +786,7 @@ Prediction  No Yes
   border-right-color: #D3D3D3;
 }
 
-:where(#flodjiauip) .gt_sourcenote {
+#flodjiauip .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -813,133 +794,151 @@ Prediction  No Yes
   padding-right: 5px;
 }
 
-:where(#flodjiauip) .gt_left {
+#flodjiauip .gt_left {
   text-align: left;
 }
 
-:where(#flodjiauip) .gt_center {
+#flodjiauip .gt_center {
   text-align: center;
 }
 
-:where(#flodjiauip) .gt_right {
+#flodjiauip .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-:where(#flodjiauip) .gt_font_normal {
+#flodjiauip .gt_font_normal {
   font-weight: normal;
 }
 
-:where(#flodjiauip) .gt_font_bold {
+#flodjiauip .gt_font_bold {
   font-weight: bold;
 }
 
-:where(#flodjiauip) .gt_font_italic {
+#flodjiauip .gt_font_italic {
   font-style: italic;
 }
 
-:where(#flodjiauip) .gt_super {
+#flodjiauip .gt_super {
   font-size: 65%;
 }
 
-:where(#flodjiauip) .gt_footnote_marks {
+#flodjiauip .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-:where(#flodjiauip) .gt_asterisk {
+#flodjiauip .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-:where(#flodjiauip) .gt_indent_1 {
+#flodjiauip .gt_indent_1 {
   text-indent: 5px;
 }
 
-:where(#flodjiauip) .gt_indent_2 {
+#flodjiauip .gt_indent_2 {
   text-indent: 10px;
 }
 
-:where(#flodjiauip) .gt_indent_3 {
+#flodjiauip .gt_indent_3 {
   text-indent: 15px;
 }
 
-:where(#flodjiauip) .gt_indent_4 {
+#flodjiauip .gt_indent_4 {
   text-indent: 20px;
 }
 
-:where(#flodjiauip) .gt_indent_5 {
+#flodjiauip .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table">
-  
-  <thead class="gt_col_headings">
-    <tr>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 368<sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>Overall</strong>, N = 368<sup class="gt_footnote_marks">1</sup></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>No</strong>, N = 300<sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>No</strong>, N = 300<sup class="gt_footnote_marks">1</sup></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Yes</strong>, N = 68<sup class=&quot;gt_footnote_marks&quot;>1</sup>"><strong>Yes</strong>, N = 68<sup class="gt_footnote_marks">1</sup></th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">JobRole</td>
-<td headers="stat_0" class="gt_row gt_center"></td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Healthcare Representative</td>
-<td headers="stat_0" class="gt_row gt_center">32 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">31 (97%)</td>
-<td headers="stat_2" class="gt_row gt_center">1 (3.1%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Human Resources</td>
-<td headers="stat_0" class="gt_row gt_center">14 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">11 (79%)</td>
-<td headers="stat_2" class="gt_row gt_center">3 (21%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Laboratory Technician</td>
-<td headers="stat_0" class="gt_row gt_center">64 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">47 (73%)</td>
-<td headers="stat_2" class="gt_row gt_center">17 (27%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Manager</td>
-<td headers="stat_0" class="gt_row gt_center">27 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">24 (89%)</td>
-<td headers="stat_2" class="gt_row gt_center">3 (11%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Manufacturing Director</td>
-<td headers="stat_0" class="gt_row gt_center">32 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">29 (91%)</td>
-<td headers="stat_2" class="gt_row gt_center">3 (9.4%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Research Director</td>
-<td headers="stat_0" class="gt_row gt_center">18 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">17 (94%)</td>
-<td headers="stat_2" class="gt_row gt_center">1 (5.6%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Research Scientist</td>
-<td headers="stat_0" class="gt_row gt_center">77 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">59 (77%)</td>
-<td headers="stat_2" class="gt_row gt_center">18 (23%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sales Executive</td>
-<td headers="stat_0" class="gt_row gt_center">84 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">70 (83%)</td>
-<td headers="stat_2" class="gt_row gt_center">14 (17%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sales Representative</td>
-<td headers="stat_0" class="gt_row gt_center">20 (100%)</td>
-<td headers="stat_1" class="gt_row gt_center">12 (60%)</td>
-<td headers="stat_2" class="gt_row gt_center">8 (40%)</td></tr>
-  </tbody>
-  
-  <tfoot class="gt_footnotes">
-    <tr>
-      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> n (%)</td>
-    </tr>
-  </tfoot>
+
+<table class="gt_table table table-sm table-striped small" data-quarto-postprocess="true">
+<thead class="gt_col_headings">
+<tr class="header">
+<th id="<strong>Characteristic</strong>" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th id="<strong>Overall</strong>, N = 368<sup class=&quot;gt_footnote_marks&quot;>1</sup>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Overall</strong>, N = 368<sup>1</sup></th>
+<th id="<strong>No</strong>, N = 300<sup class=&quot;gt_footnote_marks&quot;>1</sup>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>No</strong>, N = 300<sup>1</sup></th>
+<th id="<strong>Yes</strong>, N = 68<sup class=&quot;gt_footnote_marks&quot;>1</sup>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Yes</strong>, N = 68<sup>1</sup></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">JobRole</td>
+<td class="gt_row gt_center" headers="stat_0"></td>
+<td class="gt_row gt_center" headers="stat_1"></td>
+<td class="gt_row gt_center" headers="stat_2"></td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Healthcare Representative</td>
+<td class="gt_row gt_center" headers="stat_0">32 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">31 (97%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (3.1%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Human Resources</td>
+<td class="gt_row gt_center" headers="stat_0">14 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">11 (79%)</td>
+<td class="gt_row gt_center" headers="stat_2">3 (21%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Laboratory Technician</td>
+<td class="gt_row gt_center" headers="stat_0">64 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">47 (73%)</td>
+<td class="gt_row gt_center" headers="stat_2">17 (27%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Manager</td>
+<td class="gt_row gt_center" headers="stat_0">27 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">24 (89%)</td>
+<td class="gt_row gt_center" headers="stat_2">3 (11%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Manufacturing Director</td>
+<td class="gt_row gt_center" headers="stat_0">32 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">29 (91%)</td>
+<td class="gt_row gt_center" headers="stat_2">3 (9.4%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Research Director</td>
+<td class="gt_row gt_center" headers="stat_0">18 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">17 (94%)</td>
+<td class="gt_row gt_center" headers="stat_2">1 (5.6%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Research Scientist</td>
+<td class="gt_row gt_center" headers="stat_0">77 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">59 (77%)</td>
+<td class="gt_row gt_center" headers="stat_2">18 (23%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Sales Executive</td>
+<td class="gt_row gt_center" headers="stat_0">84 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">70 (83%)</td>
+<td class="gt_row gt_center" headers="stat_2">14 (17%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Sales Representative</td>
+<td class="gt_row gt_center" headers="stat_0">20 (100%)</td>
+<td class="gt_row gt_center" headers="stat_1">12 (60%)</td>
+<td class="gt_row gt_center" headers="stat_2">8 (40%)</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="4" class="gt_footnote"><sup>1</sup> n (%)</td>
+</tr>
+</tfoot>
+
 </table>
+
 </div>
 </div>
 </div>
 <p>For illustrasjonens skyld kan vi da dele inn datamaterialet i to deler: lab-teknikkere og resten. For hver gruppe kan vi så lage en confusion matrix og undersøke verdiene.</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>labTech <span class="ot">&lt;-</span> attrition_test <span class="sc">%&gt;%</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(JobRole <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Laboratory Technician"</span>))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -951,7 +950,6 @@ Prediction  No Yes
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>cm2 <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(others<span class="sc">$</span>Attrition, others<span class="sc">$</span>attrition_class, <span class="at">positive =</span> <span class="st">"Yes"</span>)</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>cm1 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -981,10 +979,7 @@ Prediction No Yes
        'Positive' Class : Yes            
                                          </code></pre>
 </div>
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cm2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -1020,15 +1015,12 @@ Prediction  No Yes
 <p>Men hvis du sjekker output fra confusionMatrix ovenfor, så er jo ikke alle tallene like. Så det kommer an på hvilke mål du sammenligner.</p>
 <p>Pakken <em>fairness</em> gjør en tilsvarende beregning for deg og kan gi resultatet grafisk. Her er sammenligning av positive predicted value gjort for alle grupper av jobber:</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_rate_parity</span>(<span class="at">data =</span> attrition_test,</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$Metric
                        Laboratory Technician Healthcare Representative
@@ -1066,15 +1058,12 @@ $Metric_plot</code></pre>
 <p>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter.</p>
 <p>(I følgende kode er det lagt på [[2]] på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den dele av koden er ikke viktig).</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">equal_odds</span>(<span class="at">data =</span> attrition_test,</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="intro_fairness_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -1084,15 +1073,12 @@ $Metric_plot</code></pre>
 <h3 data-number="4.3.3" class="anchored" data-anchor-id="false-positive-rate-parity"><span class="header-section-number">4.3.3</span> False positive rate parity</h3>
 <p>Er falske positive rate i ulike grupper lik?</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fpr_parity</span>(<span class="at">data =</span> attrition_test,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="intro_fairness_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -1154,11 +1140,11 @@ $Metric_plot</code></pre>
 
 <!-- -->
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-berk2016b" class="csl-entry" role="doc-biblioentry">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-berk2016b" class="csl-entry" role="listitem">
 Berk, Richard A., Susan B. Sorenson, and Geoffrey Barnes. 2016. <span>“Forecasting Domestic Violence: A Machine Learning Approach to Help Inform Arraignment Decisions.”</span> <em>Journal of Empirical Legal Studies</em> 13: 94–115. <a href="https://doi.org/10.1111/jels.12098">https://doi.org/10.1111/jels.12098</a>.
 </div>
-<div id="ref-caspi2017" class="csl-entry" role="doc-biblioentry">
+<div id="ref-caspi2017" class="csl-entry" role="listitem">
 Caspi, Avshalom, Renate M. Houts, Daniel W. Belsky, Honalee Harrington, Sean Hogan, Sandhya Ramrakha, Richie Poulton, and Terrie E. Moffitt. 2017. <span>“Childhood Forecasting of a Small Segment of the Population with Large Economic Burden.”</span> <em>Nature Human Behavior</em> 1 (5): 223–40. https://doi.org/<a href="https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005">https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005</a>.
 </div>
 </div>
@@ -1198,9 +1184,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1316,6 +1316,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {

@@ -8,6 +8,9 @@ I dette kapittelt skal vi bruke følgende pakker:
 #| echo: true
 #| warning: false 
 #| message: false
+
+invisible(Sys.setlocale(locale='no_NB.utf8'))
+
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
 library(skimr)       # funksjonen skim() for å se på data
 library(rsample)     # for å dele data i training og testing
@@ -111,10 +114,12 @@ Med andre ord kan voldsraten beskrives som:
 
 ```{r}
 #| echo: false
-library(equatiomatic)
-extract_eq(est, use_coefs = TRUE)
+# library(equatiomatic)
+# extract_eq(est, use_coefs = TRUE)
 ```
-
+$$
+\operatorname{\widehat{voldskriminalitet}} = 0.51 + 0.41(\operatorname{prop\_unge\_menn})
+$$
 
 Men vi har også sett at $r^2$ er ganske lav, bare `r round(summary(est)$r.squared, digits = 3)`. Denne koeffisienten kalles også "coefficient of determination" og sier noe om i hvor stor grad modellen fanger opp variasjoenen i dataene. En lav $r^2$ betyr at modellen i liten grad gjør det. Vi må altså forvente at modellen vil bomme ganske kraftig i sine prediksjoner. Vi kan velge å ta modellen seriøst likevel, men ikke ha for store forventninger for prediksjonene!
 

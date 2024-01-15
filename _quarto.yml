@@ -32,7 +32,7 @@ bibliography: references.bib
 format:
   html:
     theme: cosmo
-    code-fold: true
+    code-fold: false
     code-tools: true
   # pdf:
   #   documentclass: scrreprt
