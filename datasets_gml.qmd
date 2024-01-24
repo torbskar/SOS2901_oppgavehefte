@@ -1,0 +1,354 @@
+# Datasett
+
+I oppgavene kan man bruke ulike datasett og gjøre omtrent de samme operasjonene. Hvert kapittel innleder med et empirisk eksempel som illustrerer hvordan det gjøres i R. Det du må finne ut av er hva hver del av koden gjør utover de ganske korte forklaringene i teksten. 
+
+En foreslått arbeidsmåte er da at du først gjør de samme analysene i eksempelet og sørger for at du skjønner hvordan ting fungerer. Deretter velger du et annet datasett (av de nedenforstående) og gjør en tilsvarende analyse på det datasettet. Så kan du fortsette med nye datasett ettersom hva du har tid til. Å gjøre flere analyser med ulike datasett er en fin forberedelse til eksamen. 
+
+Husk at for hvert datasett er det ulike relevante problemstillinger som har betydning for hvordan du gjennomfører og tolker resultatet. Du må derfor ikke ta lett på tekstoppgavene! 
+
+
+## Innlesning av datasettene
+Disse datasettene er i litt annerledes i nedlastingsformatet enn i eksempel-koden. Filene som er i rds-format (filnavnet slutter på .rds) leses inn med funksjonen `readRDS()` og skal fungere slik de er. 
+
+De filene som er i csv-format (filnavnet slutter på .csv) er en tekstfil der kolonnene er markert med skilletegn.^[Du kan åpne en slik fil i en Notepad eller annet tekstprogram vil du se hvordan det ser ut.] Dette er typisk *komma*, men i nedlastningsformatet har dette blitt til *semikolon*. Det gjør at å lese inn med `read.csv()` ikke fungerer som forventet. Løsningen er å enten angi skilletegnet eksplisitt med `sep = ";"` eller bruke funksjonen `read.csv2()` i stedet for `read.csv()`. Her er eksempelkode: 
+
+
+```{r}
+#| eval: false
+attrition <- read.csv("data/attrition.csv", sep = ";")   # Angir skilletegnet eksplisitt
+
+attrition <- read.csv2("data/attrition.csv")             # Bruker en variant av samme funksjon der forvalget er semikolon
+
+```
+
+Alle datasettene er nå også gjort tilgjengelig i Canvas i to zip-mapper: 1) data i det formatet som ble brukt ved innlesning, og 2) alle i rds-format. 
+
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(downloadthis)
+```
+
+
+I disse oppgavene skal vi bruke flere forskjellige datasett. Last de ned og legg dem i din data-mappe. 
+
+## Credit
+Utfallsvariabel: "default" (misligholdelse av lån) 
+Data er hentet fra [datacamp.com](datacamp.com)
+
+Dataene inneholder følgende variable:
+```{r credit}
+credit <- read.csv("data/credit.csv")
+
+glimpse(credit)
+
+```
+
+::: {.content-hidden when-format="pdf"}
+
+```{r}
+#| echo: false
+credit <- read.csv("data/credit.csv")
+credit %>%
+  download_this(
+    output_name = "credit dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+:::
+
+## Attrition
+Utfallsvariabel: "Attrition", dvs om en arbeidstaker slutter i jobben. 
+
+Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset).
+
+```{r attrition}
+
+attrition <- readRDS("data/attrition.rds")
+glimpse(attrition)
+
+```
+
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+attrition %>%
+  download_this(
+    output_name = "attrition dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
+
+## Kommunedata
+Disse dataene er hentet fra SSBs offisielle statistikk og koblet sammen på kommunenummer. Fra statistikkbanken tabeller nr. 06944 (inntekt), 12210 (sosialhjelp/KOSTRA), 07459 (befolkning), 08487 (anmeldte lovbrudd). Flere variable kan kobles på. 
+Merk: det er flere endringer i kommunestruktur, særlig i 2020. Kommunene er altså ikke helt det samme over tid. 
+
+Aktuelle utfallsvariable: Flere variable kan være aktuell som utfallsvariable. Prediktorer må nok omarbeides noe etter egne vurderinger (f.eks. omregne til per 1000 eller prosent, summere totaltall etc).  
+
+```{r kommune}
+kommune <- readRDS("data/kommunedata.rds")
+glimpse(kommune)
+
+```
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+kommune %>%
+  download_this(
+    output_name = "kommune dataset",
+    output_extension = ".rds",
+    button_label = "Download data as rds",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+:::
+
+
+## Churn
+
+```{r}
+churn <- read.csv("data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+glimpse(churn)
+```
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+churn %>%
+  download_this(
+    output_name = "churn dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+:::
+
+## Recidivism from Iowa prisons
+
+Datasettet inneholder data på 26020 personer løslatt fra fengsel i staten Iowa, USA mellom 2010 og 2015. For hver person er det informasjon om hvorvidt de har blitt fengslet på nytt innen 3 år (dvs. fulgt til mellom 2013 og 2018).
+
+Aktuell utfallsvariabel: "Recidivism...Return.to.Prison.numeric"
+Endre gjerne variabelnavn til noe kortere. 
+
+Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/slonnadube/recidivism-for-offenders-released-from-prison) og er nærmere omtalt der.
+
+```{r recidivism}
+recidivism <- read.csv("data/3-Year_Recidivism_for_Offenders_Released_from_Prison_in_Iowa_elaborated.csv", stringsAsFactors = TRUE)
+
+glimpse(recidivism)
+
+```
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+recidivism %>%
+  download_this(
+    output_name = "recidivism dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
+
+## Compas
+Utfallsvariabel: "Two_yr_Revidvism"
+
+Data er hentet fra R-pakken fairmodels, modifisert datsett fra [ProPublica](https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis)
+
+```{r}
+compas <- readRDS("data/compas.rds")
+glimpse(compas)
+```
+
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+compas %>%
+  download_this(
+    output_name = "recidivism dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
+
+## Diabetes rehospitalization
+
+Data er beskrevet nærmere i [Strack et al (2014)](https://www.hindawi.com/journals/bmri/2014/781670/) (se særlig tabell 1) og er tilgjengelig fra [UCI machine learning repository](https://archive.ics.uci.edu/ml/datasets/diabetes+130-us+hospitals+for+years+1999-2008)
+
+Utfallsvariabelen av interesse er *readmitted*, altså om pasienten blir lagt inn på nytt på et eller annet tidspunkt etter utskrivning.
+
+```{r diabetic}
+diabetic <- read.csv("data/diabetic_data.csv")
+glimpse(diabetic)
+```
+
+
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+diabetic %>%
+  download_this(
+    output_name = "diabetic dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
+
+## Absenteeism
+
+Dette er et syntetisk datasett som inneholder 8336 personer i en tenkt bedrift og hvor mange timer hver person har fravær fra jobben.
+
+Data er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/HRAnalyticRepository/absenteeism-dataset)
+
+```{r absenteeism}
+absenteeism <- read.csv("data/MFGEmployees4.csv")
+glimpse(absenteeism)
+```
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+absenteeism %>%
+  download_this(
+    output_name = "absenteeism dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
+
+## Human resources (HR)
+
+Data er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/rhuebner/human-resources-data-set) og variable er beskrevet nærmere [på denne lenken](https://rpubs.com/rhuebner/hrd_cb_v14).
+
+```{r hr}
+hr <- read.csv("data/HRDataset_v14.csv")
+glimpse(hr)
+
+```
+
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+hr %>%
+  download_this(
+    output_name = "hr dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
+
+## Nettverk
+
+```{r nettverk}
+load("data/networkExample.RData")
+glimpse(dataset)
+```
+
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+dataset %>%
+  download_this(
+    output_name = "nettverk dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
+
+
+## Occupational wage data
+
+
+```{r oes}
+oes <- readRDS("data/oes.rds")
+class(oes)
+glimpse(oes)
+```
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+oes %>%
+  download_this(
+    output_name = "oes dataset",
+    output_extension = ".rds",
+    button_label = "Download data as rds",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+
+:::
+
+## Voters
+
+Data er hentet fra [2016 Views of the Electorate Research Survey](https://www.voterstudygroup.org/data) gjennomført av Voter study group.
+Full variabelliste er lastet opp i Canvas, der det står 
+
+Aktuell problemstilling er å predikere hvilke velgere som støtter Clinton. En slik klassifisering kan brukes til f.eks. å målrette budskap. En relatert problemstilling er å klustre velgerne for å finne segmenter. 
+
+```{r voters}
+voters <- read.csv("data/voters.csv")
+glimpse(voters)
+```
+
+::: {.content-hidden when-format="pdf"}
+```{r}
+#| echo: false
+voters %>%
+  download_this(
+    output_name = "voters dataset",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+
+```
+:::
