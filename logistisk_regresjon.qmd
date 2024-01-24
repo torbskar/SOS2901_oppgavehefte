@@ -1,5 +1,14 @@
 # Logistisk regresjon
 
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+invisible(Sys.setlocale(locale='no_NB.utf8'))
+```
+
+
+
 I dette kapittelt skal vi bruke følgende pakker:
 
 ```{r}
@@ -36,7 +45,7 @@ skim(attrition)
 
 Merk at det er en variabel vi helt sikkert ikke trenger, så vi sletter denne like gjerne med en gang: *EmployeeNumber* er et løpenummer for person. Siden det er et 1:1 forhold mellom dette og utfallsvariabelen, så bør den tas ut. 
 
-Bruker select() med minustegn for variable vi vil fjerne. Her overskrives datasettet med det modifiserte datasettet
+Bruker `select()` med minustegn for variable vi vil fjerne. Her overskrives datasettet med det modifiserte datasettet
 
 ```{r}
 #| warning: false 
@@ -114,11 +123,7 @@ summary(lm_est)
 
 Dette betyr at vi har estimert følgende regresjonsligning:
 
-```{r}
-#| echo: false
-library(equatiomatic)
-extract_eq(lm_est, use_coefs = TRUE, coef_digits = 3)
-```
+$$ \hat{Attrition} = 0.409 -0.0069 \cdot Age $$
 
 Vi kan da predikere for ulike aldre ved å første lage et nytt datasett med kun alder som variabel og de verdiene som finnes i datasettet, og så bruke 'predict()' på dette datasettet etterpå. Da kan vi også se resultatet for ulike aldre. Her er et eksempel:
 
@@ -144,19 +149,19 @@ Den viktigste ulempen med lineære sannsynlighetsmodeller er altså at modellen 
 
 Logistisk regresjon har det til felles med lineær regresjon at utfallet er en lineær spesifikasjon.
 
-$$  log( \frac{\pi}{(1-\pi)}) = \alpha + \beta X $$
+$$  log( \frac{\pi}{1-\pi}) = \alpha + \beta X $$
 
 Venstresiden av ligningen kalles en *logit*, der $\pi$ er en sannsynlighet. Uttrykket $\frac{\pi}{(1-\pi)}$ er en *odds*, som er et forholdstall mellom sannsynligheten for at utfallet skjer mot sannsynligheten for det motsatte. Tolkningen av $\beta$ er da en endring av *odds* på logaritisk skala. Hvis man eksponensierer $\beta$ er den da tolkbar som en *oddsrate*.
 
-Som du nå sikkert skjønner så er altså tolkningen av regresjonskoeffisientene nokså krøkete å tolke substansielt for de fleste av oss. Det kan i seg selv være et argument mot å bruke logistisk regresjon i en del sammenhenger.
+Som du nå sikkert skjønner så er altså tolkningen av regresjonskoeffisientene nokså krøkete å tolke substansielt for de fleste av oss. Det kan i seg selv være et argument *mot* å bruke logistisk regresjon i en del sammenhenger.
 
 Men man kan regne om til sannsynligheter som er vesentlig enklere å forstå. Særlig hvis man ikke er så interessert i tolkningen av $\beta$, men prediksjon av $\pi$.
 
 Ligningen kan da skrives om slik at venstresiden av ligningen blir en sannsynlighet direkte:
 
-$$  \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} $$
+$$ \hat \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} $$
 
-En enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $\pi = P(y = 1) > 0.5$ tilhører den ene gruppen og resten i den andre gruppen.
+En relativt enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $ \hat \pi = P(y = 1) > 0.5$ tilhører den ene gruppen og resten i den andre gruppen.
 
 Logistisk regresjon kan dessuten håndtere utfall med flere enn to kategorier, noe OLS ikke kan. Vi bruker derfor logistisk regresjon når det er kategoriske utfall. I andre sammenhenger vil folk hevde at OLS er bedre å bruke (av diverse grunner), men i *denne sammenhengen* er logistisk regresjon som hovedregel å foretrekke over OLS for kategoriske utfall.
 
@@ -175,14 +180,9 @@ En penere output kan gis med 'gtsummary' på samme måte som for OLS slik:
 tbl_regression(est_logit)
 ```
 
-```{r}
-#| echo: false
-library(equatiomatic)
-extract_eq(est_logit, use_coefs = TRUE, coef_digits = 3)
-```
 
-Hvordan plotte slike data? Bruk geom_jitter eller geom_point. 
-Å legge til en regresjonslinje har brukte vi geom_smooth(). Med stat_smoot() kan vi spesifisere andre typer regresjonsmodeller, herunder logistisk regresjon. 
+Hvordan plotte slike data? Bruk `geom_jitter` eller `geom_point`. 
+Å legge til en regresjonslinje har brukte vi `geom_smooth()`. Med `stat_smoot()` kan vi spesifisere andre typer regresjonsmodeller, herunder logistisk regresjon. 
 
 ```{r}
 #| warning: false 
@@ -193,7 +193,7 @@ ggplot(training, aes(x=Age, y=Attrition))+
 
 ```
 
-Du synes sikkert dette plottet ser litt rart ut. Bytt ut geom_point() med følgende: `geom_jitter(height = .02, alpha=.3)` så skal du få omtrent følgende resultat:
+Du synes sikkert dette plottet ser litt rart ut. Bytt ut `geom_point()` med følgende: `geom_jitter(height = .02, alpha=.3)` så skal du få omtrent følgende resultat:
 
 ```{r}
 #| warning: false 
@@ -384,7 +384,6 @@ For funksjonen `table()` spiller det en rolle hvilken rekkefølge variablene ang
 ### Confusion matrix
 Fra pakken 'caret' er det en funksjon for confusion matrix som regner ut masse greier for oss. (Vi skal bare bruke akkurat den funksjonen fra 'caret'). 
 
-**NB!** *Koden nedenfor er korrigert 03.02.2023!*
 Merk at `confusionMatrix()` kan angis på to måter, velg den andre for minst fare for feil: 
 
 #### Angi hver vektor for seg

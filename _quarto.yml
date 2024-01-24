@@ -27,6 +27,9 @@ book:
    - datasets.qmd
    - introduksjon_R.qmd
 
+  #downloads: [pdf]
+
+
 bibliography: references.bib
 
 format:

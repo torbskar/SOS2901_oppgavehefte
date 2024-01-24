@@ -69,6 +69,31 @@ kommune_test <- testing(kommune_split)
 
 ### Enkel lineær regresjon i R
 
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+invisible(Sys.setlocale(locale='no_NB.utf8'))
+```
+
+
+I dette kapittelt skal vi bruke følgende pakker:
+
+```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
+library(tidyverse)   # datahåndtering, grafikk og glimpse()
+library(skimr)       # funksjonen skim() for å se på data
+library(rsample)     # for å dele data i training og testing
+library(gtsummary)   # Pent formatert regresjonstabell
+library(caret)       # Funksjonen confusionMatrix()
+```
+
+
 En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i kommunen. Rett og slett fordi dette er den demografiske gruppen som begår mest vold - og kriminalitet generelt, faktisk. Hvis befolkningssammensetningen forventes å bli yngre vil det medføre flere unge menn, og da kan vi kanskje forvente at det blir flere voldshendelser bare av den grunn? Sammenhengen mellom unge menn og voldsrate kan estimeres med helt vanlig lineær regresjon.
 
 En god start på de fleste empiriske analyser er å beskrive sammenhengen med et plot. Her legger vi på en lineær regresjonslinje med `geom_smooth()` der vi presiserer lineær modell med `method = "lm"` og lar være å ta med konfidensintervallet `se = FALSE`.
