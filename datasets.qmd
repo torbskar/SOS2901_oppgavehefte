@@ -33,10 +33,10 @@ glimpse(credit)
 
 Utfallsvariabel: "Attrition", dvs om en arbeidstaker slutter i jobben.
 
-Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset), men du kan laste de ned fra [denne lenken](https://github.com/torbskar/SOS2901_oppgavehefte/tree/main/data/attrition.rds)
+Datasettet er tilgjengelig fra [Kaggle](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset), men du kan laste de ned fra [denne lenken](https://github.com/torbskar/SOS2901_oppgavehefte/tree/main/data/Attrition.rds)
 
 ```{r attrition}
-attrition <- readRDS("data/attrition.rds")
+attrition <- readRDS("data/Attrition.rds")
 glimpse(attrition)
 
 ```
