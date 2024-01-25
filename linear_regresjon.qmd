@@ -279,6 +279,7 @@ Hvis vi nå predikerer for hver enkelt kommune og plotter forventet mot observer
 ```{r}
 #| warning: false
 #| error: false
+#| message: false
 kom_pred <- kom_s %>% 
   mutate(pred = predict(step_mod))
 
@@ -291,15 +292,16 @@ ggplot(kom_pred, aes(x = voldskriminalitet, y = pred)) +
 Nå kan vi også regne ut RMSE, som altså er "root mean squared error". Med andre ord: regn ut residualene (dvs. "error"), og kvadrer denne, og så ta kvadratroten av gjennomsnittet av denne. Her er en kode skrevet litt omstendelig så den er litt lettere å forstå:
 
 ```{r}
-kom_s %>% 
+rmse <- kom_s %>% 
   mutate(pred = predict(step_mod), 
          residual = pred - voldskriminalitet) %>% 
   mutate(sq.resid = residual^2) %>% 
   summarise(sqrt(mean(sq.resid)))
-  
+
+rmse  
 ```
 
-Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med 1.38 prosentpoeng på voldsraten i kommunen. [^linear_regresjon-4] Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.
+Dette betyr omtrentlig at modellen i gjennomsnitt vil bomme med `r base::round(rmse, digits = 3)` prosentpoeng på voldsraten i kommunen. [^linear_regresjon-4] Hvorvidt det er presist *nok* eller ikke vil vel strengt tatt komme an på behovet for presisjon, altså: hva man skal bruke det til.
 
 [^linear_regresjon-4]: Denne formuleringen er ganske omtrentlig. RMSE er egentlig kvadratroten av gjennomsnittet til de kvadrerte residualene, som er noe litt annet enn gjennomsnittet av de absolutte verdiene av residualene. Det gir bl.a. litt mer vekt til store residualer enn et vanlig gjennomsnitt
 
