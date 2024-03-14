@@ -41,7 +41,7 @@ rf <- randomForest(Two_yr_Recidivism ~ .,
 ```
 
 
-Lager en prediksjon i nytt datasett
+Lager en prediksjon i en kopi av datasett, mest for å ikke blande sammen prediksjonene med det opprinnelige datasettet. 
 
 
 ```{r}
@@ -51,7 +51,8 @@ compas_p <- compas %>%
 
 
 
-Confusion matrix
+Da kan vi lage en confusion matrix for å se hvordan modellen fungerer. 
+
 
 
 ```{r}
@@ -60,7 +61,10 @@ confusionMatrix(compas_p$pred_rf,
 ```
 
 
-Splitter datasettet i to etter kjønn. Her for menn. 
+For å få litt bedre grep om hvordan fairness-pakken fungerer kan gjøre det mer manuelt først. Vi kan f.eks. se på hvordan modellen slår ut for menn og kvinner. 
+
+
+Først kan vi da splitte datasettet i to etter kjønn. Her for menn. 
 
 ```{r}
 compas_1 <- compas_p %>% 
@@ -68,14 +72,13 @@ compas_1 <- compas_p %>%
 ```
 
 
-
-Confusion matrix for menn
+Confusion matrix for menn blir da tilsvarende som tidligere. 
 ```{r}
 confusionMatrix(compas_1$pred_rf,
                 compas_1$Two_yr_Recidivism, positive="1")
 ```
 
-
+Merk at vi her fikk en accuracy på 0.66 for menn. 
 Splitter datasettet i to etter kjønn. Her for kvinner. 
 ```{r}
 compas_2 <- compas_p %>% 
@@ -89,8 +92,12 @@ confusionMatrix(compas_2$pred_rf,
                 compas_2$Two_yr_Recidivism, positive="1")
 ```
 
+Merk at vi her fikk en accuracy på 0.71 for kvinner. Modellen er altså mer presis for kvinner enn for menn. Dette er et eksempel på *bias* i modellen. Forholdet mellom feilrater er da $.66/.71 = .93$. Dette tallet sier at modellens accuracy for menn er 93% av accuracy for kvinner, og dette er et mål på *bias* i modellen. Om man synes det er mye eller lite er derimot en vurderingssak! 
 
-Bruker funksjoner i fairness-pakken til å gjøre det samme: 
+Man kan også regne ut den andre veien, altså kvinner delt på menn. Da får vi 1.08, som sier at modellen er 8% mer presis for kvinner enn for menn. Det blir jo det samme, men motsatt vei. Vi må altså velge *referansegruppe* for sammenligningen. 
+
+
+Funksjoner `acc_parity` fra fairness-pakken gjør akkurat dette: regner ut accuracy for ulike grupper og sammenligner dem. Her er koden:
 
 ```{r}
 acc <- acc_parity(data = compas_p, 
@@ -100,8 +107,12 @@ acc <- acc_parity(data = compas_p,
                   base         = 'Female')
 acc$Metric
 ```
+Men spesifiserer altså hvilke variable som er utfallsvariabel, hvilken som er gruppevariabel, hvilken som er prediksjonsvariabel og hvilken gruppe som skal være referanse. 
 
-Her er en grafisk fremstilling av ACC
+
+
+
+Fairness-pakken har også noen innebygde funksjoner for grafiske fremstillinger. 
 
 ```{r}
 acc$Metric_plot
@@ -134,9 +145,10 @@ Merk at denne vektoren har verdiene som er en kombinasjon av de opprinnelige var
 1) Menn uten tilbakefall
 1) Menn med tilbakefall 
 
-Merk da at tallene som angis for `sampsize` ikke kan være høyere enn antallet i hver gruppe, og helst ikke høyere enn ca 70% av dette. 
+Merk da at tallene som angis for `sampsize` ikke kan være høyere enn antallet i hver gruppe, og helst ikke høyere enn ca 70% av dette. Men det er primært *forholdet mellom tallene* som er viktig. 
 
-Her er kode for random forest med stratifisert utvalg og angitte verdier av sampsize: 
+Her er kode for random forest med stratifisert utvalg og angitte verdier av sampsize. Tallene oppgis i den rekkefølgen som er angitt i variabelen `strata`, altså som i tabellen ovenfor. Her er altså kvinner vektet lavere enn menn, som burde øke accuracy for menn. Samtidig er kvinner med tilbakefall vektet litt høyere enn kvinner uten tilbakefall. 
+
 
 ```{r}
 set.seed(45)
@@ -146,10 +158,9 @@ rf <- randomForest(Two_yr_Recidivism ~ .,
                    sampsize = c(215, 290, 1500, 1500), 
                    ntree=800)
 
-#rf
 ```
 
-
+Nå kan vi lage en prediksjon og se om modellen er mer rettferdig på samme måte som vi har gjort tidligere. 
 
 ```{r}
 compas_p <- compas %>% 
@@ -170,7 +181,7 @@ Nå lurer du helt sikkert på hvordan du skal velge verdier for `sampsize` i et 
 
 
 ### Hva andre subgrupper? 
-Så er spørsmålet om den balansering vi nå har gjort slår ut på andre grupper også. 
+Så er spørsmålet om den balansering vi nå har gjort slår ut på andre grupper også. La oss se på etnisitet. Vi bruker den samme modellen som over, men bytter ut variabelen for kjønn med variabelen for etnisitet. 
 
 
 ```{r}

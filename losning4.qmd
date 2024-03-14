@@ -1,0 +1,167 @@
+---
+title: "Løsningsforslag: Intro. til fairness"
+format: html
+---
+
+Vi starter med å laste inn pakkene vi trenger for å løse oppgavene.
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(tidyverse)
+library(fairness)
+library(rsample)
+library(caret)
+```  
+
+I stedet for å bruke samme datasett som i instruksjonenene velger vi her Credit. Utfallsvariabelen vi er interessert i å predikere er "default" som er en binær variabel som indikerer om en person har misligholdt et lån eller ikke. Vi starter med å laste inn dataene og se på de første radene. 
+
+Denne filen er i csv-format, så vi leser inn med `read.csv` og setter `stringsAsFactors = TRUE` for å konvertere tekstvariable (eng.: "strings") til faktorer. 
+Bruker `glimpse` til å sjekke at innlesning ble riktig. Det skal se ut som følger. 
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+credit <- read.csv("data/credit.csv", stringsAsFactors = TRUE)
+
+glimpse(credit)
+
+```  
+
+
+Logistisk regresjon med `glm` når utfallet er en factor-variabel bruker den første kategorien som ønsket utfall (ofte omtalt som "failure" i metodelitteraturen). Vi kan se hvilken kategori som er referansekategori ved å bruke `levels`-funksjonen. Det spiller ingen rolle for estimeringen hvilken kategori som er referansekategori, men det spiller en rolle for tolkningen om man predikerer "1" eller "0". Selv om det er helt ok å bruke en factor-variabel som utfallsvariabel, så er det litt lettere å ikke gå surr i tolkningen hvis det er en binær variabel med 0 og 1.
+
+Det kan gjøres som følger, og lag en tabell etterpå bare for å sjekke at det ble riktig. 
+
+```{r}
+credit <- credit %>% 
+  mutate(default = as.numeric(default == "yes"))
+
+table(credit$default)
+
+
+```
+
+## Split datasett
+
+Så kan vi splitte datasettet i to deler, en treningsdel og en testdel. Vi bruker `initial_split` fra `rsample`-pakken og gir de to delene navnene `credit_train` og `credit_test`. Vi sjekker dimensjonene til treningssettet for å forsikre oss om at det ble riktig med `nrow`. Det er 750 observasjoner i treningsdatasettet slik det burde være.  
+
+Husk å bruk `set.seed` for å gjøre det reproduserbart. Dette er viktig at venner deg til å gjøre hver gang slik at du ikke får forskjellige resultater hver gang. (På eksamen blir du bedt om å bruke en oppgitt seed for at sensuren skal bli riktig). 
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+set.seed(426)
+credit_split <- initial_split(credit)
+credit_train <- training(credit_split) 
+credit_test  <- testing(credit_split) 
+
+nrow(credit_train)
+```
+
+
+
+## Plot dataene
+Det er ofte lurt å plotte datene før man begynner analysen. Det gir litt intuitiv innsikt og også en sjekk på at dataene ser rimelige ut. Vi kan for eksempel plotte "amount" mot "default" for å se om det er noen sammenheng mellom lånebeløp og sannsynligheten for mislighold. 
+
+Her har vi brukt `cut` for å lage kategorier av lånebeløpene slik at det gir mening å regne en andel i hvert intervall. Vi har valgt 100 kategorier. Vi grupperer så etter disse kategoriene og tar gjennomsnittet av "default" for hver kategori. Vi bruker `ggplot` for å lage plottet.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+credit_train_p <- credit_train %>% 
+  mutate(amount_int = cut(amount, breaks = 100, labels = F)) %>% 
+  group_by(amount_int) %>% 
+  summarise(default = mean(default == 1)) 
+
+ggplot(credit_train_p, aes(x = amount_int, y = default))+ 
+  geom_point() +
+  geom_smooth(se = F) 
+
+
+```
+
+Det ser ut til at det er en sammenheng mellom lånebeløp og sannsynligheten for mislighold.
+
+
+## Enkel logistisk regresjon 
+Som en oppvarming kan vi først tilpasse en modell med kun én variabel: lånebeløpet med variabelen "amount", i dollar. Denne variabelen har verdier fra drøye 200 til 16000 i treningsdataene. 
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+est_enkel <- glm( default ~ amount, data = credit_train, family = "binomial")
+summary(est_enkel)
+
+```
+Vi kan nå predikere på bakgrunn av modellen. Det er hensiktsmessig å lage en kopi av datasettet og lage en ny variabel med `mutate`. Funksjonen `predict` med argumentet `type = "response"` gir en sannsynlighet. Altså: for hver observasjon får vi en estimert sannsynlighet på bakgrunn av modellen. 
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+cred_pred <- credit_train %>% 
+  mutate(pred = predict(est_enkel, type = "response"))
+
+ggplot(cred_pred, aes(x = amount, y = pred)) +
+  geom_point(aes(y = default))+
+  geom_line(col="red", linewidth = 1)
+
+```
+
+
+
+
+## Prediksjon med mange variable
+
+Vi kan nå lage en logistisk regresjonsmodell for å predikere "default" med de andre variablene i datasettet. Vi bruker `glm`-funksjonen og setter `family = "binomial"` for å indikere at vi ønsker en logistisk regresjon. Her bruker vi samtlige variable med `.`. Vi bruker `summary` for å se på resultatene.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+est_multlogit <- glm( default ~ ., data = credit_train, family = "binomial")
+summary(est_multlogit)
+
+```
+
+
+Vi kan først se på resultatene med testdatasettet. Vi lager en ny variabel `prob` som er sannsynligheten for mislighold. Vi lager så en ny variabel `attrition_class` som er en faktorvariabel som er "Yes" hvis sannsynligheten er over 0.5 og "No" ellers. Vi bruker `mutate` for å lage de nye variablene. 
+
+Det kan være greit å lagre resultatene i et nytt datasett fremfor å overskrive det gamle. Det gjør det lettere hvis man må kjøre regresjonen på nytt pga feil eller noe slikt.  
+
+
+```{r}
+credit_train2 <- credit_train %>% 
+  mutate(prob = predict(est_multlogit, type = "response")) %>% 
+    mutate(default_pred = (ifelse(prob < .5, 0, 1)))
+
+```
+
+Så kan vi lage en tabell med observert mot predikert. Det kan være greit å bruke `table` for å lage tabellen først. Så kan man bruke `confusionMatrix` for å få en del statistikk på resultatene. Gjør gjerne en manuell utregning for å ikke gå unødig surr i hva som er hva. Husk at dette kan variere litt med oppsettet. Et godt råd er å *alltid* skrive inn `positive = ...` for å være sikker på at det blir riktig. I dette tilfellet er det "1" som er det positive utfallet. 
+
+Da blir f.eks. sensitivitet være andelen av de som faktisk misligholder som blir predikert som mislighold. Det er 114/(114+115) = 0.50. Funksjonen `confusionMatrix` gir samme resultat slik:  
+
+
+```{r}
+cm <- credit_train2 %>% 
+  select(default_pred, default) %>%
+  table()
+
+confusionMatrix(cm, positive = "1")
+
+```
+
+
+
+
+
+
+
+

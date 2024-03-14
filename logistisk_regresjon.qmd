@@ -33,6 +33,7 @@ For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere s
 
 [^logistisk_regresjon-1]: Her kunne man jo også tenke seg at den gode lederen har en dialog med de ansatte og fanger opp deres frustrasjoner og behov slik at maskinell prediksjon ikke trengs. Det er jo også en form for prediksjon med kvalitative data! Så her er vi i en setting der dette ikke fungerer eller det er så store forhold at en kvalitativ tilnærming ikke er praktisk mulig eller noe sånt.
 
+
 Først leser vi inn datasettet og evt. laster pakker i trenger. Dataene er i csv-format så vi leser inn med `readRDS()`. Deretter kan vi se på innholdet med `skim()`:
 
 ```{r}
