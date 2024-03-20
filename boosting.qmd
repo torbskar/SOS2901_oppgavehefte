@@ -30,6 +30,8 @@ Det sentrale punktet for boosting er at modellen bygges steg for steg med en gra
 Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen `gbm` krever nummerisk utfallsvariabel. 
 
 ```{r}
+#| message: false
+#| warning: false
 compas <- readRDS("../data/compas.rds") %>% 
   mutate(Two_yr_Recidivism = ifelse(Two_yr_Recidivism == "1", 1, 0)) %>% 
   na.omit()
@@ -40,6 +42,8 @@ glimpse(compas)
 Vi lager en split som tidligere
 
 ```{r}
+#| message: false
+#| warning: false
 set.seed(42)
 training_init <- initial_split(compas)
 
@@ -58,6 +62,8 @@ Litt forenklet kan vi si at dette er det observert utfallet minus det predikerte
 Gradient boosting fungerer med flere andre fordelinger, men hvis vi begrenser oss til klassifikasjon kan vi angi `distribution = "bernoulli"`. Merk at for `gbm` må utfallsvariabelen være numerisk, ikke factor. 
 
 ```{r}
+#| message: false
+#| warning: false
 set.seed(542)
 gradboost1 <- gbm(formula = Two_yr_Recidivism ~ .,
                  data = training,
@@ -98,6 +104,8 @@ Som i random forest kan vi undersøke hvilke variable som er mest betydningsfull
 Resultatene er tolkbare tilsvarende som relative importance som vi så i random forest. 
 
 ```{r}
+#| message: false
+#| warning: false
 sumboost <- summary(gradboost1, method = permutation.test.gbm, normalize = T, 
                     plotit = F)
 
@@ -115,12 +123,15 @@ Merk at resultatet fra `summary()` her returnerer en data.frame som kan plottes 
 Man kan også plotte hvordan resultatet endres med ulike verdier på prediktorene. Dette tilsvarer *partial dependence*. Her er det mest hensiktsmessig å bruke den innebygde funksjonen `plot()` som kaller en underliggende plot-funksjon for gbm-objekter. 
 
 ```{r}
+#| message: false
+#| warning: false
 plot(gradboost1, "Number_of_Priors", type = "response")
 plot(gradboost1, "Age_Below_TwentyFive", type = "response")
 plot(gradboost1, "Ethnicity", type = "response")
 plot(gradboost1, "Misdemeanor", type = "response")
 
 ```
+
 
 
 
@@ -141,6 +152,8 @@ compas_p <- training %>%
 Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
 
 ```{r}
+#| message: false
+#| warning: false
 tab <- table(compas_p$p_klass, training$Two_yr_Recidivism) 
 tab
 ```
@@ -148,6 +161,8 @@ tab
 Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
 
 ```{r}
+#| message: false
+#| warning: false
 confusionMatrix(tab, positive="1")
 ```
 
@@ -163,6 +178,8 @@ Her er et eksempel der *negative* tillegges 2 ganger så mye vekt som *positive*
 Vær obs på at det er ikke så lett å vite helt hvordan slik vekting slår ut på resultatene. Det er ikke et 1-til-1 forhold mellom vekting og feilrater. Som i annen justering kan dette gå ut over accuracy og andre mål, så det er vanligvis en trade-off her. Du må derfor sjekke resultatene og så evt. gå tilbake og justere vektene hvis det ikke ble slik du ønsket. 
 
 ```{r}
+#| message: false
+#| warning: false
 wts <- training %>% 
   mutate(wts = ifelse(Two_yr_Recidivism == 1, 1, 2)) %>%   # se begrunnelse s. 274 i Berk 
   pull(wts)
@@ -204,6 +221,8 @@ tab
 Så kan vi legge tabellen inn i funksjonen `confusionMatrix()` for å også få diverse utregninger. (Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei.) Dette er altså akkurat samme prosedyre som vi har brukt ved tidligere prediksjoner. 
 
 ```{r}
+#| message: false
+#| warning: false
 confusionMatrix(tab, positive="1")
 ```
 
@@ -215,13 +234,15 @@ Det er heller ingenting nytt når det gjelder om prediksjonen kan slå ut skjevt
 Her er et eksempel med forskjeller i "accuracy" for menn og kvinner. Det er altså høyere andel riktig klassifiserte for kvinner enn for menn. 
 
 ```{r}
+#| message: false
+#| warning: false
 acc <- fairness::acc_parity(data = compas_p, 
                   outcome      = 'Two_yr_Recidivism', 
                   group        = 'Sex',
                   preds        = 'p_klass', 
                   base         = 'Female')
 
-acc[[2]]
+acc
 
 ```
 
@@ -234,6 +255,8 @@ Her er en kode for å lage vekter og legger den vekten inn i `gbm`. Tanken i kod
 La oss først se på fordelingen av utfallet etter kjønn ved en enkel krysstabell. Her har jeg brukt funksjonen `tbl_cross()` for å få en penere tabell med summeringer, men en enklere tabell gjør også nytten.  
 
 ```{r}
+#| message: false
+#| warning: false
 training %>% 
    tbl_cross( row = Sex, col =  Two_yr_Recidivism)
 ```
@@ -246,7 +269,8 @@ I koden nedenfor lages også en krysstabell bare for å sjekke at det ble slik d
 
 
 ```{r}
-
+#| message: false
+#| warning: false
 wts <- training %>%  
   mutate(wts1 = case_when(
     Sex == "Male" & Two_yr_Recidivism == 0 ~ 1,
@@ -281,6 +305,8 @@ Kodingen av vekten kan treng litt forklaring. Det er forsåvidt standard R-kode,
 Da kan vi gjøre en ny boostingmodell og sjekke resultatene. Koden er identisk som ovenfor, bare at vektene er endret 
 
 ```{r}
+#| message: false
+#| warning: false
 set.seed(542)
 gradboost3 <- gbm(formula = Two_yr_Recidivism ~ .,
                  data = training,
@@ -308,13 +334,16 @@ compas_p <- training %>%
 Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
 
 ```{r}
-
+#| message: false
+#| warning: false
 tab <- table(compas_p$p_klass, training$Two_yr_Recidivism) 
 tab
 ```
 
 Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
 ```{r}
+#| message: false
+#| warning: false
 confusionMatrix(tab, positive="1")
 ```
 

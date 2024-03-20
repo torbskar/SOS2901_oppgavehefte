@@ -1,0 +1,64 @@
+---
+title: "Løsningsforslag: Random forest, fairness og tuning"
+format: html
+---
+
+
+
+
+Vi starter med å laste inn pakkene vi trenger for å løse oppgavene.
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+library(tidyverse)
+library(randomForest)
+library(fairness)
+library(rsample)
+library(caret)
+```  
+
+
+
+## Velger datasett
+
+Vi skal bruke et datasett *Churn* som inneholder informasjon om kunder som har sagt opp abonnementet sitt. Vi skal bruke denne informasjonen til å lage en modell som kan forutsi om en kunde kommer til å si opp abonnementet sitt.
+
+```{r}
+churn <- read.csv("data/WA_Fn-UseC_-Telco-Customer-Churn.csv", stringsAsFactors = TRUE)
+glimpse(churn)
+```
+
+### Oppgave a) Konsekvenser av å bruke en modell
+Vi bør ha en formening om hva modellen skal brukes til, og hvilke konsekvenser det kan ha både for kundene og bedriften. Bedriften ønsker selvsagt å beholde kundene sine, og det kan være dyrt å miste kunder. Det kan også være dyrt å bruke ressurser på kunder som kommer til å si opp uansett. 
+
+Så hva vil bedriften gjøre? En mulighet er å gi rabatter til kunder som modellen forutsier at kommer til å si opp. Dette kan være en god strategi for å unngå at de bytter leverandør. De kundene som sannsynligvis ikke kommer til å si opp bør derimot ikke få rabatt, for det vil bare være en unødvendig kostnad og gi lavere inntekter. 
+
+Fra et kundeperspektiv har det kanskje ikke noen stor betydning om de får rabatt eller ikke. Men det er jo en viss urettferdighet i det. På et nivå kan man si at man legger inn belønning til de lite lojale kundene, mens de lojale kundene i praksis betaler mer. Dette kan jo også ha en omdømmekostnad ved at kundene føler seg urettferdig behandlet og rett og slett blir litt sure. Det kan jo øke motivasjonen til å bytte abonnement, men slike prosesser sier jo ikke dataene her noe om. Men det indikerer at heller ikke bedriften vil være tjent med en for urettferdig modell. 
+
+Hvis det også er slik at noen grupper er mer tilbøyelige til å bytte abonnement enn andre, så vil disse gruppene få mer rabatt. Motsatt: andre grupper vil systematisk betale mer. Dette kan være en form for diskriminering, og det er jo ikke bra. Det kan også skade omdømme. Det er derfor i bedriftens interesse å unngå åpenbare *bias* i modellen. 
+
+
+### Oppgave b) Lage en random forest modell og vurder resultatet
+
+
+
+
+### Oppgave c) hvilken gruppe er viktigst at blir behandlet rettferdig? 
+
+
+
+### Oppgave d) Hvilket mål på rettferdighet?
+
+
+### Oppgave e)  Tilpasse modellen på nytt med justert samsize
+
+
+### Oppgave f)  Hvordan har rettferdigheten endret seg?
+
+
+### Oppgave g)  Hvordan er rettferdigheten for andre grupper? 
+
+
+
+### Oppgave g)  Hvilke konsekvenser kan det ha for bedriften å bruke en modell som ikke er rettferdig?
