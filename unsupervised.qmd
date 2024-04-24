@@ -119,7 +119,7 @@ ggplot(df1, aes(x=x, y = y, col = factor(group), shape = factor(group))) +
   theme(legend.position = "none")
 ```
 
-Etter at hvert datapunkt er klassifisert til det "klusteret" de er nærmest, kan det så regnes det ut midtpunktet for hvert kluster. Dette midtpunktet er så utgangspunktet for neste runde med klassifisering: avstanden fra alle datapunkter til midtpunktet regnes ut og ny klassifisering til det klusteret datapunktet er nærmest. 
+Etter at hvert datapunkt er klassifisert til det "klusteret" de er nærmest, kan det så regnes det ut midtpunktet for hvert kluster. Dette midtpunktet er så utgangspunktet for neste runde med klassifisering: avstanden fra alle datapunkter til midtpunktet regnes ut og ny klassifisering til det klusteret datapunktet er nærmest.
 
 
 ```{r}
