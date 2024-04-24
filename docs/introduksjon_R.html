@@ -313,7 +313,7 @@ div.csl-indent {
 </section>
 <section id="rstudio-projects" class="level2" data-number="B.2">
 <h2 data-number="B.2" class="anchored" data-anchor-id="rstudio-projects"><span class="header-section-number">B.2</span> Rstudio projects</h2>
-<p>Det anbefales sterkt å lage en mappestruktur egnet for <em>Rstudio projects</em>. Hensikten med dette er å ha en hensiktsmessig og ryddig mappestruktur for alt arbeidet ditt. Dette er forklart nærmere i <span class="citation" data-cites="r4ds">(<a href="#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span>, se kapittelet om <a href="https://r4ds.had.co.nz/workflow-projects.html">workflow</a> og særlig <a href="https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects">avsnittet om projects</a>.</p>
+<p>Det anbefales sterkt å lage en mappestruktur egnet for <em>Rstudio projects</em>. Hensikten med dette er å ha en hensiktsmessig og ryddig mappestruktur for alt arbeidet ditt. Dette er forklart nærmere i <span class="citation" data-cites="r4ds">(<a href="references.html#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span>, se kapittelet om <a href="https://r4ds.had.co.nz/workflow-projects.html">workflow</a> og særlig <a href="https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects">avsnittet om projects</a>.</p>
 <p>Lag en egen mappe for dette kurset og lag følgende undermapper:</p>
 <ul>
 <li>Data</li>
@@ -337,7 +337,7 @@ div.csl-indent {
 <section id="lese-inn-data" class="level2" data-number="B.4">
 <h2 data-number="B.4" class="anchored" data-anchor-id="lese-inn-data"><span class="header-section-number">B.4</span> Lese inn data</h2>
 <p>Data kommer generelt i mange ulike formater og noen ganger skaper det uforutsette utfordringer med å få data inn i R. I dette kurset er imidlertid dataene i formatene .rds eller .csv.</p>
-<p>Alle datasett laster du ned og lagrer i mappen for data (se forrige avsnitt) og leser inn i R derfra. For å lære mer om innlesning av data, se <span class="citation" data-cites="r4ds">(<a href="#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> i kapittelet om <a href="https://r4ds.had.co.nz/data-import.html">data import</a>.</p>
+<p>Alle datasett laster du ned og lagrer i mappen for data (se forrige avsnitt) og leser inn i R derfra. For å lære mer om innlesning av data, se <span class="citation" data-cites="r4ds">(<a href="references.html#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> i kapittelet om <a href="https://r4ds.had.co.nz/data-import.html">data import</a>.</p>
 <p>Merk at csv-filer er tekstfiler der kollonnene er separert med komma eller semikolon. Hvis dataene ser veldig rare ut etter å lest de inn kan det være fordi det var et annet skilletegn enn du trodde.</p>
 <p>csv-filer kan leses inn med funksjonen <code>read.csv()</code> for komma-separerte filer og <code>read.csv2()</code> for semikolon-separerte filer, mens rds-filer leses med <code>readRDS()</code>.</p>
 <p>Vær obs på at når man leser inn csv-filer så vil R gjette på hva slags variabeltyper det er. De vil i hovedsak være numeriske, tekst eller factor. I all hovedsak bør tekstvariable tolkes som factor. Dette kan du få til ved å spesifiser det når dataene leses inn slik:</p>
@@ -349,7 +349,7 @@ div.csl-indent {
 <section id="variabeltyper" class="level2" data-number="B.5">
 <h2 data-number="B.5" class="anchored" data-anchor-id="variabeltyper"><span class="header-section-number">B.5</span> Variabeltyper</h2>
 <p>Variable kan være av forskjellige typer, primært numerisk eller kategoriske. Numeriske kan igjen være heltall eller lagret med et angitt presisjonsnivå (integer, numeric eller double), men forskjellen mellom disse har i praksis ikke noe å si for vårt bruk her. Datovariable er også numeriske, men vi skal ikke jobbe med datoer her.</p>
-<p>Kategoriske variable er ‘string’ (dvs en tekst-streng) eller <em>factor</em>. Du kan lese mer om factor-variable i <span class="citation" data-cites="r4ds">Wickham and Grolemund (<a href="#ref-r4ds" role="doc-biblioref">2017</a>)</span> i <a href="https://r4ds.had.co.nz/factors.html">kapittelet om factor</a>. Kort sagt er factor-variable tekst-variable som har en tilhørende underliggende numerisk verdi som gjør at den kan benyttes i modeller og beregninger.</p>
+<p>Kategoriske variable er ‘string’ (dvs en tekst-streng) eller <em>factor</em>. Du kan lese mer om factor-variable i <span class="citation" data-cites="r4ds">Wickham and Grolemund (<a href="references.html#ref-r4ds" role="doc-biblioref">2017</a>)</span> i <a href="https://r4ds.had.co.nz/factors.html">kapittelet om factor</a>. Kort sagt er factor-variable tekst-variable som har en tilhørende underliggende numerisk verdi som gjør at den kan benyttes i modeller og beregninger.</p>
 <p>Et alternativ er å kode om faktorvariable eller tekst-variable til dummy-variable med verdiene 0 eller 1.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </section>
 <section id="dele-et-datasett-i-training-og-testing" class="level2" data-number="B.6">
@@ -406,7 +406,7 @@ For eksempel kan du lage en ny variabel som er summen av variable med navn X og 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nyedata <span class="ot">&lt;-</span> <span class="fu">mutate</span>(dinedata, <span class="at">sumXY =</span> X <span class="sc">+</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Du kan lese mer om disse verbene i R4DS <span class="citation" data-cites="r4ds">(<a href="#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> kapittelet <a href="https://r4ds.had.co.nz/transform.html"><em>Transform</em></a></p>
+<p>Du kan lese mer om disse verbene i R4DS <span class="citation" data-cites="r4ds">(<a href="references.html#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> kapittelet <a href="https://r4ds.had.co.nz/transform.html"><em>Transform</em></a></p>
 <p>I dette kurset skal vi ofte lage en ny variabel med <code>predict()</code> og det gjør vi da inni en <code>mutate()</code>, omtrentlig slik:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>endretdata <span class="ot">&lt;-</span> dinedata <span class="sc">%&gt;%</span> </span>
@@ -415,7 +415,7 @@ For eksempel kan du lage en ny variabel som er summen av variable med navn X og 
 <p>Her skal resultatet være et kopi av det opprinnelige datasettet, <em>dinedata</em>, som lages i et nytt objekt <em>endretdata</em>, der den andre linjen legger til en ny variabel som inneholder predikerte verdier fra en modell lagret i <em>modellobjekt</em>.</p>
 <section id="hva-gjør-pipe-operatoren" class="level3" data-number="B.10.1">
 <h3 data-number="B.10.1" class="anchored" data-anchor-id="hva-gjør-pipe-operatoren"><span class="header-section-number">B.10.1</span> Hva gjør ‘pipe-operatoren’ <code>%&gt;%</code> ??</h3>
-<p>Du kan sette sammen flere kombinsjoner av <code>mutate()</code>, <code>select()</code> og andre dplyr-verb med <code>%&gt;%</code>. Les mer om den i R4DS <span class="citation" data-cites="r4ds">(<a href="#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> i et eget avsnitt om <a href="https://r4ds.had.co.nz/pipes.html">pipes</a>.</p>
+<p>Du kan sette sammen flere kombinsjoner av <code>mutate()</code>, <code>select()</code> og andre dplyr-verb med <code>%&gt;%</code>. Les mer om den i R4DS <span class="citation" data-cites="r4ds">(<a href="references.html#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> i et eget avsnitt om <a href="https://r4ds.had.co.nz/pipes.html">pipes</a>.</p>
 <p>Enkelt sagt tar <code>%&gt;%</code> og legger det som er til <em>venstre</em> over som <em>første</em> argument i neste dplyr-verb. Dermed kan man sette sammen en rekke av dplyr-verb der du både filtrerer, lager nye variable, summerer osv.</p>
 </section>
 </section>
@@ -423,12 +423,12 @@ For eksempel kan du lage en ny variabel som er summen av variable med navn X og 
 <h2 data-number="B.11" class="anchored" data-anchor-id="grafikk-quickn-dirty-vs-ggplot"><span class="header-section-number">B.11</span> Grafikk: quick’n dirty vs ggplot</h2>
 <p>En rekke modeller har noen standard funksjoner for å plotte. Funksjonen <code>plot()</code> vil kjenne igjen hva slags objekt det er snakk om og så lage en viss type plot. Bruker du dette på et objekt for lineær regresjon får du et annet type plot enn hvis du gjør det på et randomForest-objekt. Dette kan være helt utmerket for en kjapp titt på resultatene, men du har litt mindre kontroll på hva du ber om. Grafikken er ganske pen, men kanskje ikke publiseringsklar.</p>
 <p>I en del eksempler her brukes <code>ggplot()</code>. Dette er for avansert grafikk og er det som brukes i standard statistikkurs på bachelornivå på SV-fakultetet (på alle fag, tror jeg). Det er en viktig grunn til at det brukes her også. For en del visualisering av tre-baserte metoder er det vesentlig lettere å bruke spesialiserte funksjoner via <code>plot()</code>. Men for all del: <code>ggplot()</code> kan lage disse figurene også, det bare krever mer arbeid enn vi prioriterer her.</p>
-<p>Du kan lære mer om <code>ggplot()</code> i R4DS <span class="citation" data-cites="r4ds">(<a href="#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> i kapittelet om <a href="https://r4ds.had.co.nz/data-visualisation.html">visualisering</a>.</p>
+<p>Du kan lære mer om <code>ggplot()</code> i R4DS <span class="citation" data-cites="r4ds">(<a href="references.html#ref-r4ds" role="doc-biblioref">Wickham and Grolemund 2017</a>)</span> i kapittelet om <a href="https://r4ds.had.co.nz/data-visualisation.html">visualisering</a>.</p>
 
 
 <!-- -->
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-r4ds" class="csl-entry" role="listitem">
 Wickham, Hadley, and Garrett Grolemund. 2017. <em>R for Data Science</em>. Beijing, China: <a href="https://r4ds.had.co.nz/index.html" class="uri">https://r4ds.had.co.nz/index.html</a>; O’Reilley.
 </div>

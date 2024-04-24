@@ -1,4 +1,8 @@
 # Unsupervised learning 
+```{r}
+#| echo: false
+invisible(Sys.setlocale(locale='no_NB.utf8'))
+```
 
 
 I dette kapittelt skal vi bruke følgende pakker: 
@@ -46,11 +50,16 @@ Her ser du de første seks observasjonene i datasettet:
 library(tidyverse)
 n <- 100
 
+
 set.seed(70)
 x <- rnorm(n, sd=.5) + rbinom(n, 1, .4)*4
 y <- x + rnorm(n)+ ifelse(x<=2, rbinom(n, 1, .5)*6, 0)
 
 df <- data.frame(x = x, y = y)
+
+saveRDS(df, file = "data/kmeans_data.rds")
+
+
 head(df)
 
 ```
@@ -232,24 +241,19 @@ Det er verd å merke seg at startpunktet (altså de tre tilfeldige punktene) kan
 
 ### K-means med `kmeans()` 
 
+Vi bruker eksempeldatasettet brukt ovenfor. 
 
 ```{r}
+#| echo : false
+#| warning: false
+#| eval: false
+df <- readRDS("data/kmeans_data.rds")
 head(df)
-library(downloadthis)
-df %>%
-  download_this(
-    output_name = "df dataset",
-    output_extension = ".rds",
-    button_label = "Download data as rds",
-    button_type = "default",
-    has_icon = TRUE,
-    icon = "fa fa-save"
-  )
 ```
 
 
 
-Heldigvis er det en funksjon som fikser hele saken for oss. Funksjonen `kmeans()` trenger primært tre imput: de dataene som skal klustres, antall klustere, og antall tilfeldige startverdier. Antall klustre må vi altså bestemme selv. 
+Det er en del plunder med å gjøre kmeans manuelt. Heldigvis er det en funksjon som fikser hele saken for oss. Funksjonen `kmeans()` trenger primært tre imput: de dataene som skal klustres, antall klustere, og antall tilfeldige startverdier. Antall klustre må vi altså bestemme selv. 
 
 Her er en kode som først kjører kmeans-algoritmen. I det objektet som kommer ut er det en vektor som heter `...$cluster` som er selve klassifiseringen. Denne kan vi legge inn som en ny variabel i datasettet. Merk at rekkefølgen på observasjonene og output-objektet er den samme, så det blir riktig å bare legge til vektoren som en ny variabel. Dernest kan vi plotte resultatet. 
 
@@ -298,236 +302,111 @@ Kvadratsummen reduseres for antall klustre. Intuitivt er jo det rimelig: jo fler
 
 
 ### Longitudinelle data
-Det er nok vanligst å klustre ulike variable. Men hvis variablene innholder verdier for ulike tidsenheter (f.eks. per år), så kan vi også analysere tidstrender på denne måten. Antall variable som klustres kan være flerdimensjonalt. Ovenfor er det brukt bare to variable, men normale er jo at det er langt flere dimensjoner samtidig. 
-
-
-
-## Hierarkisk klustering 
-
-**OBS!** *Som dere ser er ikke denne delen tilstrekkelig gjennomarbeidet i tide til at det er til veldig mye hjelp for dere før eksamen. Legg derfor vekt på k-means og PCA. Men ta en titt på pensumet likevel slik at dere kjenner litt til hva dette er.*
-
-
-::: {#exr-}
-Last ned filen med kommunedata fra Canvas. 
-Dette er deler av dataene vi brukte i første seminar med kommunetall. Her er det anmeldt 
-kriminalitet per 1000 innbyggere i kommuner i 2016. 
-
-a) Gjør en hierarkisk klusteranalsyse. Er det noen kommuner som skiller seg veldig fra de 
-andre? Spiller det noen rolle hvilken type distance du setter? 
-a) Hvilke kommuner er de de klusterne som skiller seg ut? 
-a) Hva kjennetegner lovbruddsbildet i de ulike klustrene? Kan du tenke deg noen grunner til at akkurat disse stikker seg ut?
- 
-:::
-
-
-::: {.solution}
-Leser inn data om inntektsutvikling for ulike yrker fra 2001 til 2016
-
-Dataene er i "bred" format. Det er slik vi vil ha det for clusteranalyse, men dårlig for å lage en graf.
-
-::: {.content-hidden when-format="pdf"}
-
-
-
-```{r}
-#| echo: false
-#| warning: false
-library(downloadthis)
-load("../data/oes.RData")
-
-gathered_oes <- gather(data = df_oes, 
-                       key = year, 
-                       value = mean_salary, 
-                       -occupation)
-
-gathered_oes %>%
-  download_this(
-    output_name = "oes dataset",
-    output_extension = ".rds",
-    button_label = "Download data as rds",
-    button_type = "default",
-    has_icon = TRUE,
-    icon = "fa fa-save"
-  )
-
-```
-
-:::
-
-
-
-```{r}
-# load("../data/oes.RData")
-# 
-# gathered_oes <- gather(data = df_oes, 
-#                        key = year, 
-#                        value = mean_salary, 
-#                        -occupation)
-```
+Det er nok vanligst å klustre ulike variable. Men hvis variablene innholder verdier for ulike tidsenheter (f.eks. per år), så kan vi også analysere tidstrender på denne måten. Antall variable som klustres kan være flerdimensjonalt. Ovenfor er det brukt bare to variable, men det normale er jo at det er langt flere dimensjoner samtidig. 
 
 
 
 
-
-```{r}
-ggplot(gathered_oes, aes(x=as.numeric(year), y=mean_salary, col = occupation))+
-  geom_line()
-
-
-dist_oes <- dist(df_oes[,-1], method = "euclidian") # calculate distances 
-
-hc_oes <- hclust(dist_oes, method = "single")  # minste avstand
-
-hc_oes <- hclust(dist_oes, method = "complete") # lengste avstand
-
-hc_oes <- hclust(dist_oes, method = "average") #gjennomsnittlig avstand
-
-par(mar=c(10,4,2,2))  # Endre marginer for base-plot
-
-dend_oes <- as.dendrogram(hc_oes) #Create a dendrogram object
-dend_colored <- color_branches(dend_oes, h = 100000)
-plot(dend_colored)
-
-# Illustrer mulige cutoff - legger linjer oppå eksisterende plot
-abline(h=100000, col="red", lwd=1.5)  # Viser cut ved h=100000
-abline(h=10000, col="red", lwd=1.5)   # Viser cut ved h=10000
-
-
-# Henter ut cluster ved valgt h
-cluster <- cutree(hc_oes, h=100000)
-#cluster <- cutree(hc_oes, k=3)
-table(cluster)
-
-
-# Legger til vektoren cluster til opprinnelige data
-hclust_oes <- mutate(df_oes, cluster = cluster)
-
-head(hclust_oes)
-
-# vrenger dataene "nedover" for å plotte
-gathered_oes <- gather(data = hclust_oes,    # datasett
-                       key = year,           # navn på ny variabel, verdier hentes fra gamle variabelnavn
-                       value = mean_salary,  # navn på ny variabel med gamle variabelverdier
-                       -occupation, -cluster) # variable som skal beholdes / grupperes etter
-ggplot(gathered_oes, aes(x = year, y = mean_salary, color = factor(cluster), group = occupation)) + 
-  geom_line()
-
-```
-
-
-
-::: {#exr-}
-Gjenta analysen over med k-means clustering. Hvor mange klustre bør det være? Får du samme 
-resultat?
-:::
-
-
-::: {.solution}
-
-```{r}
-## K-means clustering med samme data 
-
-# Eksempel ved å sette antall kluster til 3
-# I dette tilfellet bør vi få samme resultat
-km_oes <- kmeans(dist_oes, centers = 3)
-
-table(km_oes$cluster)
-
-kmclust_oes <- mutate(df_oes, cluster=km_oes$cluster)
-
-# Plotter
-gathered_kmoes <- gather(data = kmclust_oes,    # datasett
-                       key = year,           # navn på ny variabel, verdier hentes fra gamle variabelnavn
-                       value = mean_salary,  # navn på ny variabel med gamle variabelverdier
-                       -occupation, -cluster) # variable som skal beholdes / grupperes etter
-ggplot(gathered_kmoes, aes(x = year, y = mean_salary, color = factor(cluster), group = occupation)) + 
-  geom_line()
-
-
-### K-means clustering. Make a search
-wss <- 0
-# For 1 to 15 cluster centers
-for (i in 1:5) {
-  km.out <- kmeans(dist_oes, centers = i, nstart=20)
-  # Save total within sum of squares to wss variable
-  wss[i] <- km.out$tot.withinss
-}
-
-# Plot total within sum of squares vs. number of clusters
-plot(1:5, wss, type = "b", 
-     xlab = "Number of Clusters", 
-     ylab = "Within groups sum of squares")
-# Marker "albuen" med en linje i plottet 
-abline(v=2, col="red")
-
-oes <- readRDS("../data/oes.rds")
-
-## Create final clustering
-km_oes <- kmeans(oes, centers = 2, nstart=20)
-table(km_oes$cluster)
-kmclust_oes <- mutate(df_oes, cluster=km_oes$cluster)
-gathered_kmoes <- gather(data = kmclust_oes,    # datasett
-                         key = year,           # navn på ny variabel, verdier hentes fra gamle variabelnavn
-                         value = mean_salary,  # navn på ny variabel med gamle variabelverdier
-                         -occupation, -cluster) # variable som skal beholdes / grupperes etter
-ggplot(gathered_kmoes, aes(x = year, y = mean_salary, color = factor(cluster), group = occupation)) + 
-  geom_line()
-
-```
-
-
-:::
-
-
-
-:::
 
 
 ## Datareduksjon med principal component analysis (PCA)
 
+En annen form for unsupervised learning er principal component analysis (PCA). Dette er en teknikk som reduserer dimensjonaliteten i et datasett. Med dimensjonalitet mener vi i praksis antall variable. I et datasett med mange variable kan det være vanskelig å se sammenhenger og strukturer. PCA reduserer antall variable til et fåtall "hovedkomponenter" som forklarer mesteparten av variansen i datasettet. Det man får ut av PCA er nye variable som er lineære kombinasjoner av de opprinnelige variablene. Den første hovedkompenenten er den som forklarer mest av varians i variablene. Den andre forklarer nest mest osv. For den første principal component (PC1) får hver variabel en *factor loading* som forteller hvor mye variabelen bidrar til PC1. 
+
+Det som noen ganger kalles *principal component regression* er en variant der man bruker den første hovedkomponenten som prediktor i en regresjonsanalyse. Dette tilsvarer å lage en indeks av de opprinnelige variablene. 
 
 
-Vi starter med datasettet for kriminalitet i norske kommuner. 
+### Empirisk eksempel
+Vi starter med datasettet for kriminalitet i norske kommuner, og velger en enkelt årgang for enkelhets skyld. Vi beholder et begrenset sett av variable av ulik art.  
 
 ```{r}
+#| warning: false
+#| message: false
 kommune <- readRDS( "data/kommunedata.rds") %>% 
-  filter(year == max(year)) %>% 
-  #select(-c(1,3))
-  select(2, vinningskriminalitet:andre_lovbrudd) 
+  filter(year == 2020) %>% 
+    mutate(kommune = ifelse(kommune == "Oslo municipality", "Oslo", kommune)) %>%
+  select(kommune, menn_18_25:menn_18min, inntekt_totalt_median:andre_lovbrudd) %>% 
+  select(-inntekt_eskatt_median) %>% 
+  column_to_rownames(var = "kommune")
 
 glimpse(kommune)
-
-
 ```
 
-Så et lite triks som ikke er viktig for resultatet som sådan, men hjelper å holde orden på dataene. Vi er kjent med at kolonnene i et datasett har navn: altså variabelnavn. Men i R kan også *radene* ha navn. Det er ikke like vanlig å bruke til noe spesielt, men her er det nyttig å ta det med seg.  
+Så et lite triks som ikke er viktig for resultatet som sådan, men hjelper i visualiseringen litt senere er å bruke radnavn. Vi er kjent med at kolonnene i et datasett har navn: altså variabelnavn. Men i R kan også *radene* ha navn. Det er ikke like vanlig å bruke til noe spesielt og kan med fordel unngås til vanlig. Men akkurat her gjør det at kommunenavnene vises når vi bruker funksjonen `biplot` nedenfor. Analyse vil ellers fungere like godt uten denne koden. 
+
+Kodesnutten `column_to_rownames(var = "kommune")` gjør om variabelen *kommune* til radnavn. Da er det bare de numeriske verdiene igjen som skal analyseres.^(Hvis ikke måtte første kollonne fjernes manuelt først før PCA.)
+
+Hvis vi skal visualisere dataene kan man bruke et scatterplot matrise, der alle par av variable plottes mot hverandre. Dette kan gjøres med `GGally`-pakken, og her er det valgt ut bare noen få av variablene. 
 
 ```{r}
-row.names(kommune) <- kommune[,1]
+#| warning: false
+#| message: false
+library(GGally)
+ggpairs(kommune[ ,c(1, 3, 6, 7, 8, 10, 11)])
 
 ```
 
-Så kan vi kjøre en principal component analyse. Det er her viktig å sette `scale = TRUE`. Dette gjør at dataene re-skaleres til en z-skår med gjennomsnitt 0 og standardavvik 1. Det skal veldig gode grunner for å gjøre noe annet, så gjør alltid dette.   
+
+Dette var bare noen få variable, og det gir rett og slett ikke så mye sammenheng. Med flere variable blir det enda vanskeligere å få noe ut av dette. 
+
+
+
+I stedet kan vi kjøre en principal component analyse med `prcomp`. Det er her viktig å sette `scale = TRUE` og `center = TRUE`. Dette er innebygde funksjoner som standardiserer dataene før algoritmen kjøres. Altså: dataene re-skaleres til en z-skår med gjennomsnitt 0 og standardavvik 1. Det skal veldig gode grunner for å gjøre noe annet, så gjør alltid dette. Koden nedenfor viser hvordan dette gjøres og gir en oppsummering av resultatet. 
+
 
 ```{r}
 library(stats)
-pr_komm <- prcomp(kommune[,-1], scale = TRUE, center = TRUE)
+pr_komm <- prcomp(kommune, scale = TRUE, center = TRUE)
 
 summary(pr_komm)
-mean(kommune$vinningskriminalitet)
-
-
-pr_komm$center
 
 ```
 
+Resultatet vises som en liste over de ulike komponentene. Den første komponenten forklarer mest av variansen, den andre nest mest osv. I dette tilfellet er det 15 komponenter. I praksis bryr vi oss mest om de første par komponentene hvis de forklarer tilstrekkelig av variansen. Her fanger de 3 første komponente opp over 80% av variansen. 
+
+PCA-objektet inneholder flere elementer som vi skal bruke nedenfor. En enkelt måte å få innsikt på er å bruke `names`-funksjonen slik: `names(pr_komm)`. Men det er først og fremst `pr_komm$x` og `pr_komm$sdev` som er interessante. `x` en matrise med de nye variablene som er lineære kombinasjoner av de opprinnelige variablene, altså et datasett men i matriseformat. `sdev` er standardavviket for de ulike komponentene, som vistes i første linjen i `summary(pr_komm)`.
+
+
+Det er vanlig å undersøke dette visuelt med et såkalt biplot. Dette er et scatterplott av PC1 og PC2 der hver enhet plasseres i forhold til disse. I tillegg vises factor loadings for hver variabel som piler. Dette plottet kan lages manuelt med `ggplot`, men det er enklere å bruke `biplot`-funksjonen som er spesielt til dette formålet. Argumentene `cex =  `,  `cex.axis =  ` og `cex.lab = ` er bare for å justere størrelsen på teksten. 
+
 ```{r}
-pvar <- pr_komm$sdev^2 
-pve <- pvar/sum(pvar)
+par(mar=c(2,1,2,1))
+biplot(pr_komm, cex = .4, cex.axis = .6, cex.lab = .6)
+
+```
+Det skal innrømmes at dette plottet er heller ikke så lett å tolke uten videre, men først og fremst fordi en del tekst kommer oppå hverandre. Så kanskje bør man ta en titt på tabellen for factor loadings for de to første komponentene i tillegg.
+
+Det er en del informasjon i dette plottet. Pilene viser *factor loadings* for hver variabel som retningen og lengden på pilen. Jo lengre pilen er, jo mer bidrar variabelen til den aktuelle komponenten. Navnet til hver enkelt kommune plassert i forhold til de ulike komponentene.^(Ovenfor var en kodesnutt som la kommunenvanene som radnavn. Hvis du ikke gjør dette kommer det punkter i stedet for navn.) Hvis to kommuner er plassert nærme hverandre, så er de like i forhold til de ulike komponentene. Hvis de er langt fra hverandre, så er de mer ulike. Vi ser bl.a. at Oslo skiller seg markant fra alle andre, men at Bergen og Trondheim er ganske like i samme retning. Eidskog og Storfjord ligger i en ganske annen retning. 
+
+Factor loadings viser hvor mye hver variabel bidrar til den aktuelle komponenten. Dette kan hentes ut med `pr_komm$rotation`.
+
+```{r}
+pr_komm$rotation[,1:2]
+
+```
+
+Variablene knyttet til befolkningsstruktur, husholdninger og sosialhjelp er de som bidrar mest til PC1. Variablene knyttet til kriminalitet er de som bidrar mest til PC2. Dette er en ganske vanlig situasjon: at ulike typer variabler grupperer seg sammen. 
+
+Vinningskriminalitet og voldskriminalitet har ganske lik factor loading. Det samme gjelder for ordenslovbrudd og lovbrudd knyttet til narkotika eller alkohol. Trafikklovbrudd skiller seg derimot en del fra de andre. 
 
 
-plot(1:6, pve, )
+Det er også mulig å hente ut annen informasjon fra PCA-objektet. 
+For å se på factor loadings for hver kommune kan vi undersøke `x`-matrisen i pca-objektet slik:  
 
+```{r}
+head(pr_komm$x)
+
+```
+Dette er en matrise med de nye variablene som er lineære kombinasjoner av de opprinnelige variablene. Hver rad er en kommune, og hver kolonne er en utregnet komponent. 
+
+Standardavviket for de ulike komponentene er gitt i `pr_komm$sdev`. Dette kan brukes til å regne ut andelen av variansen som forklares av hver komponent. Vi kan også plotte dette. 
+
+```{r}
+pvar <- pr_komm$sdev^2   # kvadrerte standardavvik (dvs. variansen)
+pve <- pvar/sum(pvar)    # Hver komponents andel av variansen
+
+
+# Hver komponents andel av variansen lagres i en data.frame for å kunne plottes med ggplot
 dt <- data.frame(components = 1:length(pve), prop_var_expl = pve)
 
 ggplot(dt, aes(x = components, y = prop_var_expl))+ 
@@ -537,36 +416,7 @@ ggplot(dt, aes(x = components, y = prop_var_expl))+
 
 ```
 
+Dette er en visualisering av hvor mye hver komponent bidrar til å forklare variansen i datasettet. Vi ser at de første komponentene forklarer mest, og at det flater ut etter hvert. Der hvor kurven flates ut med en "albue" er et godt sted å stoppe. I dette tilfellet er det etter 3 komponenter som summerer opp det meste av dataene. 
 
-
-Da kan resultatene vises grafisk som følger. 
-
-```{r}
-biplot(pr_komm, cex = .3)
-```
-
-
-
-```{r}
-kommune_scale <- kommune %>% 
-  mutate(across(where(is.numeric), scale)) 
-glimpse(kommune_scale)
-```
-
-
-```{r}
-
-
-```
-
-
-
-
-### Multippel korrespondanseanalyse
-PCA har egentlig som forutsetning av variablene er kontinuerlige, og det er litt trøblete å bruke det på kategoriske variable. Men ofte har vi kategoriske variable. 
-
-En variant av PCA for kategoriske variable er korrespondanseanalyse, som i teorien altså skal være bedre enn PCA. I praksis er det imidlertid ikke nødvendigvis veldig stor forskjell, så det er neppe stor skade skjedd hvis man bruker PCA likevel. 
-
-
-
+Slik sett er datasettet redusert fra 15 variable til 3. Der de opprinnelige variablene var korrelerte i varierende grad, så er de tre nye variablene ikke korrelerte, men representerer ulike dimensjoner. Merk at de nye variablene beholder det aller meste av informasjonen i de opprinnelige dataene (jf. plottet over), og er mye mer effektivt enn å bruke alle de opprinnelige variablene i en regresjonsanalyse eller bare plukke ut noen få som tilsynelatende er viktigst isolert sett. 
 
