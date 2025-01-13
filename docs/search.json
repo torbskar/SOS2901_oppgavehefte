@@ -439,5 +439,55 @@
     "title": "Appendix B — Introduksjon til R",
     "section": "",
     "text": "Man kan si at dette ligner litt på subjekt og verb i vanlige språk.↩︎\nDette kalles også noen ganger for indikatorvariable eller one-hot-encoding, litt avhengig av fagfelt og tradisjoner, men er det samme.↩︎\nDet finnes flere slike dialekter av R, men som ikke er relevant her. Men greit å vite om, særlig hvis man søker på nettet etter hjelp for spesielle problemer. Tidyverse utvikles av firmaet Posit som også lager Rstudio. De leverer også et eget rammeverk for maskinlæring som heter tidymodels, som bl.a. pakken rsample er en del av. Vi holder oss til basis-pakkene for de spesifikke funksjonene på dette kurset.↩︎"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "SOS2901 Maskinlæring for samfunnsvitere",
+    "section": "",
+    "text": "Introduksjon\nDette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. Det lages delvis underveis, så det vil bli oppdateringer innimellom. Ikke alt er klart akkurat nå, og det vil skje endringer i dokumentet underveis gjennom hele semesteret.\nHvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Deretter kommer noen oppgaver, som dere skal løse. Oppgavene er ganske åpne og det er meningen at dere skal velge et annet datasett og gjøre tilsvarende analyser som i eksempelet. Fra eksempelet får dere også nødvendig kode. Datasettene som er tilgjengelige finner dere i appendikset. Last de ned til egen masking for å jobbe med dem.\nHver uke skal vi jobbe med på følgende måte:",
+    "crumbs": [
+      "Introduksjon"
+    ]
+  },
+  {
+    "objectID": "index.html#forberedelse-til-undervisning",
+    "href": "index.html#forberedelse-til-undervisning",
+    "title": "SOS2901 Maskinlæring for samfunnsvitere",
+    "section": "Forberedelse til undervisning",
+    "text": "Forberedelse til undervisning\nTil hver undervisningsgang skal du ha forberedt to ting:\n\nValgt et datasett og splittet dette i training/testing\nFormulert noe om hva en prediksjon med denne typen data kan tenkes å brukes til i praksis (en slags problemstilling, med andre ord)\nForberede minst ett spørsmål eller kommentar til det tekniske eller pensum. Vi starter hver undervisning med oppklaringer",
+    "crumbs": [
+      "Introduksjon"
+    ]
+  },
+  {
+    "objectID": "index.html#undervisningsvideoer",
+    "href": "index.html#undervisningsvideoer",
+    "title": "SOS2901 Maskinlæring for samfunnsvitere",
+    "section": "Undervisningsvideoer",
+    "text": "Undervisningsvideoer\nDet legges ut undervisningsvideoer i Canvas. Det går også an å få tilgang til de samme videoene på denne lenken",
+    "crumbs": [
+      "Introduksjon"
+    ]
+  },
+  {
+    "objectID": "index.html#installasjon",
+    "href": "index.html#installasjon",
+    "title": "SOS2901 Maskinlæring for samfunnsvitere",
+    "section": "Installasjon",
+    "text": "Installasjon\nDu må installere både R og Rstudio på din datamaskin. Hvis du har Windows-maskin trenger du også installere Rtools. Hvis du har Mac OS X kan det hende du må installere XQuartz.\nSe ellers video fra SICSS",
+    "crumbs": [
+      "Introduksjon"
+    ]
+  },
+  {
+    "objectID": "index.html#pakker",
+    "href": "index.html#pakker",
+    "title": "SOS2901 Maskinlæring for samfunnsvitere",
+    "section": "Pakker",
+    "text": "Pakker\nR er basert på bruk av “pakker” som må installeres for å få tilgang til funksjoner vi skal bruke. Disse installeres med bruk av kommandoen install.packages(). F.eks. kan man installere pakken Tidyverse med følgende: install.packages(\"tidyverse\").\nFor å installere flere pakker kan man kjøre install.packages() flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre install.packages() på dette objektet. Noe slikt:\nVi skal i hvert fall bruke de pakkene som installeres med følgende kode:\n\npkgs &lt;- c(\"tidyverse\", \"skimr\", \"randomForest\", \"rpart\", \"rpart.plot\", \"pAUC\", \"rsample\", \"fairness\", \"xgboost\")\ninstall.packages(pkgs)\n\nDet kan hende vi kommer til å bruke flere etterhvert.\nMen for at du skal kunne bruke pakkene må du aktivere dem i R ved library(). Dette må du gjøre hver gang du starter opp R. Det kan se slik ut:\n\nlibrary(tidyverse)\nlibrary(skimr)\nlibrary(randomForest)\nlibrary(caret)\nlibrary(pAUC)\n\nHvert kapittel starter med en oversikt over hvilke pakker som brukes.",
+    "crumbs": [
+      "Introduksjon"
+    ]
   }
 ]
