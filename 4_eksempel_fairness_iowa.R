@@ -2,6 +2,7 @@ library(tidyverse)
 library(pROC)
 library(rsample)
 library(janitor)   # Inneholder funksjonen clean_names() som bl.a. fjerner punktum i variabelnavnene så det blir litt greiere å bruke
+library(caret)
 
 # Lese inn data og forenkle noen variable 
 recidivism_iowa <- read.csv("data/3-Year_Recidivism_for_Offenders_Released_from_Prison_in_Iowa_elaborated.csv") %>% 
@@ -42,12 +43,26 @@ summary(est_logit)
 
 
 training_pred <- training %>% 
-  mutate(prob = predict(est_logit, type = "response"))
+  mutate(prob = predict(est_logit, type = "response"), 
+         prob_class = ifelse(prob > 0.5, 1, 0))
 
 testing_pred <- testing %>% 
-  mutate(prob = predict(est_logit, type = "response", newdata = testing))
+  mutate(prob = predict(est_logit, type = "response", newdata = testing),
+         prob_class = ifelse(prob > 0.5, 1, 0))
 
 glimpse(testing_pred)
+
+
+testing_pred %>% 
+  select(prob_class, recidivism) %>% 
+  table() %>% 
+  confusionMatrix()
+
+
+
+confusionMatrix(as.factor(testing_pred$prob_class), reference = as.factor(testing_pred$recidivism))
+
+
 
 
 ggplot(testing_pred, aes(x = prob)) +
