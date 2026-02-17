@@ -2,7 +2,7 @@
 
 
 ## Introduksjon til fairness
-Det blir litt repetisjon her nå. Det grunnleggende med fairness har vi vært innom før, men nå gjør vi det i kontekst av random forest. En ting er å avdekke bias og urettferdighet, en annen ting er å gjøre noe med det! 
+I forrige kapittel så vi at `sampsize` er et viktig verktøy for å justere feilratene i random forest. Nå skal vi bruke dette til å adressere *bias* mellom undergrupper. En ting er å avdekke bias og urettferdighet, en annen ting er å gjøre noe med det! 
 
 
 
@@ -268,32 +268,6 @@ Jeg tror konklusjonen er at man justere for noe, men ikke alt. Men med nok data 
 
 Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du f.eks. ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for - og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett være umulige valg. Men hva er så alternativet? Det er jo heller ikke sikkert er bedre på noen av disse parametrene. 
 
-
-## Oppgaver
-
-
-::: {#exr-}
-Gå gjennom eksempelet over og sjekk at det fungerer og at du skjønner hvert steg. 
-:::
-
-
-::: {#exr-}
-Velg deg et annet datasett og gjør tilsvarende analyse. Det er viktig at du nå gjør en vurdering av hvilke undergrupper du synes er viktigst å motvirke urettferdighet for. Her bør du ta hensyn også til hva slags tiltak og konsekvenser det er snakk om! Skriv ned dine vurderinger om dette som begrunnelse for hvordan du vil motvirke urettferdighet i modellen. 
-
-a) Vurder hvilke konsekvenser prediksjonen kan få, med henblikk på et tenkt praktisk tiltak. Hvilke feilrater vil du akseptere? Ta et valg. 
-a) Estimer modellen som tidligere, lag en confusion matrix og vurder resultatet. Juster modellen til du er fornøyd med resultatet. 
-a) Vurder hvilken undergruppe du synes det er viktigst at ikke blir biased. 
-a) Hvilket mål på fairness synes du er viktigst i akkurat dette tilfellet? Velg ett mål, begrunn det valget og sjekk. 
-a) Estimer modellen på nytt med stratifisert utvalg og justert `sampsize`. Prøv deg frem til du får et akseptabelt mål på fairness. 
-a) Sjekk confusion matrix og sammenlign med den første modellen. Modellen ble kanskje mer rettferdig, men gikk f.eks. accuracy ned eller endrede feilrater? Eller litt flåsete sagt: Var det verd å få en mer rettferdig modell?
-a) Sjekk nå det samme målet på fairness med to andre undergrupper. Ble det like bra?  
-
-:::
-
-
-::: {#exr-}
-Velg et annet datasett og gjør tilsvarende øvelse. 
-:::
 
 
 

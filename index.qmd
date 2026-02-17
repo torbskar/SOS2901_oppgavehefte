@@ -1,22 +1,10 @@
 # Introduksjon {.unnumbered}
 
-Dette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. Det lages delvis underveis, så det vil bli oppdateringer innimellom. Ikke alt er klart akkurat nå, og det vil skje endringer i dokumentet underveis gjennom hele semesteret. 
+Dette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. Det lages delvis underveis, så det vil bli oppdateringer innimellom. Det vil kunne skje endringer i dokumentet underveis gjennom hele semesteret.
 
-Hvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Deretter kommer noen oppgaver, som dere skal løse. Oppgavene er ganske åpne og det er meningen at dere skal velge et annet datasett og gjøre tilsvarende analyser som i eksempelet. Fra eksempelet får dere også nødvendig kode. Datasettene som er tilgjengelige finner dere i appendikset. Last de ned til egen masking for å jobbe med dem. 
-
-Hver uke skal vi jobbe med på følgende måte: 
-
-1) Gå gjennom eksempelet og sjekk at du klarer reprodusere resultatene og skjønner omtrentlig hva du driver med. 
-1) Velg et av de andre datasettene og gjør tilsvarende analyser med dette 
-1) Gjenta gjerne med flere datasett
+Hvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Datasettene vil dere finne i rommet i Canvas. Last de ned til egen maskin for å jobbe med dem.
 
 
-## Forberedelse til undervisning
-Til hver undervisningsgang skal du ha forberedt to ting: 
-
-1) Valgt et datasett og splittet dette i training/testing 
-1) Formulert noe om hva en prediksjon med denne typen data kan tenkes å brukes til i praksis (en slags problemstilling, med andre ord)
-1) Forberede minst ett spørsmål eller kommentar til det tekniske eller pensum. Vi starter hver undervisning med oppklaringer
 
 ## Undervisningsvideoer
 
@@ -28,17 +16,17 @@ Det legges ut undervisningsvideoer i Canvas. Det går også an å få tilgang ti
 
 Dette kurset forutsetter at man har grunnleggende ferdigheter i kvantitative metoder og har brukt *R* før. Hvis du vet du trenger det: frisk opp litt fra tidligere kurs.
 
-Når det er sagt, så er det begrenset hvor mye man *må* kunne fra før hvis du er motivert til å jobbe med stoffet skal du nok få til dette. Det blir mye nytt uansett. 
+Når det er sagt, så er det begrenset hvor mye man *må* kunne fra før hvis du er motivert til å jobbe med stoffet skal du nok få til dette. Det blir mye nytt uansett.
 
-Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham & Grolemunds bok ["R for data science"](https://r4ds.had.co.nz/) et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk. 
+Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham & Grolemunds bok ["R for data science"](https://r4ds.had.co.nz/) et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk.
 
 
 # R og Rstudio
 
-## Installasjon 
+## Installasjon
 Du må installere både [R](https://www.r-project.org/) og [Rstudio](https://posit.co/products/open-source/rstudio/) på din datamaskin. Hvis du har Windows-maskin trenger du også installere [Rtools](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html). Hvis du har Mac OS X kan det hende du må installere [XQuartz](https://www.xquartz.org/).
 
-Se ellers video fra [SICSS](https://youtu.be/ulIv0NiVTs4) 
+Se ellers video fra [SICSS](https://youtu.be/ulIv0NiVTs4)
 {{< video https://youtu.be/ulIv0NiVTs4 >}}
 
 
@@ -48,29 +36,47 @@ R er basert på bruk av "pakker" som må installeres for å få tilgang til funk
 
 For å installere flere pakker kan man kjøre `install.packages()` flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre `install.packages()` på dette objektet. Noe slikt:
 
-Vi skal i hvert fall bruke de pakkene som installeres med følgende kode: 
+Vi skal i hvert fall bruke de pakkene som installeres med følgende kode:
 ```{r }
 #| code-fold: false
 #| eval: false
-pkgs <- c("tidyverse", "skimr", "randomForest", "rpart", "rpart.plot", "pAUC", "rsample", "fairness", "xgboost")
+pkgs <- c("tidyverse", "skimr", "randomForest", "rpart", "rpart.plot",
+           "rsample", "fairness", "xgboost", "mgcv", "splines", "Ecdat",
+           "ipred", "pROC", "caret", "forcats", "gtsummary", "janitor",
+           "gbm", "dendextend", "directlabels", "GGally")
 install.packages(pkgs)
 
 ```
 
-Det kan hende vi kommer til å bruke flere etterhvert. 
+Det kan hende vi kommer til å bruke flere etterhvert.
 
-Men for at du skal kunne bruke pakkene må du aktivere dem i R ved `library()`. Dette må du gjøre hver gang du starter opp R. Det kan se slik ut:
+Men for at du skal kunne bruke pakkene må du aktivere dem i R ved `library()`. Dette må du gjøre hver gang du starter opp R. Hvert kapittel starter med en oversikt over hvilke pakker som brukes i det kapittelet.
 
-```{r }
-#| code-fold: false
-#| eval: false
-library(tidyverse)
-library(skimr)
-library(randomForest)
-library(caret)
-library(pAUC)
 
-```
+## Oversikt over pakker brukt i heftet
 
-Hvert kapittel starter med en oversikt over hvilke pakker som brukes. 
+Tabellen under gir en oversikt over alle pakkene vi bruker, med en kort forklaring og de viktigste funksjonene.
+
+| Pakke | Beskrivelse | Viktige funksjoner | Kapittel |
+|---|---|---|---|
+| `tidyverse` | Samling av pakker for datahåndtering og grafikk | `mutate()`, `select()`, `filter()`, `ggplot()`, `glimpse()` | Alle |
+| `skimr` | Raske sammendrag av datasett | `skim()` | Lineær regresjon, Unsupervised |
+| `rsample` | Splitting av data i training/testing | `initial_split()`, `training()`, `testing()` | Alle supervised-kapitler |
+| `mgcv` | Generaliserte additive modeller (GAM) | `gam()`, `s()` | Lineær regresjon, Logistisk regresjon |
+| `splines` | Spline-funksjoner for fleksibel regresjon | `bs()` | Logistisk regresjon |
+| `Ecdat` | Datasett for økonometri (Clothing-data) | `data(Clothing)` | Logistisk regresjon |
+| `pROC` | ROC-kurver og AUC-beregning | `roc()`, `auc()` | Logistisk regresjon |
+| `caret` | Confusion matrix og modellevaluering | `confusionMatrix()` | Logistisk regresjon, CART, Bagging, Random forest, Boosting |
+| `rpart` | Klassifikasjonstrær (CART) | `rpart()`, `prune()` | CART, Bagging |
+| `rpart.plot` | Plotting av klassifikasjonstrær | `rpart.plot()`, `rpart.rules()` | CART, Bagging |
+| `ipred` | Bagging av klassifikasjonstrær | `bagging()` | Bagging |
+| `forcats` | Rekoding og håndtering av factor-variable | `fct_lump()`, `fct_recode()` | Bagging |
+| `randomForest` | Random forest-algoritmen | `randomForest()`, `varImpPlot()`, `partialPlot()` | Random forest |
+| `fairness` | Mål på rettferdighet/bias | `acc_parity()`, `fnr_parity()`, `fpr_parity()` | Fairness, Boosting |
+| `gbm` | Gradient boosting | `gbm()`, `gbm.perf()` | Boosting |
+| `gtsummary` | Pene sammendragstabeller | `tbl_cross()`, `tbl_summary()` | Boosting, Fairness |
+| `janitor` | Datarensing | `clean_names()` | Diverse |
+| `dendextend` | Dendrogram-visualisering | | Unsupervised |
+| `directlabels` | Direkte labels i plot | | Unsupervised |
+| `GGally` | Utvidelser til ggplot2, scatterplotmatriser | `ggpairs()` | Unsupervised |
 

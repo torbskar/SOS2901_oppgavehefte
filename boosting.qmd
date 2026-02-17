@@ -365,34 +365,5 @@ acc[[2]]
 
 
 
-## Oppgaver
-::: {#exr-}
-Se over de vurderingene du gjorde i tidligere analyser av compas-dataene, herunder hva slags feilrater du er villig til å akseptere og hva slags konsekvenser de ulike typene feil kan få. Vil du gjøre andre vurderinger nå? Ta stilling til om du fremdeles synes tidligere vurderinger var ok. Bestem deg for hvor mange falske positive du er villig til å godta per falske negative (dvs asymetriske kostnader). Bruk dette videre i neste oppgave. 
-:::
-
-::: {#exr-}
-Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men du må gjøre tre endringer: 
-
-1) Vurder asymetriske konstnader, spesielt cost-ratio (dvs. forholdet mellom falske positive og falske negative). Se om du klarer å justere modellen så du får dette resultatet. 
-1) Sjekk mål på fairness også for etnisitet. Test ut flere forskjellige mål fra fairness-pakken. Bruk fortsatt *training*datasettet. 
-1) Etter at du har kjørt gjennom alt med *training*datasettet må du sjekke resultatet mot *testing*datasettet. Ble det vesentlig endring i resultatene? 
-
-:::
-
-
-::: {#exr-}
-Bruk et annet datasett og gjør tilsvarende analyser. Husk å få med følgende deler: 
-
-a) Vurdering av konsekvenser av feil: hva vil du godta? Begrunn svaret med et tenkt tiltak som skal settes i verk. 
-a) Tilpass modellen, og vurder om du har nok iterasjoner (antall runder i boostingen). Øk ved behov. 
-a) Prediker, lag confusion matrix og sammenlign med hva du i utgangspunktet bestemte deg for å godta. Hvis det trengs endringer, juster modellen på nytt til du er mer fornøyd. 
-a) Kommenter hvilke variable som er mest betydningsfulle for prediksjonen og på hvilken måte. 
-a) Hvilke mål på fairness synes du er mest relevant her og for hvilke undergrupper? Sjekk dette empirisk. 
-a) Prøv å justere modellen til et mer tilfredsstillende rettferdig resultat for valgte undergrupper.
-a) Sjekk nå resultatene (inkl. fairness) for *testing*dataene også. 
-a) Vil du sette i verk tiltak basert på en slik prediksjonsmodell? Begrunn svaret. 
-
-:::
-
 
 

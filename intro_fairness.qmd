@@ -27,7 +27,7 @@ training <- training(attrition_split)
 testing  <- testing(attrition_split) 
 ```
 
-Det kan være nyttig å allerede såpass tidlig i kurset begynne å gjøre noen rettferdighetsbetraktninger. For å varme opp litt. Foreløpig har vi kun sett på regresjonsmodeller, og da er det begrenset i hvilken grad vi klarer *tune* modellene for å tilpasse ønsket resultat. Det blir mer av det siden, særlig når vi kommer til random forest. Men vi starter med å introdusere noen begreper og betraktninger.
+Nå som vi har sett på klassifikasjonstrær, bagging og random forest er det på tide å gjøre noen rettferdighetsbetraktninger. Vi starter med et eksempel basert på logistisk regresjon for å introdusere begreper og mål, og i neste kapittel skal vi se hvordan vi kan *tune* random forest for å motvirke bias.
 
 ## Hva slags rettferdighet
 
@@ -181,60 +181,6 @@ Det du må ta stilling til er egentlig hvor viktig du synes likebehandling er! O
 
 Så bør det nevnes at noen ganger ville man gjort noe uansett. Altså gjort de samme tiltakene basert på skjønn eller andre typer vurderinger. Det vil også ha feilrater og forskjeller mellom undergrupper i slike tilfeller, selv om man ikke har et oppsett som gir testing-data å estimere dette på. Det betyr at du ikke bare må ta stilling til om algoritmen er "fair" eller ikke, men også om den er mer eller mindre "fair" enn den alternative fremgangsmåten. 
 
-
-## Oppgaver
-
-::: {#exr-fair-rep}
-Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
-:::
-
-::: {#exr-fair-fler}
-Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.
-:::
-
-::: {#exr-fair-vurd}
-Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:
-
--   Er det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en "fair" modell?
--   Hvilke mål på "fairness" vil du si er viktigst i dette eksempelet? Hvorfor?
-:::
-
-
-::: {#exr-fair-enkel}
-Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder: 
-
-* Ble accuracy bedre eller verre? 
-* Ble resultatet mer "fair"?
-
-:::
-
-
-::: {#exr-fair-nyedata}
-Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.  
-:::
-
-
-
-
-## Refleksjonsoppgaver
-
-::: {#exr-fair-ref1}
-Studien til @caspi2017 bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende: 
-
-* Hva slags informasjon synes du *mangler* for å vurdere treffsikkerheten på prediksjonsmodellen? 
-* Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder? 
-* Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater? 
-* Er det behov for å vurdere "fairness" grundigere her? 
-:::
-
-
-::: {#exr-fair-ref2}
-Studien til @berk2016b bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende: 
-
-* Synes du at forholdstallet 1 til 10 for falske  positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da? 
-* Er det grunn til å tro at man bør undersøke "fairness" grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for? 
-
-:::
 
 
 

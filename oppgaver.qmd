@@ -1,0 +1,221 @@
+# Oppgaver
+
+Her er alle oppgavene samlet. De er organisert etter kapittel.
+
+
+
+## Logistisk regresjon
+
+Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger.
+
+::: {#exr-logit-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
+:::
+
+::: {#exr-logit-eksplisitt}
+Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.
+
+Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.
+:::
+
+::: {#exr-logit-split}
+Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.
+:::
+
+::: {#exr-logit-sepaa}
+Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:
+
+a)  Bruk `glimpse()` og `skim()` til å få oversikt over innholdet i datasettet
+b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang
+c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable
+:::
+
+::: {#exr-logit-train}
+Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve.
+
+a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell
+b)  Estimer en ny modell med alle variable i datasettet
+c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd
+
+Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.
+:::
+
+::: {#exr-logit-test}
+I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger:
+
+a)  Prediker utfallet på testing-datasettet
+b)  Regn ut AUC
+c)  Hvor stor er *endringen* i AUC er fra resultatene når du brukte training-datasettet?
+
+Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.
+:::
+
+::: {#exr-logit-class}
+Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet.
+:::
+
+
+## Klassifikasjonstrær
+
+::: {#exr-cart-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
+:::
+
+::: {#exr-cart-tune}
+Prøv deg frem med å justere tuning-parametrene `cp`, `minbucket` og `maxdepth`. Se hvordan treet endrer seg og sammenlign confusion matrix for ulike varianter. Bruk training-data til å justere og testing-data til sluttevaluering.
+:::
+
+::: {#exr-cart-compare}
+Sammenlign resultatet fra klassifikasjonstreet med logistisk regresjon (baseline). Hvilken modell gir best prediksjon? Vurder accuracy, sensitivity og specificity.
+:::
+
+::: {#exr-cart-loss}
+Juster loss matrix for å endre forholdet mellom falske positive og falske negative. Tenk deg en praktisk anvendelse og vurder hva slags feilrater som er akseptable.
+:::
+
+::: {#exr-cart-regler}
+Bruk `rpart.rules()` til å skrive ut reglene fra et klassifikasjonstre. Gi en tolkning av reglene -- hvem blir klassifisert som hva, og gir det mening?
+:::
+
+
+## Bagging
+
+::: {#exr-bag-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
+:::
+
+::: {#exr-bag-nbagg}
+Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk `set.seed()` slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter.
+:::
+
+::: {#exr-bag-nydata}
+Velg et nytt datasett og gjør en tilsvarende analyse med bagging. Vurder confusion matrix og sammenlign med et enkelt klassifikasjonstre.
+:::
+
+::: {#exr-bag-tune}
+Gjør en prediksjon med bruk av bagging og vurder confusion matrix. Prøv deg litt frem med å justere på tuningparametrene, f.eks. `cp` og `maxdepth` via `control = rpart.control()`.
+:::
+
+::: {#exr-bag-oob}
+Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?
+:::
+
+
+## Random forest
+
+::: {#exr-rf-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men gjør én endring: split datasettet først i testing og training.
+:::
+
+::: {#exr-rf-tune}
+Prøv deg frem med å justere `sampsize`, `mtry` og `ntree`. Se hvordan feilratene endrer seg. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette.
+:::
+
+::: {#exr-rf-varimp}
+Tolk random forest:
+a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning.
+a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial dependence plot.
+:::
+
+::: {#exr-rf-missing}
+Bruk de syntetiske dataene og håndter manglende verdier med `replace_na()`. Sammenlign resultater med ulike konfigurasjoner av `sampsize`. Hvilken konfigurasjon gir best balanse mellom sensitivity og specificity?
+:::
+
+
+## Intro til fairness
+
+::: {#exr-fair-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.
+:::
+
+::: {#exr-fair-fler}
+Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.
+:::
+
+::: {#exr-fair-vurd}
+Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:
+
+-   Er det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en "fair" modell?
+-   Hvilke mål på "fairness" vil du si er viktigst i dette eksempelet? Hvorfor?
+:::
+
+::: {#exr-fair-enkel}
+Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder:
+
+* Ble accuracy bedre eller verre?
+* Ble resultatet mer "fair"?
+:::
+
+::: {#exr-fair-nyedata}
+Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.
+:::
+
+
+### Refleksjonsoppgaver
+
+::: {#exr-fair-ref1}
+Studien til @caspi2017 bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende:
+
+* Hva slags informasjon synes du *mangler* for å vurdere treffsikkerheten på prediksjonsmodellen?
+* Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder?
+* Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater?
+* Er det behov for å vurdere "fairness" grundigere her?
+:::
+
+::: {#exr-fair-ref2}
+Studien til @berk2016b bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende:
+
+* Synes du at forholdstallet 1 til 10 for falske  positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da?
+* Er det grunn til å tro at man bør undersøke "fairness" grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for?
+:::
+
+
+## Fairness og tuning
+
+::: {#exr-fairtuning-rep}
+Gå gjennom eksempelet over og sjekk at det fungerer og at du skjønner hvert steg.
+:::
+
+::: {#exr-fairtuning-nydata}
+Velg deg et annet datasett og gjør tilsvarende analyse. Det er viktig at du nå gjør en vurdering av hvilke undergrupper du synes er viktigst å motvirke urettferdighet for. Her bør du ta hensyn også til hva slags tiltak og konsekvenser det er snakk om! Skriv ned dine vurderinger om dette som begrunnelse for hvordan du vil motvirke urettferdighet i modellen.
+
+a) Vurder hvilke konsekvenser prediksjonen kan få, med henblikk på et tenkt praktisk tiltak. Hvilke feilrater vil du akseptere? Ta et valg.
+a) Estimer modellen som tidligere, lag en confusion matrix og vurder resultatet. Juster modellen til du er fornøyd med resultatet.
+a) Vurder hvilken undergruppe du synes det er viktigst at ikke blir biased.
+a) Hvilket mål på fairness synes du er viktigst i akkurat dette tilfellet? Velg ett mål, begrunn det valget og sjekk.
+a) Estimer modellen på nytt med stratifisert utvalg og justert `sampsize`. Prøv deg frem til du får et akseptabelt mål på fairness.
+a) Sjekk confusion matrix og sammenlign med den første modellen. Modellen ble kanskje mer rettferdig, men gikk f.eks. accuracy ned eller endrede feilrater? Eller litt flåsete sagt: Var det verd å få en mer rettferdig modell?
+a) Sjekk nå det samme målet på fairness med to andre undergrupper. Ble det like bra?
+:::
+
+::: {#exr-fairtuning-annet}
+Velg et annet datasett og gjør tilsvarende øvelse.
+:::
+
+
+## Boosting
+
+::: {#exr-boost-vurd}
+Se over de vurderingene du gjorde i tidligere analyser av compas-dataene, herunder hva slags feilrater du er villig til å akseptere og hva slags konsekvenser de ulike typene feil kan få. Vil du gjøre andre vurderinger nå? Ta stilling til om du fremdeles synes tidligere vurderinger var ok. Bestem deg for hvor mange falske positive du er villig til å godta per falske negative (dvs asymetriske kostnader). Bruk dette videre i neste oppgave.
+:::
+
+::: {#exr-boost-rep}
+Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men du må gjøre tre endringer:
+
+1) Vurder asymetriske konstnader, spesielt cost-ratio (dvs. forholdet mellom falske positive og falske negative). Se om du klarer å justere modellen så du får dette resultatet.
+1) Sjekk mål på fairness også for etnisitet. Test ut flere forskjellige mål fra fairness-pakken. Bruk fortsatt *training*datasettet.
+1) Etter at du har kjørt gjennom alt med *training*datasettet må du sjekke resultatet mot *testing*datasettet. Ble det vesentlig endring i resultatene?
+:::
+
+::: {#exr-boost-nydata}
+Bruk et annet datasett og gjør tilsvarende analyser. Husk å få med følgende deler:
+
+a) Vurdering av konsekvenser av feil: hva vil du godta? Begrunn svaret med et tenkt tiltak som skal settes i verk.
+a) Tilpass modellen, og vurder om du har nok iterasjoner (antall runder i boostingen). Øk ved behov.
+a) Prediker, lag confusion matrix og sammenlign med hva du i utgangspunktet bestemte deg for å godta. Hvis det trengs endringer, juster modellen på nytt til du er mer fornøyd.
+a) Kommenter hvilke variable som er mest betydningsfulle for prediksjonen og på hvilken måte.
+a) Hvilke mål på fairness synes du er mest relevant her og for hvilke undergrupper? Sjekk dette empirisk.
+a) Prøv å justere modellen til et mer tilfredsstillende rettferdig resultat for valgte undergrupper.
+a) Sjekk nå resultatene (inkl. fairness) for *testing*dataene også.
+a) Vil du sette i verk tiltak basert på en slik prediksjonsmodell? Begrunn svaret.
+:::

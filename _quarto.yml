@@ -14,20 +14,17 @@ book:
     - introduksjon.qmd
     - linear_regresjon.qmd
     - logistisk_regresjon.qmd
-    - intro_fairness.qmd
     - cart.qmd
     - bagging.qmd
     - randomForest.qmd
+    - intro_fairness.qmd
     - fairness.qmd
     - boosting.qmd
-    - unsupervised.qmd
+  #  - unsupervised.qmd
     - references.qmd
 
-  appendices:
-   - datasets.qmd
-   - introduksjon_R.qmd
-
-  #downloads: [pdf]
+  
+  downloads: [pdf]
 
 
 bibliography: references.bib
@@ -37,8 +34,8 @@ format:
     theme: cosmo
     code-fold: false
     code-tools: true
-  # pdf:
-  #   documentclass: scrreprt
+  pdf:
+    documentclass: scrreprt
 
 
 # På kontormaskinen må jeg kjøre denne først: 

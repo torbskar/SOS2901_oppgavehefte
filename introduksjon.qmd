@@ -121,12 +121,3 @@ Et velkjent eksempel er hvordan [Amazon besluttet å slutte å bruke en algoritm
 
 Når man skal ta en algoritme i bruk er det derfor helt avgjørende at man kan forsvare bruken av de dataene algoritmen er trent på. Kjente skjevheter kan i prinsippet motarbeides ved *tuning* (dette kommer vi tilbake til), men det er vanskelig å garantere at det er skjevheter man *ikke* har tenkt på.
 
-## Oppgaver
-
-::: {#exr-sepaa}
-Kan man tenke seg målrettede tiltak som **ikke** innebærer en form for prediksjon om fremtiden? (Implisitt eller eksplisitt)
-:::
-
-::: {#exr-feil}
-Hvor alvorlig er det å gjøre feil? Hva avgjør om feil prediksjon spiller noen rolle?
-:::

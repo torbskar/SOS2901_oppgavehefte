@@ -6,313 +6,239 @@ I dette kapittelt skal vi bruke følgende pakker:
 #| eval: true
 #| code-fold: false
 #| echo: true
-#| warning: false 
+#| warning: false
 #| message: false
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
-library(skimr)       # funksjonen skim() for å se på data
 library(rsample)     # for å dele data i training og testing
-library(rpart)      # funksjoner for CART 
-library(rpart.plot) # funksjon for å plotte CART 
-library(caret)      # inneholder funksjon for confusion matrix 
+library(rpart)       # funksjoner for CART
+library(rpart.plot)  # funksjon for å plotte CART
+library(caret)       # inneholder funksjon for confusion matrix
 ```
 
-Vi skal her bruke datasettet **credit** fra Canvas. Dataene er en banks kundehistorikk for kreditt for 1000 kunder. Variabelen *default*[^cart-1] er «yes» hvis tilbakebetaling som avtalt og «no» hvis ikke. Dette er utfallsvariabelen. Øvrige variable er rimelig selvforklarende etter variabelnavn. Målet er å lage et system for hvilke nye kunder som skal få innvilget kreditt.
 
-[^cart-1]: Begrepet "default" på engelsk kan bety å ikke holde en forpliktelse, men i software kan det bety forhåndsvalg. Dette kan være forvirrende akkurat her. Du kan godt endre variabelnavnet hvis du vil.
+Vi skal her bruke syntetiske data som simulerer en fødselskohort. Datasettet inneholder informasjon om individer og utfallsvariabelen `felonies` angir om personen har begått en alvorlig forbrytelse (1) eller ikke (0). Vi starter med å lage en logistisk regresjonsmodell som sammenligningsgrunnlag, og deretter bygger vi klassifikasjonstrær.
+
+
+## Lese inn data
 
 ```{r}
-credit <- read.csv("../data/credit.csv", stringsAsFactors = TRUE) 
-
-skim(credit)
+load("data/synthetic_birthCohort96.RData")
+glimpse(synthetic_birthCohort)
 ```
 
-Vi splitter først datasettet i to deler: en til training og en til testing.
+Vi gjør litt enkel datahåndtering: fjerner noen variable og gjør utfallsvariabelen om til en factor.
 
 ```{r}
-set.seed(42)
-training_init <- initial_split(credit)
+synth <- synthetic_birthCohort %>%
+  select(-drugs, -violence) %>%
+  mutate(felonies = factor(felonies))
 
-training <- training(training_init)
-testing  <- testing(training_init)
-
+table(synth$felonies)
 ```
 
-Vi starter med å inkludere noen få variable som gir en oversiktlig illustrasjon. Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere `method = "class"`. Hvis ikke vil `rpart()` gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet.
+
+Vi splitter datasettet i training og testing:
 
 ```{r}
-credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
-                     data=training, method="class")
+set.seed(426)
+synth_split <- initial_split(synth, prop = .7)
+training <- training(synth_split)
+testing  <- testing(synth_split)
+```
+
+
+## Logistisk regresjon som baseline
+
+Før vi lager klassifikasjonstrær er det nyttig å ha et sammenligningsgrunnlag. Vi bruker logistisk regresjon med alle variable:
+
+```{r}
+est.glm <- glm(felonies ~ ., data = training, family = "binomial")
+summary(est.glm)
+```
+
+Vi predikerer på testing-data og gjør en klassifisering med cut-off på 0.5:
+
+```{r}
+testing_glm <- testing %>%
+  mutate(prob_glm = predict(est.glm, newdata = testing, type = "response")) %>%
+  mutate(klassifiser = factor(ifelse(prob_glm < .5, 0, 1))) %>%
+  drop_na()
+
+confusionMatrix(reference = testing_glm$felonies,
+                testing_glm$klassifiser,
+                positive = "1")
+```
+
+Denne confusion matrix gir oss et referansepunkt for å vurdere klassifikasjonstrærne.
+
+
+## Klassifikasjonstre
+
+Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere `method = "class"`. Hvis ikke vil `rpart()` gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet.
+
+```{r}
+klass_tre <- rpart(felonies ~ .,
+                   data = training, method = "class")
 
 ```
 
 Resultatet kan fremstilles grafisk med funksjonen `rpart.plot()` slik:
 
 ```{r}
-rpart.plot(credit_tree)
+rpart.plot(klass_tre)
 
 ```
 
-Vi kan også få printet ut resultatet som tall i en tabell.[^cart-2]
-
-[^cart-2]: Argumentet `extra = 4` brukes for klassifikasjonstrær for å få andel i hver gruppe per node.
+Vi kan også få printet ut resultatet som regler i en tabell med `rpart.rules()`:
 
 ```{r}
-rpart.rules(credit_tree, extra=4)  
+rpart.rules(klass_tre, extra = 4)
 ```
 
-Da kan vi sammenligne prediksjoner med observert utfall for trainingdataene på tilsvarende måte som før. I `predict()` må det angis `type = "class"` for å spesifisere at det skal være klassifikasjon. Hvis ikke får man en slags sannsynlighet.
+Da kan vi sammenligne prediksjoner med observert utfall for testingdataene. I `predict()` må det angis `type = "class"` for å spesifisere at det skal være klassifikasjon.
 
 ```{r}
-training_pred <- training %>% 
-  mutate(default_pred = predict(credit_tree,  type="class"))
+testing_pred <- testing %>%
+  mutate(felonies_pred = predict(klass_tre, newdata = testing, type = "class"))
 
-```
-
-Vi kan så skrive ut confusion matrix.
-
-```{r}
-tab <- training_pred %>% 
-  select(default_pred, default) %>% 
+tab <- testing_pred %>%
+  select(felonies_pred, felonies) %>%
   table()
-tab
+
+confusionMatrix(tab, positive = "1")
 
 ```
 
-Så kan vi få regnet ut alle de standardmålene slik vi har gjort før:
+
+
+## Tuning/pruning
+
+Vi har vært inne på tidligere at vi kan styre hvordan algoritmen fungerer. Det er noen parametres om styrer prosessen, og disse kan vi justere. Her tar vi for oss de viktigste.
+
+Kort fortalt styrer disse parametrene hvor komplekse trærne kan bli. Husk nå fra tidligere kapittel: mer kompleks modell gir bedre tilpassning til trainingdata - men kan gi dårligere tilpassning til testingdata. Målet er altså å finne en slags balansert kompleksitet.
+
+Nå er arbeidsflyten slik at man skrur litt på disse parametrene, sjekker resultatet og justerer på nytt og sjekker... osv. Da er det viktig at bruker trainingdata! Ikke bruke testingdata før du er rimelig fornøyd med resultatet.
+
+### Bruk av `cp = ...`
+
+`cp` er complexity parameter som setter et krav på hvor mye hver split skal bidra til modellens tilpassning til data. Forvalget er 0.01. Med en lavere verdi tillates mer komplekse trær:
 
 ```{r}
-confusionMatrix(tab)
+#| warning: false
+#| error: false
+klass_tre2 <- rpart(felonies ~ .,
+                    data = training, method = "class",
+                    cp = 0.0000001, maxdepth = 20, minbucket = 3)
+
+rpart.plot(klass_tre2)
 
 ```
 
-Men ovenfor har vi altså brukt training-data. Når man er fornøyd med modellen er derimot testing-data som gir indikasjon på hvor godt modellen fungerer.
+### Bruk av `maxdepth = ...`
+
+Parameteren `maxdepth` setter en grense for hvor mange splitter det kan gjøres i hver forgrening:
 
 ```{r}
-testing_pred <- testing %>% 
-  mutate(default_pred = predict(credit_tree, newdata=testing, type="class"))
+klass_tre3 <- rpart(felonies ~ .,
+                    data = training, method = "class",
+                    maxdepth = 4)
 
-tab <- testing_pred %>% 
-  select(default_pred, default) %>% 
-  table()
-tab
-
-confusionMatrix(tab)
+rpart.plot(klass_tre3)
 
 ```
-
-## Tuning/pruning 
-
-Vi har vært inne på tidligere at vi kan styre hvordan algoritmen fungerer. Det er noen parametres om styrer prosessen, og disse kan vi justere. Her tar vi for oss de viktiste, men det finnes flere.
-
-Kort fortalt styrer disse parametrene hvor komplekse trærne kan bli. Husk nå fra tidligere kapittel: mer kompleks modell gir bedre tilpassning til trainingdata - men kan gi dårligere tilpassning til testingdata. Målet er altså å finne en slags balansert kompleksitet. Med klassifikasjonstrær påvirker vi dette mer direkte enn ved regresjonsmodeller.
-
-Nå er arbeidsflyten slik at man skrur litt på disse parametrene, sjekker resultatet og justerer på nytt og sjekker... osv. Da er det viktig at bruker trainingdata! Ikke bruke testingdata før du er rimelig fornøyd med resultatet. Først da bruker du testingdata.
-
-### Bruk av `minsplit = ...`
-
-Parameteren `minsplit` kontrollerer det miste antallet observasjoner som kan være i en node for at en ny split skal testes. Hvis det blir for få observasjoner i en node, så stopper splitten der. Forvalget for denne parameteren er 20, så hvis f.eks. en node har 19 observasjoner, så stopper forgreningen der.
-
-Her er et eksempel for å illustrere. Ved å sette `minsplit = 50`, som en god del høyere enn forvalget på 20, vil man få et mindre komplekst tre. 
-
-```{r}
-credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
-                     data=training, method="class", minsplit = 50)
-
-rpart.plot(credit_tree)
-
-```
-
-
 
 
 
 ### Bruk av `minbucket = ...`
 
-Parameterne `minbucket = ...` styrer hvor mange observasjoner det minst må være i den siste noden. Forvalget er en 1/3 av `minsplit`, altså 7 hvis man ikke har endret på `minsplit`. Hvis man endrer `minsplit`, så endres `minbucket` også automatisk. Men du kan altså også styre `minbucket` direkte også.
-
-Dette ligner på hva `minsplit` gjør, men mens `minsplit` kan godt splitte en node med 20 i to grupper med 1 og 19, så vil `minbucket` ikke tillate en ny split med mindre den ene gruppen har minst 7.
-
-Her er et eksempel der det er satt `minbucket = 15`. Det skaper et mindre komplekst tre, og et lavere tall ville kunne gi et mer komplekst tre. Men det er andre valg som også spiller inn (forvalgte sådan) slik at du ikke nødvendigvis får et veldig mye mer komplisert tre ved å angi en lav verdi. 
+Parameterne `minbucket = ...` styrer hvor mange observasjoner det minst må være i den siste noden. Forvalget er en 1/3 av `minsplit`, altså 7 hvis man ikke har endret på `minsplit`.
 
 ```{r}
-credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
-                     data=training, method="class", minbucket = 15)
+klass_tre4 <- rpart(felonies ~ .,
+                    data = training, method = "class",
+                    minbucket = 15)
 
-rpart.plot(credit_tree)
-
-```
-
-
-
-### Bruk av `maxdepth = ...`
-
-Parameteren `maxdepth` setter rett og slett en grense for hvor mange splitter det kan gjøres i hver forgrening. Her er et eksempel der dybden på treet settes til maks 4 og treet får da altså ingen flere forgreininger etter det. 
-
-
-```{r}
-credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
-                     data=training, method="class", maxdepth = 4)
-
-rpart.plot(credit_tree)
-
-```
-
-
-
-### Bruk av `cp = ...`
-
-`cp` er complexity parameter som setter et krav på hvor mye hver split skal bidra til modellens tilpassning til data. Hvis en enkelt split ikke bidrar med mer enn dette, så stopper det der. Her angir du et tall mellom 0 og 1, der 0 er å tillate mest mulig split. Forvalget er 0.01. Her er et eksempel med tillate mest mulig compleksitet, så setter `cp` til et veldig lavt tall slik at denne restriksjonen blir tilnærmet borte. 
-
-
-```{r}
-#| warning: false
-#| error: false
-credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
-                     data=training, method="class", cp = .00001)
-
-rpart.plot(credit_tree)
+rpart.plot(klass_tre4)
 
 ```
 
 
 ### Sette delene sammen
-Du kan så kombinere disse parametrene. Eller: du kan faktisk ikke unngå å kombinere dem, for alle har forvalgte verdier. Det betyr at hvis du ikke justerer på dem, så bruker du jo de forvalgte. Forskjellen er bare om du har tatt et eksplisitt valg eller overlater det hele til softwaren. Når det er sagt er jo de forvalgte verdiene ikke helt dumme. 
+Du kan kombinere disse parametrene. Alle har forvalgte verdier, så du bruker dem uansett -- forskjellen er bare om du har tatt et eksplisitt valg eller overlater det hele til softwaren.
 
-Du har sett at `cp` kan gi veldig komplekse trær, og du må være innstilt på at dette skaper overfitting. Det kan være at klassifikasjonstreet ditt i stor grad fanger opp støy, så et for lavt `cp` er neppe lurt. Men du kan f.eks. sette `cp` lavt og justere med de andre parametrene. Du har nå altså en del verktøy tilgjengelig for å styre resultatet. Altså i tillegg til å velge hvilke variable du tar med i modellen i utgangspunktet. 
-
-Her er et eksempel der alle ovennevnte parametere er angitt. Merk at dette ikke nødvendigvis er et spesielt godt tre, men er for illustrasjonens skyld. Du kan selv prøve deg frem og se hvordan resultatet endres når du justerer de enkelte parametrene. 
-
+Her er et eksempel der vi bruker et ganske komplekst tre med justerte parametre:
 
 ```{r}
 #| warning: false
 #| error: false
-credit_tree <- rpart(default ~ age + amount + percent_of_income + purpose + employment_duration + housing, 
-                     data=training, method="class", 
-                     cp = .005, minbucket = 5, minsplit = 10, maxdepth = 7)
+klass_tre5 <- rpart(felonies ~ .,
+                    data = training, method = "class",
+                    cp = 0, maxdepth = 25, minbucket = 5)
 
-rpart.plot(credit_tree)
-
+rpart.plot(klass_tre5)
+rpart.rules(klass_tre5)
 ```
 
-
-### Pruning 
-En relatert teknikk er å beskjære treet basert på `cp`. Altså, når du har bygget et tre som du tenker er for komplekst, så kan du beskjære grenene slik at de minst viktige grenene kuttes. Algoritmen starter da nederst og kutter steg for steg til et mindre komplekst tre.^[For vanlig lineær regresjon gjorde vi noe tilsvarende: automatisk seleksjon av variable etter hvor viktige de var for tilpassningen. Dette er en tilsvarende type logikk.] Funksjonen `prune()` gjør jobben, og du må angi et tidligere bygget tre som første argument og deretter en angitt verdi for `cp`. 
-
-Her er et eksempel der forrige tre beskjæres med en høyere verdi for `cp`. 
+Vi kan sjekke resultatet med confusion matrix på testing-data:
 
 ```{r}
-pruned_credit_tree <- prune(credit_tree, cp = .015)
-rpart.plot(pruned_credit_tree)
+testing_pred <- testing %>%
+  mutate(felonies_pred = predict(klass_tre5, newdata = testing, type = "class"))
+
+confusionMatrix(reference = testing_pred$felonies,
+                testing_pred$felonies_pred,
+                positive = "1")
+```
+
+
+### Pruning
+En relatert teknikk er å beskjære treet basert på `cp`. Altså, når du har bygget et tre som du tenker er for komplekst, så kan du beskjære grenene slik at de minst viktige grenene kuttes. Funksjonen `prune()` gjør jobben:
+
+```{r}
+pruned_tre <- prune(klass_tre5, cp = .01)
+rpart.plot(pruned_tre)
 
 ```
 
-Men altså: det er ikke meningen at man skal rote rundt på måfå med disse justeringene! Det vil nok være lurt å starte med forvalgte verdier, sjekke resultatet og så se om man ønsker justere noe. Det kan være for å bedre "accuracy" eller et annet mål basert på confusion matrix. 
 
+## Asymetriske kostnader med loss matrix
 
-## Asymetriske kostnader med loss matrix med `cost = ...` 
-
-Loss matrix er forklart nøyere hos [@berk2016a] og krever litt innsats å venne hodet til å forstå. Utgangspunktet er følgende matrise for om observasjoner er klassifisert rett eller feil.
+Loss matrix gjør det mulig å vekte ulike typer feil forskjellig. Utgangspunktet er følgende matrise:
 
 $$
 loss = \begin{bmatrix}
                TN & FN \\
-               FP & TP 
+               FP & TP
         \end{bmatrix}
 $$
 
-Hver posisjon i matrisen kan gis et tall. Forvalget i `rpart()` er å vekte alle disse utfallene likt og da ser matrisen slik ut: 
-$$
-loss = \begin{bmatrix}
-               0 & 0 \\
-               0 & 0 
-        \end{bmatrix}
-$$
-Tallene angir vekter i følgende rekkefølge i øverste rad: sanne negative, falske negative, og i nederste rad: falske positive og sanne positive. Altså som angitt over. 
-
-
-Vi setter alltid vektingen av sanne positive og sanne negative til 0. Det er feilene som evt. skal vektes. Første steg er dermed å velge hvordan man vil vekte utfallet. La oss si at vi ønsker å angi at falske positive skal veie tyngre enn falske negative, med en faktor på 4 kan det gjøres ved å spesifisere matrisen som følger: 
-
-$$
-loss = \begin{bmatrix}
-               0 & 1 \\
-               4 & 0 
-        \end{bmatrix}
-$$
-
-I R gjør vi dette ved å lage en matrise. Rekken med tall angis fra øvre venstre hjørne og mot høye, og så samme fra nedre venstre hjørne. Matrisen lagres i et eget objekt, som jeg her har kalt for *lossm*.
+Vi setter alltid vektingen av sanne positive og sanne negative til 0. Feilene vektes. Her er et eksempel der falske positive veier 4 ganger tyngre enn falske negative:
 
 ```{r}
 lossm <- matrix(c(0, 4, 1, 0), ncol=2)
 lossm
 ```
 
-Nå kan loss matrisen angis i `rpart()` som et element under `parms = ...`. 
-
 ```{r}
-rpart_loss <- rpart(default ~ . , 
-                  data = training, 
-                  parms=list(loss = lossm),
+rpart_loss <- rpart(felonies ~ . ,
+                  data = training,
+                  parms = list(loss = lossm),
                   method = "class")
-```
 
-Da kan man se på resultatet igjen på samme måte som før. 
-
-```{r}
 rpart.plot(rpart_loss)
 ```
 
-## Fairness omigjen
-Nå er jo algoritmen endret, så confusion matrix er også endret. Da vil nødvendigvis mål på fairness ha endret seg også. Dette bør sjekkes, og evt gå tilbake og justere modellen igjen på ulike måter og sjekke igjen. 
-
-
-## Tester justert modell med testingdata
-Så er ringen sluttet: Nå du tror du har endet opp med en god algoritme, så er det på tide å sjekke mot testingdata. Da får du så en mer realistisk forståelse av hvordan resultatene vil slå ut for *nye* data. 
+Sjekk mot testingdata:
 
 ```{r}
-testing_pred <- testing %>% 
-  mutate(default_pred = predict(rpart_loss, newdata=testing, type="class"))
+testing_pred <- testing %>%
+  mutate(felonies_pred = predict(rpart_loss, newdata = testing, type = "class"))
 
-tab <- testing_pred %>% 
-  select(default_pred, default) %>% 
+tab <- testing_pred %>%
+  select(felonies_pred, felonies) %>%
   table()
-confusionMatrix(tab)
+confusionMatrix(tab, positive = "1")
 
 ```
 
 
-
-
-## Oppgaver
-
-::: {#exr-}
-Gjenta oppgave 1, men basert på dine vurderinger i e) se om du klarer å tune modellen mer i retning av ønsket cost-ratio. Bruk argumentene prior, cp, minbucket og maxdepth.
-:::
-
-<div>
-
-Bruk datasettet credit til å predikere kredittverdighet for nye kunder.
-
-a)  Spesifiser en formel med et fåtall variable og lag et klassifikasjonstre.
-b)  Plot med rpart.plot()
-c)  Bruk predict() til å klassifisere.
-d)  Lag en confusion matrix med table()
-e)  Gi en vurdering av resultatet.
-    1)  Si noe om forholdet mellom resultat for training og testing datasett.
-    2)  Er cost-ratio ok fra bankens perspektiv?
-    3)  Er cost-ratio ok fra kundens perspektiv?
-    4)  Andre hensyn som bør spille inn her?
-
-</div>
-
-<div>
-
-Datafilen credit_kunder.csv inneholder data om to lånesøkere: Ola Normann og Kari Hansen.\
-Skal banken gi dem lån? Bruk foretrukne modell fra forrige oppgave.
-
-</div>
-
-<div>
-
-Banker bruker slike systemer i dag i større eller mindre grad til automatisere behandling av lånesøknader. (Men de bruker både rikere data og mer avanserte algoritmer). I hvilken grad synes du slike systemer kan/bør helautomatiseres? Bør det være reguleringer på hva slags data som benyttes til slike systemer? Bør kunden få innsyn i algoritmen ved avslag? Gi noen vurderinger av mulige fordeler og ulemper med tanke på hvordan det kan slå ut for enkeltindivider.
-
-</div>
