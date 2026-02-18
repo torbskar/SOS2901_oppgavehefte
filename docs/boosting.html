@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./oppgaver.html" rel="next">
 <link href="./fairness.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -239,6 +239,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./oppgaver.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -298,10 +304,10 @@ window.Quarto = {
 <p>Det sentrale punktet for boosting er at modellen bygges steg for steg med en gradvis forbedring fra forrige runde slik at modellen blir gradvis bedre og bedre. Dette til kontrast til <em>bagging</em> der styrken ligger i avstemning på tvers av mange klassifikasjonstrær. I boosting er det altså samme modell som forbedres i hvert steg. Dette gjøres på en måte der feilklassifiseringen vektes opp i hver iterasjon. I adaptive boosting lages den en vekt litt mekanisk, mens i gradient boosting baseres det på en gradient fra velkjente statistiske fordelinger, f.eks. binomisk fordeling for kategorisk utfall.</p>
 <!-- # Kilde: https://towardsdatascience.com/how-to-select-between-boosting-algorithm-e8d1b15924f7 -->
 <!-- # http://uc-r.github.io/gbm_regression -->
-<p>Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen <code>gbm</code> krever nummerisk utfallsvariabel.</p>
+<p>Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen <code>gbm()</code> krever numerisk utfallsvariabel. Vi bruker <code>na.omit()</code> for å fjerne eventuelle rader med manglende verdier.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/compas.rds"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Two_yr_Recidivism =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="st">"1"</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Two_yr_Recidivism =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="st">"1"</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1677,14 +1683,15 @@ N = 1,795<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shrinkage =</span> <span class="fl">0.001</span>,</span>
 <span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bag.fraction =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Vi gjør prediksjon og klassifisering på samme måte som før:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(gradboost3, <span class="at">type =</span> <span class="st">"response"</span>), </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(gradboost3, <span class="at">type =</span> <span class="st">"response"</span>),</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">p_klass =</span> <span class="fu">ifelse</span>(pred <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)</p>
+<p>Lager enkel krysstabell med predikert mot observert (dvs confusion matrix):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(compas_p<span class="sc">$</span>p_klass, training<span class="sc">$</span>Two_yr_Recidivism) </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(compas_p<span class="sc">$</span>p_klass, training<span class="sc">$</span>Two_yr_Recidivism)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>tab</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   
@@ -1726,11 +1733,13 @@ N = 1,795<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
                                          </code></pre>
 </div>
 </div>
+<p>Sammenlign nå feilratene med den forrige modellen (uten gruppevekting). Ble forholdet mellom falske positive og falske negative annerledes?</p>
+<p>Så sjekker vi om den nye vektingen har gjort modellen mer rettferdig med hensyn på kjønn:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'p_klass'</span>, </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'p_klass'</span>,</span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -1741,6 +1750,7 @@ N = 1,795<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 </div>
 </div>
 </div>
+<p>Sammenlign dette med fairness-resultatet fra den uvektede modellen. Ble det mer rettferdig? Vekting er altså et verktøy for å justere bias i boosting på tilsvarende måte som <code>sampsize</code> er det for random forest. Men som alltid: det er en trade-off mellom rettferdighet og overall accuracy.</p>
 
 
 <!-- -->
@@ -2213,8 +2223,8 @@ N = 1,795<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="References">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./oppgaver.html" class="pagination-link" aria-label="Oppgaver">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -2247,13 +2257,13 @@ N = 1,795<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- # http://uc-r.github.io/gbm_regression --&gt;</span></span>
 <span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen <span class="in">`gbm`</span> krever nummerisk utfallsvariabel. </span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen <span class="in">`gbm()`</span> krever numerisk utfallsvariabel. Vi bruker <span class="in">`na.omit()`</span> for å fjerne eventuelle rader med manglende verdier.</span>
 <span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
 <span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/compas.rds"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Two_yr_Recidivism =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="st">"1"</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Two_yr_Recidivism =</span> <span class="fu">ifelse</span>(Two_yr_Recidivism <span class="sc">==</span> <span class="st">"1"</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span>
 <span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span>
 <span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a></span>
@@ -2542,50 +2552,56 @@ N = 1,795<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb35-358"><a href="#cb35-358" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-359"><a href="#cb35-359" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-360"><a href="#cb35-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-363"><a href="#cb35-363" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb35-364"><a href="#cb35-364" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb35-365"><a href="#cb35-365" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb35-366"><a href="#cb35-366" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
-<span id="cb35-367"><a href="#cb35-367" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(gradboost3, <span class="at">type =</span> <span class="st">"response"</span>), </span>
-<span id="cb35-368"><a href="#cb35-368" aria-hidden="true" tabindex="-1"></a>         <span class="at">p_klass =</span> <span class="fu">ifelse</span>(pred <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb35-369"><a href="#cb35-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-370"><a href="#cb35-370" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-361"><a href="#cb35-361" aria-hidden="true" tabindex="-1"></a>Vi gjør prediksjon og klassifisering på samme måte som før:</span>
+<span id="cb35-362"><a href="#cb35-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-365"><a href="#cb35-365" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-366"><a href="#cb35-366" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb35-367"><a href="#cb35-367" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb35-368"><a href="#cb35-368" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span></span>
+<span id="cb35-369"><a href="#cb35-369" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(gradboost3, <span class="at">type =</span> <span class="st">"response"</span>),</span>
+<span id="cb35-370"><a href="#cb35-370" aria-hidden="true" tabindex="-1"></a>         <span class="at">p_klass =</span> <span class="fu">ifelse</span>(pred <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
 <span id="cb35-371"><a href="#cb35-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-372"><a href="#cb35-372" aria-hidden="true" tabindex="-1"></a>Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)</span>
+<span id="cb35-372"><a href="#cb35-372" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb35-373"><a href="#cb35-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-376"><a href="#cb35-376" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb35-377"><a href="#cb35-377" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb35-378"><a href="#cb35-378" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb35-379"><a href="#cb35-379" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(compas_p<span class="sc">$</span>p_klass, training<span class="sc">$</span>Two_yr_Recidivism) </span>
-<span id="cb35-380"><a href="#cb35-380" aria-hidden="true" tabindex="-1"></a>tab</span>
-<span id="cb35-381"><a href="#cb35-381" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb35-382"><a href="#cb35-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-383"><a href="#cb35-383" aria-hidden="true" tabindex="-1"></a>Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. </span>
-<span id="cb35-386"><a href="#cb35-386" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb35-387"><a href="#cb35-387" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb35-388"><a href="#cb35-388" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb35-389"><a href="#cb35-389" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab, <span class="at">positive=</span><span class="st">"1"</span>)</span>
-<span id="cb35-390"><a href="#cb35-390" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb35-391"><a href="#cb35-391" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-392"><a href="#cb35-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-374"><a href="#cb35-374" aria-hidden="true" tabindex="-1"></a>Lager enkel krysstabell med predikert mot observert (dvs confusion matrix):</span>
+<span id="cb35-375"><a href="#cb35-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-378"><a href="#cb35-378" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-379"><a href="#cb35-379" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb35-380"><a href="#cb35-380" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb35-381"><a href="#cb35-381" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(compas_p<span class="sc">$</span>p_klass, training<span class="sc">$</span>Two_yr_Recidivism)</span>
+<span id="cb35-382"><a href="#cb35-382" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb35-383"><a href="#cb35-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb35-384"><a href="#cb35-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-385"><a href="#cb35-385" aria-hidden="true" tabindex="-1"></a>Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei.</span>
+<span id="cb35-388"><a href="#cb35-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-389"><a href="#cb35-389" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb35-390"><a href="#cb35-390" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb35-391"><a href="#cb35-391" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(tab, <span class="at">positive=</span><span class="st">"1"</span>)</span>
+<span id="cb35-392"><a href="#cb35-392" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb35-393"><a href="#cb35-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-396"><a href="#cb35-396" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb35-397"><a href="#cb35-397" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb35-398"><a href="#cb35-398" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
-<span id="cb35-399"><a href="#cb35-399" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb35-400"><a href="#cb35-400" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb35-401"><a href="#cb35-401" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb35-402"><a href="#cb35-402" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'p_klass'</span>, </span>
-<span id="cb35-403"><a href="#cb35-403" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
-<span id="cb35-404"><a href="#cb35-404" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
-<span id="cb35-405"><a href="#cb35-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-406"><a href="#cb35-406" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb35-407"><a href="#cb35-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-408"><a href="#cb35-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-394"><a href="#cb35-394" aria-hidden="true" tabindex="-1"></a>Sammenlign nå feilratene med den forrige modellen (uten gruppevekting). Ble forholdet mellom falske positive og falske negative annerledes?</span>
+<span id="cb35-395"><a href="#cb35-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-396"><a href="#cb35-396" aria-hidden="true" tabindex="-1"></a>Så sjekker vi om den nye vektingen har gjort modellen mer rettferdig med hensyn på kjønn:</span>
+<span id="cb35-397"><a href="#cb35-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-400"><a href="#cb35-400" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb35-401"><a href="#cb35-401" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb35-402"><a href="#cb35-402" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb35-403"><a href="#cb35-403" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
+<span id="cb35-404"><a href="#cb35-404" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
+<span id="cb35-405"><a href="#cb35-405" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
+<span id="cb35-406"><a href="#cb35-406" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'p_klass'</span>,</span>
+<span id="cb35-407"><a href="#cb35-407" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
+<span id="cb35-408"><a href="#cb35-408" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
 <span id="cb35-409"><a href="#cb35-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-410"><a href="#cb35-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-410"><a href="#cb35-410" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb35-411"><a href="#cb35-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-412"><a href="#cb35-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-412"><a href="#cb35-412" aria-hidden="true" tabindex="-1"></a>Sammenlign dette med fairness-resultatet fra den uvektede modellen. Ble det mer rettferdig? Vekting er altså et verktøy for å justere bias i boosting på tilsvarende måte som <span class="in">`sampsize`</span> er det for random forest. Men som alltid: det er en trade-off mellom rettferdighet og overall accuracy.</span>
+<span id="cb35-413"><a href="#cb35-413" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-414"><a href="#cb35-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-415"><a href="#cb35-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-416"><a href="#cb35-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-417"><a href="#cb35-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-418"><a href="#cb35-418" aria-hidden="true" tabindex="-1"></a></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -210,6 +210,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./oppgaver.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -271,7 +277,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Men: Det går an å bruke gjøre en split likevel. Da er det mer å regne som et <em>valideringsdatasett</em>. Hvis man tuner modellen og sjekker OOB-resultatene, så står man i fare for å overfitte mot OOB.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Med andre ord: Det kan være en god ide å splitte dataene først likevel.</p>
 <section id="eksempel-med-compas-data" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="eksempel-med-compas-data"><span class="header-section-number">6.1</span> Eksempel med COMPAS-data</h2>
-<p>Leser inn Compas-dataene.</p>
+<p>COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) er et risikoverktøy brukt av politi og rettsvesen i flere amerikanske stater. Datasettet inneholder informasjon om personer som har vært gjennom rettssystemet, der utfallsvariabelen <code>Two_yr_Recidivism</code> angir om personen begikk ny kriminalitet innen to år. Vi bruker dette datasettet gjennom flere kapitler i heftet.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -411,7 +417,7 @@ Confusion matrix:
 1 1176 1633   0.4186543</code></pre>
 </div>
 </div>
-<p>Vi kan da plotte variable importance plot. Set <code>type = 1</code> for at det skal vise gjennomsnittlig reduksjon i accuracy.</p>
+<p>Vi kan da plotte variable importance plot. Set <code>type = 1</code> for at det skal vise gjennomsnittlig reduksjon i accuracy. Plottet viser hvor mye dårligere modellens prediksjon blir hvis en variabel permuteres (stokkes om). Variable som er høyt oppe i plottet er mest viktige for prediksjonen.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(rf, <span class="at">type =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -425,7 +431,7 @@ Confusion matrix:
 </section>
 <section id="partial-dependence" class="level3" data-number="6.1.2">
 <h3 data-number="6.1.2" class="anchored" data-anchor-id="partial-dependence"><span class="header-section-number">6.1.2</span> Partial dependence</h3>
-<p>Her må du velge hvilken variabel du ønsker å se på.</p>
+<p>Variable importance forteller oss <em>hvilke</em> variable som er viktige, men ikke <em>hvordan</em> de påvirker prediksjonen. Partial dependence plot viser sammenhengen mellom en enkelt variabel og den predikerte sannsynligheten, justert for alle andre variable. Her må du velge hvilken variabel du ønsker å se på, og <code>which.class</code> angir hvilken klasse du vil se sannsynligheten for.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">partialPlot</span>(rf, <span class="at">pred.data =</span> compas,</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">x.var =</span> Number_of_Priors,</span>
@@ -438,6 +444,7 @@ Confusion matrix:
 </div>
 </div>
 </div>
+<p>Plottet viser at sannsynligheten for tilbakefall øker med antall tidligere lovbrudd, noe som er intuitivt rimelig.</p>
 </section>
 </section>
 <section id="tuning-av-random-forest-med-sampsize" class="level2" data-number="6.2">
@@ -446,6 +453,7 @@ Confusion matrix:
 <p>Hensikten med å gjøre dette er at hvis det er et mindretall som har det ene utfallet, så blir hvert tre bygget med mer informasjon om majoritetsgruppen. Hvis vi vekter opp minoritetsgruppen, så får disse større inflytelse på hvert tre.</p>
 <section id="eksempel-med-compas-data-1" class="level3" data-number="6.2.1">
 <h3 data-number="6.2.1" class="anchored" data-anchor-id="eksempel-med-compas-data-1"><span class="header-section-number">6.2.1</span> Eksempel med COMPAS-data</h3>
+<p>Her setter vi <code>sampsize = c(1900, 1900)</code>, altså like mange fra hver kategori av utfallsvariabelen. Det første tallet er antallet som trekkes fra kategori 0 (ingen tilbakefall) og det andre fra kategori 1 (tilbakefall):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>rf3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . ,</span>
@@ -467,7 +475,7 @@ Confusion matrix:
 1  978 1831   0.3481666</code></pre>
 </div>
 </div>
-<p>Her er et eksempel der de veies ulikt:</p>
+<p>Her er et eksempel der gruppene veies ulikt – vi trekker færre fra kategori 0 enn fra kategori 1, noe som gir mer vekt til tilbakefalls-gruppen:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rf4 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . ,</span>
@@ -493,7 +501,7 @@ Confusion matrix:
 </section>
 <section id="eksempel-med-syntetiske-data" class="level3" data-number="6.2.2">
 <h3 data-number="6.2.2" class="anchored" data-anchor-id="eksempel-med-syntetiske-data"><span class="header-section-number">6.2.2</span> Eksempel med syntetiske data</h3>
-<p>Vi kan gjøre tilsvarende med de syntetiske fødselskohort-dataene. Her håndterer vi først eventuelle manglende verdier med <code>replace_na()</code>:</p>
+<p>Vi kan gjøre tilsvarende med de syntetiske fødselskohort-dataene. Her håndterer vi først eventuelle manglende verdier med <code>replace_na()</code>. Merk at <code>randomForest()</code> ikke håndterer manglende verdier (NA), så disse må erstattes før estimeringen. En enkel løsning er å sette NA til 0, men i praksis bør man vurdere om dette er faglig rimelig.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/synthetic_birthCohort96.RData"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -514,7 +522,7 @@ Confusion matrix:
 21579   921 </code></pre>
 </div>
 </div>
-<p>Vi sammenligner flere ulike konfigurasjoner av <code>sampsize</code>:</p>
+<p>Vi sammenligner flere ulike konfigurasjoner av <code>sampsize</code>. Først kjører vi med forvalget, uten å angi <code>sampsize</code>. Da trekker <code>randomForest()</code> like mange observasjoner som det er i datasettet, men med tilbakelegging:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Default (ingen sampsize angitt)</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>rf_s1 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> ., <span class="at">data =</span> synth_train)</span>
@@ -553,6 +561,7 @@ Prediction    0    1
                                           </code></pre>
 </div>
 </div>
+<p>Deretter prøver vi en balansert sampsize der vi trekker like mange fra hver kategori:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Balansert sampsize</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>rf_s2 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
@@ -593,6 +602,7 @@ Prediction    0    1
                                           </code></pre>
 </div>
 </div>
+<p>Vi kan også prøve en ubalansert sampsize der vi trekker litt flere fra minoritetsgruppen:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ubalansert sampsize</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>rf_s3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
@@ -633,6 +643,7 @@ Prediction    0    1
                                           </code></pre>
 </div>
 </div>
+<p>Til sist prøver vi en konfigurasjon der vi trekker langt flere fra kategori 0 enn fra kategori 1:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Større sampsize</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>rf_s4 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
@@ -1180,7 +1191,7 @@ Prediction    0    1
 <span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eksempel med COMPAS-data</span></span>
 <span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>Leser inn Compas-dataene.</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) er et risikoverktøy brukt av politi og rettsvesen i flere amerikanske stater. Datasettet inneholder informasjon om personer som har vært gjennom rettssystemet, der utfallsvariabelen <span class="in">`Two_yr_Recidivism`</span> angir om personen begikk ny kriminalitet innen to år. Vi bruker dette datasettet gjennom flere kapitler i heftet.</span>
 <span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>)</span>
@@ -1246,7 +1257,7 @@ Prediction    0    1
 <span id="cb32-109"><a href="#cb32-109" aria-hidden="true" tabindex="-1"></a>rf</span>
 <span id="cb32-110"><a href="#cb32-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-111"><a href="#cb32-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-112"><a href="#cb32-112" aria-hidden="true" tabindex="-1"></a>Vi kan da plotte variable importance plot. Set <span class="in">`type = 1`</span> for at det skal vise gjennomsnittlig reduksjon i accuracy.</span>
+<span id="cb32-112"><a href="#cb32-112" aria-hidden="true" tabindex="-1"></a>Vi kan da plotte variable importance plot. Set <span class="in">`type = 1`</span> for at det skal vise gjennomsnittlig reduksjon i accuracy. Plottet viser hvor mye dårligere modellens prediksjon blir hvis en variabel permuteres (stokkes om). Variable som er høyt oppe i plottet er mest viktige for prediksjonen.</span>
 <span id="cb32-113"><a href="#cb32-113" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-116"><a href="#cb32-116" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-117"><a href="#cb32-117" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(rf, <span class="at">type =</span> <span class="dv">1</span>)</span>
@@ -1254,7 +1265,7 @@ Prediction    0    1
 <span id="cb32-119"><a href="#cb32-119" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-120"><a href="#cb32-120" aria-hidden="true" tabindex="-1"></a><span class="fu">### Partial dependence</span></span>
 <span id="cb32-121"><a href="#cb32-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-122"><a href="#cb32-122" aria-hidden="true" tabindex="-1"></a>Her må du velge hvilken variabel du ønsker å se på.</span>
+<span id="cb32-122"><a href="#cb32-122" aria-hidden="true" tabindex="-1"></a>Variable importance forteller oss *hvilke* variable som er viktige, men ikke *hvordan* de påvirker prediksjonen. Partial dependence plot viser sammenhengen mellom en enkelt variabel og den predikerte sannsynligheten, justert for alle andre variable. Her må du velge hvilken variabel du ønsker å se på, og <span class="in">`which.class`</span> angir hvilken klasse du vil se sannsynligheten for.</span>
 <span id="cb32-123"><a href="#cb32-123" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-126"><a href="#cb32-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb32-127"><a href="#cb32-127" aria-hidden="true" tabindex="-1"></a><span class="fu">partialPlot</span>(rf, <span class="at">pred.data =</span> compas,</span>
@@ -1262,109 +1273,119 @@ Prediction    0    1
 <span id="cb32-129"><a href="#cb32-129" aria-hidden="true" tabindex="-1"></a>            <span class="at">which.class =</span> <span class="st">"1"</span>)</span>
 <span id="cb32-130"><a href="#cb32-130" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-131"><a href="#cb32-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-132"><a href="#cb32-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-132"><a href="#cb32-132" aria-hidden="true" tabindex="-1"></a>Plottet viser at sannsynligheten for tilbakefall øker med antall tidligere lovbrudd, noe som er intuitivt rimelig.</span>
 <span id="cb32-133"><a href="#cb32-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-134"><a href="#cb32-134" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tuning av random forest med sampsize</span></span>
+<span id="cb32-134"><a href="#cb32-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-135"><a href="#cb32-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-136"><a href="#cb32-136" aria-hidden="true" tabindex="-1"></a>Det er mest vanlig å justere sampling-skjemaet i baggingen: altså hvor mange observasjoner som trekkes til å bygge hvert tre. Ved å bruke argumentet <span class="in">`sampsize = ...`</span> kan vi angi antallet som trekkes fra hver kategori i utfallsvariabelen.</span>
+<span id="cb32-136"><a href="#cb32-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tuning av random forest med sampsize</span></span>
 <span id="cb32-137"><a href="#cb32-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-138"><a href="#cb32-138" aria-hidden="true" tabindex="-1"></a>Hensikten med å gjøre dette er at hvis det er et mindretall som har det ene utfallet, så blir hvert tre bygget med mer informasjon om majoritetsgruppen. Hvis vi vekter opp minoritetsgruppen, så får disse større inflytelse på hvert tre.</span>
+<span id="cb32-138"><a href="#cb32-138" aria-hidden="true" tabindex="-1"></a>Det er mest vanlig å justere sampling-skjemaet i baggingen: altså hvor mange observasjoner som trekkes til å bygge hvert tre. Ved å bruke argumentet <span class="in">`sampsize = ...`</span> kan vi angi antallet som trekkes fra hver kategori i utfallsvariabelen.</span>
 <span id="cb32-139"><a href="#cb32-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-140"><a href="#cb32-140" aria-hidden="true" tabindex="-1"></a><span class="fu">### Eksempel med COMPAS-data</span></span>
+<span id="cb32-140"><a href="#cb32-140" aria-hidden="true" tabindex="-1"></a>Hensikten med å gjøre dette er at hvis det er et mindretall som har det ene utfallet, så blir hvert tre bygget med mer informasjon om majoritetsgruppen. Hvis vi vekter opp minoritetsgruppen, så får disse større inflytelse på hvert tre.</span>
 <span id="cb32-141"><a href="#cb32-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-144"><a href="#cb32-144" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-145"><a href="#cb32-145" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
-<span id="cb32-146"><a href="#cb32-146" aria-hidden="true" tabindex="-1"></a>rf3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . ,</span>
-<span id="cb32-147"><a href="#cb32-147" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1900</span>),</span>
-<span id="cb32-148"><a href="#cb32-148" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> compas)</span>
-<span id="cb32-149"><a href="#cb32-149" aria-hidden="true" tabindex="-1"></a>rf3</span>
-<span id="cb32-150"><a href="#cb32-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-151"><a href="#cb32-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-152"><a href="#cb32-152" aria-hidden="true" tabindex="-1"></a>Her er et eksempel der de veies ulikt:</span>
-<span id="cb32-153"><a href="#cb32-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-156"><a href="#cb32-156" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-157"><a href="#cb32-157" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
-<span id="cb32-158"><a href="#cb32-158" aria-hidden="true" tabindex="-1"></a>rf4 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . ,</span>
-<span id="cb32-159"><a href="#cb32-159" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1900</span>),</span>
-<span id="cb32-160"><a href="#cb32-160" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas)</span>
-<span id="cb32-161"><a href="#cb32-161" aria-hidden="true" tabindex="-1"></a>rf4</span>
-<span id="cb32-162"><a href="#cb32-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-163"><a href="#cb32-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-164"><a href="#cb32-164" aria-hidden="true" tabindex="-1"></a>Det viktige nå er at feilratene for falske positive og falske negative blir vesentlig forskjellig! Det betyr at ved hvordan vi estimerer modellen kan vi legge sterke føringer på resultatet. Vi bør derfor ta stilling til *på forhånd* hvilke feilrater vi er villig til å akseptere.</span>
-<span id="cb32-165"><a href="#cb32-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-166"><a href="#cb32-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-167"><a href="#cb32-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### Eksempel med syntetiske data</span></span>
-<span id="cb32-168"><a href="#cb32-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-169"><a href="#cb32-169" aria-hidden="true" tabindex="-1"></a>Vi kan gjøre tilsvarende med de syntetiske fødselskohort-dataene. Her håndterer vi først eventuelle manglende verdier med <span class="in">`replace_na()`</span>:</span>
+<span id="cb32-142"><a href="#cb32-142" aria-hidden="true" tabindex="-1"></a><span class="fu">### Eksempel med COMPAS-data</span></span>
+<span id="cb32-143"><a href="#cb32-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-144"><a href="#cb32-144" aria-hidden="true" tabindex="-1"></a>Her setter vi <span class="in">`sampsize = c(1900, 1900)`</span>, altså like mange fra hver kategori av utfallsvariabelen. Det første tallet er antallet som trekkes fra kategori 0 (ingen tilbakefall) og det andre fra kategori 1 (tilbakefall):</span>
+<span id="cb32-145"><a href="#cb32-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-148"><a href="#cb32-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-149"><a href="#cb32-149" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
+<span id="cb32-150"><a href="#cb32-150" aria-hidden="true" tabindex="-1"></a>rf3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . ,</span>
+<span id="cb32-151"><a href="#cb32-151" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1900</span>),</span>
+<span id="cb32-152"><a href="#cb32-152" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> compas)</span>
+<span id="cb32-153"><a href="#cb32-153" aria-hidden="true" tabindex="-1"></a>rf3</span>
+<span id="cb32-154"><a href="#cb32-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-155"><a href="#cb32-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-156"><a href="#cb32-156" aria-hidden="true" tabindex="-1"></a>Her er et eksempel der gruppene veies ulikt -- vi trekker færre fra kategori 0 enn fra kategori 1, noe som gir mer vekt til tilbakefalls-gruppen:</span>
+<span id="cb32-157"><a href="#cb32-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-160"><a href="#cb32-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-161"><a href="#cb32-161" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
+<span id="cb32-162"><a href="#cb32-162" aria-hidden="true" tabindex="-1"></a>rf4 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> . ,</span>
+<span id="cb32-163"><a href="#cb32-163" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1900</span>),</span>
+<span id="cb32-164"><a href="#cb32-164" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas)</span>
+<span id="cb32-165"><a href="#cb32-165" aria-hidden="true" tabindex="-1"></a>rf4</span>
+<span id="cb32-166"><a href="#cb32-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-167"><a href="#cb32-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-168"><a href="#cb32-168" aria-hidden="true" tabindex="-1"></a>Det viktige nå er at feilratene for falske positive og falske negative blir vesentlig forskjellig! Det betyr at ved hvordan vi estimerer modellen kan vi legge sterke føringer på resultatet. Vi bør derfor ta stilling til *på forhånd* hvilke feilrater vi er villig til å akseptere.</span>
+<span id="cb32-169"><a href="#cb32-169" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-170"><a href="#cb32-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-173"><a href="#cb32-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-174"><a href="#cb32-174" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb32-175"><a href="#cb32-175" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb32-176"><a href="#cb32-176" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/synthetic_birthCohort96.RData"</span>)</span>
-<span id="cb32-177"><a href="#cb32-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-178"><a href="#cb32-178" aria-hidden="true" tabindex="-1"></a>synth <span class="ot">&lt;-</span> synthetic_birthCohort <span class="sc">%&gt;%</span></span>
-<span id="cb32-179"><a href="#cb32-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>drugs, <span class="sc">-</span>violence) <span class="sc">%&gt;%</span></span>
-<span id="cb32-180"><a href="#cb32-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">felonies =</span> <span class="fu">factor</span>(felonies)) <span class="sc">%&gt;%</span></span>
-<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(.x, <span class="dv">0</span>)))</span>
-<span id="cb32-182"><a href="#cb32-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-183"><a href="#cb32-183" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">426</span>)</span>
-<span id="cb32-184"><a href="#cb32-184" aria-hidden="true" tabindex="-1"></a>synth_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(synth)</span>
-<span id="cb32-185"><a href="#cb32-185" aria-hidden="true" tabindex="-1"></a>synth_train <span class="ot">&lt;-</span> <span class="fu">training</span>(synth_split)</span>
-<span id="cb32-186"><a href="#cb32-186" aria-hidden="true" tabindex="-1"></a>synth_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(synth_split)</span>
-<span id="cb32-187"><a href="#cb32-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-188"><a href="#cb32-188" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(synth_train<span class="sc">$</span>felonies)</span>
-<span id="cb32-189"><a href="#cb32-189" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-190"><a href="#cb32-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a>Vi sammenligner flere ulike konfigurasjoner av <span class="in">`sampsize`</span>:</span>
-<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a><span class="co"># Default (ingen sampsize angitt)</span></span>
-<span id="cb32-197"><a href="#cb32-197" aria-hidden="true" tabindex="-1"></a>rf_s1 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> ., <span class="at">data =</span> synth_train)</span>
-<span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a>synth_test1 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
-<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s1, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
-<span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test1<span class="sc">$</span>felonies, synth_test1<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
-<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a><span class="co"># Balansert sampsize</span></span>
-<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a>rf_s2 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
-<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">600</span>, <span class="dv">600</span>),</span>
-<span id="cb32-211"><a href="#cb32-211" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> synth_train)</span>
-<span id="cb32-212"><a href="#cb32-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a>synth_test2 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
-<span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s2, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
-<span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test2<span class="sc">$</span>felonies, synth_test2<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
-<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-171"><a href="#cb32-171" aria-hidden="true" tabindex="-1"></a><span class="fu">### Eksempel med syntetiske data</span></span>
+<span id="cb32-172"><a href="#cb32-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-173"><a href="#cb32-173" aria-hidden="true" tabindex="-1"></a>Vi kan gjøre tilsvarende med de syntetiske fødselskohort-dataene. Her håndterer vi først eventuelle manglende verdier med <span class="in">`replace_na()`</span>. Merk at <span class="in">`randomForest()`</span> ikke håndterer manglende verdier (NA), så disse må erstattes før estimeringen. En enkel løsning er å sette NA til 0, men i praksis bør man vurdere om dette er faglig rimelig.</span>
+<span id="cb32-174"><a href="#cb32-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-177"><a href="#cb32-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-178"><a href="#cb32-178" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb32-179"><a href="#cb32-179" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb32-180"><a href="#cb32-180" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/synthetic_birthCohort96.RData"</span>)</span>
+<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-182"><a href="#cb32-182" aria-hidden="true" tabindex="-1"></a>synth <span class="ot">&lt;-</span> synthetic_birthCohort <span class="sc">%&gt;%</span></span>
+<span id="cb32-183"><a href="#cb32-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>drugs, <span class="sc">-</span>violence) <span class="sc">%&gt;%</span></span>
+<span id="cb32-184"><a href="#cb32-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">felonies =</span> <span class="fu">factor</span>(felonies)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-185"><a href="#cb32-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(.x, <span class="dv">0</span>)))</span>
+<span id="cb32-186"><a href="#cb32-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-187"><a href="#cb32-187" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">426</span>)</span>
+<span id="cb32-188"><a href="#cb32-188" aria-hidden="true" tabindex="-1"></a>synth_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(synth)</span>
+<span id="cb32-189"><a href="#cb32-189" aria-hidden="true" tabindex="-1"></a>synth_train <span class="ot">&lt;-</span> <span class="fu">training</span>(synth_split)</span>
+<span id="cb32-190"><a href="#cb32-190" aria-hidden="true" tabindex="-1"></a>synth_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(synth_split)</span>
+<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(synth_train<span class="sc">$</span>felonies)</span>
+<span id="cb32-193"><a href="#cb32-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-194"><a href="#cb32-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a>Vi sammenligner flere ulike konfigurasjoner av <span class="in">`sampsize`</span>. Først kjører vi med forvalget, uten å angi <span class="in">`sampsize`</span>. Da trekker <span class="in">`randomForest()`</span> like mange observasjoner som det er i datasettet, men med tilbakelegging:</span>
+<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a><span class="co"># Default (ingen sampsize angitt)</span></span>
+<span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a>rf_s1 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> ., <span class="at">data =</span> synth_train)</span>
+<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a>synth_test1 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
+<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s1, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb32-205"><a href="#cb32-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-206"><a href="#cb32-206" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test1<span class="sc">$</span>felonies, synth_test1<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a>Deretter prøver vi en balansert sampsize der vi trekker like mange fra hver kategori:</span>
+<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a><span class="co"># Balansert sampsize</span></span>
+<span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a>rf_s2 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
+<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">600</span>, <span class="dv">600</span>),</span>
+<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> synth_train)</span>
 <span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a><span class="co"># Ubalansert sampsize</span></span>
-<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a>rf_s3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
-<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">600</span>),</span>
-<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> synth_train)</span>
+<span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a>synth_test2 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
+<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s2, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test2<span class="sc">$</span>felonies, synth_test2<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a>Vi kan også prøve en ubalansert sampsize der vi trekker litt flere fra minoritetsgruppen:</span>
 <span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a>synth_test3 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
-<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s3, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
-<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test3<span class="sc">$</span>felonies, synth_test3<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
-<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-235"><a href="#cb32-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-236"><a href="#cb32-236" aria-hidden="true" tabindex="-1"></a><span class="co"># Større sampsize</span></span>
-<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a>rf_s4 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
-<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">800</span>, <span class="dv">400</span>),</span>
-<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> synth_train)</span>
+<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a><span class="co"># Ubalansert sampsize</span></span>
+<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a>rf_s3 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
+<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">600</span>),</span>
+<span id="cb32-233"><a href="#cb32-233" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> synth_train)</span>
+<span id="cb32-234"><a href="#cb32-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-235"><a href="#cb32-235" aria-hidden="true" tabindex="-1"></a>synth_test3 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
+<span id="cb32-236"><a href="#cb32-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s3, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test3<span class="sc">$</span>felonies, synth_test3<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-240"><a href="#cb32-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a>synth_test4 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
-<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s4, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
-<span id="cb32-243"><a href="#cb32-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-244"><a href="#cb32-244" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test4<span class="sc">$</span>felonies, synth_test4<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
-<span id="cb32-245"><a href="#cb32-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-247"><a href="#cb32-247" aria-hidden="true" tabindex="-1"></a>Merk at de ulike konfigurasjonene gir tydelig forskjellige feilrater. Det er dette Berk (2016) kaller *asymetriske kostnader* og må vurderes i henhold til konsekvenser av hva prediksjonen skal brukes til.</span>
-<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a>Til sist prøver vi en konfigurasjon der vi trekker langt flere fra kategori 0 enn fra kategori 1:</span>
+<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-245"><a href="#cb32-245" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a><span class="co"># Større sampsize</span></span>
+<span id="cb32-247"><a href="#cb32-247" aria-hidden="true" tabindex="-1"></a>rf_s4 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(felonies <span class="sc">~</span> .,</span>
+<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">800</span>, <span class="dv">400</span>),</span>
+<span id="cb32-249"><a href="#cb32-249" aria-hidden="true" tabindex="-1"></a>                      <span class="at">data =</span> synth_train)</span>
+<span id="cb32-250"><a href="#cb32-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-251"><a href="#cb32-251" aria-hidden="true" tabindex="-1"></a>synth_test4 <span class="ot">&lt;-</span> synth_test <span class="sc">%&gt;%</span></span>
+<span id="cb32-252"><a href="#cb32-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(rf_s4, <span class="at">newdata =</span> ., <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb32-253"><a href="#cb32-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-254"><a href="#cb32-254" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(<span class="at">reference =</span> synth_test4<span class="sc">$</span>felonies, synth_test4<span class="sc">$</span>pred, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb32-255"><a href="#cb32-255" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-256"><a href="#cb32-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-257"><a href="#cb32-257" aria-hidden="true" tabindex="-1"></a>Merk at de ulike konfigurasjonene gir tydelig forskjellige feilrater. Det er dette Berk (2016) kaller *asymetriske kostnader* og må vurderes i henhold til konsekvenser av hva prediksjonen skal brukes til.</span>
+<span id="cb32-258"><a href="#cb32-258" aria-hidden="true" tabindex="-1"></a></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

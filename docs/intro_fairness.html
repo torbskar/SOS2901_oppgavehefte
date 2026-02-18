@@ -210,6 +210,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./oppgaver.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -1068,15 +1074,15 @@ $Metric_plot</code></pre>
 </section>
 <section id="equalized-odds" class="level3" data-number="7.3.2">
 <h3 data-number="7.3.2" class="anchored" data-anchor-id="equalized-odds"><span class="header-section-number">7.3.2</span> Equalized odds</h3>
-<p>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter.</p>
-<p>(I følgende kode er det lagt på [[2]] på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den dele av koden er ikke viktig).</p>
+<p>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. Hvis dette tallet er likt mellom grupper betyr det at modellen er like god til å fange opp de som faktisk slutter uavhengig av jobbtype. Hvis det er ulikt betyr det at modellen er flinkere til å oppdage sluttere i noen jobber enn andre.</p>
+<p>(I følgende kode er det lagt på <code>[[2]]</code> på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den delen av koden er ikke viktig).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">equal_odds</span>(<span class="at">data =</span> attrition_test,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>,</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1088,14 +1094,14 @@ $Metric_plot</code></pre>
 </section>
 <section id="false-positive-rate-parity" class="level3" data-number="7.3.3">
 <h3 data-number="7.3.3" class="anchored" data-anchor-id="false-positive-rate-parity"><span class="header-section-number">7.3.3</span> False positive rate parity</h3>
-<p>Er falske positive rate i ulike grupper lik?</p>
+<p>Er falske positive rate i ulike grupper lik? Falsk positiv rate er andelen av de som <em>ikke</em> slutter som likevel blir feilaktig klassifisert som at de vil slutte. Hvis denne raten er ulik mellom grupper, vil noen grupper bli utsatt for flere unødvendige tiltak enn andre.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fpr_parity</span>(<span class="at">data =</span> attrition_test,</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>,</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1736,29 +1742,29 @@ $Metric_plot</code></pre>
 <span id="cb15-162"><a href="#cb15-162" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-163"><a href="#cb15-163" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-164"><a href="#cb15-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Equalized odds</span></span>
-<span id="cb15-165"><a href="#cb15-165" aria-hidden="true" tabindex="-1"></a>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. </span>
+<span id="cb15-165"><a href="#cb15-165" aria-hidden="true" tabindex="-1"></a>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. Hvis dette tallet er likt mellom grupper betyr det at modellen er like god til å fange opp de som faktisk slutter uavhengig av jobbtype. Hvis det er ulikt betyr det at modellen er flinkere til å oppdage sluttere i noen jobber enn andre.</span>
 <span id="cb15-166"><a href="#cb15-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-167"><a href="#cb15-167" aria-hidden="true" tabindex="-1"></a>(I følgende kode er det lagt på [<span class="co">[</span><span class="ot">2</span><span class="co">]</span>] på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den dele av koden er ikke viktig). </span>
+<span id="cb15-167"><a href="#cb15-167" aria-hidden="true" tabindex="-1"></a>(I følgende kode er det lagt på <span class="in">`[[2]]`</span> på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den delen av koden er ikke viktig).</span>
 <span id="cb15-168"><a href="#cb15-168" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-171"><a href="#cb15-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb15-172"><a href="#cb15-172" aria-hidden="true" tabindex="-1"></a><span class="fu">equal_odds</span>(<span class="at">data =</span> attrition_test,</span>
-<span id="cb15-173"><a href="#cb15-173" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
-<span id="cb15-174"><a href="#cb15-174" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
-<span id="cb15-175"><a href="#cb15-175" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb15-173"><a href="#cb15-173" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>,</span>
+<span id="cb15-174"><a href="#cb15-174" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>,</span>
+<span id="cb15-175"><a href="#cb15-175" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>,</span>
 <span id="cb15-176"><a href="#cb15-176" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
-<span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span>
+<span id="cb15-177"><a href="#cb15-177" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]]</span>
 <span id="cb15-178"><a href="#cb15-178" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb15-179"><a href="#cb15-179" aria-hidden="true" tabindex="-1"></a><span class="fu">### False positive rate parity</span></span>
 <span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a>Er falske positive rate i ulike grupper lik? </span>
+<span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a>Er falske positive rate i ulike grupper lik? Falsk positiv rate er andelen av de som *ikke* slutter som likevel blir feilaktig klassifisert som at de vil slutte. Hvis denne raten er ulik mellom grupper, vil noen grupper bli utsatt for flere unødvendige tiltak enn andre.</span>
 <span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-185"><a href="#cb15-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb15-186"><a href="#cb15-186" aria-hidden="true" tabindex="-1"></a><span class="fu">fpr_parity</span>(<span class="at">data =</span> attrition_test,</span>
-<span id="cb15-187"><a href="#cb15-187" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>, </span>
-<span id="cb15-188"><a href="#cb15-188" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>, </span>
-<span id="cb15-189"><a href="#cb15-189" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>, </span>
+<span id="cb15-187"><a href="#cb15-187" aria-hidden="true" tabindex="-1"></a>                 <span class="at">outcome =</span> <span class="st">"Attrition"</span>,</span>
+<span id="cb15-188"><a href="#cb15-188" aria-hidden="true" tabindex="-1"></a>                 <span class="at">group =</span> <span class="st">"JobRole"</span>,</span>
+<span id="cb15-189"><a href="#cb15-189" aria-hidden="true" tabindex="-1"></a>                 <span class="at">preds =</span> <span class="st">"attrition_class"</span>,</span>
 <span id="cb15-190"><a href="#cb15-190" aria-hidden="true" tabindex="-1"></a>                 <span class="at">base =</span> <span class="st">"Laboratory Technician"</span></span>
-<span id="cb15-191"><a href="#cb15-191" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]] </span>
+<span id="cb15-191"><a href="#cb15-191" aria-hidden="true" tabindex="-1"></a>                 )[[<span class="dv">2</span>]]</span>
 <span id="cb15-192"><a href="#cb15-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb15-193"><a href="#cb15-193" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-194"><a href="#cb15-194" aria-hidden="true" tabindex="-1"></a></span>

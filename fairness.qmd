@@ -24,7 +24,7 @@ Compas er et risikoverktøy brukt av amerikansk politi i flere stater som benytt
 
 
 ```{r}
-compas <- readRDS("../data/compas.rds")
+compas <- readRDS("data/compas.rds")
 
 glimpse(compas)
 
@@ -239,23 +239,26 @@ rf <- randomForest(Two_yr_Recidivism ~ .,
 
 
 ```{r}
-compas_p <- compas %>% 
-  mutate(pred_rf = predict(rf))  
+compas_p <- compas %>%
+  mutate(pred_rf = predict(rf))
 
-acc <- acc_parity(data = compas_p, 
-                  outcome      = 'Two_yr_Recidivism', 
+acc <- acc_parity(data = compas_p,
+                  outcome      = 'Two_yr_Recidivism',
                   group        = 'Sex',
-                  preds        = 'pred_rf', 
+                  preds        = 'pred_rf',
                   base         = 'Female')
 acc[[2]]
 ```
 
+Nå sjekker vi kjønnsbalansen igjen. Sammenlign med resultatet fra tidligere -- ble det mer balansert?
+
+La oss også sjekke om den samme modellen er rettferdig med hensyn på etnisitet:
 
 ```{r}
-acc <- acc_parity(data = compas_p, 
-                  outcome      = 'Two_yr_Recidivism', 
+acc <- acc_parity(data = compas_p,
+                  outcome      = 'Two_yr_Recidivism',
                   group        = 'Ethnicity',
-                  preds        = 'pred_rf', 
+                  preds        = 'pred_rf',
                   base         = 'Caucasian')
 acc[[2]]
 ```

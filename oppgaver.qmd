@@ -25,7 +25,7 @@ Last inn valgte datasett og splitt i et training og et testing datasett. Sett sp
 ::: {#exr-logit-sepaa}
 Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:
 
-a)  Bruk `glimpse()` og `skim()` til å få oversikt over innholdet i datasettet
+a)  Bruk `glimpse()` til å få oversikt over innholdet i datasettet
 b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang
 c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable
 :::

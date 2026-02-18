@@ -18,107 +18,10 @@ I dette kapittelt skal vi bruke følgende pakker:
 #| warning: false
 #| message: false
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
-library(skimr)       # funksjonen skim() for å se på data
 library(rsample)     # for å dele data i training og testing
-library(splines)     # for spline-regresjon
-library(Ecdat)       # inneholder datasettet Clothing
-library(mgcv)        # for GAM (generaliserte additive modeller)
 library(pROC)        # Beregne ROC-curve
 library(caret)       # Funksjonen confusionMatrix()
 ```
-
-Før vi går over til logistisk regresjon tar vi en titt på noen utvidelser av lineær regresjon som er nyttige for prediksjon: splines og GAM.
-
-## Splines
-
-I forrige kapittel brukte vi lineær regresjon og så at modellen antar en lineær sammenheng mellom prediktor og utfall. Men hva hvis sammenhengen *ikke* er lineær? En mulighet er å bruke *splines*, som er stykkevis definerte funksjoner som kan tilpasse mer fleksible former.
-
-Vi bruker datasettet Clothing fra pakken `Ecdat` som eksempel. Variabelen `tsales` er totalt salg og `inv2` er investeringer.
-
-```{r}
-#| warning: false
-#| message: false
-data(Clothing)
-glimpse(Clothing)
-```
-
-La oss først se på sammenhengen med et scatterplot og en lineær regresjonslinje:
-
-```{r}
-#| warning: false
-#| message: false
-p0 <- ggplot(Clothing, aes(inv2, tsales)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, col = "gray")
-
-p0
-```
-
-Sammenhengen ser ikke helt lineær ut. Vi kan prøve en *piecewise linear spline* der vi angir knuter (knots) der funksjonen skifter retning. Funksjonen `bs()` fra pakken `splines` brukes til dette.
-
-### Piecewise linear spline
-
-Med `degree = 1` får vi en stykkevis lineær funksjon, altså rette linjer mellom knutene:
-
-```{r}
-model1 <- lm(tsales ~ bs(inv2, knots = c(12000, 60000, 150000), degree = 1), data = Clothing)
-summary(model1)
-```
-
-### B-spline (kubisk)
-
-Med `degree = 3` får vi en glattere, kubisk funksjon:
-
-```{r}
-model2 <- lm(tsales ~ bs(inv2, knots = c(12000, 60000, 150000), degree = 3), data = Clothing)
-summary(model2)
-```
-
-For å visualisere forskjellen lager vi et datasett med predikerte verdier for begge modellene:
-
-```{r}
-#| warning: false
-#| message: false
-inv2.grid <- data.frame(inv2 = seq(min(Clothing$inv2), max(Clothing$inv2)))
-
-pred1 <- predict(model1, newdata = inv2.grid, se = TRUE, interval = "prediction")$fit %>%
-  bind_cols(inv2.grid)
-
-pred2 <- predict(model2, newdata = inv2.grid, se = TRUE, interval = "prediction")$fit %>%
-  bind_cols(inv2.grid)
-
-ggplot(Clothing, aes(inv2, tsales)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, col = "gray") +
-  geom_line(data = pred1, aes(y = fit), linewidth = 1, col = "blue") +
-  geom_line(data = pred2, aes(y = fit), linewidth = 1, col = "red")
-```
-
-Den blå linjen er den stykkevis lineære spline og den røde er den kubiske. Begge tilpasser dataene bedre enn den rette linjen.
-
-### GAM med smoothing spline
-
-En enda enklere tilnærming er å bruke `gam()` fra `mgcv`-pakken med `s()` som automatisk velger en god smoothing:
-
-```{r}
-#| warning: false
-#| message: false
-model3 <- gam(tsales ~ s(inv2), data = Clothing)
-summary(model3)
-
-pred3 <- inv2.grid %>%
-  mutate(fit = predict(model3, newdata = inv2.grid))
-
-ggplot(Clothing, aes(inv2, tsales)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, col = "gray") +
-  geom_line(data = pred1, aes(y = fit), col = "blue") +
-  geom_line(data = pred2, aes(y = fit), col = "red") +
-  geom_line(data = pred3, aes(y = fit), col = "purple")
-```
-
-Den lilla linjen er GAM-modellen. Fordelen med GAM er at du ikke trenger å velge knuter selv -- funksjonen finner en god tilpassning automatisk.
-
 
 ## Empirisk eksempel: Kategorisk utfall
 
@@ -129,14 +32,14 @@ For arbeidsgivere kan det være kostbart med endringer i staben. Arbeidstakere s
 [^logistisk_regresjon-1]: Her kunne man jo også tenke seg at den gode lederen har en dialog med de ansatte og fanger opp deres frustrasjoner og behov slik at maskinell prediksjon ikke trengs. Det er jo også en form for prediksjon med kvalitative data! Så her er vi i en setting der dette ikke fungerer eller det er så store forhold at en kvalitativ tilnærming ikke er praktisk mulig eller noe sånt.
 
 
-Først leser vi inn datasettet. Deretter kan vi se på innholdet med `skim()`:
+Først leser vi inn datasettet. Deretter kan vi se på innholdet med `glimpse()`:
 
 ```{r}
 #| warning: false
 #| message: false
 
 attrition <- readRDS("data/attrition.rds")
-skim(attrition)
+glimpse(attrition)
 ```
 
 Merk at det er en variabel vi helt sikkert ikke trenger, så vi sletter denne like gjerne med en gang: *EmployeeNumber* er et løpenummer for person. Siden det er et 1:1 forhold mellom dette og utfallsvariabelen, så bør den tas ut. Vi lager også en numerisk versjon av utfallsvariabelen som vi trenger for plotting.
@@ -213,7 +116,7 @@ Man kan regne om til sannsynligheter som er vesentlig enklere å forstå. Lignin
 
 $$ \hat \pi = \frac{e^{\alpha + \beta X}}{1 + e^{\alpha + \beta X}} $$
 
-En relativt enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $ \hat \pi = P(y = 1) > 0.5$ tilhører den ene gruppen og resten i den andre gruppen.
+En relativt enkel omregning av regresjonsresultatet gir altså en *sannynlighet*. Denne sannsynligheten kan vi da bruke til *klassifikasjon* hvis det er formålet med analysen. Hvis utfallsvariabelen har to kategorier, så er en nærliggende mulighet å klassifisere til den gruppen hver person mest sannsynlig tilhører. Altså: de som har $\hat{\pi} = P(y = 1) > 0.5$ tilhører den ene gruppen og resten i den andre gruppen.
 
 Her er et eksempel på hvordan estimere enkel logistisk regresjon i R:
 
@@ -223,7 +126,7 @@ summary(est_logit)
 
 ```
 
-Vi kan sammenligne lineær og logistisk modell for å se forskjellen i predikert sannsynlighet:
+Vi kan sammenligne lineær og logistisk modell for å se forskjellen i predikert sannsynlighet. Den røde kurven er den lineære modellen og den blå er den logistiske:
 
 ```{r}
 #| warning: false
@@ -237,6 +140,7 @@ ggplot(testing, aes(x = prob_lm)) +
   geom_density(aes(x = prob_glm), fill = "blue", alpha = .3)
 ```
 
+Forskjellen er som regel ikke så stor i midten av fordelingen, men den lineære modellen kan gi verdier utenfor 0-1-intervallet. For klassifikasjon spiller det sjelden noen stor rolle, men for å være korrekt bruker vi logistisk regresjon når utfallet er binært.
 
 Hvordan plotte slike data? Bruk `geom_jitter` eller `geom_point`.
 
@@ -266,6 +170,8 @@ attrition_pred <- training %>%
 
 ### ROC og AUC
 
+For å vurdere hvor god prediksjonen er *uavhengig* av valg av cut-off bruker vi ROC-kurven (Receiver Operating Characteristic). ROC-kurven viser sammenhengen mellom sensitivity (andelen sanne positive) og 1-specificity (andelen falske positive) for alle mulige verdier av cut-off. En modell som predikerer perfekt vil gi en kurve som går rett opp og deretter bort til høyre. En modell som gjetter tilfeldig vil ligge langs den diagonale grå linjen.
+
 ```{r}
 
 ROC <- roc( attrition_pred$Attrition, attrition_pred$prob )
@@ -280,7 +186,7 @@ ggplot(df, aes(y = Sensitivity, x= (1-Specificity))) +
 
 ```
 
-Area under the curve er `r round(auc(ROC), digits = 3)`.
+Arealet under ROC-kurven (AUC) gir et enkelt tall som oppsummerer modellens prediksjonsevne. AUC varierer mellom 0.5 (tilfeldig gjetting) og 1.0 (perfekt prediksjon). For den enkle modellen er AUC `r round(auc(ROC), digits = 3)`.
 
 
 
@@ -370,8 +276,7 @@ Når arealet under kurven (AUC) er `r round(auc(ROC_test), digits = 3)`. Kanskje
 
 
 ## Klassifikasjon
-Men for et handlingsvalg må vi gjøre faktisk klassifisering. Det vi har estimert så langt er bare en sannsynlighet. Selve klassifiseringen krever at man tar et aktivt valg på en cut-off for hvem man tror faktisk slutter. La oss først se på fordelingen av sannsynligheter.
-
+Men for et handlingsvalg må vi gjøre faktisk klassifisering. Det vi har estimert så langt er bare en sannsynlighet. Selve klassifiseringen krever at man tar et aktivt valg om en cut-off for hvem man tror faktisk slutter. La oss først se på fordelingen av predikerte sannsynligheter:
 
 ```{r}
 #| message: false
@@ -380,6 +285,7 @@ ggplot(attrition_test, aes(x = prob)) +
   geom_histogram()
 ```
 
+De aller fleste har lav predikert sannsynlighet for å slutte. Det er som forventet siden de fleste faktisk *ikke* slutter. Spørsmålet er nå: ved hvilken sannsynlighet skal vi si at noen er i faresonen?
 
 Vi kan bestemme oss for at et rimelig cut-off er 50/50, altså med sannsynlighet 0.5. Her gjøres en klassifisering for testing-datasettet, og lager en krysstabell med den klassifiserte etter prediksjon mot observert utfall. En slik krysstabell kalles altså en *confusion matrix*.
 

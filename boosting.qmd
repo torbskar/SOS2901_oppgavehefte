@@ -27,13 +27,13 @@ Det sentrale punktet for boosting er at modellen bygges steg for steg med en gra
 <!-- # http://uc-r.github.io/gbm_regression -->
 
 
-Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen `gbm` krever nummerisk utfallsvariabel. 
+Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen `gbm()` krever numerisk utfallsvariabel. Vi bruker `na.omit()` for å fjerne eventuelle rader med manglende verdier.
 
 ```{r}
 #| message: false
 #| warning: false
-compas <- readRDS("../data/compas.rds") %>% 
-  mutate(Two_yr_Recidivism = ifelse(Two_yr_Recidivism == "1", 1, 0)) %>% 
+compas <- readRDS("data/compas.rds") %>%
+  mutate(Two_yr_Recidivism = ifelse(Two_yr_Recidivism == "1", 1, 0)) %>%
   na.omit()
 glimpse(compas)
 
@@ -322,44 +322,50 @@ gradboost3 <- gbm(formula = Two_yr_Recidivism ~ .,
 
 
 
+Vi gjør prediksjon og klassifisering på samme måte som før:
+
 ```{r}
 #| message: false
 #| warning: false
-compas_p <- training %>% 
-  mutate(pred = predict(gradboost3, type = "response"), 
+compas_p <- training %>%
+  mutate(pred = predict(gradboost3, type = "response"),
          p_klass = ifelse(pred > 0.5, 1, 0))
 
 ```
 
-Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
+Lager enkel krysstabell med predikert mot observert (dvs confusion matrix):
 
 ```{r}
 #| message: false
 #| warning: false
-tab <- table(compas_p$p_klass, training$Two_yr_Recidivism) 
+tab <- table(compas_p$p_klass, training$Two_yr_Recidivism)
 tab
 ```
 
-Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
+Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei.
 ```{r}
 #| message: false
 #| warning: false
 confusionMatrix(tab, positive="1")
 ```
 
+Sammenlign nå feilratene med den forrige modellen (uten gruppevekting). Ble forholdet mellom falske positive og falske negative annerledes?
 
+Så sjekker vi om den nye vektingen har gjort modellen mer rettferdig med hensyn på kjønn:
 
 ```{r}
 #| message: false
 #| error: false
-acc <- acc_parity(data = compas_p, 
-                  outcome      = 'Two_yr_Recidivism', 
+acc <- acc_parity(data = compas_p,
+                  outcome      = 'Two_yr_Recidivism',
                   group        = 'Sex',
-                  preds        = 'p_klass', 
+                  preds        = 'p_klass',
                   base         = 'Female')
 acc[[2]]
 
 ```
+
+Sammenlign dette med fairness-resultatet fra den uvektede modellen. Ble det mer rettferdig? Vekting er altså et verktøy for å justere bias i boosting på tilsvarende måte som `sampsize` er det for random forest. Men som alltid: det er en trade-off mellom rettferdighet og overall accuracy.
 
 
 

@@ -32,7 +32,7 @@ Husk at klassifikasjonstrær er litt ustabile greier, og små tilfeldige variasj
 
 ## Empirisk eksempel: Syntetiske data
 
-Vi fortsetter med de syntetiske fødselskohort-dataene fra forrige kapittel, men demonstrerer også med Attrition-dataene og COMPAS-dataene.
+Vi bruker de syntetiske fødselskohort-dataene. Disse er generert for å etterligne en kohort født i 1996, der utfallsvariabelen `felonies` angir om personen har begått alvorlige lovbrudd (1) eller ikke (0). Vi fjerner variablene `drugs` og `violence` fordi disse er delkomponenter av utfallet. Vi demonstrerer også med Attrition-dataene.
 
 ```{r}
 #| warning: false
@@ -82,7 +82,7 @@ bag2 <- bagging(felonies ~ ., data = training,
 bag2
 ```
 
-Sammenlign med testing-data:
+Sammenlign med testing-data. Her lager vi prediksjoner fra både det enkle klassifikasjonstreet og bagging-modellen, slik at vi kan sammenligne dem direkte:
 
 ```{r}
 testing_pred <- testing %>%
@@ -92,6 +92,8 @@ testing_pred <- testing %>%
 confusionMatrix(reference = testing_pred$felonies, testing_pred$pred_tre, positive = "1")
 confusionMatrix(reference = testing_pred$felonies, testing_pred$pred_bag, positive = "1")
 ```
+
+Sammenlign accuracy, sensitivity og specificity for de to modellene. Bagging gir typisk bedre og mer stabile resultater enn et enkelt tre fordi de tilfeldige feilene jevner seg ut over mange trær.
 
 
 ## Eksempel med Attrition-data
@@ -134,6 +136,7 @@ confusionMatrix(reference = attr_test_pred$Attrition, attr_test_pred$pred_tre, p
 confusionMatrix(reference = attr_test_pred$Attrition, attr_test_pred$pred_bag, positive = "Yes")
 ```
 
+Igjen ser vi at bagging typisk gir et resultat som er noe mer stabilt enn et enkelt tre. Merk at forbedringen ikke alltid er like dramatisk -- det kommer an på dataene og det underliggende mønsteret.
 
 ## Out-of-bag data (OOB)
 Bagging kan brukes på training data og testing data som vi har gjort før. Men en ulempe med dette er jo at man får et litt mindre datasett å tilpasse modellene med. Merk at bagging i utgangspunktet baserer seg på å trekke et tilfeldig *utvalg* fra de opprinnelige dataene. Så for hvert tre er det en del observasjoner som ikke blir brukt til å bygge treet. Altså har vi et testing-datasett umiddelbart tilgjengelig!

@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; Oppgaver – SOS2901 Maskinlæring for samfunnsvitere</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./boosting.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-70a47bd5681a7291082a5b9f83d58762.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./oppgaver.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">SOS2901 Maskinlæring for samfunnsvitere</a> 
+        <div class="sidebar-tools-main">
+    <a href="./SOS2901-Maskinlæring-for-samfunnsvitere.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduksjon</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduksjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduksjon til maskinlæring</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./linear_regresjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Lineær regresjon</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./logistisk_regresjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logistisk regresjon</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cart.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Klassifikasjonstrær</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bagging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bagging</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./randomForest.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fairness.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./oppgaver.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#logistisk-regresjon" id="toc-logistisk-regresjon" class="nav-link active" data-scroll-target="#logistisk-regresjon"><span class="header-section-number">10.1</span> Logistisk regresjon</a></li>
+  <li><a href="#klassifikasjonstrær" id="toc-klassifikasjonstrær" class="nav-link" data-scroll-target="#klassifikasjonstrær"><span class="header-section-number">10.2</span> Klassifikasjonstrær</a></li>
+  <li><a href="#bagging" id="toc-bagging" class="nav-link" data-scroll-target="#bagging"><span class="header-section-number">10.3</span> Bagging</a></li>
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest"><span class="header-section-number">10.4</span> Random forest</a></li>
+  <li><a href="#intro-til-fairness" id="toc-intro-til-fairness" class="nav-link" data-scroll-target="#intro-til-fairness"><span class="header-section-number">10.5</span> Intro til fairness</a>
+  <ul class="collapse">
+  <li><a href="#refleksjonsoppgaver" id="toc-refleksjonsoppgaver" class="nav-link" data-scroll-target="#refleksjonsoppgaver"><span class="header-section-number">10.5.1</span> Refleksjonsoppgaver</a></li>
+  </ul></li>
+  <li><a href="#fairness-og-tuning" id="toc-fairness-og-tuning" class="nav-link" data-scroll-target="#fairness-og-tuning"><span class="header-section-number">10.6</span> Fairness og tuning</a></li>
+  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting"><span class="header-section-number">10.7</span> Boosting</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Her er alle oppgavene samlet. De er organisert etter kapittel.</p>
+<section id="logistisk-regresjon" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="logistisk-regresjon"><span class="header-section-number">10.1</span> Logistisk regresjon</h2>
+<p>Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger.</p>
+<div id="exr-logit-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.1</strong></span> Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+</div>
+<div id="exr-logit-eksplisitt" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.2</strong></span> Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</p>
+<p>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</p>
+</div>
+<div id="exr-logit-split" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.3</strong></span> Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</p>
+</div>
+<div id="exr-logit-sepaa" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.4</strong></span> Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</p>
+<ol type="a">
+<li>Bruk <code>glimpse()</code> til å få oversikt over innholdet i datasettet</li>
+<li>Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</li>
+<li>Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</li>
+</ol>
+</div>
+<div id="exr-logit-train" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.5</strong></span> Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve.</p>
+<ol type="a">
+<li>Velg ut tre forklaringsvariable og estimer en regresjonsmodell</li>
+<li>Estimer en ny modell med alle variable i datasettet</li>
+<li>Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</li>
+</ol>
+<p>Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</p>
+</div>
+<div id="exr-logit-test" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.6</strong></span> I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger:</p>
+<ol type="a">
+<li>Prediker utfallet på testing-datasettet</li>
+<li>Regn ut AUC</li>
+<li>Hvor stor er <em>endringen</em> i AUC er fra resultatene når du brukte training-datasettet?</li>
+</ol>
+<p>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor <em>endring</em> i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</p>
+</div>
+<div id="exr-logit-class" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.7</strong></span> Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet.</p>
+</div>
+</section>
+<section id="klassifikasjonstrær" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="klassifikasjonstrær"><span class="header-section-number">10.2</span> Klassifikasjonstrær</h2>
+<div id="exr-cart-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.8</strong></span> Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+</div>
+<div id="exr-cart-tune" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.9</strong></span> Prøv deg frem med å justere tuning-parametrene <code>cp</code>, <code>minbucket</code> og <code>maxdepth</code>. Se hvordan treet endrer seg og sammenlign confusion matrix for ulike varianter. Bruk training-data til å justere og testing-data til sluttevaluering.</p>
+</div>
+<div id="exr-cart-compare" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.10</strong></span> Sammenlign resultatet fra klassifikasjonstreet med logistisk regresjon (baseline). Hvilken modell gir best prediksjon? Vurder accuracy, sensitivity og specificity.</p>
+</div>
+<div id="exr-cart-loss" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.11</strong></span> Juster loss matrix for å endre forholdet mellom falske positive og falske negative. Tenk deg en praktisk anvendelse og vurder hva slags feilrater som er akseptable.</p>
+</div>
+<div id="exr-cart-regler" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.12</strong></span> Bruk <code>rpart.rules()</code> til å skrive ut reglene fra et klassifikasjonstre. Gi en tolkning av reglene – hvem blir klassifisert som hva, og gir det mening?</p>
+</div>
+</section>
+<section id="bagging" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="bagging"><span class="header-section-number">10.3</span> Bagging</h2>
+<div id="exr-bag-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.13</strong></span> Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+</div>
+<div id="exr-bag-nbagg" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.14</strong></span> Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk <code>set.seed()</code> slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter.</p>
+</div>
+<div id="exr-bag-nydata" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.15</strong></span> Velg et nytt datasett og gjør en tilsvarende analyse med bagging. Vurder confusion matrix og sammenlign med et enkelt klassifikasjonstre.</p>
+</div>
+<div id="exr-bag-tune" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.16</strong></span> Gjør en prediksjon med bruk av bagging og vurder confusion matrix. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <code>cp</code> og <code>maxdepth</code> via <code>control = rpart.control()</code>.</p>
+</div>
+<div id="exr-bag-oob" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.17</strong></span> Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?</p>
+</div>
+</section>
+<section id="random-forest" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">10.4</span> Random forest</h2>
+<div id="exr-rf-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.18</strong></span> Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men gjør én endring: split datasettet først i testing og training.</p>
+</div>
+<div id="exr-rf-tune" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.19</strong></span> Prøv deg frem med å justere <code>sampsize</code>, <code>mtry</code> og <code>ntree</code>. Se hvordan feilratene endrer seg. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette.</p>
+</div>
+<div id="exr-rf-varimp" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.20</strong></span> Tolk random forest: a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning. a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial dependence plot.</p>
+</div>
+<div id="exr-rf-missing" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.21</strong></span> Bruk de syntetiske dataene og håndter manglende verdier med <code>replace_na()</code>. Sammenlign resultater med ulike konfigurasjoner av <code>sampsize</code>. Hvilken konfigurasjon gir best balanse mellom sensitivity og specificity?</p>
+</div>
+</section>
+<section id="intro-til-fairness" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="intro-til-fairness"><span class="header-section-number">10.5</span> Intro til fairness</h2>
+<div id="exr-fair-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.22</strong></span> Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</p>
+</div>
+<div id="exr-fair-fler" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.23</strong></span> Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.</p>
+</div>
+<div id="exr-fair-vurd" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.24</strong></span> Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:</p>
+<ul>
+<li>Er det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en “fair” modell?</li>
+<li>Hvilke mål på “fairness” vil du si er viktigst i dette eksempelet? Hvorfor?</li>
+</ul>
+</div>
+<div id="exr-fair-enkel" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.25</strong></span> Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder:</p>
+<ul>
+<li>Ble accuracy bedre eller verre?</li>
+<li>Ble resultatet mer “fair”?</li>
+</ul>
+</div>
+<div id="exr-fair-nyedata" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.26</strong></span> Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på “fairness” igjen. Gjør tilsvarende som over.</p>
+</div>
+<section id="refleksjonsoppgaver" class="level3" data-number="10.5.1">
+<h3 data-number="10.5.1" class="anchored" data-anchor-id="refleksjonsoppgaver"><span class="header-section-number">10.5.1</span> Refleksjonsoppgaver</h3>
+<div id="exr-fair-ref1" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.27</strong></span> Studien til <span class="citation" data-cites="caspi2017">Caspi et al. (<a href="references.html#ref-caspi2017" role="doc-biblioref">2017</a>)</span> bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende:</p>
+<ul>
+<li>Hva slags informasjon synes du <em>mangler</em> for å vurdere treffsikkerheten på prediksjonsmodellen?</li>
+<li>Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder?</li>
+<li>Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater?</li>
+<li>Er det behov for å vurdere “fairness” grundigere her?</li>
+</ul>
+</div>
+<div id="exr-fair-ref2" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.28</strong></span> Studien til <span class="citation" data-cites="berk2016b">Berk, Sorenson, and Barnes (<a href="references.html#ref-berk2016b" role="doc-biblioref">2016</a>)</span> bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende:</p>
+<ul>
+<li>Synes du at forholdstallet 1 til 10 for falske positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da?</li>
+<li>Er det grunn til å tro at man bør undersøke “fairness” grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for?</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="fairness-og-tuning" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="fairness-og-tuning"><span class="header-section-number">10.6</span> Fairness og tuning</h2>
+<div id="exr-fairtuning-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.29</strong></span> Gå gjennom eksempelet over og sjekk at det fungerer og at du skjønner hvert steg.</p>
+</div>
+<div id="exr-fairtuning-nydata" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.30</strong></span> Velg deg et annet datasett og gjør tilsvarende analyse. Det er viktig at du nå gjør en vurdering av hvilke undergrupper du synes er viktigst å motvirke urettferdighet for. Her bør du ta hensyn også til hva slags tiltak og konsekvenser det er snakk om! Skriv ned dine vurderinger om dette som begrunnelse for hvordan du vil motvirke urettferdighet i modellen.</p>
+<ol type="a">
+<li>Vurder hvilke konsekvenser prediksjonen kan få, med henblikk på et tenkt praktisk tiltak. Hvilke feilrater vil du akseptere? Ta et valg.</li>
+<li>Estimer modellen som tidligere, lag en confusion matrix og vurder resultatet. Juster modellen til du er fornøyd med resultatet.</li>
+<li>Vurder hvilken undergruppe du synes det er viktigst at ikke blir biased.</li>
+<li>Hvilket mål på fairness synes du er viktigst i akkurat dette tilfellet? Velg ett mål, begrunn det valget og sjekk.</li>
+<li>Estimer modellen på nytt med stratifisert utvalg og justert <code>sampsize</code>. Prøv deg frem til du får et akseptabelt mål på fairness.</li>
+<li>Sjekk confusion matrix og sammenlign med den første modellen. Modellen ble kanskje mer rettferdig, men gikk f.eks. accuracy ned eller endrede feilrater? Eller litt flåsete sagt: Var det verd å få en mer rettferdig modell?</li>
+<li>Sjekk nå det samme målet på fairness med to andre undergrupper. Ble det like bra?</li>
+</ol>
+</div>
+<div id="exr-fairtuning-annet" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.31</strong></span> Velg et annet datasett og gjør tilsvarende øvelse.</p>
+</div>
+</section>
+<section id="boosting" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="boosting"><span class="header-section-number">10.7</span> Boosting</h2>
+<div id="exr-boost-vurd" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.32</strong></span> Se over de vurderingene du gjorde i tidligere analyser av compas-dataene, herunder hva slags feilrater du er villig til å akseptere og hva slags konsekvenser de ulike typene feil kan få. Vil du gjøre andre vurderinger nå? Ta stilling til om du fremdeles synes tidligere vurderinger var ok. Bestem deg for hvor mange falske positive du er villig til å godta per falske negative (dvs asymetriske kostnader). Bruk dette videre i neste oppgave.</p>
+</div>
+<div id="exr-boost-rep" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.33</strong></span> Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men du må gjøre tre endringer:</p>
+<ol type="1">
+<li>Vurder asymetriske konstnader, spesielt cost-ratio (dvs. forholdet mellom falske positive og falske negative). Se om du klarer å justere modellen så du får dette resultatet.</li>
+<li>Sjekk mål på fairness også for etnisitet. Test ut flere forskjellige mål fra fairness-pakken. Bruk fortsatt <em>training</em>datasettet.</li>
+<li>Etter at du har kjørt gjennom alt med <em>training</em>datasettet må du sjekke resultatet mot <em>testing</em>datasettet. Ble det vesentlig endring i resultatene?</li>
+</ol>
+</div>
+<div id="exr-boost-nydata" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10.34</strong></span> Bruk et annet datasett og gjør tilsvarende analyser. Husk å få med følgende deler:</p>
+<ol type="a">
+<li>Vurdering av konsekvenser av feil: hva vil du godta? Begrunn svaret med et tenkt tiltak som skal settes i verk.</li>
+<li>Tilpass modellen, og vurder om du har nok iterasjoner (antall runder i boostingen). Øk ved behov.</li>
+<li>Prediker, lag confusion matrix og sammenlign med hva du i utgangspunktet bestemte deg for å godta. Hvis det trengs endringer, juster modellen på nytt til du er mer fornøyd.</li>
+<li>Kommenter hvilke variable som er mest betydningsfulle for prediksjonen og på hvilken måte.</li>
+<li>Hvilke mål på fairness synes du er mest relevant her og for hvilke undergrupper? Sjekk dette empirisk.</li>
+<li>Prøv å justere modellen til et mer tilfredsstillende rettferdig resultat for valgte undergrupper.</li>
+<li>Sjekk nå resultatene (inkl. fairness) for <em>testing</em>dataene også.</li>
+<li>Vil du sette i verk tiltak basert på en slik prediksjonsmodell? Begrunn svaret.</li>
+</ol>
+</div>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-berk2016b" class="csl-entry" role="listitem">
+Berk, Richard A., Susan B. Sorenson, and Geoffrey Barnes. 2016. <span>“Forecasting Domestic Violence: A Machine Learning Approach to Help Inform Arraignment Decisions.”</span> <em>Journal of Empirical Legal Studies</em> 13: 94–115. <a href="https://doi.org/10.1111/jels.12098">https://doi.org/10.1111/jels.12098</a>.
+</div>
+<div id="ref-caspi2017" class="csl-entry" role="listitem">
+Caspi, Avshalom, Renate M. Houts, Daniel W. Belsky, Honalee Harrington, Sean Hogan, Sandhya Ramrakha, Richie Poulton, and Terrie E. Moffitt. 2017. <span>“Childhood Forecasting of a Small Segment of the Population with Large Economic Burden.”</span> <em>Nature Human Behavior</em> 1 (5): 223–40. https://doi.org/<a href="https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005">https://doi-org.ezproxy.uio.no/10.1038/s41562-016-0005</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./boosting.html" class="pagination-link" aria-label="Boosting">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Oppgaver</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Her er alle oppgavene samlet. De er organisert etter kapittel.</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Logistisk regresjon</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Disse oppgavene vil være ganske tilsvarende som for oppgavene med lineær regresjon. Men du skal nå bruke logistisk regresjon med tilhørende teknikker og vurderinger.</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-rep}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-eksplisitt}</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>Velg et datasettet og formuler hva en prediksjonsmodell kan kunne brukes til. Se for deg at tiltak du foreslår vil altså ha faktiske konsekvenser, så gjør en vurdering av hvorvidt feilprediksjoner vil være problematiske og i så fall på hvilken måte. Vurder mulighetene for feil opp mot gevinst ved riktig prediksjon.</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>Merk: det er ikke viktig at anvendelsen skal være realistisk, men du må alltid ta konsekvensen i vurderingene.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-split}</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>Last inn valgte datasett og splitt i et training og et testing datasett. Sett splitten ved .70. Bruk training-data til å gjøre deg kjent med dataene og estimere modellene. Ikke bruk testing-dataene inntil du får beskjed om det.</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-sepaa}</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>Gjør deg kjent med innholdet i disse training-dataene. Du kan gjøre f.eks. følgende:</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>a)  Bruk <span class="in">`glimpse()`</span> til å få oversikt over innholdet i datasettet</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>b)  Hvis det er noen variable du ikke kommer til å bruke, slett gjerne disse med en gang</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>c)  Lag noen tabeller og plot som viser hvordan utfallsvariabelen er fordelt etter andre variable</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-train}</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>Estimer flere logistiske regresjonsmodeller med et fåtall prediktorer. Gjør et utvalg av de variablene du mener er mest relevant for å forklare utfallet. Estimer flere regresjonsmodeller for å predikere utfallet, og sammenlign hvor gode prediksjoner disse gir. Mest relevante statistikk er AUC og ROC-curve.</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>a)  Velg ut tre forklaringsvariable og estimer en regresjonsmodell</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>b)  Estimer en ny modell med alle variable i datasettet</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>c)  Estimer en ny modell og inkluder noen få polynomer og/eller interaksjonsledd</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>Lag gjerne noen plot av ROC-curve for i hvert fall noen av modellene slik at du får en følelse med hva AUC egentlig betyr. Plot også predikert verdi mot observert verdi og gjør en vurdering av RMSE.</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-test}</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>I forrige oppgave brukte du training-datasettet til både å estimere modellene og vurdere resultatet. Nå skal du bruke testing-datasettet til å vurdere de samme resultatene. Dette gjør du ved å predikere på testing-datasettet og regne ut AUC for disse dataene. For hver modell i forrige oppgave, gjør som følger:</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>a)  Prediker utfallet på testing-datasettet</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>b)  Regn ut AUC</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>c)  Hvor stor er *endringen* i AUC er fra resultatene når du brukte training-datasettet?</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>Vurdering: En mer komplisert modell beskriver dataene bedre. Men er det like stor *endring* i AUC og RMSE for enkle og mer kompliserte modeller? Beskriv hva du ser og gi en forklaring.</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>::: {#exr-logit-class}</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>Når over har predikert en sannsynlighet og regnet ut AUC har du ennå ikke tatt noen avgjørelse. Bestem deg for et grenseverdi for når du vil klassifisere som det ene eller andre. (Alså: ved hvilken sannsynlighet). Gjør så en klassifikasjon og lag en confusion matrix. Gi en vurdering av resultatet.</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">## Klassifikasjonstrær</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>::: {#exr-cart-rep}</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>::: {#exr-cart-tune}</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>Prøv deg frem med å justere tuning-parametrene <span class="in">`cp`</span>, <span class="in">`minbucket`</span> og <span class="in">`maxdepth`</span>. Se hvordan treet endrer seg og sammenlign confusion matrix for ulike varianter. Bruk training-data til å justere og testing-data til sluttevaluering.</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>::: {#exr-cart-compare}</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>Sammenlign resultatet fra klassifikasjonstreet med logistisk regresjon (baseline). Hvilken modell gir best prediksjon? Vurder accuracy, sensitivity og specificity.</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>::: {#exr-cart-loss}</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>Juster loss matrix for å endre forholdet mellom falske positive og falske negative. Tenk deg en praktisk anvendelse og vurder hva slags feilrater som er akseptable.</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>::: {#exr-cart-regler}</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>Bruk <span class="in">`rpart.rules()`</span> til å skrive ut reglene fra et klassifikasjonstre. Gi en tolkning av reglene -- hvem blir klassifisert som hva, og gir det mening?</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bagging</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>::: {#exr-bag-rep}</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>::: {#exr-bag-nbagg}</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>Prøv deg litt frem med å angi hvor mange trær som skal bygges. Sammenlign modell med og uten OOB. Bruk <span class="in">`set.seed()`</span> slik at evt. forskjeller i resultatene ikke skyldes tilfeldigheter.</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>::: {#exr-bag-nydata}</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasett og gjør en tilsvarende analyse med bagging. Vurder confusion matrix og sammenlign med et enkelt klassifikasjonstre.</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>::: {#exr-bag-tune}</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>Gjør en prediksjon med bruk av bagging og vurder confusion matrix. Prøv deg litt frem med å justere på tuningparametrene, f.eks. <span class="in">`cp`</span> og <span class="in">`maxdepth`</span> via <span class="in">`control = rpart.control()`</span>.</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>::: {#exr-bag-oob}</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>Forklar for en medstudent (eller andre) hva OOB er for noe. Hva er forskjellen på å splitte i training/testing datasett og å bruke OOB?</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## Random forest</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>::: {#exr-rf-rep}</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men gjør én endring: split datasettet først i testing og training.</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>::: {#exr-rf-tune}</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>Prøv deg frem med å justere <span class="in">`sampsize`</span>, <span class="in">`mtry`</span> og <span class="in">`ntree`</span>. Se hvordan feilratene endrer seg. Gjør deg først opp en mening om hvordan du vil at confusion matrix skal se ut (f.eks. cost-ratio) og prøv å nærme deg dette.</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>::: {#exr-rf-varimp}</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>Tolk random forest:</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>a) Hvilke variable har størst prediktiv verdi? Lag et variable importance plot og gi en tolkning.</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>a) Velg noen av variablene (gjerne f.eks. de med størst prediktiv verdi) og lag partial dependence plot.</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>::: {#exr-rf-missing}</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>Bruk de syntetiske dataene og håndter manglende verdier med <span class="in">`replace_na()`</span>. Sammenlign resultater med ulike konfigurasjoner av <span class="in">`sampsize`</span>. Hvilken konfigurasjon gir best balanse mellom sensitivity og specificity?</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## Intro til fairness</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-rep}</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer.</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-fler}</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>Regn ut minst tre ulike mål på fairness og velg selv over hvilke grupper. Gi en forklaring på hva hver av dem betyr.</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-vurd}</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>Det er mange muligheter her: ulike mål og flere grupper. Man kan også kombinere grupper på flere måter. Gjør følgende vurderinger:</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Er det rimelig å gjøre en prediksjon som gir like resultater på tvers av alle mål og grupper? Kan du i det hele tatt få en "fair" modell?</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Hvilke mål på "fairness" vil du si er viktigst i dette eksempelet? Hvorfor?</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-enkel}</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>Kanskje hjelper det å estimere en annen modell? Estimer en ny logistisk regresjon, men velg bare et fåtall variable som du velger selv. Hold det enkelt i første omgang. Se på resultatene og vurder:</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Ble accuracy bedre eller verre?</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Ble resultatet mer "fair"?</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-nyedata}</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>Velg et nytt datasett, gjør en prediksjon med logistisk regresjon og regn ut mål på "fairness" igjen. Gjør tilsvarende som over.</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a><span class="fu">### Refleksjonsoppgaver</span></span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref1}</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>Studien til @caspi2017 bruker regresjon for å predikere hvem som tilhører den gruppen med konsentrasjon av sosiale problemer. (Det er en litt annen type modell enn logisk regresjon, men det spiller egentlig liten rolle). Diskuter følgende:</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags informasjon synes du *mangler* for å vurdere treffsikkerheten på prediksjonsmodellen?</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Hva slags tiltak er det tenkt å settes i verk når man har identifisert hvem som får problemer i voksen alder?</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Basert på hvordan prediksjonen skal brukes hva tenker du er akseptable feilrater?</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det behov for å vurdere "fairness" grundigere her?</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>::: {#exr-fair-ref2}</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>Studien til @berk2016b bruker andre typer modeller enn vi har sett på til nå. Se bort fra akkurat det tekniske i modeller og justeringer, men se diskusjonen av resultatet presentert som confusion matrix. Se for deg at dette blir de faktiske resultatene for fengsling eller ikke-fengsling og vurder følgende:</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Synes du at forholdstallet 1 til 10 for falske  positive/negative er ok i denne settingen? Hvis du skal foreslå noe annet, hva vil du si da?</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Er det grunn til å tro at man bør undersøke "fairness" grundigere her? I så fall: hvilke undergrupper mener du er mest viktig å undersøke dette for?</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fairness og tuning</span></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>::: {#exr-fairtuning-rep}</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og sjekk at det fungerer og at du skjønner hvert steg.</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>::: {#exr-fairtuning-nydata}</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>Velg deg et annet datasett og gjør tilsvarende analyse. Det er viktig at du nå gjør en vurdering av hvilke undergrupper du synes er viktigst å motvirke urettferdighet for. Her bør du ta hensyn også til hva slags tiltak og konsekvenser det er snakk om! Skriv ned dine vurderinger om dette som begrunnelse for hvordan du vil motvirke urettferdighet i modellen.</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>a) Vurder hvilke konsekvenser prediksjonen kan få, med henblikk på et tenkt praktisk tiltak. Hvilke feilrater vil du akseptere? Ta et valg.</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>a) Estimer modellen som tidligere, lag en confusion matrix og vurder resultatet. Juster modellen til du er fornøyd med resultatet.</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>a) Vurder hvilken undergruppe du synes det er viktigst at ikke blir biased.</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>a) Hvilket mål på fairness synes du er viktigst i akkurat dette tilfellet? Velg ett mål, begrunn det valget og sjekk.</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>a) Estimer modellen på nytt med stratifisert utvalg og justert <span class="in">`sampsize`</span>. Prøv deg frem til du får et akseptabelt mål på fairness.</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>a) Sjekk confusion matrix og sammenlign med den første modellen. Modellen ble kanskje mer rettferdig, men gikk f.eks. accuracy ned eller endrede feilrater? Eller litt flåsete sagt: Var det verd å få en mer rettferdig modell?</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>a) Sjekk nå det samme målet på fairness med to andre undergrupper. Ble det like bra?</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>::: {#exr-fairtuning-annet}</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>Velg et annet datasett og gjør tilsvarende øvelse.</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Boosting</span></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>::: {#exr-boost-vurd}</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>Se over de vurderingene du gjorde i tidligere analyser av compas-dataene, herunder hva slags feilrater du er villig til å akseptere og hva slags konsekvenser de ulike typene feil kan få. Vil du gjøre andre vurderinger nå? Ta stilling til om du fremdeles synes tidligere vurderinger var ok. Bestem deg for hvor mange falske positive du er villig til å godta per falske negative (dvs asymetriske kostnader). Bruk dette videre i neste oppgave.</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>::: {#exr-boost-rep}</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>Gå gjennom eksempelet over og repliker disse analysene slik at du ser at du skjønner hvordan det fungerer. Men du må gjøre tre endringer:</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>1) Vurder asymetriske konstnader, spesielt cost-ratio (dvs. forholdet mellom falske positive og falske negative). Se om du klarer å justere modellen så du får dette resultatet.</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>1) Sjekk mål på fairness også for etnisitet. Test ut flere forskjellige mål fra fairness-pakken. Bruk fortsatt *training*datasettet.</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>1) Etter at du har kjørt gjennom alt med *training*datasettet må du sjekke resultatet mot *testing*datasettet. Ble det vesentlig endring i resultatene?</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>::: {#exr-boost-nydata}</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>Bruk et annet datasett og gjør tilsvarende analyser. Husk å få med følgende deler:</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>a) Vurdering av konsekvenser av feil: hva vil du godta? Begrunn svaret med et tenkt tiltak som skal settes i verk.</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>a) Tilpass modellen, og vurder om du har nok iterasjoner (antall runder i boostingen). Øk ved behov.</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>a) Prediker, lag confusion matrix og sammenlign med hva du i utgangspunktet bestemte deg for å godta. Hvis det trengs endringer, juster modellen på nytt til du er mer fornøyd.</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>a) Kommenter hvilke variable som er mest betydningsfulle for prediksjonen og på hvilken måte.</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>a) Hvilke mål på fairness synes du er mest relevant her og for hvilke undergrupper? Sjekk dette empirisk.</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>a) Prøv å justere modellen til et mer tilfredsstillende rettferdig resultat for valgte undergrupper.</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>a) Sjekk nå resultatene (inkl. fairness) for *testing*dataene også.</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>a) Vil du sette i verk tiltak basert på en slik prediksjonsmodell? Begrunn svaret.</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

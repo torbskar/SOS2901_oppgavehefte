@@ -40,7 +40,7 @@ Vi skal i hvert fall bruke de pakkene som installeres med følgende kode:
 ```{r }
 #| code-fold: false
 #| eval: false
-pkgs <- c("tidyverse", "skimr", "randomForest", "rpart", "rpart.plot",
+pkgs <- c("tidyverse", "randomForest", "rpart", "rpart.plot",
            "rsample", "fairness", "xgboost", "mgcv", "splines", "Ecdat",
            "ipred", "pROC", "caret", "forcats", "gtsummary", "janitor",
            "gbm", "dendextend", "directlabels", "GGally")
@@ -60,11 +60,10 @@ Tabellen under gir en oversikt over alle pakkene vi bruker, med en kort forklari
 | Pakke | Beskrivelse | Viktige funksjoner | Kapittel |
 |---|---|---|---|
 | `tidyverse` | Samling av pakker for datahåndtering og grafikk | `mutate()`, `select()`, `filter()`, `ggplot()`, `glimpse()` | Alle |
-| `skimr` | Raske sammendrag av datasett | `skim()` | Lineær regresjon, Unsupervised |
 | `rsample` | Splitting av data i training/testing | `initial_split()`, `training()`, `testing()` | Alle supervised-kapitler |
-| `mgcv` | Generaliserte additive modeller (GAM) | `gam()`, `s()` | Lineær regresjon, Logistisk regresjon |
-| `splines` | Spline-funksjoner for fleksibel regresjon | `bs()` | Logistisk regresjon |
-| `Ecdat` | Datasett for økonometri (Clothing-data) | `data(Clothing)` | Logistisk regresjon |
+| `mgcv` | Generaliserte additive modeller (GAM) | `gam()`, `s()` | Lineær regresjon |
+| `splines` | Spline-funksjoner for fleksibel regresjon | `bs()` | Lineær regresjon |
+| `Ecdat` | Datasett for økonometri (Clothing-data) | `data(Clothing)` | Lineær regresjon |
 | `pROC` | ROC-kurver og AUC-beregning | `roc()`, `auc()` | Logistisk regresjon |
 | `caret` | Confusion matrix og modellevaluering | `confusionMatrix()` | Logistisk regresjon, CART, Bagging, Random forest, Boosting |
 | `rpart` | Klassifikasjonstrær (CART) | `rpart()`, `prune()` | CART, Bagging |

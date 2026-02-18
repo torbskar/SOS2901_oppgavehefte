@@ -239,6 +239,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./oppgaver.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -294,7 +300,7 @@ window.Quarto = {
 </div>
 <p>Compas er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert av flere. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett “biased” mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Et datasett er gjort tilgjengelig av <a href="https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis">Propublica her</a> som vi skal bruke.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/compas.rds"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -610,13 +616,13 @@ FemaleCaucasian0 FemaleCaucasian1     FemaleOther0     FemaleOther1
 <span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co">#rf</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))  </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
 <span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -627,11 +633,13 @@ FemaleCaucasian0 FemaleCaucasian1     FemaleOther0     FemaleOther1
 </div>
 </div>
 </div>
+<p>Nå sjekker vi kjønnsbalansen igjen. Sammenlign med resultatet fra tidligere – ble det mer balansert?</p>
+<p>La oss også sjekke om den samme modellen er rettferdig med hensyn på etnisitet:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Ethnicity'</span>,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Caucasian'</span>)</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -1151,7 +1159,7 @@ FemaleCaucasian0 FemaleCaucasian1     FemaleOther0     FemaleOther1
 <span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/compas.rds"</span>)</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>)</span>
 <span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span>
 <span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a></span>
@@ -1366,37 +1374,40 @@ FemaleCaucasian0 FemaleCaucasian1     FemaleOther0     FemaleOther1
 <span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-279"><a href="#cb31-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))  </span>
+<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))</span>
 <span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
+<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
+<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
 <span id="cb31-285"><a href="#cb31-285" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb31-286"><a href="#cb31-286" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
+<span id="cb31-286"><a href="#cb31-286" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
 <span id="cb31-287"><a href="#cb31-287" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
 <span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
 <span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb31-290"><a href="#cb31-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-291"><a href="#cb31-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-295"><a href="#cb31-295" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb31-296"><a href="#cb31-296" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb31-297"><a href="#cb31-297" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Ethnicity'</span>,</span>
-<span id="cb31-298"><a href="#cb31-298" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
-<span id="cb31-299"><a href="#cb31-299" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Caucasian'</span>)</span>
-<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
-<span id="cb31-301"><a href="#cb31-301" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-302"><a href="#cb31-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a>Her ble det i hvert fall annerledes, men ikke helt likt nå heller. Nå kan man drive på en stund å justere og se hva man får til. Hvis man har et veldig stort datasett (som vi ikke har her) så kan man i teorien justere for flere ulike egenskaper samtidig og i større detalj. Man er rett og slett litt begrenset av dataene. </span>
-<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-305"><a href="#cb31-305" aria-hidden="true" tabindex="-1"></a>Problemet er selvsagt at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper du ikke har data for som det senere vil vise seg er urettferdig. Det kan f.eks. slå ut svært skjevt for type nabolag, sosioøkonomisk status, religiøs tilhørighet, lengde på håret - eller hva som helst annet. Man trenger data for å sjekke, men også data for å bygge algoritmen. </span>
-<span id="cb31-306"><a href="#cb31-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a>Jeg tror konklusjonen er at man justere for noe, men ikke alt. Men med nok data kan man justere for *mer* - men fremdeles ikke alt. I tillegg er som regel ikke justeringer gratis. Kanskje blir presisjonen i modellen totalt sett dårligere? </span>
-<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a>Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du f.eks. ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for - og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett være umulige valg. Men hva er så alternativet? Det er jo heller ikke sikkert er bedre på noen av disse parametrene. </span>
-<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-291"><a href="#cb31-291" aria-hidden="true" tabindex="-1"></a>Nå sjekker vi kjønnsbalansen igjen. Sammenlign med resultatet fra tidligere -- ble det mer balansert?</span>
+<span id="cb31-292"><a href="#cb31-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-293"><a href="#cb31-293" aria-hidden="true" tabindex="-1"></a>La oss også sjekke om den samme modellen er rettferdig med hensyn på etnisitet:</span>
+<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-297"><a href="#cb31-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb31-298"><a href="#cb31-298" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
+<span id="cb31-299"><a href="#cb31-299" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
+<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Ethnicity'</span>,</span>
+<span id="cb31-301"><a href="#cb31-301" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
+<span id="cb31-302"><a href="#cb31-302" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Caucasian'</span>)</span>
+<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
+<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb31-305"><a href="#cb31-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-306"><a href="#cb31-306" aria-hidden="true" tabindex="-1"></a>Her ble det i hvert fall annerledes, men ikke helt likt nå heller. Nå kan man drive på en stund å justere og se hva man får til. Hvis man har et veldig stort datasett (som vi ikke har her) så kan man i teorien justere for flere ulike egenskaper samtidig og i større detalj. Man er rett og slett litt begrenset av dataene. </span>
+<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a>Problemet er selvsagt at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper du ikke har data for som det senere vil vise seg er urettferdig. Det kan f.eks. slå ut svært skjevt for type nabolag, sosioøkonomisk status, religiøs tilhørighet, lengde på håret - eller hva som helst annet. Man trenger data for å sjekke, men også data for å bygge algoritmen. </span>
+<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a>Jeg tror konklusjonen er at man justere for noe, men ikke alt. Men med nok data kan man justere for *mer* - men fremdeles ikke alt. I tillegg er som regel ikke justeringer gratis. Kanskje blir presisjonen i modellen totalt sett dårligere? </span>
 <span id="cb31-311"><a href="#cb31-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-312"><a href="#cb31-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-312"><a href="#cb31-312" aria-hidden="true" tabindex="-1"></a>Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du f.eks. ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for - og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett være umulige valg. Men hva er så alternativet? Det er jo heller ikke sikkert er bedre på noen av disse parametrene. </span>
+<span id="cb31-313"><a href="#cb31-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-314"><a href="#cb31-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-315"><a href="#cb31-315" aria-hidden="true" tabindex="-1"></a></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

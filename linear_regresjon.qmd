@@ -12,8 +12,9 @@ I dette kapittelt skal vi bruke følgende pakker:
 invisible(Sys.setlocale(locale='no_NB.utf8'))
 
 library(tidyverse)   # datahåndtering, grafikk og glimpse()
-library(skimr)       # funksjonen skim() for å se på data
 library(rsample)     # for å dele data i training og testing
+library(splines)     # for spline-regresjon
+library(Ecdat)       # inneholder datasettet Clothing
 library(mgcv)        # for generaliserte additive modeller (GAM)
 ```
 
@@ -29,14 +30,6 @@ Først leser vi inn dataene og tar en titt på variabellisten.
 ```{r}
 kommune <- readRDS( "data/kommunedata.rds")
 glimpse(kommune)
-
-```
-
-En annen måte å få oversikt over dataene på er å bruke funksjonen `skim()`, som gir noe mer informasjon om fordelingen av hver enkelt variabel.
-
-```{r}
-
-skim(kommune)
 
 ```
 
@@ -298,11 +291,102 @@ Dette er en ganske ekstrem variant av *overfitting*. Ved å formulere en veldig 
 Det er altså slik at en enklere modell kan passe til *nye* data langt bedre enn en veldig komplisert modell. Grunnen er overfitting: modellen fanger opp vel så mye tilfeldig støy som det underliggende mønsteret. Støyen vil jo være annerledes i de nye dataene.
 
 
-### Generalized additive models (GAM)
+## Splines
+
+I modellene over har vi antatt en lineær sammenheng mellom prediktor og utfall. Men hva hvis sammenhengen *ikke* er lineær? En mulighet er å bruke *splines*, som er stykkevis definerte funksjoner som kan tilpasse mer fleksible former. Splines er nyttige for prediksjon fordi de kan fange opp ikke-lineære mønstre i dataene uten at vi trenger å spesifisere funksjonsformen på forhånd.
+
+Vi bruker datasettet Clothing fra pakken `Ecdat` som eksempel. Variabelen `tsales` er totalt salg og `inv2` er investeringer.
+
+```{r}
+#| warning: false
+#| message: false
+data(Clothing)
+glimpse(Clothing)
+```
+
+La oss først se på sammenhengen med et scatterplot og en lineær regresjonslinje:
+
+```{r}
+#| warning: false
+#| message: false
+p0 <- ggplot(Clothing, aes(inv2, tsales)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, col = "gray")
+
+p0
+```
+
+Sammenhengen ser ikke helt lineær ut. Vi kan prøve en *piecewise linear spline* der vi angir knuter (knots) der funksjonen skifter retning. Funksjonen `bs()` fra pakken `splines` brukes til dette.
+
+### Piecewise linear spline
+
+Med `degree = 1` får vi en stykkevis lineær funksjon, altså rette linjer mellom knutene:
+
+```{r}
+model1 <- lm(tsales ~ bs(inv2, knots = c(12000, 60000, 150000), degree = 1), data = Clothing)
+summary(model1)
+```
+
+### B-spline (kubisk)
+
+Med `degree = 3` får vi en glattere, kubisk funksjon:
+
+```{r}
+model2 <- lm(tsales ~ bs(inv2, knots = c(12000, 60000, 150000), degree = 3), data = Clothing)
+summary(model2)
+```
+
+For å visualisere forskjellen lager vi et datasett med predikerte verdier for begge modellene:
+
+```{r}
+#| warning: false
+#| message: false
+inv2.grid <- data.frame(inv2 = seq(min(Clothing$inv2), max(Clothing$inv2)))
+
+pred1 <- predict(model1, newdata = inv2.grid, se = TRUE, interval = "prediction")$fit %>%
+  bind_cols(inv2.grid)
+
+pred2 <- predict(model2, newdata = inv2.grid, se = TRUE, interval = "prediction")$fit %>%
+  bind_cols(inv2.grid)
+
+ggplot(Clothing, aes(inv2, tsales)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, col = "gray") +
+  geom_line(data = pred1, aes(y = fit), linewidth = 1, col = "blue") +
+  geom_line(data = pred2, aes(y = fit), linewidth = 1, col = "red")
+```
+
+Den blå linjen er den stykkevis lineære spline og den røde er den kubiske. Begge tilpasser dataene bedre enn den rette linjen.
+
+### GAM med smoothing spline
+
+En enda enklere tilnærming er å bruke `gam()` fra `mgcv`-pakken med `s()` som automatisk velger en god smoothing:
+
+```{r}
+#| warning: false
+#| message: false
+model3 <- gam(tsales ~ s(inv2), data = Clothing)
+summary(model3)
+
+pred3 <- inv2.grid %>%
+  mutate(fit = predict(model3, newdata = inv2.grid))
+
+ggplot(Clothing, aes(inv2, tsales)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, col = "gray") +
+  geom_line(data = pred1, aes(y = fit), col = "blue") +
+  geom_line(data = pred2, aes(y = fit), col = "red") +
+  geom_line(data = pred3, aes(y = fit), col = "purple")
+```
+
+Den lilla linjen er GAM-modellen. Fordelen med GAM er at du ikke trenger å velge knuter selv -- funksjonen finner en god tilpassning automatisk.
+
+
+### GAM med kommunedata
 
 Generaliserte additive modeller er i utgangspunktet som lineær regresjon, men inkluderer en eller flere *smoothing*-parametre. Disse smoothing-parametrene "lærer" funksjonsformen fra dataene i stedet for å anta en lineær sammenheng. Funksjonen `gam()` fra pakken `mgcv` brukes for dette, og `s()` rundt en variabel angir at den skal ha en fleksibel form.
 
-Her er et eksempel der vi bruker GAM med noen utvalgte variable:
+Her er et eksempel der vi bruker GAM med noen utvalgte variable fra kommunedataene:
 
 ```{r}
 #| warning: false
@@ -328,8 +412,6 @@ Merk at `s()` tilpasser en fleksibel kurve til dataene. Fordelen med GAM er at v
 
 ### Oppsummerende kommentar
 
-Dette gjelder generelt: mer komplisert regresjonsmodell vil gi tilsynelatende bedre tilpassning til data enten man måler med $r^2$ eller RMSE. Man kan riktignok bruke mål på tilpassning som justerer for antall parametre etc (f.eks. justert $r^2$, AIC eller BIC), som kanskje kan bedre dette noe, men det vil ofte lede til overfitting likevel.
+Det gjelder generelt at mer kompliserte regresjonsmodeller vil gi tilsynelatende bedre tilpassning til data, enten man måler med $r^2$ eller RMSE. Man kan riktignok bruke mål på tilpassning som justerer for antall parametre etc (f.eks. justert $r^2$, AIC eller BIC), som kanskje kan bedre dette noe, men det vil ofte lede til overfitting likevel.
 
-Det er derfor veldig viktig å teste modellen mot *nye* data. I praksis testing-dataene man lagde til å begynne med.
-
-I resten av kurset skal vi unngå å bruke latterlige kompliserte modeller som ble demonstrert ovenfor. Man kan godt bruke interaksjonsledd, polynomer, splines og andre fancy ting. Men med måte.
+Det er derfor veldig viktig å teste modellen mot *nye* data -- i praksis testing-dataene man lagde til å begynne med. Splines og GAM gir mer fleksible modeller enn vanlig lineær regresjon, men de er langt fra så risikable som f.eks. 3-veis interaksjoner. Man kan godt bruke interaksjonsledd, polynomer, splines og andre verktøy. Men med måte.

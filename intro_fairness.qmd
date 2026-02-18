@@ -146,29 +146,29 @@ Ok. Det ville uansett være en lite klok arbeidsgiver som baserer seg kun på de
 
 
 ### Equalized odds
-En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. 
+En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. Hvis dette tallet er likt mellom grupper betyr det at modellen er like god til å fange opp de som faktisk slutter uavhengig av jobbtype. Hvis det er ulikt betyr det at modellen er flinkere til å oppdage sluttere i noen jobber enn andre.
 
-(I følgende kode er det lagt på [[2]] på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den dele av koden er ikke viktig). 
+(I følgende kode er det lagt på `[[2]]` på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den delen av koden er ikke viktig).
 
 ```{r}
 equal_odds(data = attrition_test,
-                 outcome = "Attrition", 
-                 group = "JobRole", 
-                 preds = "attrition_class", 
+                 outcome = "Attrition",
+                 group = "JobRole",
+                 preds = "attrition_class",
                  base = "Laboratory Technician"
-                 )[[2]] 
+                 )[[2]]
 ```
 ### False positive rate parity
 
-Er falske positive rate i ulike grupper lik? 
+Er falske positive rate i ulike grupper lik? Falsk positiv rate er andelen av de som *ikke* slutter som likevel blir feilaktig klassifisert som at de vil slutte. Hvis denne raten er ulik mellom grupper, vil noen grupper bli utsatt for flere unødvendige tiltak enn andre.
 
 ```{r}
 fpr_parity(data = attrition_test,
-                 outcome = "Attrition", 
-                 group = "JobRole", 
-                 preds = "attrition_class", 
+                 outcome = "Attrition",
+                 group = "JobRole",
+                 preds = "attrition_class",
                  base = "Laboratory Technician"
-                 )[[2]] 
+                 )[[2]]
 ```
 
 

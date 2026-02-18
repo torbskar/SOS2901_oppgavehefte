@@ -16,34 +16,26 @@ library(caret)       # inneholder funksjon for confusion matrix
 ```
 
 
-Vi skal her bruke syntetiske data som simulerer en fødselskohort. Datasettet inneholder informasjon om individer og utfallsvariabelen `felonies` angir om personen har begått en alvorlig forbrytelse (1) eller ikke (0). Vi starter med å lage en logistisk regresjonsmodell som sammenligningsgrunnlag, og deretter bygger vi klassifikasjonstrær.
+Klassifikasjonstrær (CART: Classification and Regression Trees) er en helt annen tilnærming enn regresjon. I stedet for å estimere koeffisienter i en ligning, deler algoritmen dataene i stadig mindre grupper basert på verdier av prediktorene. Resultatet er et "tre" som kan leses som en serie if-else-regler. Fordelen er at trær er enkle å tolke og kan fange opp ikke-lineære sammenhenger og interaksjoner automatisk. Ulempen er at enkelttrær kan være ustabile og har en tendens til overfitting.
+
+Vi skal her bruke Attrition-datasettet fra kapittelet om logistisk regresjon. Utfallsvariabelen er `Attrition` som angir om en arbeidstaker slutter i jobben ("Yes") eller ikke ("No"). Vi starter med å lage en logistisk regresjonsmodell som sammenligningsgrunnlag, og deretter bygger vi klassifikasjonstrær.
 
 
 ## Lese inn data
 
 ```{r}
-load("data/synthetic_birthCohort96.RData")
-glimpse(synthetic_birthCohort)
+attrition <- readRDS("data/attrition.rds") %>%
+  select(-EmployeeNumber)
+glimpse(attrition)
 ```
-
-Vi gjør litt enkel datahåndtering: fjerner noen variable og gjør utfallsvariabelen om til en factor.
-
-```{r}
-synth <- synthetic_birthCohort %>%
-  select(-drugs, -violence) %>%
-  mutate(felonies = factor(felonies))
-
-table(synth$felonies)
-```
-
 
 Vi splitter datasettet i training og testing:
 
 ```{r}
 set.seed(426)
-synth_split <- initial_split(synth, prop = .7)
-training <- training(synth_split)
-testing  <- testing(synth_split)
+attrition_split <- initial_split(attrition, prop = .7)
+training <- training(attrition_split)
+testing  <- testing(attrition_split)
 ```
 
 
@@ -52,7 +44,7 @@ testing  <- testing(synth_split)
 Før vi lager klassifikasjonstrær er det nyttig å ha et sammenligningsgrunnlag. Vi bruker logistisk regresjon med alle variable:
 
 ```{r}
-est.glm <- glm(felonies ~ ., data = training, family = "binomial")
+est.glm <- glm(Attrition ~ ., data = training, family = "binomial")
 summary(est.glm)
 ```
 
@@ -61,12 +53,11 @@ Vi predikerer på testing-data og gjør en klassifisering med cut-off på 0.5:
 ```{r}
 testing_glm <- testing %>%
   mutate(prob_glm = predict(est.glm, newdata = testing, type = "response")) %>%
-  mutate(klassifiser = factor(ifelse(prob_glm < .5, 0, 1))) %>%
-  drop_na()
+  mutate(klassifiser = factor(ifelse(prob_glm < .5, "No", "Yes")))
 
-confusionMatrix(reference = testing_glm$felonies,
+confusionMatrix(reference = testing_glm$Attrition,
                 testing_glm$klassifiser,
-                positive = "1")
+                positive = "Yes")
 ```
 
 Denne confusion matrix gir oss et referansepunkt for å vurdere klassifikasjonstrærne.
@@ -77,7 +68,7 @@ Denne confusion matrix gir oss et referansepunkt for å vurdere klassifikasjonst
 Utfallsvariabel og prediktorer spesifiseres som en formel på samme måte som for regresjon. Siden vi her har en klassifikasjon må vi spesifisere `method = "class"`. Hvis ikke vil `rpart()` gjette hva slags modell (som kanskje er riktig), så du kan få andre resultater enn du forventet.
 
 ```{r}
-klass_tre <- rpart(felonies ~ .,
+klass_tre <- rpart(Attrition ~ .,
                    data = training, method = "class")
 
 ```
@@ -89,6 +80,8 @@ rpart.plot(klass_tre)
 
 ```
 
+Treet leses fra toppen og nedover. I hver node vises den predikerte klassen, andelen som tilhører denne klassen, og andelen av totalen som havner i denne noden. Hver split angir et kriterium: observasjoner som oppfyller kriteriet går til venstre, resten til høyre. Bladnodene (nederst) gir den endelige klassifiseringen.
+
 Vi kan også få printet ut resultatet som regler i en tabell med `rpart.rules()`:
 
 ```{r}
@@ -99,16 +92,17 @@ Da kan vi sammenligne prediksjoner med observert utfall for testingdataene. I `p
 
 ```{r}
 testing_pred <- testing %>%
-  mutate(felonies_pred = predict(klass_tre, newdata = testing, type = "class"))
+  mutate(Attrition_pred = predict(klass_tre, newdata = testing, type = "class"))
 
 tab <- testing_pred %>%
-  select(felonies_pred, felonies) %>%
+  select(Attrition_pred, Attrition) %>%
   table()
 
-confusionMatrix(tab, positive = "1")
+confusionMatrix(tab, positive = "Yes")
 
 ```
 
+Sammenlign dette resultatet med logistisk regresjon-baseline ovenfor. Spesielt interessant er accuracy, sensitivity (andelen av de som faktisk slutter som vi fanger opp) og specificity (andelen av de som blir som vi riktig klassifiserer). Et enkelt tre med forvalgte parametre gjør det ofte ganske greit, men vi kan forsøke å forbedre det med tuning.
 
 
 ## Tuning/pruning
@@ -126,7 +120,7 @@ Nå er arbeidsflyten slik at man skrur litt på disse parametrene, sjekker resul
 ```{r}
 #| warning: false
 #| error: false
-klass_tre2 <- rpart(felonies ~ .,
+klass_tre2 <- rpart(Attrition ~ .,
                     data = training, method = "class",
                     cp = 0.0000001, maxdepth = 20, minbucket = 3)
 
@@ -139,7 +133,7 @@ rpart.plot(klass_tre2)
 Parameteren `maxdepth` setter en grense for hvor mange splitter det kan gjøres i hver forgrening:
 
 ```{r}
-klass_tre3 <- rpart(felonies ~ .,
+klass_tre3 <- rpart(Attrition ~ .,
                     data = training, method = "class",
                     maxdepth = 4)
 
@@ -154,7 +148,7 @@ rpart.plot(klass_tre3)
 Parameterne `minbucket = ...` styrer hvor mange observasjoner det minst må være i den siste noden. Forvalget er en 1/3 av `minsplit`, altså 7 hvis man ikke har endret på `minsplit`.
 
 ```{r}
-klass_tre4 <- rpart(felonies ~ .,
+klass_tre4 <- rpart(Attrition ~ .,
                     data = training, method = "class",
                     minbucket = 15)
 
@@ -171,7 +165,7 @@ Her er et eksempel der vi bruker et ganske komplekst tre med justerte parametre:
 ```{r}
 #| warning: false
 #| error: false
-klass_tre5 <- rpart(felonies ~ .,
+klass_tre5 <- rpart(Attrition ~ .,
                     data = training, method = "class",
                     cp = 0, maxdepth = 25, minbucket = 5)
 
@@ -183,13 +177,14 @@ Vi kan sjekke resultatet med confusion matrix på testing-data:
 
 ```{r}
 testing_pred <- testing %>%
-  mutate(felonies_pred = predict(klass_tre5, newdata = testing, type = "class"))
+  mutate(Attrition_pred = predict(klass_tre5, newdata = testing, type = "class"))
 
-confusionMatrix(reference = testing_pred$felonies,
-                testing_pred$felonies_pred,
-                positive = "1")
+confusionMatrix(reference = testing_pred$Attrition,
+                testing_pred$Attrition_pred,
+                positive = "Yes")
 ```
 
+Legg merke til at et veldig komplekst tre ikke nødvendigvis gir bedre resultater på testing-data. Treet kan ha blitt for tilpasset training-dataene (overfitting). En måte å motvirke dette på er å *beskjære* treet i etterkant.
 
 ### Pruning
 En relatert teknikk er å beskjære treet basert på `cp`. Altså, når du har bygget et tre som du tenker er for komplekst, så kan du beskjære grenene slik at de minst viktige grenene kuttes. Funksjonen `prune()` gjør jobben:
@@ -212,15 +207,15 @@ loss = \begin{bmatrix}
         \end{bmatrix}
 $$
 
-Vi setter alltid vektingen av sanne positive og sanne negative til 0. Feilene vektes. Her er et eksempel der falske positive veier 4 ganger tyngre enn falske negative:
+Vi setter alltid vektingen av sanne positive og sanne negative til 0. Feilene vektes. Her er et eksempel der falske negative (at vi ikke fanger opp noen som faktisk slutter) veier 4 ganger tyngre enn falske positive:
 
 ```{r}
-lossm <- matrix(c(0, 4, 1, 0), ncol=2)
+lossm <- matrix(c(0, 1, 4, 0), ncol=2)
 lossm
 ```
 
 ```{r}
-rpart_loss <- rpart(felonies ~ . ,
+rpart_loss <- rpart(Attrition ~ . ,
                   data = training,
                   parms = list(loss = lossm),
                   method = "class")
@@ -232,13 +227,14 @@ Sjekk mot testingdata:
 
 ```{r}
 testing_pred <- testing %>%
-  mutate(felonies_pred = predict(rpart_loss, newdata = testing, type = "class"))
+  mutate(Attrition_pred = predict(rpart_loss, newdata = testing, type = "class"))
 
 tab <- testing_pred %>%
-  select(felonies_pred, felonies) %>%
+  select(Attrition_pred, Attrition) %>%
   table()
-confusionMatrix(tab, positive = "1")
+confusionMatrix(tab, positive = "Yes")
 
 ```
 
+Sammenlign sensitivity og specificity med den opprinnelige modellen uten loss matrix. Ved å vekte falske negative tyngre tvinger vi modellen til å fange opp flere av de som faktisk slutter -- men på bekostning av flere falske positive. Denne avveiningen mellom ulike typer feil er sentral i resten av kurset.
 

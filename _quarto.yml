@@ -1,6 +1,9 @@
-project: 
+project:
   type: book
   output-dir: docs
+
+execute:
+  freeze: auto
 
 book:
   title: "SOS2901 Maskinlæring for samfunnsvitere"
@@ -21,6 +24,7 @@ book:
     - fairness.qmd
     - boosting.qmd
   #  - unsupervised.qmd
+    - oppgaver.qmd
     - references.qmd
 
   
