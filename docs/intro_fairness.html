@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; En lett introduksjon til fairness – SOS2901 Maskinlæring for samfunnsvitere</title>
+<title>8&nbsp; En lett introduksjon til fairness – SOS2901 Maskinlæring for samfunnsvitere</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./fairness.html" rel="next">
-<link href="./randomForest.html" rel="prev">
+<link href="./boosting.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro_fairness.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro_fairness.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -192,20 +192,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./fairness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -230,15 +230,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#hva-slags-rettferdighet" id="toc-hva-slags-rettferdighet" class="nav-link active" data-scroll-target="#hva-slags-rettferdighet"><span class="header-section-number">7.1</span> Hva slags rettferdighet</a></li>
-  <li><a href="#mer-confusion-matrix" id="toc-mer-confusion-matrix" class="nav-link" data-scroll-target="#mer-confusion-matrix"><span class="header-section-number">7.2</span> Mer confusion matrix</a></li>
-  <li><a href="#mål-på-fairness" id="toc-mål-på-fairness" class="nav-link" data-scroll-target="#mål-på-fairness"><span class="header-section-number">7.3</span> Mål på fairness</a>
+  <li><a href="#hva-slags-rettferdighet" id="toc-hva-slags-rettferdighet" class="nav-link active" data-scroll-target="#hva-slags-rettferdighet"><span class="header-section-number">8.1</span> Hva slags rettferdighet</a></li>
+  <li><a href="#mer-confusion-matrix" id="toc-mer-confusion-matrix" class="nav-link" data-scroll-target="#mer-confusion-matrix"><span class="header-section-number">8.2</span> Mer confusion matrix</a></li>
+  <li><a href="#mål-på-fairness" id="toc-mål-på-fairness" class="nav-link" data-scroll-target="#mål-på-fairness"><span class="header-section-number">8.3</span> Mål på fairness</a>
   <ul class="collapse">
-  <li><a href="#predictive-rate-parity" id="toc-predictive-rate-parity" class="nav-link" data-scroll-target="#predictive-rate-parity"><span class="header-section-number">7.3.1</span> Predictive rate parity</a></li>
-  <li><a href="#equalized-odds" id="toc-equalized-odds" class="nav-link" data-scroll-target="#equalized-odds"><span class="header-section-number">7.3.2</span> Equalized odds</a></li>
-  <li><a href="#false-positive-rate-parity" id="toc-false-positive-rate-parity" class="nav-link" data-scroll-target="#false-positive-rate-parity"><span class="header-section-number">7.3.3</span> False positive rate parity</a></li>
+  <li><a href="#predictive-rate-parity" id="toc-predictive-rate-parity" class="nav-link" data-scroll-target="#predictive-rate-parity"><span class="header-section-number">8.3.1</span> Predictive rate parity</a></li>
+  <li><a href="#equalized-odds" id="toc-equalized-odds" class="nav-link" data-scroll-target="#equalized-odds"><span class="header-section-number">8.3.2</span> Equalized odds</a></li>
+  <li><a href="#false-positive-rate-parity" id="toc-false-positive-rate-parity" class="nav-link" data-scroll-target="#false-positive-rate-parity"><span class="header-section-number">8.3.3</span> False positive rate parity</a></li>
   </ul></li>
-  <li><a href="#litt-oppsummerende" id="toc-litt-oppsummerende" class="nav-link" data-scroll-target="#litt-oppsummerende"><span class="header-section-number">7.4</span> Litt oppsummerende</a></li>
+  <li><a href="#litt-oppsummerende" id="toc-litt-oppsummerende" class="nav-link" data-scroll-target="#litt-oppsummerende"><span class="header-section-number">8.4</span> Litt oppsummerende</a></li>
   </ul>
 </nav>
     </div>
@@ -247,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -272,8 +272,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairness)    <span class="co"># Beregne mål på fairness</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Nå som vi har sett på klassifikasjonstrær, bagging og random forest er det på tide å gjøre noen rettferdighetsbetraktninger. Vi starter med et eksempel basert på logistisk regresjon for å introdusere begreper og mål, og i neste kapittel skal vi se hvordan vi kan <em>tune</em> random forest for å motvirke bias.</p>
-<section id="hva-slags-rettferdighet" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="hva-slags-rettferdighet"><span class="header-section-number">7.1</span> Hva slags rettferdighet</h2>
+<section id="hva-slags-rettferdighet" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="hva-slags-rettferdighet"><span class="header-section-number">8.1</span> Hva slags rettferdighet</h2>
 <p>I denne settingen kan rettferdighet kommer i betraktning på flere måter, herunder følgende:</p>
 <ul>
 <li>I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak</li>
@@ -285,8 +285,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Det er nok av ting å tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Hvis datakvaliteten er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene kan i prinsippet motarbeides, så er det vel i praksis slik at en skjevhet kommer sjelden alene?</p>
 <p>Vurderinger av overordnet feilrater er et gjennomgående tema, så vi starter med det. Deretter skal vi se på mål på skjevheter over undergrupper. Prinsippet er relativt enkelt, uten at vurderingene blir enkle av den grunn.</p>
 </section>
-<section id="mer-confusion-matrix" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="mer-confusion-matrix"><span class="header-section-number">7.2</span> Mer confusion matrix</h2>
+<section id="mer-confusion-matrix" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="mer-confusion-matrix"><span class="header-section-number">8.2</span> Mer confusion matrix</h2>
 <p>Et utgangspunkt er det vi kaller confusion matrix. Det er rett og slett en krysstabell der vi sammenholder predikert og observert utfall. Å lage en slik tabell avhenger ikke av metoden vi bruker, bare at vi kan sammenlignet prediksjon med faktisk utfall.</p>
 <p>Vi bruker eksempelet fra forrige kapittel med logistisk regresjon.</p>
 <div class="cell">
@@ -401,10 +401,10 @@ Prediction  No Yes
 <p>Hvorvidt dette er “rettferdig” eller ikke kommer jo an på hva man skal gjøre med denne prediksjonen. Så det er jo en første vurdering. Synes man feilratene er ok? Er evt. konsekvensene av å ikke gjøre noe ok?</p>
 <p>I dette eksempelet er positive predictive value 0.38 som altså er andelen av de som er predikert som positive som er rett. Det betyr at hvis vi setter i verk tiltak mot alle som er predikert positive, så vil 0.62 være bortkastet. På den annen side, vil 0.68 av de som faktisk er positive fanges opp (sensitivity).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 </section>
-<section id="mål-på-fairness" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="mål-på-fairness"><span class="header-section-number">7.3</span> Mål på fairness</h2>
-<section id="predictive-rate-parity" class="level3" data-number="7.3.1">
-<h3 data-number="7.3.1" class="anchored" data-anchor-id="predictive-rate-parity"><span class="header-section-number">7.3.1</span> Predictive rate parity</h3>
+<section id="mål-på-fairness" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="mål-på-fairness"><span class="header-section-number">8.3</span> Mål på fairness</h2>
+<section id="predictive-rate-parity" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="predictive-rate-parity"><span class="header-section-number">8.3.1</span> Predictive rate parity</h3>
 <p>Ovenfor så vi blant annet at “positive predicted value” , altså andelen sanne positive av alle predikerte positive, er 0.382.</p>
 <p>Men det er ulike typer jobber i denne bedriften. Her er fordelingen for test-datasettet:</p>
 <div class="cell">
@@ -1072,8 +1072,8 @@ $Metric_plot</code></pre>
 <p>Men man kunne også tenke seg et negativt tiltak: de som er predikert å ville slutte vil <em>ikke</em> få lønnsforhøyelse eller andre goder. Hvis vurderingen er at de vil slutte uansett, så er det bortkastede ressurser. Flere blant lab-teknikerne ville da urettmessig få avslag.</p>
 <p>Ok. Det ville uansett være en lite klok arbeidsgiver som baserer seg kun på dette. Det finnes bedre måter å beholde arbeidstakerne sine på. Men man kan tenke seg andre situasjoner der konsekvensene er tydeligere: Hva om det var en automatisert sjekk av kredittverdighet for å få boliglån? Eller kanskje opptak til et lederprogram? Eller risikovurdering for prøveløslatelse fra fengsel?</p>
 </section>
-<section id="equalized-odds" class="level3" data-number="7.3.2">
-<h3 data-number="7.3.2" class="anchored" data-anchor-id="equalized-odds"><span class="header-section-number">7.3.2</span> Equalized odds</h3>
+<section id="equalized-odds" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="equalized-odds"><span class="header-section-number">8.3.2</span> Equalized odds</h3>
 <p>En annen variant er å se på andelen sanne positive av andelen som faktisk er positive. Altså: andelen som er predikert å slutte av de som faktisk slutter. Hvis dette tallet er likt mellom grupper betyr det at modellen er like god til å fange opp de som faktisk slutter uavhengig av jobbtype. Hvis det er ulikt betyr det at modellen er flinkere til å oppdage sluttere i noen jobber enn andre.</p>
 <p>(I følgende kode er det lagt på <code>[[2]]</code> på slutten for å bare vise figuren, altså droppe tabellen. Akkurat den delen av koden er ikke viktig).</p>
 <div class="cell">
@@ -1092,8 +1092,8 @@ $Metric_plot</code></pre>
 </div>
 </div>
 </section>
-<section id="false-positive-rate-parity" class="level3" data-number="7.3.3">
-<h3 data-number="7.3.3" class="anchored" data-anchor-id="false-positive-rate-parity"><span class="header-section-number">7.3.3</span> False positive rate parity</h3>
+<section id="false-positive-rate-parity" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="false-positive-rate-parity"><span class="header-section-number">8.3.3</span> False positive rate parity</h3>
 <p>Er falske positive rate i ulike grupper lik? Falsk positiv rate er andelen av de som <em>ikke</em> slutter som likevel blir feilaktig klassifisert som at de vil slutte. Hvis denne raten er ulik mellom grupper, vil noen grupper bli utsatt for flere unødvendige tiltak enn andre.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fpr_parity</span>(<span class="at">data =</span> attrition_test,</span>
@@ -1112,8 +1112,8 @@ $Metric_plot</code></pre>
 </div>
 </section>
 </section>
-<section id="litt-oppsummerende" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="litt-oppsummerende"><span class="header-section-number">7.4</span> Litt oppsummerende</h2>
+<section id="litt-oppsummerende" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="litt-oppsummerende"><span class="header-section-number">8.4</span> Litt oppsummerende</h2>
 <p>Den R-pakken vi bruker her har en hel rekke ulike mål innebygget. Se en oversikt på <a href="https://cran.r-project.org/web/packages/fairness/vignettes/fairness.html">pakkens <em>vignette</em></a>.</p>
 <p>Hvilket mål som er viktigst er det derimot ikke noe klart svar på. Det kommer an på hva man har tenkt til å bruke prediksjonen til, hvilke konsekvenser tiltaket har, og hvilke konsekvenser det har å ikke gjøre noe. Disse konsekvensene kan vurderes forskjellig for personer etter om det er riktig eller feil prediksjon.</p>
 <p>Det du må ta stilling til er egentlig hvor viktig du synes likebehandling er! Ofte er jo det åpenbart veldig viktig.</p>
@@ -1584,13 +1584,13 @@ $Metric_plot</code></pre>
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./randomForest.html" class="pagination-link" aria-label="Random forest">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></span>
+      <a href="./boosting.html" class="pagination-link" aria-label="Boosting">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./fairness.html" class="pagination-link" aria-label="Fairness og tuning">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

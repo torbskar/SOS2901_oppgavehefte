@@ -28,6 +28,11 @@ Vi illustrerer lineær regresjon med et empirisk eksempel. Her skal vi bruke dat
 Først leser vi inn dataene og tar en titt på variabellisten.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 kommune <- readRDS( "data/kommunedata.rds")
 glimpse(kommune)
 
@@ -42,6 +47,11 @@ Merk bruken av `set.seed()`. For å splitte genererer R tilfeldige tall, og *see
 [^linear_regresjon-1]: Bortsett fra for dem som mener det er svaret på "the Ultimate Question of Life, the Universe, and Everything"
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 set.seed(42)
 kommune_split <- initial_split(kommune, prop = .7)
 
@@ -57,6 +67,9 @@ En ganske åpenbar faktor som forklarer forekomsten av vold er andel unge menn i
 En god start på de fleste empiriske analyser er å beskrive sammenhengen med et plot. Her legger vi på en lineær regresjonslinje med `geom_smooth()` der vi presiserer lineær modell med `method = "lm"` og lar være å ta med konfidensintervallet `se = FALSE`.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
 #| message: false
 kommune_train <- kommune_train %>%
@@ -71,6 +84,11 @@ ggplot(kommune_train, aes(x = prop_unge_menn,
 Lineær regresjon estimeres med `lm()` og du kan få en enkel output med bruk av `summary()`.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 est <- lm(voldskriminalitet ~ prop_unge_menn, data = kommune_train)
 summary(est)
 
@@ -79,7 +97,11 @@ summary(est)
 Man kan også hente ut kun $r^2$ med følgende kode:
 
 ```{r}
+#| eval: true
 #| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 summary(est)$r.squared
 ```
 
@@ -89,11 +111,6 @@ For ordens skyld: I tidligere metodekurs har du kanskje lært å få ut en pener
 
 Med andre ord kan voldsraten beskrives som:
 
-```{r}
-#| echo: false
-# library(equatiomatic)
-# extract_eq(est, use_coefs = TRUE)
-```
 $$
 \operatorname{\widehat{voldskriminalitet}} = 0.51 + 0.41(\operatorname{prop\_unge\_menn})
 $$
@@ -107,7 +124,11 @@ $$ rmse = \sqrt{ \frac{ \sum{(O_i-P_i)^2} }{N} }  $$
 der $O$ er de observerte verdiene og $P$ er de predikerte verdiene for observasjon $i$. Merk at $(O_i-P_i)$ er residualene. I R kan vi hente ut residualene fra regresjons-objektet med dollartegnet `...$res` etter objektnavnet. Da kan du regne ut RMSE som følger:
 
 ```{r}
+#| eval: true
 #| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 rmse <- sqrt(mean(est$res^2))
 rmse
 ```
@@ -119,7 +140,11 @@ RMSE sier altså omtrentlig hvor mye modellen i gjennomsnitt bommer på de obser
 For å få litt bedre tak på hva RMSE betyr kan vi se på et plot av de predikerte og observerte verdiene. Vi kan predikere vold for hver enkelt kommune basert på denne modellen, som altså er den forventede voldsraten *hvis modellen er sann*. Funksjonen `predict()` gir oss hva vi trenger.
 
 ```{r}
+#| eval: true
 #| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 kom <- kommune_train %>%
   mutate(pred = predict(est))
 ```
@@ -127,8 +152,10 @@ kom <- kommune_train %>%
 Merk at koden her lagde en kopi av datasettet der vi har alle de opprinnelige variablene pluss en variabel med de predikerte verdiene. Vi kan nå sammenlignet prediksjonene med de observerte utfallene.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
-#| error: false
 #| message: false
 ggplot(kom, aes(x = voldskriminalitet, y = pred)) +
   geom_point(alpha = .3) +
@@ -140,7 +167,11 @@ Hvis prediksjonen hadde vært perfekt ville disse punktene ligget på linja, noe
 Hva hvis vi vil vite forventet voldsrate for en kommune for en gitt andel unge menn? Løsningen er å lage et nytt datasett med de verdiene vi er interessert i og så predikere for dette datasettet med å spesifisere `newdata = dt`. Her er et eksempel der vi ønsker å vite voldsraten hvis andelen unge menn er 15%.
 
 ```{r}
+#| eval: true
 #| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 dt <- data.frame(prop_unge_menn = 15)
 p <- predict(est, newdata = dt)
 p
@@ -149,6 +180,11 @@ p
 I følge modellen vil altså en kommune der 15% av populasjonen er unge menn ha en `r round(p, digits = 3)` voldshendelser per 1000 innbyggere. Fra tradisjonell statistikk vet vi jo at det er usikkerhet knyttet til dette estimatet og vi kan også ta det med i beregningen her. Vanligvis vil man estimere med et *konfidensintervall*, som gjelder hvis man estimerer et gjennomsnitt i en gruppe. Her skal vi derimot predikere for en enkelt kommune, som da har større usikkerhet enn om man estimerer for en enkelt observasjon. Dette kalles prediksjonsintervall og må spesifiseres i koden. Hvis det ikke er gitt vil R gi konfidensintervallet.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 p_ki <- predict(est, newdata = dt, interval = "prediction")
 p_ki
 ```
@@ -164,6 +200,11 @@ Enkel regresjon er nettopp enkel og prediksjonen blir ikke så god. Men vi kan k
 I R vil vi da bare legge til flere variabelnavn i formelen. Ellers er det meste likt som for enkel lineær regresjon.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 est_m <- lm(voldskriminalitet ~ prop_unge_menn + inntekt_totalt_median + shj_unge +
                    ant_husholdninger ,
             data = kommune_train)
@@ -177,8 +218,10 @@ Merk at $r^2$ nå har gått betraktelig opp, til ca `r round(summary(est_m)$r.sq
 Her er et scatterplot av observert mot forventet voldsrater:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
-#| error: false
 #| message: false
 kom_pred <- kommune_train %>%
   mutate(pred = predict(est_m))
@@ -194,6 +237,11 @@ ggplot(kom_pred, aes(x = voldskriminalitet, y = pred)) +
 La oss nå systematisk sammenligne flere modeller med ulik kompleksitet. Vi lager først et datasett med utvalgte variable og bruker formelen `voldskriminalitet ~ .` for å ta med alle variable.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 kom_s <- kommune_train %>%
   select(-c(kommune, kommune_nr, ordenslovbrudd,
             nark_alko_kriminalitet, trafikklovbrudd, andre_lovbrudd,
@@ -212,6 +260,11 @@ Men vi kan gjøre modellen ekstra komplisert ved inkludere alle mulige interaksj
 Her bygger vi fire modeller med økende kompleksitet og sammenligner RMSE for training-data:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 est1 <- est     # enkel modell med bare prop_unge_menn (estimert over)
 est2 <- est_m   # multippel regresjon (estimert over)
 est3 <- lm(voldskriminalitet ~ .^2, data = kom_s)    # alle 2-veis interaksjoner
@@ -221,7 +274,11 @@ est4 <- lm(voldskriminalitet ~ .^3, data = kom_s)    # alle 3-veis interaksjoner
 RMSE for training-data:
 
 ```{r}
+#| eval: true
 #| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 sqrt(mean(est1$res^2))
 sqrt(mean(est2$res^2))
 sqrt(mean(est3$res^2))
@@ -235,9 +292,10 @@ For training-data ser vi altså at RMSE synker for hver modell. Mer kompleksitet
 Nå har vi bare sett på hvordan prediksjonen fungerer på training-datasettet. Vi må sjekke med testing-datasettet. Det lagde vi i begynnelsen, så nå henter vi det frem. I `predict()` må vi nå angi `newdata =`. Vi predikerer fra alle fire modellene samtidig og regner ut RMSE for testing-data:
 
 ```{r}
+#| eval: true
 #| code-fold: false
+#| echo: true
 #| warning: false
-#| error: false
 #| message: false
 kommune_test <- kommune_test %>%
   mutate(prop_unge_menn = (menn_18_25 + menn_26_35)/bef_totalt*100)
@@ -264,8 +322,10 @@ rmse_test
 Her ser vi at de mest kompliserte modellene gir *dårligere* prediksjon på nye data! La oss også plotte predikert mot observert for den mest kompliserte modellen:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
-#| error: false
 #| message: false
 ggplot(kommune_pred, aes(x = voldskriminalitet, y = pred4)) +
   geom_point(alpha = .3) +
@@ -278,8 +338,10 @@ Ser dette rart ut? Det er noen observasjoner som har predikert skyhøy voldsrate
 Sammenlignet er den enklere multippelregresjonsmodellen vesentlig bedre på nye data:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
-#| error: false
 #| message: false
 ggplot(kommune_pred, aes(x = voldskriminalitet, y = pred2)) +
   geom_point(alpha = .3) +
@@ -298,6 +360,9 @@ I modellene over har vi antatt en lineær sammenheng mellom prediktor og utfall.
 Vi bruker datasettet Clothing fra pakken `Ecdat` som eksempel. Variabelen `tsales` er totalt salg og `inv2` er investeringer.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
 #| message: false
 data(Clothing)
@@ -307,6 +372,9 @@ glimpse(Clothing)
 La oss først se på sammenhengen med et scatterplot og en lineær regresjonslinje:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
 #| message: false
 p0 <- ggplot(Clothing, aes(inv2, tsales)) +
@@ -323,6 +391,11 @@ Sammenhengen ser ikke helt lineær ut. Vi kan prøve en *piecewise linear spline
 Med `degree = 1` får vi en stykkevis lineær funksjon, altså rette linjer mellom knutene:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
 model1 <- lm(tsales ~ bs(inv2, knots = c(12000, 60000, 150000), degree = 1), data = Clothing)
 summary(model1)
 ```
@@ -339,6 +412,9 @@ summary(model2)
 For å visualisere forskjellen lager vi et datasett med predikerte verdier for begge modellene:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
 #| message: false
 inv2.grid <- data.frame(inv2 = seq(min(Clothing$inv2), max(Clothing$inv2)))
@@ -363,6 +439,9 @@ Den blå linjen er den stykkevis lineære spline og den røde er den kubiske. Be
 En enda enklere tilnærming er å bruke `gam()` fra `mgcv`-pakken med `s()` som automatisk velger en god smoothing:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
 #| message: false
 model3 <- gam(tsales ~ s(inv2), data = Clothing)
@@ -389,8 +468,10 @@ Generaliserte additive modeller er i utgangspunktet som lineær regresjon, men i
 Her er et eksempel der vi bruker GAM med noen utvalgte variable fra kommunedataene:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
-#| error: false
 #| message: false
 
 gam_mod <- gam(voldskriminalitet ~ s(prop_unge_menn) + s(inntekt_totalt_median) + s(shj_unge),
@@ -401,8 +482,10 @@ summary(gam_mod)
 Vi kan plotte de estimerte smoothing-funksjonene for å se hvordan sammenhengen ser ut:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
 #| warning: false
-#| error: false
 #| message: false
 plot(gam_mod)
 ```

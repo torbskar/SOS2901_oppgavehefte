@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Torbjørn Skardhamar">
-<meta name="dcterms.date" content="2026-02-18">
+<meta name="dcterms.date" content="2026-02-23">
 
 <title>SOS2901 Maskinlæring for samfunnsvitere</title>
 <style>
@@ -193,20 +193,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./fairness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -268,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 18, 2026</p>
+      <p class="date">February 23, 2026</p>
     </div>
   </div>
   
@@ -286,7 +286,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Hvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Datasettene vil dere finne i rommet i Canvas. Last de ned til egen maskin for å jobbe med dem.</p>
 <section id="undervisningsvideoer" class="level2">
 <h2 class="anchored" data-anchor-id="undervisningsvideoer">Undervisningsvideoer</h2>
-<p>Det legges ut undervisningsvideoer i Canvas. Det går også an å få tilgang til <a href="https://uio.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=fbd0aeb4-f162-4681-977b-af8e0137df63">de samme videoene på denne lenken</a></p>
+<p>Det finnes noen undervisningsvideoer fra noen år tilbake. Disse dekker omtrent de vi går gjennom i undervisningen, men er ikke nødvendigvis helt oppdaterte. Dere har tilgang til <a href="https://uio.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=fbd0aeb4-f162-4681-977b-af8e0137df63">disse videoene på denne lenken</a></p>
 </section>
 </section>
 <section id="hva-vi-forutsetter-av-forkunnskaper" class="level1">
@@ -926,80 +926,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>Hvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Datasettene vil dere finne i rommet i Canvas. Last de ned til egen maskin for å jobbe med dem.</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Undervisningsvideoer</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Undervisningsvideoer</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>Det finnes noen undervisningsvideoer fra noen år tilbake. Disse dekker omtrent de vi går gjennom i undervisningen, men er ikke nødvendigvis helt oppdaterte. Dere har tilgang til <span class="co">[</span><span class="ot">disse videoene på denne lenken</span><span class="co">](https://uio.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=fbd0aeb4-f162-4681-977b-af8e0137df63)</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>Det legges ut undervisningsvideoer i Canvas. Det går også an å få tilgang til <span class="co">[</span><span class="ot">de samme videoene på denne lenken</span><span class="co">](https://uio.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=fbd0aeb4-f162-4681-977b-af8e0137df63)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu"># Hva vi forutsetter av forkunnskaper</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>Dette kurset forutsetter at man har grunnleggende ferdigheter i kvantitative metoder og har brukt *R* før. Hvis du vet du trenger det: frisk opp litt fra tidligere kurs.</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu"># Hva vi forutsetter av forkunnskaper</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>Når det er sagt, så er det begrenset hvor mye man *må* kunne fra før hvis du er motivert til å jobbe med stoffet skal du nok få til dette. Det blir mye nytt uansett.</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>Dette kurset forutsetter at man har grunnleggende ferdigheter i kvantitative metoder og har brukt *R* før. Hvis du vet du trenger det: frisk opp litt fra tidligere kurs.</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham &amp; Grolemunds bok <span class="co">[</span><span class="ot">"R for data science"</span><span class="co">](https://r4ds.had.co.nz/)</span> et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk.</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>Når det er sagt, så er det begrenset hvor mye man *må* kunne fra før hvis du er motivert til å jobbe med stoffet skal du nok få til dette. Det blir mye nytt uansett.</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu"># R og Rstudio</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham &amp; Grolemunds bok <span class="co">[</span><span class="ot">"R for data science"</span><span class="co">](https://r4ds.had.co.nz/)</span> et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk.</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installasjon</span></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu"># R og Rstudio</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installasjon</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>Du må installere både <span class="co">[</span><span class="ot">R</span><span class="co">](https://www.r-project.org/)</span> og <span class="co">[</span><span class="ot">Rstudio</span><span class="co">](https://posit.co/products/open-source/rstudio/)</span> på din datamaskin. Hvis du har Windows-maskin trenger du også installere <span class="co">[</span><span class="ot">Rtools</span><span class="co">](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html)</span>. Hvis du har Mac OS X kan det hende du må installere <span class="co">[</span><span class="ot">XQuartz</span><span class="co">](https://www.xquartz.org/)</span>.</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>Du må installere både <span class="co">[</span><span class="ot">R</span><span class="co">](https://www.r-project.org/)</span> og <span class="co">[</span><span class="ot">Rstudio</span><span class="co">](https://posit.co/products/open-source/rstudio/)</span> på din datamaskin. Hvis du har Windows-maskin trenger du også installere <span class="co">[</span><span class="ot">Rtools</span><span class="co">](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html)</span>. Hvis du har Mac OS X kan det hende du må installere <span class="co">[</span><span class="ot">XQuartz</span><span class="co">](https://www.xquartz.org/)</span>.</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>Se ellers video fra <span class="co">[</span><span class="ot">SICSS</span><span class="co">](https://youtu.be/ulIv0NiVTs4)</span> {{&lt; video https://youtu.be/ulIv0NiVTs4 &gt;}}</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pakker {.unnumbered}</span></span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>Se ellers video fra <span class="co">[</span><span class="ot">SICSS</span><span class="co">](https://youtu.be/ulIv0NiVTs4)</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>{{&lt; video https://youtu.be/ulIv0NiVTs4 &gt;}}</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>R er basert på bruk av "pakker" som må installeres for å få tilgang til funksjoner vi skal bruke. Disse installeres med bruk av kommandoen <span class="in">`install.packages()`</span>. F.eks. kan man installere pakken Tidyverse med følgende: <span class="in">`install.packages("tidyverse")`</span>.</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>For å installere flere pakker kan man kjøre <span class="in">`install.packages()`</span> flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre <span class="in">`install.packages()`</span> på dette objektet. Noe slikt:</span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Pakker {.unnumbered}</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>Vi skal i hvert fall bruke de pakkene som installeres med følgende kode:</span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>R er basert på bruk av "pakker" som må installeres for å få tilgang til funksjoner vi skal bruke. Disse installeres med bruk av kommandoen <span class="in">`install.packages()`</span>. F.eks. kan man installere pakken Tidyverse med følgende: <span class="in">`install.packages("tidyverse")`</span>.</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>For å installere flere pakker kan man kjøre <span class="in">`install.packages()`</span> flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre <span class="in">`install.packages()`</span> på dette objektet. Noe slikt:</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>Vi skal i hvert fall bruke de pakkene som installeres med følgende kode:</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"randomForest"</span>, <span class="st">"rpart"</span>, <span class="st">"rpart.plot"</span>,</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>           <span class="st">"rsample"</span>, <span class="st">"fairness"</span>, <span class="st">"xgboost"</span>, <span class="st">"mgcv"</span>, <span class="st">"splines"</span>, <span class="st">"Ecdat"</span>,</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>           <span class="st">"ipred"</span>, <span class="st">"pROC"</span>, <span class="st">"caret"</span>, <span class="st">"forcats"</span>, <span class="st">"gtsummary"</span>, <span class="st">"janitor"</span>,</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>           <span class="st">"gbm"</span>, <span class="st">"dendextend"</span>, <span class="st">"directlabels"</span>, <span class="st">"GGally"</span>)</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(pkgs)</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>Det kan hende vi kommer til å bruke flere etterhvert.</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>Men for at du skal kunne bruke pakkene må du aktivere dem i R ved <span class="in">`library()`</span>. Dette må du gjøre hver gang du starter opp R. Hvert kapittel starter med en oversikt over hvilke pakker som brukes i det kapittelet.</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oversikt over pakker brukt i heftet</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>Tabellen under gir en oversikt over alle pakkene vi bruker, med en kort forklaring og de viktigste funksjonene.</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pakke <span class="pp">|</span> Beskrivelse <span class="pp">|</span> Viktige funksjoner <span class="pp">|</span> Kapittel <span class="pp">|</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`tidyverse`</span> <span class="pp">|</span> Samling av pakker for datahåndtering og grafikk <span class="pp">|</span> <span class="in">`mutate()`</span>, <span class="in">`select()`</span>, <span class="in">`filter()`</span>, <span class="in">`ggplot()`</span>, <span class="in">`glimpse()`</span> <span class="pp">|</span> Alle <span class="pp">|</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rsample`</span> <span class="pp">|</span> Splitting av data i training/testing <span class="pp">|</span> <span class="in">`initial_split()`</span>, <span class="in">`training()`</span>, <span class="in">`testing()`</span> <span class="pp">|</span> Alle supervised-kapitler <span class="pp">|</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mgcv`</span> <span class="pp">|</span> Generaliserte additive modeller (GAM) <span class="pp">|</span> <span class="in">`gam()`</span>, <span class="in">`s()`</span> <span class="pp">|</span> Lineær regresjon <span class="pp">|</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`splines`</span> <span class="pp">|</span> Spline-funksjoner for fleksibel regresjon <span class="pp">|</span> <span class="in">`bs()`</span> <span class="pp">|</span> Lineær regresjon <span class="pp">|</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Ecdat`</span> <span class="pp">|</span> Datasett for økonometri (Clothing-data) <span class="pp">|</span> <span class="in">`data(Clothing)`</span> <span class="pp">|</span> Lineær regresjon <span class="pp">|</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pROC`</span> <span class="pp">|</span> ROC-kurver og AUC-beregning <span class="pp">|</span> <span class="in">`roc()`</span>, <span class="in">`auc()`</span> <span class="pp">|</span> Logistisk regresjon <span class="pp">|</span></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`caret`</span> <span class="pp">|</span> Confusion matrix og modellevaluering <span class="pp">|</span> <span class="in">`confusionMatrix()`</span> <span class="pp">|</span> Logistisk regresjon, CART, Bagging, Random forest, Boosting <span class="pp">|</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rpart`</span> <span class="pp">|</span> Klassifikasjonstrær (CART) <span class="pp">|</span> <span class="in">`rpart()`</span>, <span class="in">`prune()`</span> <span class="pp">|</span> CART, Bagging <span class="pp">|</span></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rpart.plot`</span> <span class="pp">|</span> Plotting av klassifikasjonstrær <span class="pp">|</span> <span class="in">`rpart.plot()`</span>, <span class="in">`rpart.rules()`</span> <span class="pp">|</span> CART, Bagging <span class="pp">|</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ipred`</span> <span class="pp">|</span> Bagging av klassifikasjonstrær <span class="pp">|</span> <span class="in">`bagging()`</span> <span class="pp">|</span> Bagging <span class="pp">|</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`forcats`</span> <span class="pp">|</span> Rekoding og håndtering av factor-variable <span class="pp">|</span> <span class="in">`fct_lump()`</span>, <span class="in">`fct_recode()`</span> <span class="pp">|</span> Bagging <span class="pp">|</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`randomForest`</span> <span class="pp">|</span> Random forest-algoritmen <span class="pp">|</span> <span class="in">`randomForest()`</span>, <span class="in">`varImpPlot()`</span>, <span class="in">`partialPlot()`</span> <span class="pp">|</span> Random forest <span class="pp">|</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fairness`</span> <span class="pp">|</span> Mål på rettferdighet/bias <span class="pp">|</span> <span class="in">`acc_parity()`</span>, <span class="in">`fnr_parity()`</span>, <span class="in">`fpr_parity()`</span> <span class="pp">|</span> Fairness, Boosting <span class="pp">|</span></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`gbm`</span> <span class="pp">|</span> Gradient boosting <span class="pp">|</span> <span class="in">`gbm()`</span>, <span class="in">`gbm.perf()`</span> <span class="pp">|</span> Boosting <span class="pp">|</span></span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`gtsummary`</span> <span class="pp">|</span> Pene sammendragstabeller <span class="pp">|</span> <span class="in">`tbl_cross()`</span>, <span class="in">`tbl_summary()`</span> <span class="pp">|</span> Boosting, Fairness <span class="pp">|</span></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`janitor`</span> <span class="pp">|</span> Datarensing <span class="pp">|</span> <span class="in">`clean_names()`</span> <span class="pp">|</span> Diverse <span class="pp">|</span></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dendextend`</span> <span class="pp">|</span> Dendrogram-visualisering <span class="pp">|</span> <span class="pp">|</span> Unsupervised <span class="pp">|</span></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`directlabels`</span> <span class="pp">|</span> Direkte labels i plot <span class="pp">|</span> <span class="pp">|</span> Unsupervised <span class="pp">|</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`GGally`</span> <span class="pp">|</span> Utvidelser til ggplot2, scatterplotmatriser <span class="pp">|</span> <span class="in">`ggpairs()`</span> <span class="pp">|</span> Unsupervised <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>pkgs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"randomForest"</span>, <span class="st">"rpart"</span>, <span class="st">"rpart.plot"</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>           <span class="st">"rsample"</span>, <span class="st">"fairness"</span>, <span class="st">"xgboost"</span>, <span class="st">"mgcv"</span>, <span class="st">"splines"</span>, <span class="st">"Ecdat"</span>,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>           <span class="st">"ipred"</span>, <span class="st">"pROC"</span>, <span class="st">"caret"</span>, <span class="st">"forcats"</span>, <span class="st">"gtsummary"</span>, <span class="st">"janitor"</span>,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>           <span class="st">"gbm"</span>, <span class="st">"dendextend"</span>, <span class="st">"directlabels"</span>, <span class="st">"GGally"</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(pkgs)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>Det kan hende vi kommer til å bruke flere etterhvert.</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>Men for at du skal kunne bruke pakkene må du aktivere dem i R ved <span class="in">`library()`</span>. Dette må du gjøre hver gang du starter opp R. Hvert kapittel starter med en oversikt over hvilke pakker som brukes i det kapittelet.</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Oversikt over pakker brukt i heftet</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>Tabellen under gir en oversikt over alle pakkene vi bruker, med en kort forklaring og de viktigste funksjonene.</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Pakke <span class="pp">|</span> Beskrivelse <span class="pp">|</span> Viktige funksjoner <span class="pp">|</span> Kapittel <span class="pp">|</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="pp">|------------------|------------------|------------------|------------------|</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`tidyverse`</span> <span class="pp">|</span> Samling av pakker for datahåndtering og grafikk <span class="pp">|</span> <span class="in">`mutate()`</span>, <span class="in">`select()`</span>, <span class="in">`filter()`</span>, <span class="in">`ggplot()`</span>, <span class="in">`glimpse()`</span> <span class="pp">|</span> Alle <span class="pp">|</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rsample`</span> <span class="pp">|</span> Splitting av data i training/testing <span class="pp">|</span> <span class="in">`initial_split()`</span>, <span class="in">`training()`</span>, <span class="in">`testing()`</span> <span class="pp">|</span> Alle supervised-kapitler <span class="pp">|</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mgcv`</span> <span class="pp">|</span> Generaliserte additive modeller (GAM) <span class="pp">|</span> <span class="in">`gam()`</span>, <span class="in">`s()`</span> <span class="pp">|</span> Lineær regresjon <span class="pp">|</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`splines`</span> <span class="pp">|</span> Spline-funksjoner for fleksibel regresjon <span class="pp">|</span> <span class="in">`bs()`</span> <span class="pp">|</span> Lineær regresjon <span class="pp">|</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Ecdat`</span> <span class="pp">|</span> Datasett for økonometri (Clothing-data) <span class="pp">|</span> <span class="in">`data(Clothing)`</span> <span class="pp">|</span> Lineær regresjon <span class="pp">|</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pROC`</span> <span class="pp">|</span> ROC-kurver og AUC-beregning <span class="pp">|</span> <span class="in">`roc()`</span>, <span class="in">`auc()`</span> <span class="pp">|</span> Logistisk regresjon <span class="pp">|</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`caret`</span> <span class="pp">|</span> Confusion matrix og modellevaluering <span class="pp">|</span> <span class="in">`confusionMatrix()`</span> <span class="pp">|</span> Logistisk regresjon, CART, Bagging, Random forest, Boosting <span class="pp">|</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rpart`</span> <span class="pp">|</span> Klassifikasjonstrær (CART) <span class="pp">|</span> <span class="in">`rpart()`</span>, <span class="in">`prune()`</span> <span class="pp">|</span> CART, Bagging <span class="pp">|</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`rpart.plot`</span> <span class="pp">|</span> Plotting av klassifikasjonstrær <span class="pp">|</span> <span class="in">`rpart.plot()`</span>, <span class="in">`rpart.rules()`</span> <span class="pp">|</span> CART, Bagging <span class="pp">|</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ipred`</span> <span class="pp">|</span> Bagging av klassifikasjonstrær <span class="pp">|</span> <span class="in">`bagging()`</span> <span class="pp">|</span> Bagging <span class="pp">|</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`forcats`</span> <span class="pp">|</span> Rekoding og håndtering av factor-variable <span class="pp">|</span> <span class="in">`fct_lump()`</span>, <span class="in">`fct_recode()`</span> <span class="pp">|</span> Bagging <span class="pp">|</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`randomForest`</span> <span class="pp">|</span> Random forest-algoritmen <span class="pp">|</span> <span class="in">`randomForest()`</span>, <span class="in">`varImpPlot()`</span>, <span class="in">`partialPlot()`</span> <span class="pp">|</span> Random forest <span class="pp">|</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fairness`</span> <span class="pp">|</span> Mål på rettferdighet/bias <span class="pp">|</span> <span class="in">`acc_parity()`</span>, <span class="in">`fnr_parity()`</span>, <span class="in">`fpr_parity()`</span> <span class="pp">|</span> Fairness, Boosting <span class="pp">|</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`gbm`</span> <span class="pp">|</span> Gradient boosting <span class="pp">|</span> <span class="in">`gbm()`</span>, <span class="in">`gbm.perf()`</span> <span class="pp">|</span> Boosting <span class="pp">|</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`gtsummary`</span> <span class="pp">|</span> Pene sammendragstabeller <span class="pp">|</span> <span class="in">`tbl_cross()`</span>, <span class="in">`tbl_summary()`</span> <span class="pp">|</span> Boosting, Fairness <span class="pp">|</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`janitor`</span> <span class="pp">|</span> Datarensing <span class="pp">|</span> <span class="in">`clean_names()`</span> <span class="pp">|</span> Diverse <span class="pp">|</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dendextend`</span> <span class="pp">|</span> Dendrogram-visualisering <span class="pp">|</span>  <span class="pp">|</span> Unsupervised <span class="pp">|</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`directlabels`</span> <span class="pp">|</span> Direkte labels i plot <span class="pp">|</span>  <span class="pp">|</span> Unsupervised <span class="pp">|</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`GGally`</span> <span class="pp">|</span> Utvidelser til ggplot2, scatterplotmatriser <span class="pp">|</span> <span class="in">`ggpairs()`</span> <span class="pp">|</span> Unsupervised <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

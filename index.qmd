@@ -4,13 +4,9 @@ Dette dokumentet gir en oversikt over hva vi skal dekke i løpet av semesteret. 
 
 Hvert kapittel starter med en introduksjon til temaet og et empirisk eksempel. Datasettene vil dere finne i rommet i Canvas. Last de ned til egen maskin for å jobbe med dem.
 
-
-
 ## Undervisningsvideoer
 
-Det legges ut undervisningsvideoer i Canvas. Det går også an å få tilgang til [de samme videoene på denne lenken](https://uio.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=fbd0aeb4-f162-4681-977b-af8e0137df63)
-
-
+Det finnes noen undervisningsvideoer fra noen år tilbake. Disse dekker omtrent de vi går gjennom i undervisningen, men er ikke nødvendigvis helt oppdaterte. Dere har tilgang til [disse videoene på denne lenken](https://uio.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=fbd0aeb4-f162-4681-977b-af8e0137df63)
 
 # Hva vi forutsetter av forkunnskaper
 
@@ -20,15 +16,13 @@ Når det er sagt, så er det begrenset hvor mye man *må* kunne fra før hvis du
 
 Hvis du trenger oppfriskning av hvordan R fungerer, så er Wickham & Grolemunds bok ["R for data science"](https://r4ds.had.co.nz/) et utmerket oppslagsverk. Men merk at vi i begrenset grad vil bruke "Tidyverse" til annet enn datahåndtering og noe grafikk.
 
-
 # R og Rstudio
 
 ## Installasjon
+
 Du må installere både [R](https://www.r-project.org/) og [Rstudio](https://posit.co/products/open-source/rstudio/) på din datamaskin. Hvis du har Windows-maskin trenger du også installere [Rtools](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html). Hvis du har Mac OS X kan det hende du må installere [XQuartz](https://www.xquartz.org/).
 
-Se ellers video fra [SICSS](https://youtu.be/ulIv0NiVTs4)
-{{< video https://youtu.be/ulIv0NiVTs4 >}}
-
+Se ellers video fra [SICSS](https://youtu.be/ulIv0NiVTs4) {{< video https://youtu.be/ulIv0NiVTs4 >}}
 
 ## Pakker {.unnumbered}
 
@@ -37,6 +31,7 @@ R er basert på bruk av "pakker" som må installeres for å få tilgang til funk
 For å installere flere pakker kan man kjøre `install.packages()` flere ganger, men det er enklere å liste opp alle pakkene i et objekt og så kjøre `install.packages()` på dette objektet. Noe slikt:
 
 Vi skal i hvert fall bruke de pakkene som installeres med følgende kode:
+
 ```{r }
 #| code-fold: false
 #| eval: false
@@ -52,13 +47,12 @@ Det kan hende vi kommer til å bruke flere etterhvert.
 
 Men for at du skal kunne bruke pakkene må du aktivere dem i R ved `library()`. Dette må du gjøre hver gang du starter opp R. Hvert kapittel starter med en oversikt over hvilke pakker som brukes i det kapittelet.
 
-
 ## Oversikt over pakker brukt i heftet
 
 Tabellen under gir en oversikt over alle pakkene vi bruker, med en kort forklaring og de viktigste funksjonene.
 
 | Pakke | Beskrivelse | Viktige funksjoner | Kapittel |
-|---|---|---|---|
+|------------------|------------------|------------------|------------------|
 | `tidyverse` | Samling av pakker for datahåndtering og grafikk | `mutate()`, `select()`, `filter()`, `ggplot()`, `glimpse()` | Alle |
 | `rsample` | Splitting av data i training/testing | `initial_split()`, `training()`, `testing()` | Alle supervised-kapitler |
 | `mgcv` | Generaliserte additive modeller (GAM) | `gam()`, `s()` | Lineær regresjon |
@@ -75,7 +69,6 @@ Tabellen under gir en oversikt over alle pakkene vi bruker, med en kort forklari
 | `gbm` | Gradient boosting | `gbm()`, `gbm.perf()` | Boosting |
 | `gtsummary` | Pene sammendragstabeller | `tbl_cross()`, `tbl_summary()` | Boosting, Fairness |
 | `janitor` | Datarensing | `clean_names()` | Diverse |
-| `dendextend` | Dendrogram-visualisering | | Unsupervised |
-| `directlabels` | Direkte labels i plot | | Unsupervised |
+| `dendextend` | Dendrogram-visualisering |  | Unsupervised |
+| `directlabels` | Direkte labels i plot |  | Unsupervised |
 | `GGally` | Utvidelser til ggplot2, scatterplotmatriser | `ggpairs()` | Unsupervised |
-

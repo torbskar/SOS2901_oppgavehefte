@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>9&nbsp; Boosting – SOS2901 Maskinlæring for samfunnsvitere</title>
+<title>7&nbsp; Boosting – SOS2901 Maskinlæring for samfunnsvitere</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./oppgaver.html" rel="next">
-<link href="./fairness.html" rel="prev">
+<link href="./intro_fairness.html" rel="next">
+<link href="./randomForest.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -147,7 +147,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./boosting.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./boosting.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -221,20 +221,20 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./fairness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -259,12 +259,12 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#stochastic-gradient-boosting" id="toc-stochastic-gradient-boosting" class="nav-link active" data-scroll-target="#stochastic-gradient-boosting"><span class="header-section-number">9.1</span> Stochastic gradient boosting</a></li>
-  <li><a href="#tolkbarhet" id="toc-tolkbarhet" class="nav-link" data-scroll-target="#tolkbarhet"><span class="header-section-number">9.2</span> Tolkbarhet</a></li>
-  <li><a href="#prediksjon-og-confusion-matrix" id="toc-prediksjon-og-confusion-matrix" class="nav-link" data-scroll-target="#prediksjon-og-confusion-matrix"><span class="header-section-number">9.3</span> Prediksjon og confusion matrix</a></li>
-  <li><a href="#asymetriske-kostnader" id="toc-asymetriske-kostnader" class="nav-link" data-scroll-target="#asymetriske-kostnader"><span class="header-section-number">9.4</span> Asymetriske kostnader</a></li>
-  <li><a href="#hva-med-bias-og-fairness" id="toc-hva-med-bias-og-fairness" class="nav-link" data-scroll-target="#hva-med-bias-og-fairness"><span class="header-section-number">9.5</span> Hva med bias og fairness?</a></li>
-  <li><a href="#justere-rettferdighet-med-vekting" id="toc-justere-rettferdighet-med-vekting" class="nav-link" data-scroll-target="#justere-rettferdighet-med-vekting"><span class="header-section-number">9.6</span> Justere rettferdighet med vekting</a></li>
+  <li><a href="#stochastic-gradient-boosting" id="toc-stochastic-gradient-boosting" class="nav-link active" data-scroll-target="#stochastic-gradient-boosting"><span class="header-section-number">7.1</span> Stochastic gradient boosting</a></li>
+  <li><a href="#tolkbarhet" id="toc-tolkbarhet" class="nav-link" data-scroll-target="#tolkbarhet"><span class="header-section-number">7.2</span> Tolkbarhet</a></li>
+  <li><a href="#prediksjon-og-confusion-matrix" id="toc-prediksjon-og-confusion-matrix" class="nav-link" data-scroll-target="#prediksjon-og-confusion-matrix"><span class="header-section-number">7.3</span> Prediksjon og confusion matrix</a></li>
+  <li><a href="#asymetriske-kostnader" id="toc-asymetriske-kostnader" class="nav-link" data-scroll-target="#asymetriske-kostnader"><span class="header-section-number">7.4</span> Asymetriske kostnader</a></li>
+  <li><a href="#hva-med-bias-og-fairness" id="toc-hva-med-bias-og-fairness" class="nav-link" data-scroll-target="#hva-med-bias-og-fairness"><span class="header-section-number">7.5</span> Hva med bias og fairness?</a></li>
+  <li><a href="#justere-rettferdighet-med-vekting" id="toc-justere-rettferdighet-med-vekting" class="nav-link" data-scroll-target="#justere-rettferdighet-med-vekting"><span class="header-section-number">7.6</span> Justere rettferdighet med vekting</a></li>
   </ul>
 </nav>
     </div>
@@ -273,7 +273,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -330,8 +330,8 @@ $ Sex                  &lt;fct&gt; Male, Male, Male, Male, Male, Male, Female, M
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>training <span class="ot">&lt;-</span> <span class="fu">training</span>(training_init)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>testing  <span class="ot">&lt;-</span> <span class="fu">testing</span>(training_init)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="stochastic-gradient-boosting" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="stochastic-gradient-boosting"><span class="header-section-number">9.1</span> Stochastic gradient boosting</h2>
+<section id="stochastic-gradient-boosting" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="stochastic-gradient-boosting"><span class="header-section-number">7.1</span> Stochastic gradient boosting</h2>
 <p>Gradient boosting for klassifisering bruker ikke vekter på samme måte som adaboost, men bruker residualene. For et binomisk utfall (to kategorier kodet 0 eller 1) er residualen, <span class="math inline">\(r_i\)</span>, er definert som</p>
 <p><span class="math display">\[ r_i = y_i - \frac{1}{e^{-f(x_i)}} \]</span> Litt forenklet kan vi si at dette er det observert utfallet minus det predikerte utfallet fra logistisk regresjon. “Gradienten” er da <span class="math inline">\(f(x)\)</span>.</p>
 <p>Gradient boosting fungerer med flere andre fordelinger, men hvis vi begrenser oss til klassifikasjon kan vi angi <code>distribution = "bernoulli"</code>. Merk at for <code>gbm</code> må utfallsvariabelen være numerisk, ikke factor.</p>
@@ -386,8 +386,8 @@ Residual Standard Error: 2.048e-06 </code></pre>
 <li><code>bag.fraction</code> er hvor stor andel av data som brukes i hver iterasjon. Dette hjelper for å redusere overfitting. Forvalget er 0.5, som innebærer at andre del av data kan fungere som OOB. Merk at Berk understreker at OOB bare kan brukes til å vurdere tilpassingen slik som i figuren over.</li>
 </ul>
 </section>
-<section id="tolkbarhet" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="tolkbarhet"><span class="header-section-number">9.2</span> Tolkbarhet</h2>
+<section id="tolkbarhet" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="tolkbarhet"><span class="header-section-number">7.2</span> Tolkbarhet</h2>
 <p>Som i random forest kan vi undersøke hvilke variable som er mest betydningsfulle i prediksjonen. I utgangspunktet gir <code>summary()</code> mot et gbm-objekt et plot, men dette er stygt og kan være vanskelig å lese skikkelig. Derfor inneholder koden nedenfor argumentet <code>plotit=FALSE</code>, så lages det et bedre plot med <code>ggplot()</code> etterpå.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Resultatene er tolkbare tilsvarende som relative importance som vi så i random forest.</p>
 <div class="cell">
@@ -444,8 +444,8 @@ Residual Standard Error: 2.048e-06 </code></pre>
 </div>
 </div>
 </section>
-<section id="prediksjon-og-confusion-matrix" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="prediksjon-og-confusion-matrix"><span class="header-section-number">9.3</span> Prediksjon og confusion matrix</h2>
+<section id="prediksjon-og-confusion-matrix" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="prediksjon-og-confusion-matrix"><span class="header-section-number">7.3</span> Prediksjon og confusion matrix</h2>
 <p>Vi gjør prediksjon på tilsvarende måte som før, men det er et par viktige detaljer. Forvalget for <code>predict()</code> for gbm-objekter er <span class="math inline">\(f(x)\)</span> som her er på log odds skalaen, men hvis vi setter <code>type = "response"</code> så får vi ut en sannsynlighet (dvs. et tall mellom 0 og 1). Da kan vi klassifisere etter hvilken gruppe som er mest sannsynlig, dvs. hvis høyere enn 0.5</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> training <span class="sc">%&gt;%</span> </span>
@@ -497,8 +497,8 @@ Residual Standard Error: 2.048e-06 </code></pre>
 </div>
 </div>
 </section>
-<section id="asymetriske-kostnader" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="asymetriske-kostnader"><span class="header-section-number">9.4</span> Asymetriske kostnader</h2>
+<section id="asymetriske-kostnader" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="asymetriske-kostnader"><span class="header-section-number">7.4</span> Asymetriske kostnader</h2>
 <p>Vi har det vanlige problemet med å vurdere om falske positive og falske negative er like problematisk. Igjen er det slik at den vurderingen krever en vurdering av utfallet man ønsker gjøre noe med og konsekvensene av tiltaket som skal iverksettes. For credit-dataene kan det jo være at noen ikke vurderes som kredittverdige.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>For å håndtere asymetriske kostnader kan vi vekte utfallene forskjellig og angi denne vekten i prosedyren. Argumentet <code>weights = ...</code> tar en vektor med verdier (ét tall for hver observasjon i dataene) og skal ikke være en del av datasettet.</p>
 <p>Her er et eksempel der <em>negative</em> tillegges 2 ganger så mye vekt som <em>positive</em> i modellen. Når utfallene vektes ulikt i modellen vil det dermed slå ut på feilratene slik at det blir ulikt forhold for falske postive og falske negative (se mer i Berk kap. 6.4 og eksempel s. 277).</p>
@@ -570,8 +570,8 @@ Residual Standard Error: 2.048e-06 </code></pre>
 </div>
 </div>
 </section>
-<section id="hva-med-bias-og-fairness" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="hva-med-bias-og-fairness"><span class="header-section-number">9.5</span> Hva med bias og fairness?</h2>
+<section id="hva-med-bias-og-fairness" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="hva-med-bias-og-fairness"><span class="header-section-number">7.5</span> Hva med bias og fairness?</h2>
 <p>Det er heller ingenting nytt når det gjelder om prediksjonen kan slå ut skjevt for ulike grupper. Selvfølgelig kan det skje, og det bør jo undersøkes. Vi kan bruke akkurat de samme funksjonene som før.</p>
 <p>Her er et eksempel med forskjeller i “accuracy” for menn og kvinner. Det er altså høyere andel riktig klassifiserte for kvinner enn for menn.</p>
 <div class="cell">
@@ -600,8 +600,8 @@ $Metric_plot</code></pre>
 </div>
 </div>
 </section>
-<section id="justere-rettferdighet-med-vekting" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="justere-rettferdighet-med-vekting"><span class="header-section-number">9.6</span> Justere rettferdighet med vekting</h2>
+<section id="justere-rettferdighet-med-vekting" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="justere-rettferdighet-med-vekting"><span class="header-section-number">7.6</span> Justere rettferdighet med vekting</h2>
 <p>Vi har allerede sett at vi kan justere algoritmen for asymetriske kostnader ved å vekte utfallet forskjellig. Vi kan også justere slik at vi også vekter opp undergrupper. Igjen er det ikke helt åpenbart hvordan det vil slå ut å vekte en gruppe opp eller ned, så det må vi sjekke.</p>
 <p>Her er en kode for å lage vekter og legger den vekten inn i <code>gbm</code>. Tanken i koden her er å først angi vektingen for kostnader og undergrupper hver for seg, og så legge disse til per person i datasettet.</p>
 <p>La oss først se på fordelingen av utfallet etter kjønn ved en enkel krysstabell. Her har jeg brukt funksjonen <code>tbl_cross()</code> for å få en penere tabell med summeringer, men en enklere tabell gjør også nytten.</p>
@@ -2218,13 +2218,13 @@ N = 1,795<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./fairness.html" class="pagination-link" aria-label="Fairness og tuning">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span>
+      <a href="./randomForest.html" class="pagination-link" aria-label="Random forest">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Random forest</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./oppgaver.html" class="pagination-link" aria-label="Oppgaver">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./intro_fairness.html" class="pagination-link" aria-label="En lett introduksjon til fairness">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">

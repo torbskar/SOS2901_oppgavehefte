@@ -20,9 +20,9 @@ book:
     - cart.qmd
     - bagging.qmd
     - randomForest.qmd
+    - boosting.qmd
     - intro_fairness.qmd
     - fairness.qmd
-    - boosting.qmd
   #  - unsupervised.qmd
     - oppgaver.qmd
     - references.qmd

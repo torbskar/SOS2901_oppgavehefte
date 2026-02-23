@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Fairness og tuning – SOS2901 Maskinlæring for samfunnsvitere</title>
+<title>9&nbsp; Fairness og tuning – SOS2901 Maskinlæring for samfunnsvitere</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./boosting.html" rel="next">
+<link href="./oppgaver.html" rel="next">
 <link href="./intro_fairness.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -147,7 +147,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./fairness.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./fairness.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -221,20 +221,20 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./fairness.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./boosting.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -259,10 +259,10 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduksjon-til-fairness" id="toc-introduksjon-til-fairness" class="nav-link active" data-scroll-target="#introduksjon-til-fairness"><span class="header-section-number">8.1</span> Introduksjon til fairness</a></li>
-  <li><a href="#fairness-tuning-med-stratifisering" id="toc-fairness-tuning-med-stratifisering" class="nav-link" data-scroll-target="#fairness-tuning-med-stratifisering"><span class="header-section-number">8.2</span> Fairness: tuning med stratifisering</a>
+  <li><a href="#introduksjon-til-fairness" id="toc-introduksjon-til-fairness" class="nav-link active" data-scroll-target="#introduksjon-til-fairness"><span class="header-section-number">9.1</span> Introduksjon til fairness</a></li>
+  <li><a href="#fairness-tuning-med-stratifisering" id="toc-fairness-tuning-med-stratifisering" class="nav-link" data-scroll-target="#fairness-tuning-med-stratifisering"><span class="header-section-number">9.2</span> Fairness: tuning med stratifisering</a>
   <ul class="collapse">
-  <li><a href="#hva-andre-subgrupper" id="toc-hva-andre-subgrupper" class="nav-link" data-scroll-target="#hva-andre-subgrupper"><span class="header-section-number">8.2.1</span> Hva andre subgrupper?</a></li>
+  <li><a href="#hva-andre-subgrupper" id="toc-hva-andre-subgrupper" class="nav-link" data-scroll-target="#hva-andre-subgrupper"><span class="header-section-number">9.2.1</span> Hva andre subgrupper?</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -272,7 +272,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -289,8 +289,8 @@ window.Quarto = {
 </header>
 
 
-<section id="introduksjon-til-fairness" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="introduksjon-til-fairness"><span class="header-section-number">8.1</span> Introduksjon til fairness</h2>
+<section id="introduksjon-til-fairness" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="introduksjon-til-fairness"><span class="header-section-number">9.1</span> Introduksjon til fairness</h2>
 <p>I forrige kapittel så vi at <code>sampsize</code> er et viktig verktøy for å justere feilratene i random forest. Nå skal vi bruke dette til å adressere <em>bias</em> mellom undergrupper. En ting er å avdekke bias og urettferdighet, en annen ting er å gjøre noe med det!</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -482,8 +482,8 @@ Group size      1175.0000000 4997.000000</code></pre>
 </div>
 </div>
 </section>
-<section id="fairness-tuning-med-stratifisering" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="fairness-tuning-med-stratifisering"><span class="header-section-number">8.2</span> Fairness: tuning med stratifisering</h2>
+<section id="fairness-tuning-med-stratifisering" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="fairness-tuning-med-stratifisering"><span class="header-section-number">9.2</span> Fairness: tuning med stratifisering</h2>
 <p>Vi har lært litt om grunnleggende tuning. For å justere feilratene er den mest effektive måten i random forest å endre hvordan samplingen skjer ved <code>sampsize</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Dette hjelper imidlertid ikke nødvendigvis mot <em>bias</em>, altså ulike feilrater for undergrupper. Det vil jo være nyttig om man kunne gjøre noe med slike skjevheter! Heldigvis kan vi det, men det er ikke så lett som man skulle håpe.</p>
 <p>Det viktige punktet å huske på er at random forest trekker tilfeldige utvalg for hvert tre og parameteren <code>sampsize</code> justerer hvor mange observasjoner som trekkes. Vi kan nå justere algoritmen til å gjøre en <em>stratifisert</em> trekning. Med andre ord: det gjøres en tilfeldig trekning innenfor subgrupper. Ovenfor har vi altså sett at modellen ikke er helt rettferdig med hensyn på kjønn. La oss fikse det!</p>
 <p>Først må vi lage en vektor for å stratifisere etter. Dette bør være variabelen for kjønn <em>kombinert med</em> utfallsvariabelen. Da får vi fire kategorier: menn med og uten tilbakefall, og kvinner med og uten tilbakefall. Så kan vi bruke sampsize til å angi hvor mange som skal trekkes fra hver av disse fire gruppene.</p>
@@ -538,8 +538,8 @@ Female0 Female1   Male0   Male1
 </div>
 <p>Magisk! Plutselig har vi endret en modell med innebygde kjønnsforskjeller til en kjønnsnøytral modell. I hvert fall på akkurat dette målet, da. Man bør jo også sjekke andre relevante mål på fairness.</p>
 <p>Nå lurer du helt sikkert på hvordan du skal velge verdier for <code>sampsize</code> i et slikt tilfelle. Det litt skuffende svaret er at du må prøve deg litt frem. Men det hjelper å vite hvilket tall som betyr hva. I dette eksempelet sikres det at det trekkes omtrent like mange kvinner med og uten tilbakefall, og tilsvarende for menn. Så er det justert litt for å oversample kvinner med tilbakefall. Men for å være ærlig: jeg testet en god del varianter her før jeg fikk det resultatet jeg ville ha.</p>
-<section id="hva-andre-subgrupper" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="hva-andre-subgrupper"><span class="header-section-number">8.2.1</span> Hva andre subgrupper?</h3>
+<section id="hva-andre-subgrupper" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="hva-andre-subgrupper"><span class="header-section-number">9.2.1</span> Hva andre subgrupper?</h3>
 <p>Så er spørsmålet om den balansering vi nå har gjort slår ut på andre grupper også. La oss se på etnisitet. Vi bruker den samme modellen som over, men bytter ut variabelen for kjønn med variabelen for etnisitet.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
@@ -1124,12 +1124,12 @@ FemaleCaucasian0 FemaleCaucasian1     FemaleOther0     FemaleOther1
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./intro_fairness.html" class="pagination-link" aria-label="En lett introduksjon til fairness">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./boosting.html" class="pagination-link" aria-label="Boosting">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Boosting</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./oppgaver.html" class="pagination-link" aria-label="Oppgaver">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
