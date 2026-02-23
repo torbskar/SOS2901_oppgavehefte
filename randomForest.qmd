@@ -30,6 +30,11 @@ Men: Det går an å bruke gjøre en split likevel. Da er det mer å regne som et
 COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) er et risikoverktøy brukt av politi og rettsvesen i flere amerikanske stater. Datasettet inneholder informasjon om personer som har vært gjennom rettssystemet, der utfallsvariabelen `Two_yr_Recidivism` angir om personen begikk ny kriminalitet innen to år. Vi bruker dette datasettet gjennom flere kapitler i heftet.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 compas <- readRDS("data/compas.rds")
 glimpse(compas)
 
@@ -39,6 +44,11 @@ glimpse(compas)
 Estimerer random forest med alle variable.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 set.seed(4356)
 rf <- randomForest(Two_yr_Recidivism ~ . ,
                     data = compas)
@@ -50,6 +60,11 @@ Følgende plot gir en oversikt over feilrater for random forest etter hvor mange
 I utgangspunktet bruker random forest 500 trær. Dette plottet viser når resultatene stabiliserer seg.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 plot(rf)
 ```
 
@@ -57,6 +72,11 @@ plot(rf)
 Prediksjon fungerer på tilsvarende måte som vi har gjort tidligere.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 compas_p <- compas %>%
   mutate(pred_rf = predict(rf))
 ```
@@ -64,15 +84,24 @@ compas_p <- compas %>%
 Confusion matrix:
 
 ```{r}
-tab <- table(compas_p$pred_rf, compas_p$Two_yr_Recidivism)
-tab
-confusionMatrix(tab, positive="1")
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
+
+confusionMatrix(reference = compas_p$Two_yr_Recidivism, compas_p$pred_rf, positive="1")
 ```
 
 
 Vi kan justere resultatet med å endre antall variable som tas med i hver split (i hvert tre). Parameteren `mtry` styrer dette:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 set.seed(4356)
 rf2 <- randomForest(Two_yr_Recidivism ~ . ,
                     mtry=4,
@@ -86,6 +115,11 @@ rf2
 For å få ut variable importance må dette settes i estimeringen med `importance = TRUE`. Det tar nå litt lengre tid å estimere, så med store datasett bør du vente med dette til du ellers er fornøyd med modellen.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 set.seed(4356)
 rf <- randomForest(Two_yr_Recidivism ~ . ,
                    importance = TRUE,
@@ -96,6 +130,11 @@ rf
 Vi kan da plotte variable importance plot. Set `type = 1` for at det skal vise gjennomsnittlig reduksjon i accuracy. Plottet viser hvor mye dårligere modellens prediksjon blir hvis en variabel permuteres (stokkes om). Variable som er høyt oppe i plottet er mest viktige for prediksjonen.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 varImpPlot(rf, type = 1)
 ```
 
@@ -104,6 +143,11 @@ varImpPlot(rf, type = 1)
 Variable importance forteller oss *hvilke* variable som er viktige, men ikke *hvordan* de påvirker prediksjonen. Partial dependence plot viser sammenhengen mellom en enkelt variabel og den predikerte sannsynligheten, justert for alle andre variable. Her må du velge hvilken variabel du ønsker å se på, og `which.class` angir hvilken klasse du vil se sannsynligheten for.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 partialPlot(rf, pred.data = compas,
             x.var = Number_of_Priors,
             which.class = "1")
@@ -124,6 +168,11 @@ Hensikten med å gjøre dette er at hvis det er et mindretall som har det ene ut
 Her setter vi `sampsize = c(1900, 1900)`, altså like mange fra hver kategori av utfallsvariabelen. Det første tallet er antallet som trekkes fra kategori 0 (ingen tilbakefall) og det andre fra kategori 1 (tilbakefall):
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 set.seed(4356)
 rf3 <- randomForest(Two_yr_Recidivism ~ . ,
                     sampsize = c(1900, 1900),
@@ -134,6 +183,11 @@ rf3
 Her er et eksempel der gruppene veies ulikt -- vi trekker færre fra kategori 0 enn fra kategori 1, noe som gir mer vekt til tilbakefalls-gruppen:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 set.seed(4356)
 rf4 <- randomForest(Two_yr_Recidivism ~ . ,
                     sampsize = c(1000, 1900),
@@ -149,7 +203,10 @@ Det viktige nå er at feilratene for falske positive og falske negative blir ves
 Vi kan gjøre tilsvarende med de syntetiske fødselskohort-dataene. Her håndterer vi først eventuelle manglende verdier med `replace_na()`. Merk at `randomForest()` ikke håndterer manglende verdier (NA), så disse må erstattes før estimeringen. En enkel løsning er å sette NA til 0, men i praksis bør man vurdere om dette er faglig rimelig.
 
 ```{r}
-#| warning: false
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
 load("data/synthetic_birthCohort96.RData")
 
@@ -169,6 +226,11 @@ table(synth_train$felonies)
 Vi sammenligner flere ulike konfigurasjoner av `sampsize`. Først kjører vi med forvalget, uten å angi `sampsize`. Da trekker `randomForest()` like mange observasjoner som det er i datasettet, men med tilbakelegging:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 # Default (ingen sampsize angitt)
 rf_s1 <- randomForest(felonies ~ ., data = synth_train)
 
@@ -181,6 +243,11 @@ confusionMatrix(reference = synth_test1$felonies, synth_test1$pred, positive = "
 Deretter prøver vi en balansert sampsize der vi trekker like mange fra hver kategori:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 # Balansert sampsize
 rf_s2 <- randomForest(felonies ~ .,
                       sampsize = c(600, 600),
@@ -195,6 +262,11 @@ confusionMatrix(reference = synth_test2$felonies, synth_test2$pred, positive = "
 Vi kan også prøve en ubalansert sampsize der vi trekker litt flere fra minoritetsgruppen:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 # Ubalansert sampsize
 rf_s3 <- randomForest(felonies ~ .,
                       sampsize = c(500, 600),
@@ -209,6 +281,11 @@ confusionMatrix(reference = synth_test3$felonies, synth_test3$pred, positive = "
 Til sist prøver vi en konfigurasjon der vi trekker langt flere fra kategori 0 enn fra kategori 1:
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
+#| message: false
 # Større sampsize
 rf_s4 <- randomForest(felonies ~ .,
                       sampsize = c(800, 400),

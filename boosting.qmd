@@ -30,8 +30,11 @@ Det sentrale punktet for boosting er at modellen bygges steg for steg med en gra
 Vi bruker compas-dataene igjen. Men nå må vi omkode utfallsvariabelen til en numerisk variabel fordi funksjonen `gbm()` krever numerisk utfallsvariabel. Vi bruker `na.omit()` for å fjerne eventuelle rader med manglende verdier.
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 compas <- readRDS("data/compas.rds") %>%
   mutate(Two_yr_Recidivism = ifelse(Two_yr_Recidivism == "1", 1, 0)) %>%
   na.omit()
@@ -42,8 +45,11 @@ glimpse(compas)
 Vi lager en split som tidligere
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 set.seed(42)
 training_init <- initial_split(compas)
 
@@ -62,8 +68,11 @@ Litt forenklet kan vi si at dette er det observert utfallet minus det predikerte
 Gradient boosting fungerer med flere andre fordelinger, men hvis vi begrenser oss til klassifikasjon kan vi angi `distribution = "bernoulli"`. Merk at for `gbm` må utfallsvariabelen være numerisk, ikke factor. 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 set.seed(542)
 gradboost1 <- gbm(formula = Two_yr_Recidivism ~ .,
                  data = training,
@@ -81,8 +90,11 @@ Merk angir argumentet `bag.fraction = 0.5` i modellen (som forøvrig også er fo
 Standard plot av gis ved `gbm.perf()` som nedenfor, og viser forbedring for hver iterasjon. Ytterligere forbedring stopper opp ved nærmere 2500 iterasjoner, markert ved den vertikale blå linjen. 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| error: false
 
 gbm.perf(gradboost1, oobag.curve = TRUE, method = "OOB", 
             plot.it=T, overlay = T) 
@@ -104,8 +116,11 @@ Som i random forest kan vi undersøke hvilke variable som er mest betydningsfull
 Resultatene er tolkbare tilsvarende som relative importance som vi så i random forest. 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 sumboost <- summary(gradboost1, method = permutation.test.gbm, normalize = T, 
                     plotit = F)
 
@@ -123,8 +138,11 @@ Merk at resultatet fra `summary()` her returnerer en data.frame som kan plottes 
 Man kan også plotte hvordan resultatet endres med ulike verdier på prediktorene. Dette tilsvarer *partial dependence*. Her er det mest hensiktsmessig å bruke den innebygde funksjonen `plot()` som kaller en underliggende plot-funksjon for gbm-objekter. 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 plot(gradboost1, "Number_of_Priors", type = "response")
 plot(gradboost1, "Age_Below_TwentyFive", type = "response")
 plot(gradboost1, "Ethnicity", type = "response")
@@ -141,8 +159,11 @@ Vi gjør prediksjon på tilsvarende måte som før, men det er et par viktige de
 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 compas_p <- training %>% 
   mutate(pred = predict(gradboost1, type = "response"), 
          p_klass = ifelse(pred > 0.5, 1, 0))
@@ -152,8 +173,11 @@ compas_p <- training %>%
 Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 tab <- table(compas_p$p_klass, training$Two_yr_Recidivism) 
 tab
 ```
@@ -161,8 +185,11 @@ tab
 Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei. 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 confusionMatrix(tab, positive="1")
 ```
 
@@ -178,8 +205,11 @@ Her er et eksempel der *negative* tillegges 2 ganger så mye vekt som *positive*
 Vær obs på at det er ikke så lett å vite helt hvordan slik vekting slår ut på resultatene. Det er ikke et 1-til-1 forhold mellom vekting og feilrater. Som i annen justering kan dette gå ut over accuracy og andre mål, så det er vanligvis en trade-off her. Du må derfor sjekke resultatene og så evt. gå tilbake og justere vektene hvis det ikke ble slik du ønsket. 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 wts <- training %>% 
   mutate(wts = ifelse(Two_yr_Recidivism == 1, 1, 2)) %>%   # se begrunnelse s. 274 i Berk 
   pull(wts)
@@ -203,170 +233,31 @@ Så kan vi gjøre prediksjon og confusion matrix på nytt.
 
 
 ```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
 compas_p <- training %>% 
   mutate(pred = predict(gradboost2, type = "response"), 
          p_klass = ifelse(pred > 0.5, 1, 0))
 
 ```
 
-Lager enkel krysstabell med predikert mot observert (dvs confusion matrix)
+
+Så kan vi legge tabellen inn i funksjonen `confusionMatrix()` for å få diverse utregninger. (Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei.) Dette er altså akkurat samme prosedyre som vi har brukt ved tidligere prediksjoner. 
+
+En endring her er at `confusionMatrix()` vil at variablene skal være factor-variable, mens boosting-algoritmen bruker numeriske variable selv om verdiene bare er 0 eller 1. Her er en løsning å legge til `factor()` som følger. Alternativt kan man gjøre om variablene til factor i steget ovenfor i det nye datasettet `compas_p`. 
 
 ```{r}
-tab <- table(compas_p$p_klass, training$Two_yr_Recidivism) 
-tab
-```
-
-Så kan vi legge tabellen inn i funksjonen `confusionMatrix()` for å også få diverse utregninger. (Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei.) Dette er altså akkurat samme prosedyre som vi har brukt ved tidligere prediksjoner. 
-
-```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false 
 #| message: false
-#| warning: false
-confusionMatrix(tab, positive="1")
+confusionMatrix(reference = factor(compas_p$Two_yr_Recidivism), 
+                factor(compas_p$p_klass), positive="1")
 ```
-
-
-
-## Hva med bias og fairness? 
-Det er heller ingenting nytt når det gjelder om prediksjonen kan slå ut skjevt for ulike grupper. Selvfølgelig kan det skje, og det bør jo undersøkes. Vi kan bruke akkurat de samme funksjonene som før. 
-
-Her er et eksempel med forskjeller i "accuracy" for menn og kvinner. Det er altså høyere andel riktig klassifiserte for kvinner enn for menn. 
-
-```{r}
-#| message: false
-#| warning: false
-acc <- fairness::acc_parity(data = compas_p, 
-                  outcome      = 'Two_yr_Recidivism', 
-                  group        = 'Sex',
-                  preds        = 'p_klass', 
-                  base         = 'Female')
-
-acc
-
-```
-
-## Justere rettferdighet med vekting
-Vi har allerede sett at vi kan justere algoritmen for asymetriske kostnader ved å vekte utfallet forskjellig. Vi kan også justere slik at vi også vekter opp undergrupper. Igjen er det ikke helt åpenbart hvordan det vil slå ut å vekte en gruppe opp eller ned, så det må vi sjekke. 
-
-
-Her er en kode for å lage vekter og legger den vekten inn i `gbm`. Tanken i koden her er å først angi vektingen for kostnader og undergrupper hver for seg, og så legge disse til per person i datasettet. 
-
-La oss først se på fordelingen av utfallet etter kjønn ved en enkel krysstabell. Her har jeg brukt funksjonen `tbl_cross()` for å få en penere tabell med summeringer, men en enklere tabell gjør også nytten.  
-
-```{r}
-#| message: false
-#| warning: false
-training %>% 
-   tbl_cross( row = Sex, col =  Two_yr_Recidivism)
-```
-
-Vi ser her at i datamaterialet er det lavere residiv blant kvinner enn menn, men det er også færre kvinner enn menn totalt. Dette kan jo være en indikator på hva som bør vektes opp. Her er et forslag der kvinner vektes opp generelt, men kvinner med residiv vektes opp enda mer. For menn vektes også residiv opp. 
-
-Vekten skal lages så det blir et tall per observasjon i datasettet, så utgangspunktet er trainingdataene. Så la oss lage en vekt som tar utgangpunktet i menn uten residiv og vekter det som 1. Hvis vi vil vekte opp residiv, så settes menn med residiv til 2. Tilsvarende for kvinner kan vi sette vektene høyere, f.eks. henholdsvis 2 og 4. 
-
-I koden nedenfor lages også en krysstabell bare for å sjekke at det ble slik det var tenkt. Tabellen har bare funksjon for å sjekke at det ble riktig. 
-
-
-```{r}
-#| message: false
-#| warning: false
-wts <- training %>%  
-  mutate(wts1 = case_when(
-    Sex == "Male" & Two_yr_Recidivism == 0 ~ 1,
-    Sex == "Male" & Two_yr_Recidivism == 1 ~ 2, 
-    Sex == "Female" & Two_yr_Recidivism == 0 ~ 2,
-    Sex == "Female" & Two_yr_Recidivism == 1 ~ 4)) %>% 
-    pull(wts1)
-
-library(gtsummary)
-df <- training %>% 
-  mutate(wts = factor(wts))
-
-df %>%  
-  select(Sex, Two_yr_Recidivism, wts) %>% 
- tbl_strata(
-    strata = Sex,
-    ~.x %>%
-      tbl_summary(
-        by = Two_yr_Recidivism, 
-        #type = everything()~"categorical", 
-        statistic = all_categorical() ~ "{n}"
-      )
-  )
-```
-
-Kodingen av vekten kan treng litt forklaring. Det er forsåvidt standard R-kode, men likevel: 
-
-* `case_when()` brukes for gjentatt if-else i flere ledd. Altså først vurderes første kriterium og får tilskrevet den verdien som følger etter `~`.  *For øvrige observasjoner* sjekkes neste kriterium på samme måte. 
-* `pull()` brukes når man bare skal beholde én variabel som en vektor (ikke ny data.frame) 
-* `tbl_strata` fra pakken gtsummary brukes til å lage en tre-veis tabell. Det spiller liten rolle hvordan tabellen lages, men denne gir en pen og lett lesbar tabell. 
-
-Da kan vi gjøre en ny boostingmodell og sjekke resultatene. Koden er identisk som ovenfor, bare at vektene er endret 
-
-```{r}
-#| message: false
-#| warning: false
-set.seed(542)
-gradboost3 <- gbm(formula = Two_yr_Recidivism ~ .,
-                 data = training,
-                 weights = wts, 
-                 distribution = "bernoulli",
-                 n.trees = 4000,
-                 interaction.depth = 3,
-                 n.minobsinnode = 1,
-                 shrinkage = 0.001,
-                 bag.fraction = 0.5)
-
-```
-
-
-
-Vi gjør prediksjon og klassifisering på samme måte som før:
-
-```{r}
-#| message: false
-#| warning: false
-compas_p <- training %>%
-  mutate(pred = predict(gradboost3, type = "response"),
-         p_klass = ifelse(pred > 0.5, 1, 0))
-
-```
-
-Lager enkel krysstabell med predikert mot observert (dvs confusion matrix):
-
-```{r}
-#| message: false
-#| warning: false
-tab <- table(compas_p$p_klass, training$Two_yr_Recidivism)
-tab
-```
-
-Lager bedre confusion matrix med alle øvrige utregninger. NB! Husk å presisere hva som er positiv verdi for at tallene skal blir riktig vei.
-```{r}
-#| message: false
-#| warning: false
-confusionMatrix(tab, positive="1")
-```
-
-Sammenlign nå feilratene med den forrige modellen (uten gruppevekting). Ble forholdet mellom falske positive og falske negative annerledes?
-
-Så sjekker vi om den nye vektingen har gjort modellen mer rettferdig med hensyn på kjønn:
-
-```{r}
-#| message: false
-#| error: false
-acc <- acc_parity(data = compas_p,
-                  outcome      = 'Two_yr_Recidivism',
-                  group        = 'Sex',
-                  preds        = 'p_klass',
-                  base         = 'Female')
-acc[[2]]
-
-```
-
-Sammenlign dette med fairness-resultatet fra den uvektede modellen. Ble det mer rettferdig? Vekting er altså et verktøy for å justere bias i boosting på tilsvarende måte som `sampsize` er det for random forest. Men som alltid: det er en trade-off mellom rettferdighet og overall accuracy.
-
 
 
 

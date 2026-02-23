@@ -36,7 +36,8 @@ Vi skal i hvert fall bruke de pakkene som installeres med følgende kode:
 #| code-fold: false
 #| eval: false
 pkgs <- c("tidyverse", "randomForest", "rpart", "rpart.plot",
-           "rsample", "fairness", "xgboost", "mgcv", "splines", "Ecdat",
+           "rsample", "fairness", "DALEX", "fairmodels", "xgboost",
+           "mgcv", "splines", "Ecdat",
            "ipred", "pROC", "caret", "forcats", "gtsummary", "janitor",
            "gbm", "dendextend", "directlabels", "GGally")
 install.packages(pkgs)
@@ -65,9 +66,11 @@ Tabellen under gir en oversikt over alle pakkene vi bruker, med en kort forklari
 | `ipred` | Bagging av klassifikasjonstrær | `bagging()` | Bagging |
 | `forcats` | Rekoding og håndtering av factor-variable | `fct_lump()`, `fct_recode()` | Bagging |
 | `randomForest` | Random forest-algoritmen | `randomForest()`, `varImpPlot()`, `partialPlot()` | Random forest |
-| `fairness` | Mål på rettferdighet/bias | `acc_parity()`, `fnr_parity()`, `fpr_parity()` | Fairness, Boosting |
+| `fairness` | Mål på rettferdighet/bias | `acc_parity()`, `fnr_parity()`, `fpr_parity()` | Boosting |
 | `gbm` | Gradient boosting | `gbm()`, `gbm.perf()` | Boosting |
-| `gtsummary` | Pene sammendragstabeller | `tbl_cross()`, `tbl_summary()` | Boosting, Fairness |
+| `DALEX` | Forklarbare modell-objekter (explainers) | `explain()` | Fairness |
+| `fairmodels` | Fairness-sjekk og visualisering | `fairness_check()`, `fairness_heatmap()` | Fairness |
+| `gtsummary` | Pene sammendragstabeller | `tbl_cross()`, `tbl_summary()` | Boosting |
 | `janitor` | Datarensing | `clean_names()` | Diverse |
 | `dendextend` | Dendrogram-visualisering |  | Unsupervised |
 | `directlabels` | Direkte labels i plot |  | Unsupervised |

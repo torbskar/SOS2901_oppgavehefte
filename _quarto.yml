@@ -21,10 +21,9 @@ book:
     - bagging.qmd
     - randomForest.qmd
     - boosting.qmd
-    - intro_fairness.qmd
     - fairness.qmd
   #  - unsupervised.qmd
-    - oppgaver.qmd
+   # - oppgaver.qmd
     - references.qmd
 
   

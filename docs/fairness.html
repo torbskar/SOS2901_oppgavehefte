@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>9&nbsp; Fairness og tuning – SOS2901 Maskinlæring for samfunnsvitere</title>
+<title>8&nbsp; Fairness i maskinlæring – SOS2901 Maskinlæring for samfunnsvitere</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./oppgaver.html" rel="next">
-<link href="./intro_fairness.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./boosting.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -106,35 +106,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -147,7 +118,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./fairness.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./fairness.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness i maskinlæring</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -227,20 +198,8 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro_fairness.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./fairness.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./oppgaver.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness i maskinlæring</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -259,11 +218,16 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduksjon-til-fairness" id="toc-introduksjon-til-fairness" class="nav-link active" data-scroll-target="#introduksjon-til-fairness"><span class="header-section-number">9.1</span> Introduksjon til fairness</a></li>
-  <li><a href="#fairness-tuning-med-stratifisering" id="toc-fairness-tuning-med-stratifisering" class="nav-link" data-scroll-target="#fairness-tuning-med-stratifisering"><span class="header-section-number">9.2</span> Fairness: tuning med stratifisering</a>
+  <li><a href="#hva-slags-rettferdighet" id="toc-hva-slags-rettferdighet" class="nav-link active" data-scroll-target="#hva-slags-rettferdighet"><span class="header-section-number">8.1</span> Hva slags rettferdighet?</a></li>
+  <li><a href="#compas-datasettet" id="toc-compas-datasettet" class="nav-link" data-scroll-target="#compas-datasettet"><span class="header-section-number">8.2</span> COMPAS-datasettet</a></li>
+  <li><a href="#baseline-modell" id="toc-baseline-modell" class="nav-link" data-scroll-target="#baseline-modell"><span class="header-section-number">8.3</span> Baseline-modell</a></li>
+  <li><a href="#mål-på-fairness-med-fairmodels" id="toc-mål-på-fairness-med-fairmodels" class="nav-link" data-scroll-target="#mål-på-fairness-med-fairmodels"><span class="header-section-number">8.4</span> Mål på fairness med fairmodels</a></li>
+  <li><a href="#forbedre-fairness-stratifisering" id="toc-forbedre-fairness-stratifisering" class="nav-link" data-scroll-target="#forbedre-fairness-stratifisering"><span class="header-section-number">8.5</span> Forbedre fairness: Stratifisering</a>
   <ul class="collapse">
-  <li><a href="#hva-andre-subgrupper" id="toc-hva-andre-subgrupper" class="nav-link" data-scroll-target="#hva-andre-subgrupper"><span class="header-section-number">9.2.1</span> Hva andre subgrupper?</a></li>
+  <li><a href="#hva-med-andre-subgrupper" id="toc-hva-med-andre-subgrupper" class="nav-link" data-scroll-target="#hva-med-andre-subgrupper"><span class="header-section-number">8.5.1</span> Hva med andre subgrupper?</a></li>
   </ul></li>
+  <li><a href="#justere-rettferdighet-med-vekting" id="toc-justere-rettferdighet-med-vekting" class="nav-link" data-scroll-target="#justere-rettferdighet-med-vekting"><span class="header-section-number">8.6</span> Justere rettferdighet med vekting</a></li>
+  <li><a href="#avsluttende-betraktninger" id="toc-avsluttende-betraktninger" class="nav-link" data-scroll-target="#avsluttende-betraktninger"><span class="header-section-number">8.7</span> Avsluttende betraktninger</a></li>
   </ul>
 </nav>
     </div>
@@ -272,7 +236,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Fairness og tuning</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Fairness i maskinlæring</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -289,20 +253,34 @@ window.Quarto = {
 </header>
 
 
-<section id="introduksjon-til-fairness" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="introduksjon-til-fairness"><span class="header-section-number">9.1</span> Introduksjon til fairness</h2>
-<p>I forrige kapittel så vi at <code>sampsize</code> er et viktig verktøy for å justere feilratene i random forest. Nå skal vi bruke dette til å adressere <em>bias</em> mellom undergrupper. En ting er å avdekke bias og urettferdighet, en annen ting er å gjøre noe med det!</p>
+<p>I dette kapittelet skal vi bruke følgende pakker:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairness)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)     <span class="co"># datahåndtering og grafikk</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)  <span class="co"># random forest-modeller</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gbm)           <span class="co"># gradient boosting</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)         <span class="co"># confusionMatrix()</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DALEX)         <span class="co"># lage explainer-objekter for modeller</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairmodels)    <span class="co"># fairness-sjekk og visualisering</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Compas er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert av flere. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett “biased” mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Et datasett er gjort tilgjengelig av <a href="https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis">Propublica her</a> som vi skal bruke.</p>
+<p>Nå som vi har sett på klassifikasjonstrær, bagging, random forest og boosting er det på tide å gjøre noen rettferdighetsbetraktninger. I maskinlæring er <em>fairness</em> et sentralt tema: modeller kan systematisk behandle ulike grupper ulikt, noe som kan ha alvorlige konsekvenser avhengig av hva modellen brukes til.</p>
+<section id="hva-slags-rettferdighet" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="hva-slags-rettferdighet"><span class="header-section-number">8.1</span> Hva slags rettferdighet?</h2>
+<p>I denne settingen kan rettferdighet komme i betraktning på flere måter, herunder følgende:</p>
+<ul>
+<li>I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak</li>
+<li>I hvilken grad <em>dataene</em> algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering</li>
+<li>I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av <em>asymetriske feilrater</em></li>
+<li>I hvilken grad forrige punkt er avpasset mot hvilke <em>tiltak</em> man så setter i verk</li>
+<li>I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen</li>
+</ul>
+<p>Det er nok av ting å ta tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Er datakvaliteten dårlig er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene i prinsippet kan motarbeides, er det vel i praksis slik at en skjevhet sjelden kommer alene.</p>
+</section>
+<section id="compas-datasettet" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="compas-datasettet"><span class="header-section-number">8.2</span> COMPAS-datasettet</h2>
+<p>COMPAS er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå til å vurdere risikoen for at en person begår ny kriminalitet. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett “biased” mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Et datasett er gjort tilgjengelig av <a href="https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis">Propublica her</a> som vi skal bruke.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 6,172
 Columns: 7
@@ -315,34 +293,24 @@ $ Ethnicity            &lt;fct&gt; Other, African_American, African_American, Ot
 $ Sex                  &lt;fct&gt; Male, Male, Male, Male, Male, Male, Female, Male,…</code></pre>
 </div>
 </div>
-<p>Vi tilpasser først en random forest modell.</p>
+</section>
+<section id="baseline-modell" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="baseline-modell"><span class="header-section-number">8.3</span> Baseline-modell</h2>
+<p>Vi tilpasser en random forest-modell på datasettet:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 6,172
-Columns: 7
-$ Two_yr_Recidivism    &lt;fct&gt; 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1…
-$ Number_of_Priors     &lt;int&gt; 0, 0, 4, 0, 14, 3, 0, 0, 3, 0, 0, 1, 7, 0, 3, 6, …
-$ Age_Above_FourtyFive &lt;fct&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0…
-$ Age_Below_TwentyFive &lt;fct&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0…
-$ Misdemeanor          &lt;fct&gt; 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0…
-$ Ethnicity            &lt;fct&gt; Other, African_American, African_American, Other,…
-$ Sex                  &lt;fct&gt; Male, Male, Male, Male, Male, Male, Female, Male,…</code></pre>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#importance = TRUE,</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> compas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Lager en prediksjon i en kopi av datasett, mest for å ikke blande sammen prediksjonene med det opprinnelige datasettet.</p>
+<p>Vi lagrer prediksjonen i en kopi av datasettet, slik at vi kan sammenligne prediksjon og observert utfall:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Da kan vi lage en confusion matrix for å se hvordan modellen fungerer.</p>
+<p>En overordnet confusion matrix viser modellens ytelse for alle observasjoner samlet:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_p<span class="sc">$</span>pred_rf,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                compas_p<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_p<span class="sc">$</span>pred_rf,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                compas_p<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive =</span> <span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -373,16 +341,11 @@ Prediction    0    1
                                           </code></pre>
 </div>
 </div>
-<p>For å få litt bedre grep om hvordan fairness-pakken fungerer kan gjøre det mer manuelt først. Vi kan f.eks. se på hvordan modellen slår ut for menn og kvinner.</p>
-<p>Først kan vi da splitte datasettet i to etter kjønn. Her for menn.</p>
+<p>For å forstå <em>bias</em> kan vi dele opp confusion matrix etter kjønn. Her er modellens ytelse for menn:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>compas_1 <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Male"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Confusion matrix for menn blir da tilsvarende som tidligere.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_1<span class="sc">$</span>pred_rf,</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                compas_1<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>compas_m <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Male"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_m<span class="sc">$</span>pred_rf,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                compas_m<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive =</span> <span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -413,15 +376,11 @@ Prediction    0    1
                                           </code></pre>
 </div>
 </div>
-<p>Merk at vi her fikk en accuracy på 0.66 for menn. Splitter datasettet i to etter kjønn. Her for kvinner.</p>
+<p>Og for kvinner:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>compas_2 <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Female"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Confusion matrix for kvinner</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_2<span class="sc">$</span>pred_rf,</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                compas_2<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>compas_f <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Female"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_f<span class="sc">$</span>pred_rf,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                compas_f<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive =</span> <span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -452,27 +411,122 @@ Prediction   0   1
                                          </code></pre>
 </div>
 </div>
-<p>Merk at vi her fikk en accuracy på 0.71 for kvinner. Modellen er altså mer presis for kvinner enn for menn. Dette er et eksempel på <em>bias</em> i modellen. Forholdet mellom feilrater er da <span class="math inline">\(.66/.71 = .93\)</span>. Dette tallet sier at modellens accuracy for menn er 93% av accuracy for kvinner, og dette er et mål på <em>bias</em> i modellen. Om man synes det er mye eller lite er derimot en vurderingssak!</p>
-<p>Man kan også regne ut den andre veien, altså kvinner delt på menn. Da får vi 1.08, som sier at modellen er 8% mer presis for kvinner enn for menn. Det blir jo det samme, men motsatt vei. Vi må altså velge <em>referansegruppe</em> for sammenligningen.</p>
-<p>Funksjoner <code>acc_parity</code> fra fairness-pakken gjør akkurat dette: regner ut accuracy for ulike grupper og sammenligner dem. Her er koden:</p>
+<p>Modellen er mer presis for kvinner enn for menn — dette er et eksempel på <em>bias</em> i modellen. Forholdet mellom accuracy for menn og kvinner gir et enkelt mål på skjevheten. Men å sammenligne confusion matriser manuelt for mange grupper og mange mål er arbeidskrevende. Det er her fairness-verktøy kommer inn.</p>
+</section>
+<section id="mål-på-fairness-med-fairmodels" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="mål-på-fairness-med-fairmodels"><span class="header-section-number">8.4</span> Mål på fairness med fairmodels</h2>
+<p>Pakken <code>fairmodels</code> gjør det enkelt å måle fairness på tvers av grupper for mange mål på én gang. For å bruke den trengs et <em>explainer</em>-objekt fra <code>DALEX</code>-pakken. Et explainer-objekt er en standardisert innpakning rundt en modell, slik at <code>fairmodels</code> kan bruke ulike typer modeller (random forest, boosting, etc.) med det samme grensesnittet.</p>
+<p>Vi lager explainer-objektet for baseline random forest-modellen. Vi angir modellen, prediktordata (uten utfallsvariabelen), og den numeriske versjonen av utfallsvariabelen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>acc<span class="sc">$</span>Metric</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y_num    <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(compas<span class="sc">$</span>Two_yr_Recidivism))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>compas_X <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Two_yr_Recidivism)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>explainer_rf <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> rf,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data  =</span> compas_X,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y     =</span> y_num,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">"Random Forest"</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                      Female        Male
-Accuracy           0.7089362    0.661597
-Accuracy Parity    1.0000000    0.933225
-Group size      1175.0000000 4997.000000</code></pre>
+<pre><code>Preparation of a new explainer is initiated
+  -&gt; model label       :  Random Forest 
+  -&gt; data              :  6172  rows  6  cols 
+  -&gt; target variable   :  6172  values 
+  -&gt; predict function  :  yhat.randomForest  will be used (  default  )
+  -&gt; predicted values  :  No value for predict function target column. (  default  )
+  -&gt; model_info        :  package randomForest , ver. 4.7.1.2 , task classification (  default  ) 
+  -&gt; predicted values  :  numerical, min =  0 , mean =  0.4037122 , max =  1  
+  -&gt; residual function :  difference between y and yhat (  default  )
+  -&gt; residuals         :  numerical, min =  -1 , mean =  0.05140765 , max =  1  
+  A new explainer has been created!  </code></pre>
 </div>
 </div>
-<p>Men spesifiserer altså hvilke variable som er utfallsvariabel, hvilken som er gruppevariabel, hvilken som er prediksjonsvariabel og hvilken gruppe som skal være referanse.</p>
-<p>Fairness-pakken har også noen innebygde funksjoner for grafiske fremstillinger.</p>
+<p>Deretter bruker vi <code>fairness_check()</code> med <code>Sex</code> som beskyttet variabel og <code>"Male"</code> som referansegruppe:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>acc<span class="sc">$</span>Metric_plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fcheck <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Creating fairness classification object
+-&gt; Privileged subgroup      : character ([32m Ok [39m )
+-&gt; Protected variable       : factor ([32m Ok [39m ) 
+-&gt; Cutoff values for explainers : 0.5 ( for all subgroups ) 
+-&gt; Fairness objects     : 0 objects 
+-&gt; Checking explainers      : 1 in total ( [32m compatible [39m )
+-&gt; Metric calculation       : 13/13 metrics calculated for all models
+[32m Fairness object created succesfully [39m </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="fairness_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Plottet viser <em>parity loss</em> for en rekke ulike fairness-mål. Den grønne sonen angir et akseptabelt område basert på 4/5-regelen: forholdet mellom gruppen og referansegruppen bør ligge mellom 0.8 og 1.25. Søyler utenfor den grønne sonen betyr at modellen er statistisk sett <em>unfair</em> på det aktuelle målet.</p>
+<p>Tre mål er særlig sentrale:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mål i fairmodels</th>
+<th>Hva måles</th>
+<th>Konsept</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>PPV</code></td>
+<td>Andelen sanne positive av alle predikerte positive</td>
+<td>Predictive rate parity</td>
+</tr>
+<tr class="even">
+<td><code>TPR</code></td>
+<td>Andelen sanne positive av alle faktisk positive (sensitivitet)</td>
+<td>Equalized odds</td>
+</tr>
+<tr class="odd">
+<td><code>FPR</code></td>
+<td>Andelen falske positive av alle faktisk negative</td>
+<td>False positive rate parity</td>
+</tr>
+</tbody>
+</table>
+<p>Hvilket mål som er viktigst avhenger av hva modellen skal brukes til og hva konsekvensene av feil er. Et eksempel: Hvis modellen brukes til å vurdere prøveløslatelse, vil en høy FPR for én gruppe bety at den gruppen urettmessig beholder i fengsel mer enn andre grupper.</p>
+<p>Vi kan også sjekke fairness for etnisitet ved å bytte ut den beskyttede variabelen:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fcheck_etni <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Ethnicity,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Caucasian"</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Creating fairness classification object
+-&gt; Privileged subgroup      : character ([32m Ok [39m )
+-&gt; Protected variable       : factor ([32m Ok [39m ) 
+-&gt; Cutoff values for explainers : 0.5 ( for all subgroups ) 
+-&gt; Fairness objects     : 0 objects 
+-&gt; Checking explainers      : 1 in total ( [32m compatible [39m )
+-&gt; Metric calculation       : 11/13 metrics calculated for all models ( [33m2 NA created[39m )
+[32m Fairness object created succesfully [39m </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck_etni)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in plot.fairness_object(fcheck_etni): Omiting NA for models: Random Forest
+Information about passed metrics may be inaccurate due to NA present, it is advisable to check metric_scores plot.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -482,52 +536,69 @@ Group size      1175.0000000 4997.000000</code></pre>
 </div>
 </div>
 </section>
-<section id="fairness-tuning-med-stratifisering" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="fairness-tuning-med-stratifisering"><span class="header-section-number">9.2</span> Fairness: tuning med stratifisering</h2>
-<p>Vi har lært litt om grunnleggende tuning. For å justere feilratene er den mest effektive måten i random forest å endre hvordan samplingen skjer ved <code>sampsize</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Dette hjelper imidlertid ikke nødvendigvis mot <em>bias</em>, altså ulike feilrater for undergrupper. Det vil jo være nyttig om man kunne gjøre noe med slike skjevheter! Heldigvis kan vi det, men det er ikke så lett som man skulle håpe.</p>
-<p>Det viktige punktet å huske på er at random forest trekker tilfeldige utvalg for hvert tre og parameteren <code>sampsize</code> justerer hvor mange observasjoner som trekkes. Vi kan nå justere algoritmen til å gjøre en <em>stratifisert</em> trekning. Med andre ord: det gjøres en tilfeldig trekning innenfor subgrupper. Ovenfor har vi altså sett at modellen ikke er helt rettferdig med hensyn på kjønn. La oss fikse det!</p>
-<p>Først må vi lage en vektor for å stratifisere etter. Dette bør være variabelen for kjønn <em>kombinert med</em> utfallsvariabelen. Da får vi fire kategorier: menn med og uten tilbakefall, og kvinner med og uten tilbakefall. Så kan vi bruke sampsize til å angi hvor mange som skal trekkes fra hver av disse fire gruppene.</p>
-<p>Her er en kode for å lage en slik stratifiseringsvektor. Pussig nok skal denne vektoren ikke legges inn som en del av datasett, men i et eget objekt. I koden nedenfor bruker vi <code>mutate()</code> for å lage en ny variabel og <code>paste0()</code> for å “lime sammen” de to variabelene. Til sist bruker <code>pull()</code> for å trekke ut kun den variabelen i en egen vektor.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Koden nedenfor gir også en tabell med antall observasjoner i hver kategori av denne vektoren.</p>
+<section id="forbedre-fairness-stratifisering" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="forbedre-fairness-stratifisering"><span class="header-section-number">8.5</span> Forbedre fairness: Stratifisering</h2>
+<p>Vi har sett at <code>sampsize</code> i random forest styrer fordelingen av treningsdata per utfallskategori. For å motvirke <em>bias</em> mellom undergrupper kan vi bruke <em>stratifisert sampling</em>: ved å trekke fra grupper i styrte proporsjoner kan vi justere modellens feilrater per gruppe.</p>
+<p><code>sampsize</code> i random forest styrer ikke bare fordelingen av utfall, men kan kombineres med <code>strata</code> for å stratifisere <em>etter en egendefinert variabel</em>. Stratifiseringsvektoren kombinerer kjønn og utfall til fire kategorier:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, Two_yr_Recidivism)) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, Two_yr_Recidivism)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>strat
 Female0 Female1   Male0   Male1 
     762     413    2601    2396 </code></pre>
 </div>
 </div>
-<p>Merk at denne vektoren har verdiene som er en kombinasjon av de opprinnelige variablene. Når vi nå angir tall i <code>sampsize()</code> så er det i denne samme rekkefølgen. Her blir det altså:</p>
-<ol type="1">
-<li>Kvinner uten tilbakefall</li>
-<li>Kvinner med tilbakefall</li>
-<li>Menn uten tilbakefall</li>
-<li>Menn med tilbakefall</li>
-</ol>
-<p>Merk da at tallene som angis for <code>sampsize</code> ikke kan være høyere enn antallet i hver gruppe, og helst ikke høyere enn ca 70% av dette. Men det er primært <em>forholdet mellom tallene</em> som er viktig.</p>
-<p>Her er kode for random forest med stratifisert utvalg og angitte verdier av sampsize. Tallene oppgis i den rekkefølgen som er angitt i variabelen <code>strata</code>, altså som i tabellen ovenfor. Her er altså kvinner vektet lavere enn menn, som burde øke accuracy for menn. Samtidig er kvinner med tilbakefall vektet litt høyere enn kvinner uten tilbakefall.</p>
+<p>Tallene i <code>sampsize</code> oppgis i samme rekkefølge som tabellen: kvinner uten tilbakefall, kvinner med tilbakefall, menn uten tilbakefall, menn med tilbakefall. Her vektes kvinner med tilbakefall opp relativt, for å øke modellens sensitivitet for denne gruppen:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">strata =</span> strat, </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">215</span>, <span class="dv">290</span>, <span class="dv">1500</span>, <span class="dv">1500</span>), </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ntree=</span><span class="dv">800</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>rf_strat <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data     =</span> compas,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">strata   =</span> strat,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">215</span>, <span class="dv">290</span>, <span class="dv">1500</span>, <span class="dv">1500</span>),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">ntree    =</span> <span class="dv">800</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Nå kan vi lage en prediksjon og se om modellen er mer rettferdig på samme måte som vi har gjort tidligere.</p>
+<p>Vi lager en explainer for den stratifiserte modellen og sammenligner med baseline ved å sende begge explainere til <code>fairness_check()</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))  </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>explainer_rf_strat <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> rf_strat,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data  =</span> compas_X,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y     =</span> y_num,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">"RF stratifisert"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Preparation of a new explainer is initiated
+  -&gt; model label       :  RF stratifisert 
+  -&gt; data              :  6172  rows  6  cols 
+  -&gt; target variable   :  6172  values 
+  -&gt; predict function  :  yhat.randomForest  will be used (  default  )
+  -&gt; predicted values  :  No value for predict function target column. (  default  )
+  -&gt; model_info        :  package randomForest , ver. 4.7.1.2 , task classification (  default  ) 
+  -&gt; predicted values  :  numerical, min =  0 , mean =  0.4916229 , max =  1  
+  -&gt; residual function :  difference between y and yhat (  default  )
+  -&gt; residuals         :  numerical, min =  -1 , mean =  -0.03650296 , max =  1  
+  A new explainer has been created!  </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fcheck2 <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Creating fairness classification object
+-&gt; Privileged subgroup      : character ([32m Ok [39m )
+-&gt; Protected variable       : factor ([32m Ok [39m ) 
+-&gt; Cutoff values for explainers : 0.5 ( for all subgroups ) 
+-&gt; Fairness objects     : 0 objects 
+-&gt; Checking explainers      : 2 in total ( [32m compatible [39m )
+-&gt; Metric calculation       : 13/13 metrics calculated for all models
+[32m Fairness object created succesfully [39m </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -536,18 +607,37 @@ Female0 Female1   Male0   Male1
 </div>
 </div>
 </div>
-<p>Magisk! Plutselig har vi endret en modell med innebygde kjønnsforskjeller til en kjønnsnøytral modell. I hvert fall på akkurat dette målet, da. Man bør jo også sjekke andre relevante mål på fairness.</p>
-<p>Nå lurer du helt sikkert på hvordan du skal velge verdier for <code>sampsize</code> i et slikt tilfelle. Det litt skuffende svaret er at du må prøve deg litt frem. Men det hjelper å vite hvilket tall som betyr hva. I dette eksempelet sikres det at det trekkes omtrent like mange kvinner med og uten tilbakefall, og tilsvarende for menn. Så er det justert litt for å oversample kvinner med tilbakefall. Men for å være ærlig: jeg testet en god del varianter her før jeg fikk det resultatet jeg ville ha.</p>
-<section id="hva-andre-subgrupper" class="level3" data-number="9.2.1">
-<h3 data-number="9.2.1" class="anchored" data-anchor-id="hva-andre-subgrupper"><span class="header-section-number">9.2.1</span> Hva andre subgrupper?</h3>
-<p>Så er spørsmålet om den balansering vi nå har gjort slår ut på andre grupper også. La oss se på etnisitet. Vi bruker den samme modellen som over, men bytter ut variabelen for kjønn med variabelen for etnisitet.</p>
+<p>Dette er en av de store fordelene med <code>fairmodels</code>: vi kan sammenligne flere modeller direkte i ett plot. Ble den stratifiserte modellen mer rettferdig enn baseline-modellen?</p>
+<p>Merk at det ikke er noe åpenbart svar på hvilke verdier man skal velge for <code>sampsize</code>. Utgangspunktet er å sørge for at det trekkes omtrent like mange observasjoner fra grupper man ønsker å balansere. Det krever litt utprøving.</p>
+<section id="hva-med-andre-subgrupper" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="hva-med-andre-subgrupper"><span class="header-section-number">8.5.1</span> Hva med andre subgrupper?</h3>
+<p>Vi justerte for kjønn — men slo det positivt ut for etnisitet også?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Ethnicity'</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Caucasian'</span>)</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fcheck2_etni <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Ethnicity,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Caucasian"</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Creating fairness classification object
+-&gt; Privileged subgroup      : character ([32m Ok [39m )
+-&gt; Protected variable       : factor ([32m Ok [39m ) 
+-&gt; Cutoff values for explainers : 0.5 ( for all subgroups ) 
+-&gt; Fairness objects     : 0 objects 
+-&gt; Checking explainers      : 2 in total ( [32m compatible [39m )
+-&gt; Metric calculation       : 8/13 metrics calculated for all models ( [33m5 NA created[39m )
+[32m Fairness object created succesfully [39m </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck2_etni)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in plot.fairness_object(fcheck2_etni): Omiting NA for models: Random Forest
+Information about passed metrics may be inaccurate due to NA present, it is advisable to check metric_scores plot.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_bar()`).</code></pre>
+</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -556,116 +646,216 @@ Female0 Female1   Male0   Male1
 </div>
 </div>
 </div>
-<p>Det er lov å bli litt skuffa nå. Dette ble jo ikke like pent balansert som for kjønn. Men det er jo ikke så rart, egentlig. Det er jo ikke gjort noe for å balansere på etnisitet.</p>
-<p>En første mulighet er å gjøre en vurdering på om kjønnsbalanse eller etnisitet er viktigst. Kanskje man heller skulle fokusere på etnisitet? Det vil antakeligvis ikke være noen dum ide.</p>
-<p>En annen mulighet er å stratifisere på begge variable samtidig. La oss undersøke muligheten ved å lage en tilsvarende stratifiserings-vektor og se på frekvensfordelingen.</p>
+<p>Sannsynligvis ikke. Vi justerte for kjønn, ikke for etnisitet. En mulighet er å stratifisere på begge variable samtidig. Vi starter med å lage en kombinert stratifiseringsvektor:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, Ethnicity, Two_yr_Recidivism)) <span class="sc">%&gt;%</span> </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>strat2 <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">caucasian =</span> <span class="fu">ifelse</span>(Ethnicity <span class="sc">==</span> <span class="st">"Caucasian"</span>, <span class="st">"Caucasian"</span>, <span class="st">"Other"</span>),</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">strat =</span> <span class="fu">paste0</span>(Sex, caucasian, Two_yr_Recidivism)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>strat
-FemaleAfrican_American0 FemaleAfrican_American1            FemaleAsian0 
-                    346                     203                       1 
-           FemaleAsian1        FemaleCaucasian0        FemaleCaucasian1 
-                      1                     312                     170 
-        FemaleHispanic0         FemaleHispanic1  FemaleNative_American1 
-                     56                      26                       2 
-           FemaleOther0            FemaleOther1   MaleAfrican_American0 
-                     47                      11                    1168 
-  MaleAfrican_American1              MaleAsian0              MaleAsian1 
-                   1458                      22                       7 
-         MaleCaucasian0          MaleCaucasian1           MaleHispanic0 
-                    969                     652                     264 
-          MaleHispanic1    MaleNative_American0    MaleNative_American1 
-                    163                       6                       3 
-             MaleOther0              MaleOther1 
-                    172                     113 </code></pre>
-</div>
-</div>
-<p>Problemet nå er jo at noen grupper er veldig, veldig små. Å stratifiser på disse vil ikke fungere rett og slett. Det er som i annen statistikk: Estimere på veldig små grupper innebærer at det blir bare støy og tilfeldigheter i estimatene.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">caucasian =</span> <span class="fu">ifelse</span>(Ethnicity <span class="sc">==</span> <span class="st">"Caucasian"</span>, <span class="st">"Caucasian"</span>, <span class="st">"Other"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, caucasian, Two_yr_Recidivism)) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>strat
+<pre><code>strat2
 FemaleCaucasian0 FemaleCaucasian1     FemaleOther0     FemaleOther1 
              312              170              450              243 
   MaleCaucasian0   MaleCaucasian1       MaleOther0       MaleOther1 
              969              652             1632             1744 </code></pre>
 </div>
 </div>
-<p>La oss prøve med dette.</p>
+<p>Problemet her er at noen grupper er svært små. Å stratifisere på disse gir bare støy. Vi begrenser oss til å skille mellom “Caucasian” og “Other” fremfor alle etnisitetskategorier:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">strata =</span> strat, </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">120</span>, </span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">200</span>, <span class="dv">200</span>, </span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">400</span>, <span class="dv">400</span>, </span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">900</span>, <span class="dv">900</span>), </span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ntree=</span><span class="dv">800</span>)</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co">#rf</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>rf_strat2 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data     =</span> compas,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">strata   =</span> strat2,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">120</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="dv">200</span>, <span class="dv">200</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="dv">400</span>, <span class="dv">400</span>,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                                       <span class="dv">900</span>, <span class="dv">900</span>),</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">ntree    =</span> <span class="dv">800</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>explainer_rf_strat2 <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> rf_strat2,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data  =</span> compas_X,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y     =</span> y_num,</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">"RF strat. kjønn+etni"</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Preparation of a new explainer is initiated
+  -&gt; model label       :  RF strat. kjønn+etni 
+  -&gt; data              :  6172  rows  6  cols 
+  -&gt; target variable   :  6172  values 
+  -&gt; predict function  :  yhat.randomForest  will be used (  default  )
+  -&gt; predicted values  :  No value for predict function target column. (  default  )
+  -&gt; model_info        :  package randomForest , ver. 4.7.1.2 , task classification (  default  ) 
+  -&gt; predicted values  :  numerical, min =  0 , mean =  0.4721089 , max =  1  
+  -&gt; residual function :  difference between y and yhat (  default  )
+  -&gt; residuals         :  numerical, min =  -0.99875 , mean =  -0.01698902 , max =  1  
+  A new explainer has been created!  </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fcheck3 <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat2,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Creating fairness classification object
+-&gt; Privileged subgroup      : character ([32m Ok [39m )
+-&gt; Protected variable       : factor ([32m Ok [39m ) 
+-&gt; Cutoff values for explainers : 0.5 ( for all subgroups ) 
+-&gt; Fairness objects     : 0 objects 
+-&gt; Checking explainers      : 3 in total ( [32m compatible [39m )
+-&gt; Metric calculation       : 13/13 metrics calculated for all models
+[32m Fairness object created succesfully [39m </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="fairness_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="fairness_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Nå sjekker vi kjønnsbalansen igjen. Sammenlign med resultatet fra tidligere – ble det mer balansert?</p>
-<p>La oss også sjekke om den samme modellen er rettferdig med hensyn på etnisitet:</p>
+<p>Sammenlign de tre modellene. Man kan justere for noe, men ikke alt samtidig. Med mer data kan man justere for <em>mer</em>, men man er alltid begrenset av datamaterialet.</p>
+</section>
+</section>
+<section id="justere-rettferdighet-med-vekting" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="justere-rettferdighet-med-vekting"><span class="header-section-number">8.6</span> Justere rettferdighet med vekting</h2>
+<p>En annen strategi er å <em>vekte observasjoner</em> i treningsfasen. Dette fungerer godt i boosting, der vektene direkte påvirker hva algoritmen fokuserer på. Vektingen er en måte å fortelle modellen at noen typer feil er viktigere enn andre.</p>
+<p><code>gbm</code> krever at utfallsvariabelen er numerisk (0/1) med <code>distribution = "bernoulli"</code>. Vi lager en kopi av datasettet med konvertert utfall:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Ethnicity'</span>,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Caucasian'</span>)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>compas_gbm <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Two_yr_Recidivism =</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(Two_yr_Recidivism)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Deretter lager vi en vektvektor der kvinner og observasjoner med tilbakefall vektes opp. Tanken er at modellen skal ta disse tilfellene mer alvorlig under trening:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>wts <span class="ot">&lt;-</span> compas_gbm <span class="sc">%&gt;%</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wts =</span> <span class="fu">case_when</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Male"</span>   <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Male"</span>   <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Female"</span> <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Female"</span> <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(wts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>case_when()</code> setter én vektverdi per observasjon basert på kombinasjonen av kjønn og utfall, og <code>pull()</code> trekker ut vektene som en vektor. Kvinner med tilbakefall vektes fire ganger så mye som menn uten tilbakefall.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">542</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>gradboost <span class="ot">&lt;-</span> <span class="fu">gbm</span>(<span class="at">formula =</span> Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data         =</span> compas_gbm,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">weights      =</span> wts,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">distribution =</span> <span class="st">"bernoulli"</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">n.trees      =</span> <span class="dv">4000</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">interaction.depth  =</span> <span class="dv">3</span>,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">n.minobsinnode =</span> <span class="dv">1</span>,</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shrinkage    =</span> <span class="fl">0.001</span>,</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bag.fraction =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For å bruke <code>gbm</code> med <code>DALEX::explain()</code> må vi angi en tilpasset prediksjonsfunksjon, fordi <code>gbm</code> trenger <code>n.trees</code> eksplisitt:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>predict_gbm <span class="ot">&lt;-</span> <span class="cf">function</span>(model, newdata) {</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(model, <span class="at">newdata =</span> newdata,</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">n.trees =</span> model<span class="sc">$</span>n.trees, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>compas_gbm_X <span class="ot">&lt;-</span> compas_gbm <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Two_yr_Recidivism)</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>explainer_gbm <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">model            =</span> gradboost,</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">data             =</span> compas_gbm_X,</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">y                =</span> compas_gbm<span class="sc">$</span>Two_yr_Recidivism,</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_function =</span> predict_gbm,</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">label            =</span> <span class="st">"GBM med vekter"</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Preparation of a new explainer is initiated
+  -&gt; model label       :  GBM med vekter 
+  -&gt; data              :  6172  rows  6  cols 
+  -&gt; target variable   :  6172  values 
+  -&gt; predict function  :  predict_gbm 
+  -&gt; predicted values  :  No value for predict function target column. (  default  )
+  -&gt; model_info        :  package gbm , ver. 2.2.2 , task classification (  default  ) 
+  -&gt; predicted values  :  numerical, min =  0.2275137 , mean =  0.599534 , max =  0.8853893  
+  -&gt; residual function :  difference between y and yhat (  default  )
+  -&gt; residuals         :  numerical, min =  -0.8737405 , mean =  -0.1444141 , max =  0.7417262  
+  A new explainer has been created!  </code></pre>
+</div>
+</div>
+<p>Nå kan vi sammenligne alle tre modellene i ett fairness-kall:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>fcheck_all <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  explainer_gbm,</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Creating fairness classification object
+-&gt; Privileged subgroup      : character ([32m Ok [39m )
+-&gt; Protected variable       : factor ([32m Ok [39m ) 
+-&gt; Cutoff values for explainers : 0.5 ( for all subgroups ) 
+-&gt; Fairness objects     : 0 objects 
+-&gt; Checking explainers      : 3 in total ( [32m compatible [39m )
+-&gt; Metric calculation       : 13/13 metrics calculated for all models
+[32m Fairness object created succesfully [39m </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="fairness_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="fairness_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Her ble det i hvert fall annerledes, men ikke helt likt nå heller. Nå kan man drive på en stund å justere og se hva man får til. Hvis man har et veldig stort datasett (som vi ikke har her) så kan man i teorien justere for flere ulike egenskaper samtidig og i større detalj. Man er rett og slett litt begrenset av dataene.</p>
-<p>Problemet er selvsagt at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper du ikke har data for som det senere vil vise seg er urettferdig. Det kan f.eks. slå ut svært skjevt for type nabolag, sosioøkonomisk status, religiøs tilhørighet, lengde på håret - eller hva som helst annet. Man trenger data for å sjekke, men også data for å bygge algoritmen.</p>
-<p>Jeg tror konklusjonen er at man justere for noe, men ikke alt. Men med nok data kan man justere for <em>mer</em> - men fremdeles ikke alt. I tillegg er som regel ikke justeringer gratis. Kanskje blir presisjonen i modellen totalt sett dårligere?</p>
-<p>Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du f.eks. ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for - og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett være umulige valg. Men hva er så alternativet? Det er jo heller ikke sikkert er bedre på noen av disse parametrene.</p>
+<p>For en kompakt oversikt over alle modeller og alle mål kan vi bruke <code>fairness_heatmap()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fairness_heatmap</span>(fcheck_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>heatmap data top rows: 
+  parity_loss_metric           model score
+1                TPR   Random Forest  0.33
+2                TPR RF stratifisert  0.04
+3                TPR  GBM med vekter  0.30
+4                TNR   Random Forest  0.21
+5                TNR RF stratifisert  0.05
+
+matrix model not scaled :
+                       TPR        TNR         PPV        NPV        FNR
+Random Forest   0.32585661 0.21473973 0.001931638 0.09351694 0.41239929
+RF stratifisert 0.04097714 0.05222386 0.183665525 0.12662643 0.08413193
+GBM med vekter  0.29995238 0.48139816 0.101917421 0.02585717 0.90244226
+                      FPR         FDR        FOR        TS       STP        ACC
+Random Forest   0.8504339 0.003894726 0.23922716 0.2571368 0.6344638 0.07622932
+RF stratifisert 0.1125916 0.275123636 0.37186916 0.1704876 0.1678504 0.01579906
+GBM med vekter  0.6048768 0.123561862 0.08350239 0.2719322 0.5085737 0.05840212
+                       F1 NEW_METRIC
+Random Forest   0.1796063  0.7382559
+RF stratifisert 0.1165885  0.1251091
+GBM med vekter  0.1866799  1.2023946</code></pre>
+</div>
+</div>
+<p>Sammenlign modellene. Ble den vektede boosting-modellen mer rettferdig enn random forest? Husk at det alltid er en trade-off: økt rettferdighet for én gruppe eller på ett mål kan gå på bekostning av total presisjon eller rettferdighet på et annet mål.</p>
+</section>
+<section id="avsluttende-betraktninger" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="avsluttende-betraktninger"><span class="header-section-number">8.7</span> Avsluttende betraktninger</h2>
+<p>Hvilket fairness-mål som er viktigst er det ikke noe klart svar på. Det kommer an på hva man har tenkt å bruke prediksjonen til, hvilke konsekvenser tiltaket har, og hvilke konsekvenser det har å ikke gjøre noe. Disse konsekvensene kan vurderes forskjellig for ulike personer, grupper og situasjoner.</p>
+<p>Problemet er at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper man ikke har data for som vil vise seg å gi urettferdige utslag. Man kan justere for <em>noe</em>, men ikke alt. Med nok data kan man justere for <em>mer</em> — men fremdeles ikke alt. I tillegg er justeringer som regel ikke gratis: økt rettferdighet for én gruppe kan innebære lavere presisjon totalt sett, eller redusert rettferdighet for en annen gruppe.</p>
+<p>Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for — og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett bli umulige valg.</p>
+<p>Bør det nevnes at noen ganger ville man gjort noe uansett — altså gjort de samme tiltakene basert på skjønn eller andre typer vurderinger. Det vil også ha feilrater og forskjeller mellom undergrupper, selv om man ikke har et oppsett som gir testing-data å estimere dette på. Det betyr at du ikke bare må ta stilling til om algoritmen er “fair” eller ikke, men også om den er <em>mer eller mindre “fair”</em> enn den alternative fremgangsmåten.</p>
 
 
 <!-- -->
 
 </section>
-</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn1"><p>Det er verd å minne på at politi i USA i stor grad er mer hardhendte enn norsk politi. Konsekvensene er altså litt mer alvorlig enn at unødig mange føler seg unødig mistenkte.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Dette er ikke eneste måten å tune på, men det vi dekker her. Det finnes andre funksjoner for random forest som inneholder mer funksjonalitet for tuning.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>For de av dere som kan en del R fra før: <code>select()</code> ville gjort noe tilsvarende, men da ville objektet være en data.frame med én variabel fremfor en vektor. Forskjellen er minimal, men <code>randomForest()</code> vil ha det på denne måten.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -1123,291 +1313,362 @@ FemaleCaucasian0 FemaleCaucasian1     FemaleOther0     FemaleOther1
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./intro_fairness.html" class="pagination-link" aria-label="En lett introduksjon til fairness">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">En lett introduksjon til fairness</span></span>
+      <a href="./boosting.html" class="pagination-link" aria-label="Boosting">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Boosting</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./oppgaver.html" class="pagination-link" aria-label="Oppgaver">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Oppgaver</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Fairness og tuning</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduksjon til fairness</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>I forrige kapittel så vi at <span class="in">`sampsize`</span> er et viktig verktøy for å justere feilratene i random forest. Nå skal vi bruke dette til å adressere *bias* mellom undergrupper. En ting er å avdekke bias og urettferdighet, en annen ting er å gjøre noe med det! </span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false </span></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairness)</span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>Compas er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert av flere. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett "biased" mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.^<span class="co">[</span><span class="ot">Det er verd å minne på at politi i USA i stor grad er mer hardhendte enn norsk politi. Konsekvensene er altså litt mer alvorlig enn at unødig mange føler seg unødig mistenkte.</span><span class="co">]</span> Et datasett er gjort tilgjengelig av <span class="co">[</span><span class="ot">Propublica her</span><span class="co">](https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis)</span> som vi skal bruke. </span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>)</span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>Vi tilpasser først en random forest modell. </span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
-<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span>
-<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
-<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a>                   <span class="co">#importance = TRUE,</span></span>
-<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> compas)</span>
-<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a>Lager en prediksjon i en kopi av datasett, mest for å ikke blande sammen prediksjonene med det opprinnelige datasettet. </span>
-<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))  </span>
-<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-60"><a href="#cb31-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-61"><a href="#cb31-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-62"><a href="#cb31-62" aria-hidden="true" tabindex="-1"></a>Da kan vi lage en confusion matrix for å se hvordan modellen fungerer. </span>
-<span id="cb31-63"><a href="#cb31-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-64"><a href="#cb31-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-65"><a href="#cb31-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-68"><a href="#cb31-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-69"><a href="#cb31-69" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_p<span class="sc">$</span>pred_rf,</span>
-<span id="cb31-70"><a href="#cb31-70" aria-hidden="true" tabindex="-1"></a>                compas_p<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span>
-<span id="cb31-71"><a href="#cb31-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-72"><a href="#cb31-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-73"><a href="#cb31-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-74"><a href="#cb31-74" aria-hidden="true" tabindex="-1"></a>For å få litt bedre grep om hvordan fairness-pakken fungerer kan gjøre det mer manuelt først. Vi kan f.eks. se på hvordan modellen slår ut for menn og kvinner. </span>
-<span id="cb31-75"><a href="#cb31-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-76"><a href="#cb31-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-77"><a href="#cb31-77" aria-hidden="true" tabindex="-1"></a>Først kan vi da splitte datasettet i to etter kjønn. Her for menn. </span>
-<span id="cb31-78"><a href="#cb31-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-81"><a href="#cb31-81" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-82"><a href="#cb31-82" aria-hidden="true" tabindex="-1"></a>compas_1 <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> </span>
-<span id="cb31-83"><a href="#cb31-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Male"</span>)</span>
-<span id="cb31-84"><a href="#cb31-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-85"><a href="#cb31-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-86"><a href="#cb31-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-87"><a href="#cb31-87" aria-hidden="true" tabindex="-1"></a>Confusion matrix for menn blir da tilsvarende som tidligere. </span>
-<span id="cb31-90"><a href="#cb31-90" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-91"><a href="#cb31-91" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_1<span class="sc">$</span>pred_rf,</span>
-<span id="cb31-92"><a href="#cb31-92" aria-hidden="true" tabindex="-1"></a>                compas_1<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span>
-<span id="cb31-93"><a href="#cb31-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-94"><a href="#cb31-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-95"><a href="#cb31-95" aria-hidden="true" tabindex="-1"></a>Merk at vi her fikk en accuracy på 0.66 for menn. </span>
-<span id="cb31-96"><a href="#cb31-96" aria-hidden="true" tabindex="-1"></a>Splitter datasettet i to etter kjønn. Her for kvinner. </span>
-<span id="cb31-99"><a href="#cb31-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-100"><a href="#cb31-100" aria-hidden="true" tabindex="-1"></a>compas_2 <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> </span>
-<span id="cb31-101"><a href="#cb31-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Female"</span>)</span>
-<span id="cb31-102"><a href="#cb31-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-103"><a href="#cb31-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-104"><a href="#cb31-104" aria-hidden="true" tabindex="-1"></a>Confusion matrix for kvinner</span>
-<span id="cb31-105"><a href="#cb31-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-108"><a href="#cb31-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-109"><a href="#cb31-109" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_2<span class="sc">$</span>pred_rf,</span>
-<span id="cb31-110"><a href="#cb31-110" aria-hidden="true" tabindex="-1"></a>                compas_2<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive=</span><span class="st">"1"</span>)</span>
-<span id="cb31-111"><a href="#cb31-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-112"><a href="#cb31-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-113"><a href="#cb31-113" aria-hidden="true" tabindex="-1"></a>Merk at vi her fikk en accuracy på 0.71 for kvinner. Modellen er altså mer presis for kvinner enn for menn. Dette er et eksempel på *bias* i modellen. Forholdet mellom feilrater er da $.66/.71 = .93$. Dette tallet sier at modellens accuracy for menn er 93% av accuracy for kvinner, og dette er et mål på *bias* i modellen. Om man synes det er mye eller lite er derimot en vurderingssak! </span>
-<span id="cb31-114"><a href="#cb31-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-115"><a href="#cb31-115" aria-hidden="true" tabindex="-1"></a>Man kan også regne ut den andre veien, altså kvinner delt på menn. Da får vi 1.08, som sier at modellen er 8% mer presis for kvinner enn for menn. Det blir jo det samme, men motsatt vei. Vi må altså velge *referansegruppe* for sammenligningen. </span>
-<span id="cb31-116"><a href="#cb31-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-117"><a href="#cb31-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-118"><a href="#cb31-118" aria-hidden="true" tabindex="-1"></a>Funksjoner <span class="in">`acc_parity`</span> fra fairness-pakken gjør akkurat dette: regner ut accuracy for ulike grupper og sammenligner dem. Her er koden:</span>
-<span id="cb31-119"><a href="#cb31-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-122"><a href="#cb31-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-123"><a href="#cb31-123" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb31-124"><a href="#cb31-124" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb31-125"><a href="#cb31-125" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb31-126"><a href="#cb31-126" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
-<span id="cb31-127"><a href="#cb31-127" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
-<span id="cb31-128"><a href="#cb31-128" aria-hidden="true" tabindex="-1"></a>acc<span class="sc">$</span>Metric</span>
-<span id="cb31-129"><a href="#cb31-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-130"><a href="#cb31-130" aria-hidden="true" tabindex="-1"></a>Men spesifiserer altså hvilke variable som er utfallsvariabel, hvilken som er gruppevariabel, hvilken som er prediksjonsvariabel og hvilken gruppe som skal være referanse. </span>
-<span id="cb31-131"><a href="#cb31-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-132"><a href="#cb31-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-133"><a href="#cb31-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-134"><a href="#cb31-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-135"><a href="#cb31-135" aria-hidden="true" tabindex="-1"></a>Fairness-pakken har også noen innebygde funksjoner for grafiske fremstillinger. </span>
-<span id="cb31-136"><a href="#cb31-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-139"><a href="#cb31-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-140"><a href="#cb31-140" aria-hidden="true" tabindex="-1"></a>acc<span class="sc">$</span>Metric_plot</span>
-<span id="cb31-141"><a href="#cb31-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-142"><a href="#cb31-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-143"><a href="#cb31-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-144"><a href="#cb31-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-145"><a href="#cb31-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fairness: tuning med stratifisering</span></span>
-<span id="cb31-146"><a href="#cb31-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-147"><a href="#cb31-147" aria-hidden="true" tabindex="-1"></a>Vi har lært litt om grunnleggende tuning. For å justere feilratene er den mest effektive måten i random forest å endre hvordan samplingen skjer ved <span class="in">`sampsize`</span>.^<span class="co">[</span><span class="ot">Dette er ikke eneste måten å tune på, men det vi dekker her. Det finnes andre funksjoner for random forest som inneholder mer funksjonalitet for tuning.</span><span class="co">]</span> Dette hjelper imidlertid ikke nødvendigvis mot *bias*, altså ulike feilrater for undergrupper. Det vil jo være nyttig om man kunne gjøre noe med slike skjevheter! Heldigvis kan vi det, men det er ikke så lett som man skulle håpe. </span>
-<span id="cb31-148"><a href="#cb31-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-149"><a href="#cb31-149" aria-hidden="true" tabindex="-1"></a>Det viktige punktet å huske på er at random forest trekker tilfeldige utvalg for hvert tre og parameteren <span class="in">`sampsize`</span> justerer hvor mange observasjoner som trekkes. Vi kan nå justere algoritmen til å gjøre en *stratifisert* trekning. Med andre ord: det gjøres en tilfeldig trekning innenfor subgrupper. Ovenfor har vi altså sett at modellen ikke er helt rettferdig med hensyn på kjønn. La oss fikse det! </span>
-<span id="cb31-150"><a href="#cb31-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-151"><a href="#cb31-151" aria-hidden="true" tabindex="-1"></a>Først må vi lage en vektor for å stratifisere etter. Dette bør være variabelen for kjønn *kombinert med* utfallsvariabelen. Da får vi fire kategorier: menn med og uten tilbakefall, og kvinner med og uten tilbakefall. Så kan vi bruke sampsize til å angi hvor mange som skal trekkes fra hver av disse fire gruppene.  </span>
-<span id="cb31-152"><a href="#cb31-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-153"><a href="#cb31-153" aria-hidden="true" tabindex="-1"></a>Her er en kode for å lage en slik stratifiseringsvektor. Pussig nok skal denne vektoren ikke legges inn som en del av datasett, men i et eget objekt. I koden nedenfor bruker vi <span class="in">`mutate()`</span> for å lage en ny variabel og <span class="in">`paste0()`</span> for å "lime sammen" de to variabelene. Til sist bruker <span class="in">`pull()`</span> for å trekke ut kun den variabelen i en egen vektor.^<span class="co">[</span><span class="ot">For de av dere som kan en del R fra før: `select()` ville gjort noe tilsvarende, men da ville objektet være en data.frame med én variabel fremfor en vektor. Forskjellen er minimal, men `randomForest()` vil ha det på denne måten.</span><span class="co">]</span> Koden nedenfor gir også en tabell med antall observasjoner i hver kategori av denne vektoren. </span>
-<span id="cb31-154"><a href="#cb31-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-157"><a href="#cb31-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-158"><a href="#cb31-158" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb31-159"><a href="#cb31-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, Two_yr_Recidivism)) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-160"><a href="#cb31-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
-<span id="cb31-161"><a href="#cb31-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-162"><a href="#cb31-162" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span>
-<span id="cb31-163"><a href="#cb31-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-164"><a href="#cb31-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-165"><a href="#cb31-165" aria-hidden="true" tabindex="-1"></a>Merk at denne vektoren har verdiene som er en kombinasjon av de opprinnelige variablene. Når vi nå angir tall i <span class="in">`sampsize()`</span> så er det i denne samme rekkefølgen. Her blir det altså: </span>
-<span id="cb31-166"><a href="#cb31-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-167"><a href="#cb31-167" aria-hidden="true" tabindex="-1"></a>1) Kvinner uten tilbakefall </span>
-<span id="cb31-168"><a href="#cb31-168" aria-hidden="true" tabindex="-1"></a>1) Kvinner med tilbakefall</span>
-<span id="cb31-169"><a href="#cb31-169" aria-hidden="true" tabindex="-1"></a>1) Menn uten tilbakefall</span>
-<span id="cb31-170"><a href="#cb31-170" aria-hidden="true" tabindex="-1"></a>1) Menn med tilbakefall </span>
-<span id="cb31-171"><a href="#cb31-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-172"><a href="#cb31-172" aria-hidden="true" tabindex="-1"></a>Merk da at tallene som angis for <span class="in">`sampsize`</span> ikke kan være høyere enn antallet i hver gruppe, og helst ikke høyere enn ca 70% av dette. Men det er primært *forholdet mellom tallene* som er viktig. </span>
-<span id="cb31-173"><a href="#cb31-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-174"><a href="#cb31-174" aria-hidden="true" tabindex="-1"></a>Her er kode for random forest med stratifisert utvalg og angitte verdier av sampsize. Tallene oppgis i den rekkefølgen som er angitt i variabelen <span class="in">`strata`</span>, altså som i tabellen ovenfor. Her er altså kvinner vektet lavere enn menn, som burde øke accuracy for menn. Samtidig er kvinner med tilbakefall vektet litt høyere enn kvinner uten tilbakefall. </span>
-<span id="cb31-175"><a href="#cb31-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-176"><a href="#cb31-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-179"><a href="#cb31-179" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-180"><a href="#cb31-180" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
-<span id="cb31-181"><a href="#cb31-181" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
-<span id="cb31-182"><a href="#cb31-182" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas,</span>
-<span id="cb31-183"><a href="#cb31-183" aria-hidden="true" tabindex="-1"></a>                   <span class="at">strata =</span> strat, </span>
-<span id="cb31-184"><a href="#cb31-184" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">215</span>, <span class="dv">290</span>, <span class="dv">1500</span>, <span class="dv">1500</span>), </span>
-<span id="cb31-185"><a href="#cb31-185" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ntree=</span><span class="dv">800</span>)</span>
-<span id="cb31-186"><a href="#cb31-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-187"><a href="#cb31-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-188"><a href="#cb31-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-189"><a href="#cb31-189" aria-hidden="true" tabindex="-1"></a>Nå kan vi lage en prediksjon og se om modellen er mer rettferdig på samme måte som vi har gjort tidligere. </span>
-<span id="cb31-190"><a href="#cb31-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-193"><a href="#cb31-193" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-194"><a href="#cb31-194" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb31-195"><a href="#cb31-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))  </span>
-<span id="cb31-196"><a href="#cb31-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-197"><a href="#cb31-197" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb31-198"><a href="#cb31-198" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb31-199"><a href="#cb31-199" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb31-200"><a href="#cb31-200" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
-<span id="cb31-201"><a href="#cb31-201" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
-<span id="cb31-202"><a href="#cb31-202" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
-<span id="cb31-203"><a href="#cb31-203" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-204"><a href="#cb31-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-205"><a href="#cb31-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-206"><a href="#cb31-206" aria-hidden="true" tabindex="-1"></a>Magisk! Plutselig har vi endret en modell med innebygde kjønnsforskjeller til en kjønnsnøytral modell. I hvert fall på akkurat dette målet, da. Man bør jo også sjekke andre relevante mål på fairness.  </span>
-<span id="cb31-207"><a href="#cb31-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-208"><a href="#cb31-208" aria-hidden="true" tabindex="-1"></a>Nå lurer du helt sikkert på hvordan du skal velge verdier for <span class="in">`sampsize`</span> i et slikt tilfelle. Det litt skuffende svaret er at du må prøve deg litt frem. Men det hjelper å vite hvilket tall som betyr hva. I dette eksempelet sikres det at det trekkes omtrent like mange kvinner med og uten tilbakefall, og tilsvarende for menn. Så er det justert litt for å oversample kvinner med tilbakefall. Men for å være ærlig: jeg testet en god del varianter her før jeg fikk det resultatet jeg ville ha. </span>
-<span id="cb31-209"><a href="#cb31-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-210"><a href="#cb31-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-211"><a href="#cb31-211" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hva andre subgrupper? </span></span>
-<span id="cb31-212"><a href="#cb31-212" aria-hidden="true" tabindex="-1"></a>Så er spørsmålet om den balansering vi nå har gjort slår ut på andre grupper også. La oss se på etnisitet. Vi bruker den samme modellen som over, men bytter ut variabelen for kjønn med variabelen for etnisitet. </span>
-<span id="cb31-213"><a href="#cb31-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-214"><a href="#cb31-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-217"><a href="#cb31-217" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-218"><a href="#cb31-218" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p, </span>
-<span id="cb31-219"><a href="#cb31-219" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>, </span>
-<span id="cb31-220"><a href="#cb31-220" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Ethnicity'</span>,</span>
-<span id="cb31-221"><a href="#cb31-221" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>, </span>
-<span id="cb31-222"><a href="#cb31-222" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Caucasian'</span>)</span>
-<span id="cb31-223"><a href="#cb31-223" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
-<span id="cb31-224"><a href="#cb31-224" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-225"><a href="#cb31-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-226"><a href="#cb31-226" aria-hidden="true" tabindex="-1"></a>Det er lov å bli litt skuffa nå. Dette ble jo ikke like pent balansert som for kjønn. Men det er jo ikke så rart, egentlig. Det er jo ikke gjort noe for å balansere på etnisitet. </span>
-<span id="cb31-227"><a href="#cb31-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-228"><a href="#cb31-228" aria-hidden="true" tabindex="-1"></a>En første mulighet er å gjøre en vurdering på om kjønnsbalanse eller etnisitet er viktigst. Kanskje man heller skulle fokusere på etnisitet? Det vil antakeligvis ikke være noen dum ide. </span>
-<span id="cb31-229"><a href="#cb31-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-230"><a href="#cb31-230" aria-hidden="true" tabindex="-1"></a>En annen mulighet er å stratifisere på begge variable samtidig. La oss undersøke muligheten ved å lage en tilsvarende stratifiserings-vektor og se på frekvensfordelingen. </span>
-<span id="cb31-231"><a href="#cb31-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-234"><a href="#cb31-234" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-235"><a href="#cb31-235" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb31-236"><a href="#cb31-236" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, Ethnicity, Two_yr_Recidivism)) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-237"><a href="#cb31-237" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
-<span id="cb31-238"><a href="#cb31-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-239"><a href="#cb31-239" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span>
-<span id="cb31-240"><a href="#cb31-240" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-241"><a href="#cb31-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-242"><a href="#cb31-242" aria-hidden="true" tabindex="-1"></a>Problemet nå er jo at noen grupper er veldig, veldig små. Å stratifiser på disse vil ikke fungere rett og slett. Det er som i annen statistikk: Estimere på veldig små grupper innebærer at det blir bare støy og tilfeldigheter i estimatene. </span>
-<span id="cb31-243"><a href="#cb31-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-244"><a href="#cb31-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-247"><a href="#cb31-247" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-248"><a href="#cb31-248" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> </span>
-<span id="cb31-249"><a href="#cb31-249" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">caucasian =</span> <span class="fu">ifelse</span>(Ethnicity <span class="sc">==</span> <span class="st">"Caucasian"</span>, <span class="st">"Caucasian"</span>, <span class="st">"Other"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-250"><a href="#cb31-250" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, caucasian, Two_yr_Recidivism)) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-251"><a href="#cb31-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
-<span id="cb31-252"><a href="#cb31-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-253"><a href="#cb31-253" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span>
-<span id="cb31-254"><a href="#cb31-254" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-255"><a href="#cb31-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-256"><a href="#cb31-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-257"><a href="#cb31-257" aria-hidden="true" tabindex="-1"></a>La oss prøve med dette. </span>
-<span id="cb31-258"><a href="#cb31-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-261"><a href="#cb31-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-262"><a href="#cb31-262" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
-<span id="cb31-263"><a href="#cb31-263" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
-<span id="cb31-264"><a href="#cb31-264" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas,</span>
-<span id="cb31-265"><a href="#cb31-265" aria-hidden="true" tabindex="-1"></a>                   <span class="at">strata =</span> strat, </span>
-<span id="cb31-266"><a href="#cb31-266" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">120</span>, </span>
-<span id="cb31-267"><a href="#cb31-267" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">200</span>, <span class="dv">200</span>, </span>
-<span id="cb31-268"><a href="#cb31-268" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">400</span>, <span class="dv">400</span>, </span>
-<span id="cb31-269"><a href="#cb31-269" aria-hidden="true" tabindex="-1"></a>                                <span class="dv">900</span>, <span class="dv">900</span>), </span>
-<span id="cb31-270"><a href="#cb31-270" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ntree=</span><span class="dv">800</span>)</span>
-<span id="cb31-271"><a href="#cb31-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-272"><a href="#cb31-272" aria-hidden="true" tabindex="-1"></a><span class="co">#rf</span></span>
-<span id="cb31-273"><a href="#cb31-273" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-274"><a href="#cb31-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-275"><a href="#cb31-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-276"><a href="#cb31-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-279"><a href="#cb31-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-280"><a href="#cb31-280" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
-<span id="cb31-281"><a href="#cb31-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))</span>
-<span id="cb31-282"><a href="#cb31-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-283"><a href="#cb31-283" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
-<span id="cb31-284"><a href="#cb31-284" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
-<span id="cb31-285"><a href="#cb31-285" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Sex'</span>,</span>
-<span id="cb31-286"><a href="#cb31-286" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
-<span id="cb31-287"><a href="#cb31-287" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Female'</span>)</span>
-<span id="cb31-288"><a href="#cb31-288" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
-<span id="cb31-289"><a href="#cb31-289" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-290"><a href="#cb31-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-291"><a href="#cb31-291" aria-hidden="true" tabindex="-1"></a>Nå sjekker vi kjønnsbalansen igjen. Sammenlign med resultatet fra tidligere -- ble det mer balansert?</span>
-<span id="cb31-292"><a href="#cb31-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-293"><a href="#cb31-293" aria-hidden="true" tabindex="-1"></a>La oss også sjekke om den samme modellen er rettferdig med hensyn på etnisitet:</span>
-<span id="cb31-294"><a href="#cb31-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-297"><a href="#cb31-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb31-298"><a href="#cb31-298" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">acc_parity</span>(<span class="at">data =</span> compas_p,</span>
-<span id="cb31-299"><a href="#cb31-299" aria-hidden="true" tabindex="-1"></a>                  <span class="at">outcome      =</span> <span class="st">'Two_yr_Recidivism'</span>,</span>
-<span id="cb31-300"><a href="#cb31-300" aria-hidden="true" tabindex="-1"></a>                  <span class="at">group        =</span> <span class="st">'Ethnicity'</span>,</span>
-<span id="cb31-301"><a href="#cb31-301" aria-hidden="true" tabindex="-1"></a>                  <span class="at">preds        =</span> <span class="st">'pred_rf'</span>,</span>
-<span id="cb31-302"><a href="#cb31-302" aria-hidden="true" tabindex="-1"></a>                  <span class="at">base         =</span> <span class="st">'Caucasian'</span>)</span>
-<span id="cb31-303"><a href="#cb31-303" aria-hidden="true" tabindex="-1"></a>acc[[<span class="dv">2</span>]]</span>
-<span id="cb31-304"><a href="#cb31-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb31-305"><a href="#cb31-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-306"><a href="#cb31-306" aria-hidden="true" tabindex="-1"></a>Her ble det i hvert fall annerledes, men ikke helt likt nå heller. Nå kan man drive på en stund å justere og se hva man får til. Hvis man har et veldig stort datasett (som vi ikke har her) så kan man i teorien justere for flere ulike egenskaper samtidig og i større detalj. Man er rett og slett litt begrenset av dataene. </span>
-<span id="cb31-307"><a href="#cb31-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-308"><a href="#cb31-308" aria-hidden="true" tabindex="-1"></a>Problemet er selvsagt at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper du ikke har data for som det senere vil vise seg er urettferdig. Det kan f.eks. slå ut svært skjevt for type nabolag, sosioøkonomisk status, religiøs tilhørighet, lengde på håret - eller hva som helst annet. Man trenger data for å sjekke, men også data for å bygge algoritmen. </span>
-<span id="cb31-309"><a href="#cb31-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-310"><a href="#cb31-310" aria-hidden="true" tabindex="-1"></a>Jeg tror konklusjonen er at man justere for noe, men ikke alt. Men med nok data kan man justere for *mer* - men fremdeles ikke alt. I tillegg er som regel ikke justeringer gratis. Kanskje blir presisjonen i modellen totalt sett dårligere? </span>
-<span id="cb31-311"><a href="#cb31-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-312"><a href="#cb31-312" aria-hidden="true" tabindex="-1"></a>Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du f.eks. ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for - og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett være umulige valg. Men hva er så alternativet? Det er jo heller ikke sikkert er bedre på noen av disse parametrene. </span>
-<span id="cb31-313"><a href="#cb31-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-314"><a href="#cb31-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-315"><a href="#cb31-315" aria-hidden="true" tabindex="-1"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Fairness i maskinlæring</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">Sys.setlocale</span>(<span class="at">locale=</span><span class="st">'no_NB.utf8'</span>))</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>I dette kapittelet skal vi bruke følgende pakker:</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)     <span class="co"># datahåndtering og grafikk</span></span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)  <span class="co"># random forest-modeller</span></span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gbm)           <span class="co"># gradient boosting</span></span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)         <span class="co"># confusionMatrix()</span></span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DALEX)         <span class="co"># lage explainer-objekter for modeller</span></span>
+<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fairmodels)    <span class="co"># fairness-sjekk og visualisering</span></span>
+<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a>Nå som vi har sett på klassifikasjonstrær, bagging, random forest og boosting er det på tide å gjøre noen rettferdighetsbetraktninger. I maskinlæring er *fairness* et sentralt tema: modeller kan systematisk behandle ulike grupper ulikt, noe som kan ha alvorlige konsekvenser avhengig av hva modellen brukes til.</span>
+<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## Hva slags rettferdighet?</span></span>
+<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>I denne settingen kan rettferdighet komme i betraktning på flere måter, herunder følgende:</span>
+<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak</span>
+<span id="cb53-37"><a href="#cb53-37" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad *dataene* algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering</span>
+<span id="cb53-38"><a href="#cb53-38" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av *asymetriske feilrater*</span>
+<span id="cb53-39"><a href="#cb53-39" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad forrige punkt er avpasset mot hvilke *tiltak* man så setter i verk</span>
+<span id="cb53-40"><a href="#cb53-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen</span>
+<span id="cb53-41"><a href="#cb53-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-42"><a href="#cb53-42" aria-hidden="true" tabindex="-1"></a>Det er nok av ting å ta tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Er datakvaliteten dårlig er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene i prinsippet kan motarbeides, er det vel i praksis slik at en skjevhet sjelden kommer alene.</span>
+<span id="cb53-43"><a href="#cb53-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-44"><a href="#cb53-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## COMPAS-datasettet</span></span>
+<span id="cb53-45"><a href="#cb53-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-46"><a href="#cb53-46" aria-hidden="true" tabindex="-1"></a>COMPAS er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå til å vurdere risikoen for at en person begår ny kriminalitet. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett "biased" mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.^<span class="co">[</span><span class="ot">Det er verd å minne på at politi i USA i stor grad er mer hardhendte enn norsk politi. Konsekvensene er altså litt mer alvorlig enn at unødig mange føler seg unødig mistenkte.</span><span class="co">]</span> Et datasett er gjort tilgjengelig av <span class="co">[</span><span class="ot">Propublica her</span><span class="co">](https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis)</span> som vi skal bruke.</span>
+<span id="cb53-47"><a href="#cb53-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-50"><a href="#cb53-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-51"><a href="#cb53-51" aria-hidden="true" tabindex="-1"></a>compas <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/compas.rds"</span>)</span>
+<span id="cb53-52"><a href="#cb53-52" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compas)</span>
+<span id="cb53-53"><a href="#cb53-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-54"><a href="#cb53-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-55"><a href="#cb53-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Baseline-modell</span></span>
+<span id="cb53-56"><a href="#cb53-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-57"><a href="#cb53-57" aria-hidden="true" tabindex="-1"></a>Vi tilpasser en random forest-modell på datasettet:</span>
+<span id="cb53-58"><a href="#cb53-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-61"><a href="#cb53-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-62"><a href="#cb53-62" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4356</span>)</span>
+<span id="cb53-63"><a href="#cb53-63" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb53-64"><a href="#cb53-64" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> compas)</span>
+<span id="cb53-65"><a href="#cb53-65" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-66"><a href="#cb53-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-67"><a href="#cb53-67" aria-hidden="true" tabindex="-1"></a>Vi lagrer prediksjonen i en kopi av datasettet, slik at vi kan sammenligne prediksjon og observert utfall:</span>
+<span id="cb53-68"><a href="#cb53-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-71"><a href="#cb53-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-72"><a href="#cb53-72" aria-hidden="true" tabindex="-1"></a>compas_p <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb53-73"><a href="#cb53-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred_rf =</span> <span class="fu">predict</span>(rf))</span>
+<span id="cb53-74"><a href="#cb53-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-75"><a href="#cb53-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-76"><a href="#cb53-76" aria-hidden="true" tabindex="-1"></a>En overordnet confusion matrix viser modellens ytelse for alle observasjoner samlet:</span>
+<span id="cb53-77"><a href="#cb53-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-80"><a href="#cb53-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-81"><a href="#cb53-81" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_p<span class="sc">$</span>pred_rf,</span>
+<span id="cb53-82"><a href="#cb53-82" aria-hidden="true" tabindex="-1"></a>                compas_p<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb53-83"><a href="#cb53-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-84"><a href="#cb53-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-85"><a href="#cb53-85" aria-hidden="true" tabindex="-1"></a>For å forstå *bias* kan vi dele opp confusion matrix etter kjønn. Her er modellens ytelse for menn:</span>
+<span id="cb53-86"><a href="#cb53-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-89"><a href="#cb53-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-90"><a href="#cb53-90" aria-hidden="true" tabindex="-1"></a>compas_m <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Male"</span>)</span>
+<span id="cb53-91"><a href="#cb53-91" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_m<span class="sc">$</span>pred_rf,</span>
+<span id="cb53-92"><a href="#cb53-92" aria-hidden="true" tabindex="-1"></a>                compas_m<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb53-93"><a href="#cb53-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-94"><a href="#cb53-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-95"><a href="#cb53-95" aria-hidden="true" tabindex="-1"></a>Og for kvinner:</span>
+<span id="cb53-96"><a href="#cb53-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-99"><a href="#cb53-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-100"><a href="#cb53-100" aria-hidden="true" tabindex="-1"></a>compas_f <span class="ot">&lt;-</span> compas_p <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Female"</span>)</span>
+<span id="cb53-101"><a href="#cb53-101" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(compas_f<span class="sc">$</span>pred_rf,</span>
+<span id="cb53-102"><a href="#cb53-102" aria-hidden="true" tabindex="-1"></a>                compas_f<span class="sc">$</span>Two_yr_Recidivism, <span class="at">positive =</span> <span class="st">"1"</span>)</span>
+<span id="cb53-103"><a href="#cb53-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-104"><a href="#cb53-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-105"><a href="#cb53-105" aria-hidden="true" tabindex="-1"></a>Modellen er mer presis for kvinner enn for menn — dette er et eksempel på *bias* i modellen. Forholdet mellom accuracy for menn og kvinner gir et enkelt mål på skjevheten. Men å sammenligne confusion matriser manuelt for mange grupper og mange mål er arbeidskrevende. Det er her fairness-verktøy kommer inn.</span>
+<span id="cb53-106"><a href="#cb53-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-107"><a href="#cb53-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mål på fairness med fairmodels</span></span>
+<span id="cb53-108"><a href="#cb53-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-109"><a href="#cb53-109" aria-hidden="true" tabindex="-1"></a>Pakken <span class="in">`fairmodels`</span> gjør det enkelt å måle fairness på tvers av grupper for mange mål på én gang. For å bruke den trengs et *explainer*-objekt fra <span class="in">`DALEX`</span>-pakken. Et explainer-objekt er en standardisert innpakning rundt en modell, slik at <span class="in">`fairmodels`</span> kan bruke ulike typer modeller (random forest, boosting, etc.) med det samme grensesnittet.</span>
+<span id="cb53-110"><a href="#cb53-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-111"><a href="#cb53-111" aria-hidden="true" tabindex="-1"></a>Vi lager explainer-objektet for baseline random forest-modellen. Vi angir modellen, prediktordata (uten utfallsvariabelen), og den numeriske versjonen av utfallsvariabelen:</span>
+<span id="cb53-112"><a href="#cb53-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-115"><a href="#cb53-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-116"><a href="#cb53-116" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-117"><a href="#cb53-117" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-118"><a href="#cb53-118" aria-hidden="true" tabindex="-1"></a>y_num    <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(compas<span class="sc">$</span>Two_yr_Recidivism))</span>
+<span id="cb53-119"><a href="#cb53-119" aria-hidden="true" tabindex="-1"></a>compas_X <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Two_yr_Recidivism)</span>
+<span id="cb53-120"><a href="#cb53-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-121"><a href="#cb53-121" aria-hidden="true" tabindex="-1"></a>explainer_rf <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb53-122"><a href="#cb53-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> rf,</span>
+<span id="cb53-123"><a href="#cb53-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">data  =</span> compas_X,</span>
+<span id="cb53-124"><a href="#cb53-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">y     =</span> y_num,</span>
+<span id="cb53-125"><a href="#cb53-125" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">"Random Forest"</span></span>
+<span id="cb53-126"><a href="#cb53-126" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-127"><a href="#cb53-127" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-128"><a href="#cb53-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-129"><a href="#cb53-129" aria-hidden="true" tabindex="-1"></a>Deretter bruker vi <span class="in">`fairness_check()`</span> med <span class="in">`Sex`</span> som beskyttet variabel og <span class="in">`"Male"`</span> som referansegruppe:</span>
+<span id="cb53-130"><a href="#cb53-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-133"><a href="#cb53-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-134"><a href="#cb53-134" aria-hidden="true" tabindex="-1"></a>fcheck <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb53-135"><a href="#cb53-135" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb53-136"><a href="#cb53-136" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb53-137"><a href="#cb53-137" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb53-138"><a href="#cb53-138" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-139"><a href="#cb53-139" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck)</span>
+<span id="cb53-140"><a href="#cb53-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-141"><a href="#cb53-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-142"><a href="#cb53-142" aria-hidden="true" tabindex="-1"></a>Plottet viser *parity loss* for en rekke ulike fairness-mål. Den grønne sonen angir et akseptabelt område basert på 4/5-regelen: forholdet mellom gruppen og referansegruppen bør ligge mellom 0.8 og 1.25. Søyler utenfor den grønne sonen betyr at modellen er statistisk sett *unfair* på det aktuelle målet.</span>
+<span id="cb53-143"><a href="#cb53-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-144"><a href="#cb53-144" aria-hidden="true" tabindex="-1"></a>Tre mål er særlig sentrale:</span>
+<span id="cb53-145"><a href="#cb53-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-146"><a href="#cb53-146" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mål i fairmodels <span class="pp">|</span> Hva måles <span class="pp">|</span> Konsept <span class="pp">|</span></span>
+<span id="cb53-147"><a href="#cb53-147" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb53-148"><a href="#cb53-148" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`PPV`</span> <span class="pp">|</span> Andelen sanne positive av alle predikerte positive <span class="pp">|</span> Predictive rate parity <span class="pp">|</span></span>
+<span id="cb53-149"><a href="#cb53-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`TPR`</span> <span class="pp">|</span> Andelen sanne positive av alle faktisk positive (sensitivitet) <span class="pp">|</span> Equalized odds <span class="pp">|</span></span>
+<span id="cb53-150"><a href="#cb53-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`FPR`</span> <span class="pp">|</span> Andelen falske positive av alle faktisk negative <span class="pp">|</span> False positive rate parity <span class="pp">|</span></span>
+<span id="cb53-151"><a href="#cb53-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-152"><a href="#cb53-152" aria-hidden="true" tabindex="-1"></a>Hvilket mål som er viktigst avhenger av hva modellen skal brukes til og hva konsekvensene av feil er. Et eksempel: Hvis modellen brukes til å vurdere prøveløslatelse, vil en høy FPR for én gruppe bety at den gruppen urettmessig beholder i fengsel mer enn andre grupper.</span>
+<span id="cb53-153"><a href="#cb53-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-154"><a href="#cb53-154" aria-hidden="true" tabindex="-1"></a>Vi kan også sjekke fairness for etnisitet ved å bytte ut den beskyttede variabelen:</span>
+<span id="cb53-155"><a href="#cb53-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-158"><a href="#cb53-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-159"><a href="#cb53-159" aria-hidden="true" tabindex="-1"></a>fcheck_etni <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb53-160"><a href="#cb53-160" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb53-161"><a href="#cb53-161" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Ethnicity,</span>
+<span id="cb53-162"><a href="#cb53-162" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Caucasian"</span></span>
+<span id="cb53-163"><a href="#cb53-163" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-164"><a href="#cb53-164" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck_etni)</span>
+<span id="cb53-165"><a href="#cb53-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-166"><a href="#cb53-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-167"><a href="#cb53-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Forbedre fairness: Stratifisering</span></span>
+<span id="cb53-168"><a href="#cb53-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-169"><a href="#cb53-169" aria-hidden="true" tabindex="-1"></a>Vi har sett at <span class="in">`sampsize`</span> i random forest styrer fordelingen av treningsdata per utfallskategori. For å motvirke *bias* mellom undergrupper kan vi bruke *stratifisert sampling*: ved å trekke fra grupper i styrte proporsjoner kan vi justere modellens feilrater per gruppe.</span>
+<span id="cb53-170"><a href="#cb53-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-171"><a href="#cb53-171" aria-hidden="true" tabindex="-1"></a><span class="in">`sampsize`</span> i random forest styrer ikke bare fordelingen av utfall, men kan kombineres med <span class="in">`strata`</span> for å stratifisere *etter en egendefinert variabel*. Stratifiseringsvektoren kombinerer kjønn og utfall til fire kategorier:</span>
+<span id="cb53-172"><a href="#cb53-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-175"><a href="#cb53-175" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-176"><a href="#cb53-176" aria-hidden="true" tabindex="-1"></a>strat <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb53-177"><a href="#cb53-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strat =</span> <span class="fu">paste0</span>(Sex, Two_yr_Recidivism)) <span class="sc">%&gt;%</span></span>
+<span id="cb53-178"><a href="#cb53-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
+<span id="cb53-179"><a href="#cb53-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-180"><a href="#cb53-180" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat)</span>
+<span id="cb53-181"><a href="#cb53-181" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-182"><a href="#cb53-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-183"><a href="#cb53-183" aria-hidden="true" tabindex="-1"></a>Tallene i <span class="in">`sampsize`</span> oppgis i samme rekkefølge som tabellen: kvinner uten tilbakefall, kvinner med tilbakefall, menn uten tilbakefall, menn med tilbakefall. Her vektes kvinner med tilbakefall opp relativt, for å øke modellens sensitivitet for denne gruppen:</span>
+<span id="cb53-184"><a href="#cb53-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-187"><a href="#cb53-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-188"><a href="#cb53-188" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
+<span id="cb53-189"><a href="#cb53-189" aria-hidden="true" tabindex="-1"></a>rf_strat <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb53-190"><a href="#cb53-190" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data     =</span> compas,</span>
+<span id="cb53-191"><a href="#cb53-191" aria-hidden="true" tabindex="-1"></a>                         <span class="at">strata   =</span> strat,</span>
+<span id="cb53-192"><a href="#cb53-192" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">215</span>, <span class="dv">290</span>, <span class="dv">1500</span>, <span class="dv">1500</span>),</span>
+<span id="cb53-193"><a href="#cb53-193" aria-hidden="true" tabindex="-1"></a>                         <span class="at">ntree    =</span> <span class="dv">800</span>)</span>
+<span id="cb53-194"><a href="#cb53-194" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-195"><a href="#cb53-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-196"><a href="#cb53-196" aria-hidden="true" tabindex="-1"></a>Vi lager en explainer for den stratifiserte modellen og sammenligner med baseline ved å sende begge explainere til <span class="in">`fairness_check()`</span>:</span>
+<span id="cb53-197"><a href="#cb53-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-200"><a href="#cb53-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-201"><a href="#cb53-201" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-202"><a href="#cb53-202" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-203"><a href="#cb53-203" aria-hidden="true" tabindex="-1"></a>explainer_rf_strat <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb53-204"><a href="#cb53-204" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> rf_strat,</span>
+<span id="cb53-205"><a href="#cb53-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">data  =</span> compas_X,</span>
+<span id="cb53-206"><a href="#cb53-206" aria-hidden="true" tabindex="-1"></a>  <span class="at">y     =</span> y_num,</span>
+<span id="cb53-207"><a href="#cb53-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">"RF stratifisert"</span></span>
+<span id="cb53-208"><a href="#cb53-208" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-209"><a href="#cb53-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-210"><a href="#cb53-210" aria-hidden="true" tabindex="-1"></a>fcheck2 <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb53-211"><a href="#cb53-211" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb53-212"><a href="#cb53-212" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb53-213"><a href="#cb53-213" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb53-214"><a href="#cb53-214" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb53-215"><a href="#cb53-215" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-216"><a href="#cb53-216" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck2)</span>
+<span id="cb53-217"><a href="#cb53-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-218"><a href="#cb53-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-219"><a href="#cb53-219" aria-hidden="true" tabindex="-1"></a>Dette er en av de store fordelene med <span class="in">`fairmodels`</span>: vi kan sammenligne flere modeller direkte i ett plot. Ble den stratifiserte modellen mer rettferdig enn baseline-modellen?</span>
+<span id="cb53-220"><a href="#cb53-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-221"><a href="#cb53-221" aria-hidden="true" tabindex="-1"></a>Merk at det ikke er noe åpenbart svar på hvilke verdier man skal velge for <span class="in">`sampsize`</span>. Utgangspunktet er å sørge for at det trekkes omtrent like mange observasjoner fra grupper man ønsker å balansere. Det krever litt utprøving.</span>
+<span id="cb53-222"><a href="#cb53-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-223"><a href="#cb53-223" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hva med andre subgrupper?</span></span>
+<span id="cb53-224"><a href="#cb53-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-225"><a href="#cb53-225" aria-hidden="true" tabindex="-1"></a>Vi justerte for kjønn — men slo det positivt ut for etnisitet også?</span>
+<span id="cb53-226"><a href="#cb53-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-229"><a href="#cb53-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-230"><a href="#cb53-230" aria-hidden="true" tabindex="-1"></a>fcheck2_etni <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb53-231"><a href="#cb53-231" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb53-232"><a href="#cb53-232" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb53-233"><a href="#cb53-233" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Ethnicity,</span>
+<span id="cb53-234"><a href="#cb53-234" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Caucasian"</span></span>
+<span id="cb53-235"><a href="#cb53-235" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-236"><a href="#cb53-236" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck2_etni)</span>
+<span id="cb53-237"><a href="#cb53-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-238"><a href="#cb53-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-239"><a href="#cb53-239" aria-hidden="true" tabindex="-1"></a>Sannsynligvis ikke. Vi justerte for kjønn, ikke for etnisitet. En mulighet er å stratifisere på begge variable samtidig. Vi starter med å lage en kombinert stratifiseringsvektor:</span>
+<span id="cb53-240"><a href="#cb53-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-243"><a href="#cb53-243" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-244"><a href="#cb53-244" aria-hidden="true" tabindex="-1"></a>strat2 <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb53-245"><a href="#cb53-245" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">caucasian =</span> <span class="fu">ifelse</span>(Ethnicity <span class="sc">==</span> <span class="st">"Caucasian"</span>, <span class="st">"Caucasian"</span>, <span class="st">"Other"</span>),</span>
+<span id="cb53-246"><a href="#cb53-246" aria-hidden="true" tabindex="-1"></a>         <span class="at">strat =</span> <span class="fu">paste0</span>(Sex, caucasian, Two_yr_Recidivism)) <span class="sc">%&gt;%</span></span>
+<span id="cb53-247"><a href="#cb53-247" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(strat)</span>
+<span id="cb53-248"><a href="#cb53-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-249"><a href="#cb53-249" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(strat2)</span>
+<span id="cb53-250"><a href="#cb53-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-251"><a href="#cb53-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-252"><a href="#cb53-252" aria-hidden="true" tabindex="-1"></a>Problemet her er at noen grupper er svært små. Å stratifisere på disse gir bare støy. Vi begrenser oss til å skille mellom "Caucasian" og "Other" fremfor alle etnisitetskategorier:</span>
+<span id="cb53-253"><a href="#cb53-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-256"><a href="#cb53-256" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-257"><a href="#cb53-257" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">45</span>)</span>
+<span id="cb53-258"><a href="#cb53-258" aria-hidden="true" tabindex="-1"></a>rf_strat2 <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb53-259"><a href="#cb53-259" aria-hidden="true" tabindex="-1"></a>                          <span class="at">data     =</span> compas,</span>
+<span id="cb53-260"><a href="#cb53-260" aria-hidden="true" tabindex="-1"></a>                          <span class="at">strata   =</span> strat2,</span>
+<span id="cb53-261"><a href="#cb53-261" aria-hidden="true" tabindex="-1"></a>                          <span class="at">sampsize =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">120</span>,</span>
+<span id="cb53-262"><a href="#cb53-262" aria-hidden="true" tabindex="-1"></a>                                       <span class="dv">200</span>, <span class="dv">200</span>,</span>
+<span id="cb53-263"><a href="#cb53-263" aria-hidden="true" tabindex="-1"></a>                                       <span class="dv">400</span>, <span class="dv">400</span>,</span>
+<span id="cb53-264"><a href="#cb53-264" aria-hidden="true" tabindex="-1"></a>                                       <span class="dv">900</span>, <span class="dv">900</span>),</span>
+<span id="cb53-265"><a href="#cb53-265" aria-hidden="true" tabindex="-1"></a>                          <span class="at">ntree    =</span> <span class="dv">800</span>)</span>
+<span id="cb53-266"><a href="#cb53-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-267"><a href="#cb53-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-270"><a href="#cb53-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-271"><a href="#cb53-271" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-272"><a href="#cb53-272" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-273"><a href="#cb53-273" aria-hidden="true" tabindex="-1"></a>explainer_rf_strat2 <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb53-274"><a href="#cb53-274" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> rf_strat2,</span>
+<span id="cb53-275"><a href="#cb53-275" aria-hidden="true" tabindex="-1"></a>  <span class="at">data  =</span> compas_X,</span>
+<span id="cb53-276"><a href="#cb53-276" aria-hidden="true" tabindex="-1"></a>  <span class="at">y     =</span> y_num,</span>
+<span id="cb53-277"><a href="#cb53-277" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="st">"RF strat. kjønn+etni"</span></span>
+<span id="cb53-278"><a href="#cb53-278" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-279"><a href="#cb53-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-280"><a href="#cb53-280" aria-hidden="true" tabindex="-1"></a>fcheck3 <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb53-281"><a href="#cb53-281" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb53-282"><a href="#cb53-282" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb53-283"><a href="#cb53-283" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat2,</span>
+<span id="cb53-284"><a href="#cb53-284" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb53-285"><a href="#cb53-285" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb53-286"><a href="#cb53-286" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-287"><a href="#cb53-287" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck3)</span>
+<span id="cb53-288"><a href="#cb53-288" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-289"><a href="#cb53-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-290"><a href="#cb53-290" aria-hidden="true" tabindex="-1"></a>Sammenlign de tre modellene. Man kan justere for noe, men ikke alt samtidig. Med mer data kan man justere for *mer*, men man er alltid begrenset av datamaterialet.</span>
+<span id="cb53-291"><a href="#cb53-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-292"><a href="#cb53-292" aria-hidden="true" tabindex="-1"></a><span class="fu">## Justere rettferdighet med vekting</span></span>
+<span id="cb53-293"><a href="#cb53-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-294"><a href="#cb53-294" aria-hidden="true" tabindex="-1"></a>En annen strategi er å *vekte observasjoner* i treningsfasen. Dette fungerer godt i boosting, der vektene direkte påvirker hva algoritmen fokuserer på. Vektingen er en måte å fortelle modellen at noen typer feil er viktigere enn andre.</span>
+<span id="cb53-295"><a href="#cb53-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-296"><a href="#cb53-296" aria-hidden="true" tabindex="-1"></a><span class="in">`gbm`</span> krever at utfallsvariabelen er numerisk (0/1) med <span class="in">`distribution = "bernoulli"`</span>. Vi lager en kopi av datasettet med konvertert utfall:</span>
+<span id="cb53-297"><a href="#cb53-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-300"><a href="#cb53-300" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-301"><a href="#cb53-301" aria-hidden="true" tabindex="-1"></a>compas_gbm <span class="ot">&lt;-</span> compas <span class="sc">%&gt;%</span></span>
+<span id="cb53-302"><a href="#cb53-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Two_yr_Recidivism =</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(Two_yr_Recidivism)))</span>
+<span id="cb53-303"><a href="#cb53-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-304"><a href="#cb53-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-305"><a href="#cb53-305" aria-hidden="true" tabindex="-1"></a>Deretter lager vi en vektvektor der kvinner og observasjoner med tilbakefall vektes opp. Tanken er at modellen skal ta disse tilfellene mer alvorlig under trening:</span>
+<span id="cb53-306"><a href="#cb53-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-309"><a href="#cb53-309" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-310"><a href="#cb53-310" aria-hidden="true" tabindex="-1"></a>wts <span class="ot">&lt;-</span> compas_gbm <span class="sc">%&gt;%</span></span>
+<span id="cb53-311"><a href="#cb53-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wts =</span> <span class="fu">case_when</span>(</span>
+<span id="cb53-312"><a href="#cb53-312" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Male"</span>   <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb53-313"><a href="#cb53-313" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Male"</span>   <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb53-314"><a href="#cb53-314" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Female"</span> <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb53-315"><a href="#cb53-315" aria-hidden="true" tabindex="-1"></a>    Sex <span class="sc">==</span> <span class="st">"Female"</span> <span class="sc">&amp;</span> Two_yr_Recidivism <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb53-316"><a href="#cb53-316" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(wts)</span>
+<span id="cb53-317"><a href="#cb53-317" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-318"><a href="#cb53-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-319"><a href="#cb53-319" aria-hidden="true" tabindex="-1"></a><span class="in">`case_when()`</span> setter én vektverdi per observasjon basert på kombinasjonen av kjønn og utfall, og <span class="in">`pull()`</span> trekker ut vektene som en vektor. Kvinner med tilbakefall vektes fire ganger så mye som menn uten tilbakefall.</span>
+<span id="cb53-320"><a href="#cb53-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-323"><a href="#cb53-323" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-324"><a href="#cb53-324" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-325"><a href="#cb53-325" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-326"><a href="#cb53-326" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">542</span>)</span>
+<span id="cb53-327"><a href="#cb53-327" aria-hidden="true" tabindex="-1"></a>gradboost <span class="ot">&lt;-</span> <span class="fu">gbm</span>(<span class="at">formula =</span> Two_yr_Recidivism <span class="sc">~</span> .,</span>
+<span id="cb53-328"><a href="#cb53-328" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data         =</span> compas_gbm,</span>
+<span id="cb53-329"><a href="#cb53-329" aria-hidden="true" tabindex="-1"></a>                 <span class="at">weights      =</span> wts,</span>
+<span id="cb53-330"><a href="#cb53-330" aria-hidden="true" tabindex="-1"></a>                 <span class="at">distribution =</span> <span class="st">"bernoulli"</span>,</span>
+<span id="cb53-331"><a href="#cb53-331" aria-hidden="true" tabindex="-1"></a>                 <span class="at">n.trees      =</span> <span class="dv">4000</span>,</span>
+<span id="cb53-332"><a href="#cb53-332" aria-hidden="true" tabindex="-1"></a>                 <span class="at">interaction.depth  =</span> <span class="dv">3</span>,</span>
+<span id="cb53-333"><a href="#cb53-333" aria-hidden="true" tabindex="-1"></a>                 <span class="at">n.minobsinnode =</span> <span class="dv">1</span>,</span>
+<span id="cb53-334"><a href="#cb53-334" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shrinkage    =</span> <span class="fl">0.001</span>,</span>
+<span id="cb53-335"><a href="#cb53-335" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bag.fraction =</span> <span class="fl">0.5</span>)</span>
+<span id="cb53-336"><a href="#cb53-336" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-337"><a href="#cb53-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-338"><a href="#cb53-338" aria-hidden="true" tabindex="-1"></a>For å bruke <span class="in">`gbm`</span> med <span class="in">`DALEX::explain()`</span> må vi angi en tilpasset prediksjonsfunksjon, fordi <span class="in">`gbm`</span> trenger <span class="in">`n.trees`</span> eksplisitt:</span>
+<span id="cb53-339"><a href="#cb53-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-342"><a href="#cb53-342" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-343"><a href="#cb53-343" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb53-344"><a href="#cb53-344" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb53-345"><a href="#cb53-345" aria-hidden="true" tabindex="-1"></a>predict_gbm <span class="ot">&lt;-</span> <span class="cf">function</span>(model, newdata) {</span>
+<span id="cb53-346"><a href="#cb53-346" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(model, <span class="at">newdata =</span> newdata,</span>
+<span id="cb53-347"><a href="#cb53-347" aria-hidden="true" tabindex="-1"></a>          <span class="at">n.trees =</span> model<span class="sc">$</span>n.trees, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb53-348"><a href="#cb53-348" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb53-349"><a href="#cb53-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-350"><a href="#cb53-350" aria-hidden="true" tabindex="-1"></a>compas_gbm_X <span class="ot">&lt;-</span> compas_gbm <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Two_yr_Recidivism)</span>
+<span id="cb53-351"><a href="#cb53-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-352"><a href="#cb53-352" aria-hidden="true" tabindex="-1"></a>explainer_gbm <span class="ot">&lt;-</span> DALEX<span class="sc">::</span><span class="fu">explain</span>(</span>
+<span id="cb53-353"><a href="#cb53-353" aria-hidden="true" tabindex="-1"></a>  <span class="at">model            =</span> gradboost,</span>
+<span id="cb53-354"><a href="#cb53-354" aria-hidden="true" tabindex="-1"></a>  <span class="at">data             =</span> compas_gbm_X,</span>
+<span id="cb53-355"><a href="#cb53-355" aria-hidden="true" tabindex="-1"></a>  <span class="at">y                =</span> compas_gbm<span class="sc">$</span>Two_yr_Recidivism,</span>
+<span id="cb53-356"><a href="#cb53-356" aria-hidden="true" tabindex="-1"></a>  <span class="at">predict_function =</span> predict_gbm,</span>
+<span id="cb53-357"><a href="#cb53-357" aria-hidden="true" tabindex="-1"></a>  <span class="at">label            =</span> <span class="st">"GBM med vekter"</span></span>
+<span id="cb53-358"><a href="#cb53-358" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-359"><a href="#cb53-359" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-360"><a href="#cb53-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-361"><a href="#cb53-361" aria-hidden="true" tabindex="-1"></a>Nå kan vi sammenligne alle tre modellene i ett fairness-kall:</span>
+<span id="cb53-362"><a href="#cb53-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-365"><a href="#cb53-365" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-366"><a href="#cb53-366" aria-hidden="true" tabindex="-1"></a>fcheck_all <span class="ot">&lt;-</span> <span class="fu">fairness_check</span>(</span>
+<span id="cb53-367"><a href="#cb53-367" aria-hidden="true" tabindex="-1"></a>  explainer_rf,</span>
+<span id="cb53-368"><a href="#cb53-368" aria-hidden="true" tabindex="-1"></a>  explainer_rf_strat,</span>
+<span id="cb53-369"><a href="#cb53-369" aria-hidden="true" tabindex="-1"></a>  explainer_gbm,</span>
+<span id="cb53-370"><a href="#cb53-370" aria-hidden="true" tabindex="-1"></a>  <span class="at">protected  =</span> compas<span class="sc">$</span>Sex,</span>
+<span id="cb53-371"><a href="#cb53-371" aria-hidden="true" tabindex="-1"></a>  <span class="at">privileged =</span> <span class="st">"Male"</span></span>
+<span id="cb53-372"><a href="#cb53-372" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-373"><a href="#cb53-373" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fcheck_all)</span>
+<span id="cb53-374"><a href="#cb53-374" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-375"><a href="#cb53-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-376"><a href="#cb53-376" aria-hidden="true" tabindex="-1"></a>For en kompakt oversikt over alle modeller og alle mål kan vi bruke <span class="in">`fairness_heatmap()`</span>:</span>
+<span id="cb53-377"><a href="#cb53-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-380"><a href="#cb53-380" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb53-381"><a href="#cb53-381" aria-hidden="true" tabindex="-1"></a><span class="fu">fairness_heatmap</span>(fcheck_all)</span>
+<span id="cb53-382"><a href="#cb53-382" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb53-383"><a href="#cb53-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-384"><a href="#cb53-384" aria-hidden="true" tabindex="-1"></a>Sammenlign modellene. Ble den vektede boosting-modellen mer rettferdig enn random forest? Husk at det alltid er en trade-off: økt rettferdighet for én gruppe eller på ett mål kan gå på bekostning av total presisjon eller rettferdighet på et annet mål.</span>
+<span id="cb53-385"><a href="#cb53-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-386"><a href="#cb53-386" aria-hidden="true" tabindex="-1"></a><span class="fu">## Avsluttende betraktninger</span></span>
+<span id="cb53-387"><a href="#cb53-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-388"><a href="#cb53-388" aria-hidden="true" tabindex="-1"></a>Hvilket fairness-mål som er viktigst er det ikke noe klart svar på. Det kommer an på hva man har tenkt å bruke prediksjonen til, hvilke konsekvenser tiltaket har, og hvilke konsekvenser det har å ikke gjøre noe. Disse konsekvensene kan vurderes forskjellig for ulike personer, grupper og situasjoner.</span>
+<span id="cb53-389"><a href="#cb53-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-390"><a href="#cb53-390" aria-hidden="true" tabindex="-1"></a>Problemet er at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper man ikke har data for som vil vise seg å gi urettferdige utslag. Man kan justere for *noe*, men ikke alt. Med nok data kan man justere for *mer* — men fremdeles ikke alt. I tillegg er justeringer som regel ikke gratis: økt rettferdighet for én gruppe kan innebære lavere presisjon totalt sett, eller redusert rettferdighet for en annen gruppe.</span>
+<span id="cb53-391"><a href="#cb53-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-392"><a href="#cb53-392" aria-hidden="true" tabindex="-1"></a>Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for — og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett bli umulige valg.</span>
+<span id="cb53-393"><a href="#cb53-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-394"><a href="#cb53-394" aria-hidden="true" tabindex="-1"></a>Bør det nevnes at noen ganger ville man gjort noe uansett — altså gjort de samme tiltakene basert på skjønn eller andre typer vurderinger. Det vil også ha feilrater og forskjeller mellom undergrupper, selv om man ikke har et oppsett som gir testing-data å estimere dette på. Det betyr at du ikke bare må ta stilling til om algoritmen er "fair" eller ikke, men også om den er *mer eller mindre "fair"* enn den alternative fremgangsmåten.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

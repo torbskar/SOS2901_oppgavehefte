@@ -1,276 +1,346 @@
-# Fairness og tuning
-
-
-## Introduksjon til fairness
-I forrige kapittel så vi at `sampsize` er et viktig verktøy for å justere feilratene i random forest. Nå skal vi bruke dette til å adressere *bias* mellom undergrupper. En ting er å avdekke bias og urettferdighet, en annen ting er å gjøre noe med det! 
-
-
+# Fairness i maskinlæring
 
 ```{r}
-#| echo: true
-#| code-fold: false
-#| warning: false 
+#| echo: false
 #| message: false
-library(tidyverse)
-library(randomForest)
-library(caret)
-library(fairness)
+#| warning: false
+invisible(Sys.setlocale(locale='no_NB.utf8'))
 ```
 
+I dette kapittelet skal vi bruke følgende pakker:
 
+```{r}
+#| eval: true
+#| code-fold: false
+#| echo: true
+#| warning: false
+#| message: false
+library(tidyverse)     # datahåndtering og grafikk
+library(randomForest)  # random forest-modeller
+library(gbm)           # gradient boosting
+library(caret)         # confusionMatrix()
+library(DALEX)         # lage explainer-objekter for modeller
+library(fairmodels)    # fairness-sjekk og visualisering
+```
 
-Compas er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert av flere. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett "biased" mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.^[Det er verd å minne på at politi i USA i stor grad er mer hardhendte enn norsk politi. Konsekvensene er altså litt mer alvorlig enn at unødig mange føler seg unødig mistenkte.] Et datasett er gjort tilgjengelig av [Propublica her](https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis) som vi skal bruke. 
+Nå som vi har sett på klassifikasjonstrær, bagging, random forest og boosting er det på tide å gjøre noen rettferdighetsbetraktninger. I maskinlæring er *fairness* et sentralt tema: modeller kan systematisk behandle ulike grupper ulikt, noe som kan ha alvorlige konsekvenser avhengig av hva modellen brukes til.
 
+## Hva slags rettferdighet?
 
+I denne settingen kan rettferdighet komme i betraktning på flere måter, herunder følgende:
+
+-   I hvilken grad maskiner vs mennesker tar avgjørelser, og herunder mulighet til å bli hørt og legge frem sin sak
+-   I hvilken grad *dataene* algoritmen er trent opp på inneholder skjevheter i utgangspunktet som så reproduseres i videre implementering
+-   I hvilken grad sluttresultatet har rimelig presisjon og akseptable feilrater, herunder vurdering av *asymetriske feilrater*
+-   I hvilken grad forrige punkt er avpasset mot hvilke *tiltak* man så setter i verk
+-   I hvilken grad feilrater og presisjon varierer systematisk med undergrupper i populasjonen
+
+Det er nok av ting å ta tak i her, men vi skal her fokusere på det som kan tallfestes gitt den modellen man har. Men for all del: Er datakvaliteten dårlig er det begrenset hvor bra det kan bli uansett. Selv om kjente skjevheter i dataene i prinsippet kan motarbeides, er det vel i praksis slik at en skjevhet sjelden kommer alene.
+
+## COMPAS-datasettet
+
+COMPAS er et risikoverktøy brukt av amerikansk politi i flere stater som benyttes på individnivå til å vurdere risikoen for at en person begår ny kriminalitet. Bruken av dette verktøyet har vært kontroversielt i flere år og kraftig kritisert. En viktig grunn er at prediksjonene slår forskjellig ut for ulike grupper og er slik sett "biased" mot bl.a. svarte borgere. Resultatet er at de blir mer utsatt for politiets oppmerksomhet enn andre.^[Det er verd å minne på at politi i USA i stor grad er mer hardhendte enn norsk politi. Konsekvensene er altså litt mer alvorlig enn at unødig mange føler seg unødig mistenkte.] Et datasett er gjort tilgjengelig av [Propublica her](https://www.propublica.org/datastore/dataset/compas-recidivism-risk-score-data-and-analysis) som vi skal bruke.
 
 ```{r}
 compas <- readRDS("data/compas.rds")
-
 glimpse(compas)
-
 ```
 
-Vi tilpasser først en random forest modell. 
+## Baseline-modell
+
+Vi tilpasser en random forest-modell på datasettet:
 
 ```{r}
 set.seed(4356)
-glimpse(compas)
 rf <- randomForest(Two_yr_Recidivism ~ .,
-                   #importance = TRUE,
-                    data = compas)
+                   data = compas)
 ```
 
-
-Lager en prediksjon i en kopi av datasett, mest for å ikke blande sammen prediksjonene med det opprinnelige datasettet. 
-
-
-```{r}
-compas_p <- compas %>% 
-  mutate(pred_rf = predict(rf))  
-```
-
-
-
-Da kan vi lage en confusion matrix for å se hvordan modellen fungerer. 
-
-
-
-```{r}
-confusionMatrix(compas_p$pred_rf,
-                compas_p$Two_yr_Recidivism, positive="1")
-```
-
-
-For å få litt bedre grep om hvordan fairness-pakken fungerer kan gjøre det mer manuelt først. Vi kan f.eks. se på hvordan modellen slår ut for menn og kvinner. 
-
-
-Først kan vi da splitte datasettet i to etter kjønn. Her for menn. 
-
-```{r}
-compas_1 <- compas_p %>% 
-  filter(Sex == "Male")
-```
-
-
-Confusion matrix for menn blir da tilsvarende som tidligere. 
-```{r}
-confusionMatrix(compas_1$pred_rf,
-                compas_1$Two_yr_Recidivism, positive="1")
-```
-
-Merk at vi her fikk en accuracy på 0.66 for menn. 
-Splitter datasettet i to etter kjønn. Her for kvinner. 
-```{r}
-compas_2 <- compas_p %>% 
-  filter(Sex == "Female")
-```
-
-Confusion matrix for kvinner
-
-```{r}
-confusionMatrix(compas_2$pred_rf,
-                compas_2$Two_yr_Recidivism, positive="1")
-```
-
-Merk at vi her fikk en accuracy på 0.71 for kvinner. Modellen er altså mer presis for kvinner enn for menn. Dette er et eksempel på *bias* i modellen. Forholdet mellom feilrater er da $.66/.71 = .93$. Dette tallet sier at modellens accuracy for menn er 93% av accuracy for kvinner, og dette er et mål på *bias* i modellen. Om man synes det er mye eller lite er derimot en vurderingssak! 
-
-Man kan også regne ut den andre veien, altså kvinner delt på menn. Da får vi 1.08, som sier at modellen er 8% mer presis for kvinner enn for menn. Det blir jo det samme, men motsatt vei. Vi må altså velge *referansegruppe* for sammenligningen. 
-
-
-Funksjoner `acc_parity` fra fairness-pakken gjør akkurat dette: regner ut accuracy for ulike grupper og sammenligner dem. Her er koden:
-
-```{r}
-acc <- acc_parity(data = compas_p, 
-                  outcome      = 'Two_yr_Recidivism', 
-                  group        = 'Sex',
-                  preds        = 'pred_rf', 
-                  base         = 'Female')
-acc$Metric
-```
-Men spesifiserer altså hvilke variable som er utfallsvariabel, hvilken som er gruppevariabel, hvilken som er prediksjonsvariabel og hvilken gruppe som skal være referanse. 
-
-
-
-
-Fairness-pakken har også noen innebygde funksjoner for grafiske fremstillinger. 
-
-```{r}
-acc$Metric_plot
-```
-
-
-
-## Fairness: tuning med stratifisering
-
-Vi har lært litt om grunnleggende tuning. For å justere feilratene er den mest effektive måten i random forest å endre hvordan samplingen skjer ved `sampsize`.^[Dette er ikke eneste måten å tune på, men det vi dekker her. Det finnes andre funksjoner for random forest som inneholder mer funksjonalitet for tuning.] Dette hjelper imidlertid ikke nødvendigvis mot *bias*, altså ulike feilrater for undergrupper. Det vil jo være nyttig om man kunne gjøre noe med slike skjevheter! Heldigvis kan vi det, men det er ikke så lett som man skulle håpe. 
-
-Det viktige punktet å huske på er at random forest trekker tilfeldige utvalg for hvert tre og parameteren `sampsize` justerer hvor mange observasjoner som trekkes. Vi kan nå justere algoritmen til å gjøre en *stratifisert* trekning. Med andre ord: det gjøres en tilfeldig trekning innenfor subgrupper. Ovenfor har vi altså sett at modellen ikke er helt rettferdig med hensyn på kjønn. La oss fikse det! 
-
-Først må vi lage en vektor for å stratifisere etter. Dette bør være variabelen for kjønn *kombinert med* utfallsvariabelen. Da får vi fire kategorier: menn med og uten tilbakefall, og kvinner med og uten tilbakefall. Så kan vi bruke sampsize til å angi hvor mange som skal trekkes fra hver av disse fire gruppene.  
-
-Her er en kode for å lage en slik stratifiseringsvektor. Pussig nok skal denne vektoren ikke legges inn som en del av datasett, men i et eget objekt. I koden nedenfor bruker vi `mutate()` for å lage en ny variabel og `paste0()` for å "lime sammen" de to variabelene. Til sist bruker `pull()` for å trekke ut kun den variabelen i en egen vektor.^[For de av dere som kan en del R fra før: `select()` ville gjort noe tilsvarende, men da ville objektet være en data.frame med én variabel fremfor en vektor. Forskjellen er minimal, men `randomForest()` vil ha det på denne måten.] Koden nedenfor gir også en tabell med antall observasjoner i hver kategori av denne vektoren. 
-
-```{r}
-strat <- compas %>% 
-  mutate(strat = paste0(Sex, Two_yr_Recidivism)) %>% 
-  pull(strat)
-
-table(strat)
-```
-
-Merk at denne vektoren har verdiene som er en kombinasjon av de opprinnelige variablene. Når vi nå angir tall i `sampsize()` så er det i denne samme rekkefølgen. Her blir det altså: 
-
-1) Kvinner uten tilbakefall 
-1) Kvinner med tilbakefall
-1) Menn uten tilbakefall
-1) Menn med tilbakefall 
-
-Merk da at tallene som angis for `sampsize` ikke kan være høyere enn antallet i hver gruppe, og helst ikke høyere enn ca 70% av dette. Men det er primært *forholdet mellom tallene* som er viktig. 
-
-Her er kode for random forest med stratifisert utvalg og angitte verdier av sampsize. Tallene oppgis i den rekkefølgen som er angitt i variabelen `strata`, altså som i tabellen ovenfor. Her er altså kvinner vektet lavere enn menn, som burde øke accuracy for menn. Samtidig er kvinner med tilbakefall vektet litt høyere enn kvinner uten tilbakefall. 
-
-
-```{r}
-set.seed(45)
-rf <- randomForest(Two_yr_Recidivism ~ .,
-                   data = compas,
-                   strata = strat, 
-                   sampsize = c(215, 290, 1500, 1500), 
-                   ntree=800)
-
-```
-
-Nå kan vi lage en prediksjon og se om modellen er mer rettferdig på samme måte som vi har gjort tidligere. 
-
-```{r}
-compas_p <- compas %>% 
-  mutate(pred_rf = predict(rf))  
-
-acc <- acc_parity(data = compas_p, 
-                  outcome      = 'Two_yr_Recidivism', 
-                  group        = 'Sex',
-                  preds        = 'pred_rf', 
-                  base         = 'Female')
-acc[[2]]
-```
-
-
-Magisk! Plutselig har vi endret en modell med innebygde kjønnsforskjeller til en kjønnsnøytral modell. I hvert fall på akkurat dette målet, da. Man bør jo også sjekke andre relevante mål på fairness.  
-
-Nå lurer du helt sikkert på hvordan du skal velge verdier for `sampsize` i et slikt tilfelle. Det litt skuffende svaret er at du må prøve deg litt frem. Men det hjelper å vite hvilket tall som betyr hva. I dette eksempelet sikres det at det trekkes omtrent like mange kvinner med og uten tilbakefall, og tilsvarende for menn. Så er det justert litt for å oversample kvinner med tilbakefall. Men for å være ærlig: jeg testet en god del varianter her før jeg fikk det resultatet jeg ville ha. 
-
-
-### Hva andre subgrupper? 
-Så er spørsmålet om den balansering vi nå har gjort slår ut på andre grupper også. La oss se på etnisitet. Vi bruker den samme modellen som over, men bytter ut variabelen for kjønn med variabelen for etnisitet. 
-
-
-```{r}
-acc <- acc_parity(data = compas_p, 
-                  outcome      = 'Two_yr_Recidivism', 
-                  group        = 'Ethnicity',
-                  preds        = 'pred_rf', 
-                  base         = 'Caucasian')
-acc[[2]]
-```
-
-Det er lov å bli litt skuffa nå. Dette ble jo ikke like pent balansert som for kjønn. Men det er jo ikke så rart, egentlig. Det er jo ikke gjort noe for å balansere på etnisitet. 
-
-En første mulighet er å gjøre en vurdering på om kjønnsbalanse eller etnisitet er viktigst. Kanskje man heller skulle fokusere på etnisitet? Det vil antakeligvis ikke være noen dum ide. 
-
-En annen mulighet er å stratifisere på begge variable samtidig. La oss undersøke muligheten ved å lage en tilsvarende stratifiserings-vektor og se på frekvensfordelingen. 
-
-```{r}
-strat <- compas %>% 
-  mutate(strat = paste0(Sex, Ethnicity, Two_yr_Recidivism)) %>% 
-  pull(strat)
-
-table(strat)
-```
-
-Problemet nå er jo at noen grupper er veldig, veldig små. Å stratifiser på disse vil ikke fungere rett og slett. Det er som i annen statistikk: Estimere på veldig små grupper innebærer at det blir bare støy og tilfeldigheter i estimatene. 
-
-
-```{r}
-strat <- compas %>% 
-  mutate(caucasian = ifelse(Ethnicity == "Caucasian", "Caucasian", "Other")) %>% 
-  mutate(strat = paste0(Sex, caucasian, Two_yr_Recidivism)) %>% 
-  pull(strat)
-
-table(strat)
-```
-
-
-La oss prøve med dette. 
-
-```{r}
-set.seed(45)
-rf <- randomForest(Two_yr_Recidivism ~ .,
-                   data = compas,
-                   strata = strat, 
-                   sampsize = c(120, 120, 
-                                200, 200, 
-                                400, 400, 
-                                900, 900), 
-                   ntree=800)
-
-#rf
-```
-
-
+Vi lagrer prediksjonen i en kopi av datasettet, slik at vi kan sammenligne prediksjon og observert utfall:
 
 ```{r}
 compas_p <- compas %>%
   mutate(pred_rf = predict(rf))
-
-acc <- acc_parity(data = compas_p,
-                  outcome      = 'Two_yr_Recidivism',
-                  group        = 'Sex',
-                  preds        = 'pred_rf',
-                  base         = 'Female')
-acc[[2]]
 ```
 
-Nå sjekker vi kjønnsbalansen igjen. Sammenlign med resultatet fra tidligere -- ble det mer balansert?
-
-La oss også sjekke om den samme modellen er rettferdig med hensyn på etnisitet:
+En overordnet confusion matrix viser modellens ytelse for alle observasjoner samlet:
 
 ```{r}
-acc <- acc_parity(data = compas_p,
-                  outcome      = 'Two_yr_Recidivism',
-                  group        = 'Ethnicity',
-                  preds        = 'pred_rf',
-                  base         = 'Caucasian')
-acc[[2]]
+confusionMatrix(compas_p$pred_rf,
+                compas_p$Two_yr_Recidivism, positive = "1")
 ```
 
-Her ble det i hvert fall annerledes, men ikke helt likt nå heller. Nå kan man drive på en stund å justere og se hva man får til. Hvis man har et veldig stort datasett (som vi ikke har her) så kan man i teorien justere for flere ulike egenskaper samtidig og i større detalj. Man er rett og slett litt begrenset av dataene. 
+For å forstå *bias* kan vi dele opp confusion matrix etter kjønn. Her er modellens ytelse for menn:
 
-Problemet er selvsagt at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper du ikke har data for som det senere vil vise seg er urettferdig. Det kan f.eks. slå ut svært skjevt for type nabolag, sosioøkonomisk status, religiøs tilhørighet, lengde på håret - eller hva som helst annet. Man trenger data for å sjekke, men også data for å bygge algoritmen. 
+```{r}
+compas_m <- compas_p %>% filter(Sex == "Male")
+confusionMatrix(compas_m$pred_rf,
+                compas_m$Two_yr_Recidivism, positive = "1")
+```
 
-Jeg tror konklusjonen er at man justere for noe, men ikke alt. Men med nok data kan man justere for *mer* - men fremdeles ikke alt. I tillegg er som regel ikke justeringer gratis. Kanskje blir presisjonen i modellen totalt sett dårligere? 
+Og for kvinner:
 
-Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du f.eks. ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for - og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett være umulige valg. Men hva er så alternativet? Det er jo heller ikke sikkert er bedre på noen av disse parametrene. 
+```{r}
+compas_f <- compas_p %>% filter(Sex == "Female")
+confusionMatrix(compas_f$pred_rf,
+                compas_f$Two_yr_Recidivism, positive = "1")
+```
 
+Modellen er mer presis for kvinner enn for menn — dette er et eksempel på *bias* i modellen. Forholdet mellom accuracy for menn og kvinner gir et enkelt mål på skjevheten. Men å sammenligne confusion matriser manuelt for mange grupper og mange mål er arbeidskrevende. Det er her fairness-verktøy kommer inn.
 
+## Mål på fairness med fairmodels
 
+Pakken `fairmodels` gjør det enkelt å måle fairness på tvers av grupper for mange mål på én gang. For å bruke den trengs et *explainer*-objekt fra `DALEX`-pakken. Et explainer-objekt er en standardisert innpakning rundt en modell, slik at `fairmodels` kan bruke ulike typer modeller (random forest, boosting, etc.) med det samme grensesnittet.
 
+Vi lager explainer-objektet for baseline random forest-modellen. Vi angir modellen, prediktordata (uten utfallsvariabelen), og den numeriske versjonen av utfallsvariabelen:
+
+```{r}
+#| warning: false
+#| message: false
+y_num    <- as.numeric(as.character(compas$Two_yr_Recidivism))
+compas_X <- compas %>% select(-Two_yr_Recidivism)
+
+explainer_rf <- DALEX::explain(
+  model = rf,
+  data  = compas_X,
+  y     = y_num,
+  label = "Random Forest"
+)
+```
+
+Deretter bruker vi `fairness_check()` med `Sex` som beskyttet variabel og `"Male"` som referansegruppe:
+
+```{r}
+fcheck <- fairness_check(
+  explainer_rf,
+  protected  = compas$Sex,
+  privileged = "Male"
+)
+plot(fcheck)
+```
+
+Plottet viser *parity loss* for en rekke ulike fairness-mål. Den grønne sonen angir et akseptabelt område basert på 4/5-regelen: forholdet mellom gruppen og referansegruppen bør ligge mellom 0.8 og 1.25. Søyler utenfor den grønne sonen betyr at modellen er statistisk sett *unfair* på det aktuelle målet.
+
+Tre mål er særlig sentrale:
+
+| Mål i fairmodels | Hva måles | Konsept |
+|---|---|---|
+| `PPV` | Andelen sanne positive av alle predikerte positive | Predictive rate parity |
+| `TPR` | Andelen sanne positive av alle faktisk positive (sensitivitet) | Equalized odds |
+| `FPR` | Andelen falske positive av alle faktisk negative | False positive rate parity |
+
+Hvilket mål som er viktigst avhenger av hva modellen skal brukes til og hva konsekvensene av feil er. Et eksempel: Hvis modellen brukes til å vurdere prøveløslatelse, vil en høy FPR for én gruppe bety at den gruppen urettmessig beholder i fengsel mer enn andre grupper.
+
+Vi kan også sjekke fairness for etnisitet ved å bytte ut den beskyttede variabelen:
+
+```{r}
+fcheck_etni <- fairness_check(
+  explainer_rf,
+  protected  = compas$Ethnicity,
+  privileged = "Caucasian"
+)
+plot(fcheck_etni)
+```
+
+## Forbedre fairness: Stratifisering
+
+Vi har sett at `sampsize` i random forest styrer fordelingen av treningsdata per utfallskategori. For å motvirke *bias* mellom undergrupper kan vi bruke *stratifisert sampling*: ved å trekke fra grupper i styrte proporsjoner kan vi justere modellens feilrater per gruppe.
+
+`sampsize` i random forest styrer ikke bare fordelingen av utfall, men kan kombineres med `strata` for å stratifisere *etter en egendefinert variabel*. Stratifiseringsvektoren kombinerer kjønn og utfall til fire kategorier:
+
+```{r}
+strat <- compas %>%
+  mutate(strat = paste0(Sex, Two_yr_Recidivism)) %>%
+  pull(strat)
+
+table(strat)
+```
+
+Tallene i `sampsize` oppgis i samme rekkefølge som tabellen: kvinner uten tilbakefall, kvinner med tilbakefall, menn uten tilbakefall, menn med tilbakefall. Her vektes kvinner med tilbakefall opp relativt, for å øke modellens sensitivitet for denne gruppen:
+
+```{r}
+set.seed(45)
+rf_strat <- randomForest(Two_yr_Recidivism ~ .,
+                         data     = compas,
+                         strata   = strat,
+                         sampsize = c(215, 290, 1500, 1500),
+                         ntree    = 800)
+```
+
+Vi lager en explainer for den stratifiserte modellen og sammenligner med baseline ved å sende begge explainere til `fairness_check()`:
+
+```{r}
+#| warning: false
+#| message: false
+explainer_rf_strat <- DALEX::explain(
+  model = rf_strat,
+  data  = compas_X,
+  y     = y_num,
+  label = "RF stratifisert"
+)
+
+fcheck2 <- fairness_check(
+  explainer_rf,
+  explainer_rf_strat,
+  protected  = compas$Sex,
+  privileged = "Male"
+)
+plot(fcheck2)
+```
+
+Dette er en av de store fordelene med `fairmodels`: vi kan sammenligne flere modeller direkte i ett plot. Ble den stratifiserte modellen mer rettferdig enn baseline-modellen?
+
+Merk at det ikke er noe åpenbart svar på hvilke verdier man skal velge for `sampsize`. Utgangspunktet er å sørge for at det trekkes omtrent like mange observasjoner fra grupper man ønsker å balansere. Det krever litt utprøving.
+
+### Hva med andre subgrupper?
+
+Vi justerte for kjønn — men slo det positivt ut for etnisitet også?
+
+```{r}
+fcheck2_etni <- fairness_check(
+  explainer_rf,
+  explainer_rf_strat,
+  protected  = compas$Ethnicity,
+  privileged = "Caucasian"
+)
+plot(fcheck2_etni)
+```
+
+Sannsynligvis ikke. Vi justerte for kjønn, ikke for etnisitet. En mulighet er å stratifisere på begge variable samtidig. Vi starter med å lage en kombinert stratifiseringsvektor:
+
+```{r}
+strat2 <- compas %>%
+  mutate(caucasian = ifelse(Ethnicity == "Caucasian", "Caucasian", "Other"),
+         strat = paste0(Sex, caucasian, Two_yr_Recidivism)) %>%
+  pull(strat)
+
+table(strat2)
+```
+
+Problemet her er at noen grupper er svært små. Å stratifisere på disse gir bare støy. Vi begrenser oss til å skille mellom "Caucasian" og "Other" fremfor alle etnisitetskategorier:
+
+```{r}
+set.seed(45)
+rf_strat2 <- randomForest(Two_yr_Recidivism ~ .,
+                          data     = compas,
+                          strata   = strat2,
+                          sampsize = c(120, 120,
+                                       200, 200,
+                                       400, 400,
+                                       900, 900),
+                          ntree    = 800)
+```
+
+```{r}
+#| warning: false
+#| message: false
+explainer_rf_strat2 <- DALEX::explain(
+  model = rf_strat2,
+  data  = compas_X,
+  y     = y_num,
+  label = "RF strat. kjønn+etni"
+)
+
+fcheck3 <- fairness_check(
+  explainer_rf,
+  explainer_rf_strat,
+  explainer_rf_strat2,
+  protected  = compas$Sex,
+  privileged = "Male"
+)
+plot(fcheck3)
+```
+
+Sammenlign de tre modellene. Man kan justere for noe, men ikke alt samtidig. Med mer data kan man justere for *mer*, men man er alltid begrenset av datamaterialet.
+
+## Justere rettferdighet med vekting
+
+En annen strategi er å *vekte observasjoner* i treningsfasen. Dette fungerer godt i boosting, der vektene direkte påvirker hva algoritmen fokuserer på. Vektingen er en måte å fortelle modellen at noen typer feil er viktigere enn andre.
+
+`gbm` krever at utfallsvariabelen er numerisk (0/1) med `distribution = "bernoulli"`. Vi lager en kopi av datasettet med konvertert utfall:
+
+```{r}
+compas_gbm <- compas %>%
+  mutate(Two_yr_Recidivism = as.numeric(as.character(Two_yr_Recidivism)))
+```
+
+Deretter lager vi en vektvektor der kvinner og observasjoner med tilbakefall vektes opp. Tanken er at modellen skal ta disse tilfellene mer alvorlig under trening:
+
+```{r}
+wts <- compas_gbm %>%
+  mutate(wts = case_when(
+    Sex == "Male"   & Two_yr_Recidivism == 0 ~ 1,
+    Sex == "Male"   & Two_yr_Recidivism == 1 ~ 2,
+    Sex == "Female" & Two_yr_Recidivism == 0 ~ 2,
+    Sex == "Female" & Two_yr_Recidivism == 1 ~ 4)) %>%
+  pull(wts)
+```
+
+`case_when()` setter én vektverdi per observasjon basert på kombinasjonen av kjønn og utfall, og `pull()` trekker ut vektene som en vektor. Kvinner med tilbakefall vektes fire ganger så mye som menn uten tilbakefall.
+
+```{r}
+#| warning: false
+#| message: false
+set.seed(542)
+gradboost <- gbm(formula = Two_yr_Recidivism ~ .,
+                 data         = compas_gbm,
+                 weights      = wts,
+                 distribution = "bernoulli",
+                 n.trees      = 4000,
+                 interaction.depth  = 3,
+                 n.minobsinnode = 1,
+                 shrinkage    = 0.001,
+                 bag.fraction = 0.5)
+```
+
+For å bruke `gbm` med `DALEX::explain()` må vi angi en tilpasset prediksjonsfunksjon, fordi `gbm` trenger `n.trees` eksplisitt:
+
+```{r}
+#| warning: false
+#| message: false
+predict_gbm <- function(model, newdata) {
+  predict(model, newdata = newdata,
+          n.trees = model$n.trees, type = "response")
+}
+
+compas_gbm_X <- compas_gbm %>% select(-Two_yr_Recidivism)
+
+explainer_gbm <- DALEX::explain(
+  model            = gradboost,
+  data             = compas_gbm_X,
+  y                = compas_gbm$Two_yr_Recidivism,
+  predict_function = predict_gbm,
+  label            = "GBM med vekter"
+)
+```
+
+Nå kan vi sammenligne alle tre modellene i ett fairness-kall:
+
+```{r}
+fcheck_all <- fairness_check(
+  explainer_rf,
+  explainer_rf_strat,
+  explainer_gbm,
+  protected  = compas$Sex,
+  privileged = "Male"
+)
+plot(fcheck_all)
+```
+
+For en kompakt oversikt over alle modeller og alle mål kan vi bruke `fairness_heatmap()`:
+
+```{r}
+fairness_heatmap(fcheck_all)
+```
+
+Sammenlign modellene. Ble den vektede boosting-modellen mer rettferdig enn random forest? Husk at det alltid er en trade-off: økt rettferdighet for én gruppe eller på ett mål kan gå på bekostning av total presisjon eller rettferdighet på et annet mål.
+
+## Avsluttende betraktninger
+
+Hvilket fairness-mål som er viktigst er det ikke noe klart svar på. Det kommer an på hva man har tenkt å bruke prediksjonen til, hvilke konsekvenser tiltaket har, og hvilke konsekvenser det har å ikke gjøre noe. Disse konsekvensene kan vurderes forskjellig for ulike personer, grupper og situasjoner.
+
+Problemet er at det ikke går an å justere i det uendelige for alle variable. I tillegg kan det uansett være andre egenskaper man ikke har data for som vil vise seg å gi urettferdige utslag. Man kan justere for *noe*, men ikke alt. Med nok data kan man justere for *mer* — men fremdeles ikke alt. I tillegg er justeringer som regel ikke gratis: økt rettferdighet for én gruppe kan innebære lavere presisjon totalt sett, eller redusert rettferdighet for en annen gruppe.
+
+Så da er vi tilbake til det litt ubehagelige gjennomgangstemaet om prioriteringer og valg: Vil du ha en rettferdig modell eller en presis modell? Hvilke grupper bør den være rettferdig for — og hvilke grupper er det ikke så farlig om den er urettferdig for? Dette kan lett bli umulige valg.
+
+Bør det nevnes at noen ganger ville man gjort noe uansett — altså gjort de samme tiltakene basert på skjønn eller andre typer vurderinger. Det vil også ha feilrater og forskjeller mellom undergrupper, selv om man ikke har et oppsett som gir testing-data å estimere dette på. Det betyr at du ikke bare må ta stilling til om algoritmen er "fair" eller ikke, men også om den er *mer eller mindre "fair"* enn den alternative fremgangsmåten.
